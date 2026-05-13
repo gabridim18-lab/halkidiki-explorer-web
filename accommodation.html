@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Accommodation</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
+</head>
+
+<body>
+<div id="loader">
+
+  <div class="loader-spinner"></div>
+
+</div>
+<div class="accommodation-page">
+
+  <div class="details">
+
+    <div class="top-header">
+
+      <div>
+
+        <h1 id="title"></h1>
+
+        <div id="category"></div>
+
+      </div>
+
+      <div class="rating-box">
+
+        <span id="rating"></span>
+
+      </div>
+
+    </div>
+
+    <div
+      class="gallery"
+      id="gallery">
+    </div>
+
+
+     <div class="beach-row">
+
+  <div id="location"></div>
+
+          <button
+          id="mapsButton"
+           class="maps-btn"
+           >
+            Take me there
+            </button>
+
+            </div>
+
+            <div class="premium-bar">
+
+            <div class="premium-item">
+
+               <img
+                src="images/guests.png"
+                class="premium-icon"
+                >
+
+                <div class="premium-text">
+
+               <span class="premium-label">
+                   Guests
+                   </span>
+
+                   <div
+                     class="premium-value"
+                      id="guestsValue">
+                    </div>
+
+                   </div>
+
+                   </div>
+
+            <div class="premium-item">
+
+               <img
+              src="images/bedrooms.png"
+               class="premium-icon"
+                >
+
+              <div class="premium-text">
+
+               <span class="premium-label">
+                Bedrooms
+             </span>
+
+              <div
+                class="premium-value"
+                id="bedroomsValue">
+              </div>
+
+              </div>
+
+              </div>
+
+              <div class="premium-item">
+
+                <img
+               src="images/bathrooms.png"
+                class="premium-icon"
+                 >
+
+               <div class="premium-text">
+
+                <span class="premium-label">
+                  Bathrooms
+                </span>
+
+               <div
+                 class="premium-value"
+                  id="bathroomsValue">
+                </div>
+
+               </div>
+
+              </div>
+
+              </div>
+
+<div class="features-row">
+
+  <div class="feature-card size-card">
+
+    <img
+      src="images/size.webp"
+      class="feature-bg"
+    >
+
+    <div class="feature-overlay">
+
+      <span class="feature-title">
+        Size
+      </span>
+
+      <span
+        class="feature-big"
+        id="sizeValue">
+      </span>
+
+    </div>
+
+  </div>
+
+  <div class="feature-card view-card">
+
+    <img
+      src="images/view.webp"
+      class="feature-bg"
+    >
+
+    <div class="feature-overlay">
+
+      <span class="feature-title">
+        View
+      </span>
+
+      <span
+        class="feature-text"
+        id="viewValue">
+      </span>
+
+    </div>
+
+  </div>
+
+  <div
+    class="feature-card small-feature"
+    id="poolCard"
+  >
+
+    <img
+      src="images/pool.webp"
+      class="feature-bg"
+    >
+
+  </div>
+
+  <div
+    class="feature-card small-feature"
+    id="petCard"
+  >
+
+    <img
+      src="images/pet.webp"
+      class="feature-bg"
+    >
+
+  </div>
+
+</div>
+<div class="amenities-row" id="amenitiesRow"></div>
+<button
+  type="button"
+  class="request-offer-btn"
+  onclick="toggleBookingForm()"
+>
+  Request Offer
+</button>
+
+<div
+  class="booking-form"
+  id="bookingForm"
+>
+
+  <input
+  type="text"
+  id="guestName"
+  placeholder="Your name"
+>
+
+<div class="dates-row">
+
+  <div class="date-field">
+
+    <label>
+      Check-in
+    </label>
+
+    <input
+      type="date"
+      id="checkinDate"
+    >
+
+  </div>
+
+  <div class="date-field">
+
+    <label>
+      Check-out
+    </label>
+
+    <input
+      type="date"
+      id="checkoutDate"
+    >
+
+  </div>
+
+</div>
+
+<div class="guests-row">
+
+  <div class="counter-box">
+
+    <span>
+      Adults
+    </span>
+
+    <div class="counter-controls">
+
+      <button
+        type="button"
+        onclick="changeAdults(-1)"
+      >
+        -
+      </button>
+
+      <span id="adultsCount">
+        1
+      </span>
+
+      <button
+        type="button"
+        onclick="changeAdults(1)"
+      >
+        +
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="counter-box">
+
+    <span>
+      Children
+    </span>
+
+    <div class="counter-controls">
+
+      <button
+        type="button"
+        onclick="changeChildren(-1)"
+      >
+        -
+      </button>
+
+      <span id="childrenCount">
+        0
+      </span>
+
+      <button
+        type="button"
+        onclick="changeChildren(1)"
+      >
+        +
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div id="childrenAges"></div>
+
+<textarea
+  id="extraMessage"
+  placeholder="Extra details..."
+></textarea>
+
+<button
+  type="button"
+  class="whatsapp-btn"
+  onclick="sendWhatsApp()"
+>
+  Send via WhatsApp
+</button>
+
+</div>
+<div
+  class="description-box"
+  id="descriptionBox"
+></div>
+</div>
+
+</div>
+
+<script>
+
+async function loadAccommodation() {
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const id =
+    params.get("id");
+
+  const response =
+    await fetch(
+      `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/${id}/index.json`
+    );
+
+  const data =
+    await response.json();
+    window.ownerPhone =
+  data.phone;
+
+  document.getElementById("title")
+    .innerText =
+      data.titleEn;
+
+  document.getElementById("category")
+    .innerText =
+      data.category
+        .replaceAll("_", " ");
+
+  document.getElementById("rating")
+    .innerText =
+      `${data.rating}/${data.ratingScale}`;
+
+  document.getElementById("location")
+    .innerText =
+      `📍 ${data.beachSlug} • ${data.zone}`;
+
+  document.getElementById("mapsButton")
+    .onclick = () => {
+
+      window.open(
+        `https://www.google.com/maps?q=${data.lat},${data.lon}`
+      );
+
+    };
+   document.getElementById("guestsValue")
+  .innerText =
+    data.guests;
+
+  document.getElementById("bedroomsValue")
+  .innerText =
+    data.bedrooms;
+
+   document.getElementById("bathroomsValue")
+  .innerText =
+    data.bathrooms || 2;
+
+    document.getElementById("sizeValue")
+  .innerText =
+    `${data.sizeSqm}m²`;
+
+    document.getElementById("viewValue")
+  .innerText =
+    data.view;
+
+    document.getElementById("descriptionBox")
+  .innerHTML = data.descriptionEn
+    .replace(/\n/g, "<br>");
+
+   if (!data.pool) {
+
+  document.getElementById("poolCard")
+    .style.display = "none";
+
+     }
+
+   if (!data.petFriendly) {
+
+  document.getElementById("petCard")
+    .style.display = "none";
+
+   
+
+}
+ document.getElementById("loader")
+  .style.display = "none";
+const amenities = [
+
+  { key: "wifi", image: "wifi.png" },
+  { key: "parking", image: "parking.png" },
+  { key: "airConditioning", image: "air_conditioning.png" },
+  { key: "kitchen", image: "kitchen.png" },
+  { key: "washer", image: "washer.png" },
+  { key: "balcony", image: "balcony.png" },
+  { key: "bbq", image: "bbq.png" }
+
+];
+
+const amenitiesRow =
+  document.getElementById("amenitiesRow");
+
+amenities.forEach(item => {
+
+  if (data[item.key]) {
+
+    amenitiesRow.innerHTML += `
+
+      <div class="amenity-card">
+
+        <img
+          src="images/${item.image}"
+          class="amenity-icon"
+        >
+
+      </div>
+
+    `;
+
+  }
+
+});
+
+  const gallery =
+    document.getElementById("gallery");
+
+  data.images.forEach(image => {
+
+    gallery.innerHTML += `
+
+      <img
+        src="${image}"
+        alt="${data.titleEn}"
+      >
+
+    `;
+
+  });
+
+}
+
+loadAccommodation();
+
+let adults = 1;
+let children = 0;
+
+function toggleBookingForm() {
+
+  const form =
+    document.getElementById("bookingForm");
+
+  form.style.display =
+    form.style.display === "flex"
+      ? "none"
+      : "flex";
+
+}
+
+function changeAdults(value) {
+
+  adults += value;
+
+  if (adults < 1)
+    adults = 1;
+
+  document.getElementById("adultsCount")
+    .innerText = adults;
+
+}
+
+function changeChildren(value) {
+
+  children += value;
+
+  if (children < 0)
+    children = 0;
+
+  document.getElementById("childrenCount")
+    .innerText = children;
+
+  renderChildrenAges();
+
+}
+
+function renderChildrenAges() {
+
+  const container =
+    document.getElementById("childrenAges");
+
+  container.innerHTML = "";
+
+  for (let i = 0; i < children; i++) {
+
+    container.innerHTML += `
+
+      <input
+        type="number"
+        placeholder="Child ${i + 1} age"
+        class="child-age"
+      >
+
+    `;
+
+  }
+
+}
+function sendWhatsApp() {
+
+  const name =
+    document.getElementById("guestName").value;
+
+  const checkin =
+    document.getElementById("checkinDate").value;
+
+  const checkout =
+    document.getElementById("checkoutDate").value;
+
+  const message =
+    document.getElementById("extraMessage").value;
+
+  const property =
+    document.getElementById("title").innerText;
+
+  const childAgeInputs =
+    document.querySelectorAll(".child-age");
+
+  let childrenAges = "";
+
+  childAgeInputs.forEach((input, index) => {
+
+    childrenAges +=
+      `Child ${index + 1}: ${input.value} years\n`;
+
+  });
+
+const text = `Hello!
+
+I am interested in:
+
+🏡 ${property}
+
+👤 Name: ${name}
+
+📅 Check-in: ${checkin}
+📅 Check-out: ${checkout}
+
+🧑 Adults: ${adults}
+👶 Children: ${children}
+
+${childrenAges}
+
+✏️ Extra details:
+${message}
+
+━━━━━━━━━━━━━━
+
+This message is sent through Halkidiki Explorer App`;
+
+  const phone =
+    window.ownerPhone.replace("+", "");
+
+  window.open(
+
+    `https://wa.me/${phone}?text=${encodeURIComponent(text)}`
+
+  );
+
+}
+document.getElementById("checkinDate")
+  .addEventListener("change", e => {
+
+    const checkin =
+      e.target.value;
+
+    const checkout =
+      document.getElementById("checkoutDate");
+
+    checkout.min = checkin;
+
+    if (checkout.value < checkin) {
+
+      checkout.value = "";
+
+    }
+
+});
+</script>
+
+</body>
+
+</html>

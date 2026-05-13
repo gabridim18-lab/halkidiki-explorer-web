@@ -3,41 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Halkidiki Explorer</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom, #0099ff, #001f4d);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-    }
-
-    .container {
-      padding: 20px;
-    }
-
-    h1 {
-      font-size: 48px;
-      margin-bottom: 10px;
-    }
-
-    p {
-      font-size: 20px;
-      opacity: 0.9;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <div class="container">
-    <h1>Halkidiki Explorer</h1>
-    <p>The ecosystem of Halkidiki tourism is coming.</p>
-  </div>
+
+  <section class="hero">
+    <section class="discover-section">
+      <div class="categories">
+
+  <button>👨‍👩‍👧‍👦 Family Friendly</button>
+
+  <button>👥 Perfect for Groups</button>
+
+  <button>❤️ Couples Retreat</button>
+
+  <button>🌿 Escape & Relax</button>
+
+  <button>🧭 Explorer’s Choice</button>
+
+</div>
+
+ <h2>Popular Stays</h2>
+
+<div
+  class="cards-container"
+  id="cards">
+</div>
+
+</section>
+
+    <div class="overlay"></div>
+
+    <div class="hero-content">
+
+      <h1>HALKIDIKI EXPLORER</h1>
+
+      <p>
+        Discover beaches, accommodations and restaurants
+        in the most beautiful region of Greece.
+      </p>
+
+      <div class="hero-buttons">
+
+        <button class="primary-btn">
+          Find Accommodation
+        </button>
+
+        <button class="secondary-btn">
+          Explore Beaches
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+  <script src="data.js"></script>
+<script>
+
+const cardsContainer =
+  document.getElementById("cards");
+
+async function loadCards() {
+
+  const cardsContainer =
+    document.getElementById("cards");
+
+  for (const item of accommodations) {
+
+    const response =
+      await fetch(
+        `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/${item.id}/index.json`
+      );
+
+    const data =
+      await response.json();
+
+    item.data = data;
+
+    cardsContainer.innerHTML += `
+
+      <div
+        class="flyer-card"
+        onclick="openAccommodation('${item.id}')"
+      >
+
+        <img
+          src="images/${item.flyer}"
+          alt="${data.titleEn}"
+        >
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+loadCards();
+function openAccommodation(id) {
+
+  window.location.href =
+    `accommodation.html?id=${id}`;
+
+}
+</script>
+  <script src="script.js"></script>
+
 </body>
 </html>
