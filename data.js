@@ -25,6 +25,18 @@ const accommodations = [
 
   flyer:
     "angelika-app-polychrono.webp"
+},
+{
+  id: "alelia_app_lagonisi",
+
+  flyer:
+    "alelia-app-lagonisi.webp"
+},
+{
+  id: "apartament_skala_fourka",
+
+  flyer:
+    "apartament-skala-fourka.webp"
 }
 
 ];
