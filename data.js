@@ -12,6 +12,30 @@ const accommodations = [
   flyer:
     "marevia-beachfront-apartment-pefkohori.webp"
 },
+{
+  id: "iconic_olea_villa_pefkohori_with_pool_beach",
+
+  flyer:
+    "iconic-olea-villa-pefkohori-with-pool-beach.webp"
+},
+{
+  id: "big_studio_cc_in_mola_kaliva",
+
+  flyer:
+    "big-studio-cc-in-mola-kaliva.webp"
+},
+{
+  id: "infinity_view_villa_in_siviri",
+
+  flyer:
+    "infinity-view-villa-in-siviri.webp"
+},
+{
+  id: "polichrono_summer_escape",
+
+  flyer:
+    "polichrono-summer-escape.webp"
+},
     {
     id: "big_app_trikorfo",
 
