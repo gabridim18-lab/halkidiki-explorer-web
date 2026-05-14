@@ -122,17 +122,25 @@ body {
 }
 
 .cards-container {
+
   display: flex;
-  gap: 30px;
+
+  gap: 18px;
 
   overflow-x: auto;
-  padding-bottom: 20px;
 
   scroll-snap-type: x mandatory;
+
+  padding-bottom: 12px;
+
+  scrollbar-width: none;
+
 }
 
 .cards-container::-webkit-scrollbar {
+
   display: none;
+
 }
 
 .stay-card {
@@ -192,27 +200,37 @@ body {
   cursor: pointer;
 }
 .flyer-card {
-  min-width: 340px;
-  max-width: 340px;
 
-  border-radius: 30px;
+  min-width: 320px;
+
+  flex: 0 0 auto;
+
+  scroll-snap-align: center;
+
+  border-radius: 28px;
 
   overflow: hidden;
 
-  flex-shrink: 0;
+  cursor: pointer;
 
-  transition: 0.3s;
+  transition: transform 0.25s ease;
 
-  scroll-snap-align: center;
 }
 
 .flyer-card:hover {
+
   transform: scale(1.02);
+
 }
 
 .flyer-card img {
+
   width: 100%;
+
+  height: auto;
+
   display: block;
+
 }
 .categories {
   display: flex;
@@ -1100,6 +1118,29 @@ body {
     font-size: 15px;
 
     line-height: 1.7;
+
+  }
+
+}
+@media (max-width: 768px) {
+
+  .flyer-card {
+
+    min-width: 92vw;
+
+  }
+
+  .discover-section {
+
+    padding: 16px;
+
+  }
+
+  .swipe-hint {
+
+    font-size: 13px;
+
+    margin-bottom: 14px;
 
   }
 
