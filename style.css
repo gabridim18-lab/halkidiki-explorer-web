@@ -1109,57 +1109,119 @@ body {
 
   .gallery img {
 
-    height: 210px;
+    height: 300px;
 
     object-fit: cover;
 
-    border-radius: 18px;
+    border-radius: 21px;
 
   }
 
-  .premium-bar {
+.premium-bar {
 
-    gap: 10px;
+  flex-wrap: nowrap;
 
-  }
+  gap: 8px;
 
-  .premium-item {
+  padding: 12px;
 
-    padding: 12px;
+  border-radius: 24px;
 
-  }
+}
 
-  .premium-icon {
+.premium-item {
 
-    width: 42px;
+  min-width: 0;
 
-    height: 42px;
+  gap: 8px;
 
-  }
+}
 
-  .premium-label {
+.premium-icon {
 
-    font-size: 13px;
+  width: 28px;
 
-  }
+  height: 28px;
 
-  .premium-value {
+}
 
-    font-size: 16px;
+.premium-label {
 
-  }
+  font-size: 11px;
 
-  .features-row {
+}
 
-    gap: 10px;
+.premium-value {
 
-  }
+  width: 42px;
 
-  .feature-card {
+  height: 42px;
 
-    min-height: 110px;
+  font-size: 18px;
 
-  }
+  border-radius: 12px;
+
+}
+
+ .features-row {
+
+  flex-wrap: nowrap;
+
+  gap: 8px;
+
+  overflow-x: auto;
+
+  scrollbar-width: none;
+
+}
+
+.features-row::-webkit-scrollbar {
+
+  display: none;
+
+}
+
+.feature-card {
+
+  min-width: 120px;
+
+  min-height: 90px;
+
+  border-radius: 18px;
+
+}
+
+.small-feature {
+
+  min-width: 90px;
+
+  max-width: 90px;
+
+}
+
+.feature-overlay {
+
+  padding: 12px;
+
+}
+
+.feature-title {
+
+  font-size: 10px;
+
+}
+
+.feature-big {
+
+  font-size: 22px;
+
+}
+
+.feature-text {
+
+  font-size: 14px;
+
+}
 
   .amenity-card {
 
@@ -1388,5 +1450,74 @@ body {
 .zone-dropdown:focus {
 
   outline: 3px solid #00aaff55;
+
+}
+.gallery-wrapper {
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+}
+
+.gallery-arrow {
+
+  position: absolute;
+
+  z-index: 20;
+
+  width: 58px;
+
+  height: 58px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.96);
+
+  box-shadow:
+    0 5px 20px rgba(0,0,0,0.18);
+
+  font-size: 38px;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+
+}
+
+.gallery-arrow:hover {
+
+  transform: scale(1.08);
+
+}
+
+.gallery-left {
+
+  left: 18px;
+
+}
+
+.gallery-right {
+
+  right: 18px;
+
+}
+@media (max-width: 768px) {
+
+ .gallery-arrow {
+
+  width: 38px;
+
+  height: 38px;
+
+  font-size: 22px;
+
+  background: rgba(255,255,255,0.82);
+
+}
 
 }

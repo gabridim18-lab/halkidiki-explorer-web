@@ -48,10 +48,28 @@
 
     </div>
 
-    <div
-      class="gallery"
-      id="gallery">
-    </div>
+    <div class="gallery-wrapper">
+
+  <button
+    class="gallery-arrow gallery-left"
+    onclick="scrollGallery(-1)"
+  >
+    ‹
+  </button>
+
+  <div
+    class="gallery"
+    id="gallery">
+  </div>
+
+  <button
+    class="gallery-arrow gallery-right"
+    onclick="scrollGallery(1)"
+  >
+    ›
+  </button>
+
+</div>
 
 
      <div class="beach-row">
@@ -350,6 +368,8 @@
 
 async function loadAccommodation() {
 
+
+
   const params =
     new URLSearchParams(window.location.search);
 
@@ -502,7 +522,20 @@ function toggleBookingForm() {
       : "flex";
 
 }
+function scrollGallery(direction) {
 
+  const gallery =
+    document.getElementById("gallery");
+
+  gallery.scrollBy({
+
+    left: direction * 920,
+
+    behavior: "smooth"
+
+  });
+
+}
 function changeAdults(value) {
 
   adults += value;
