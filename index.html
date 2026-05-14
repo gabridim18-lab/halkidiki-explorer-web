@@ -60,10 +60,123 @@
 
   <p class="swipe-text">
 
-    Swipe to explore accommodations
+    Swipe to explore and click for details
 
   </p>
+<div class="filters-bar">
 
+  <div class="filter-group">
+
+    <button
+      class="filter-pill active"
+      data-guests="0"
+    >
+      Any Guests
+    </button>
+
+    <button
+      class="filter-pill"
+      data-guests="2"
+    >
+      2+
+    </button>
+
+    <button
+      class="filter-pill"
+      data-guests="4"
+    >
+      4+
+    </button>
+
+    <button
+      class="filter-pill"
+      data-guests="6"
+    >
+      6+
+    </button>
+
+    <button
+      class="filter-pill"
+      data-guests="8"
+    >
+      8+
+    </button>
+
+    <button
+  class="filter-pill toggle-pill"
+  id="poolFilter"
+>
+  🏊 Pool
+</button>
+
+<button
+  class="filter-pill toggle-pill"
+  id="petFilter"
+>
+  🐶 Pet Friendly
+</button>
+
+<div class="zone-dropdown-wrapper">
+
+  <select id="zoneSelect" class="zone-dropdown">
+
+    <option value="">
+      🌍 All Zones
+    </option>
+
+    <option value="Kassandra">
+      🟣 Kassandra
+    </option>
+
+    <option value="Sithonia">
+      🔵 Sithonia
+    </option>
+
+    <option value="Thessaloniki">
+      🟢 Thessaloniki
+    </option>
+
+    <option value="Olympiada">
+      🟡 Olympiada
+    </option>
+
+  </select>
+
+</div>
+
+<div class="distance-dropdown-wrapper">
+
+  <select
+    id="distanceSelect"
+    class="zone-dropdown"
+  >
+
+    <option value="">
+      🌍 Any Distance
+    </option>
+
+    <option value="50">
+      🏖️ Beachfront
+    </option>
+
+    <option value="150">
+      🚶 less than 150m
+    </option>
+
+    <option value="300">
+      ☀️ between 150m and 300m
+    </option>
+
+  </select>
+
+</div>
+
+
+
+
+  </div>
+
+</div>
   <div class="cards-wrapper">
 
     <button
@@ -96,6 +209,15 @@
 const cardsContainer =
   document.getElementById("cards");
 
+  let selectedGuests = 0;
+   let poolOnly = false;
+    let petOnly = false;
+    let selectedZone = "";
+   let selectedDistance = 0;
+
+
+
+
 async function loadCards() {
 
   for (const item of accommodations) {
@@ -119,25 +241,149 @@ async function loadCards() {
     const data =
       await response.json();
 
+      if (
+
+  (
+    selectedGuests === 0 ||
+    data.guests >= selectedGuests
+  )
+
+  &&
+
+  (
+    !poolOnly ||
+    data.pool === true
+  )
+
+  &&
+
+  (
+    !petOnly ||
+    data.petFriendly === true
+  )
+  &&
+
+(
+  selectedZone === "" ||
+  data.zone === selectedZone
+)
+&&
+
+(
+  selectedDistance === 0 ||
+  data.distanceMetersOverride <= selectedDistance
+)
+
+
+
+
+) {
+
     cardsContainer.innerHTML += `
 
       <div
         class="flyer-card"
         onclick="openAccommodation('${item.id}')"
-      >
+       >
 
         <img
           src="images/${item.flyer}"
           alt="${data.titleEn}"
         >
 
-      </div>
-
-    `;
+       </div>
+ 
+        `;
+      }
 
   }
 
 }
+document
+  .getElementById("poolFilter")
+  .addEventListener("click", async () => {
+
+    poolOnly = !poolOnly;
+
+    document
+      .getElementById("poolFilter")
+      .classList.toggle("active");
+
+    cardsContainer.innerHTML = "";
+
+    await loadCards();
+
+});
+document
+  .getElementById("distanceSelect")
+  .addEventListener("change", async (e) => {
+
+    selectedDistance =
+      parseInt(e.target.value) || 0;
+
+    cardsContainer.innerHTML = "";
+
+    await loadCards();
+
+});
+document
+  .getElementById("petFilter")
+  .addEventListener("click", async () => {
+
+    petOnly = !petOnly;
+
+    document
+      .getElementById("petFilter")
+      .classList.toggle("active");
+
+    cardsContainer.innerHTML = "";
+
+    await loadCards();
+
+});
+document
+  .getElementById("zoneSelect")
+  .addEventListener("change", async (e) => {
+
+    selectedZone = e.target.value;
+
+    cardsContainer.innerHTML = "";
+
+    await loadCards();
+
+});
+
+
+
+document
+  .querySelectorAll("[data-guests]")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      async () => {
+
+        document
+          .querySelectorAll("[data-guests]")
+          .forEach(btn =>
+            btn.classList.remove("active")
+          );
+
+        button.classList.add("active");
+
+        selectedGuests =
+          parseInt(
+            button.dataset.guests
+          );
+
+        cardsContainer.innerHTML = "";
+
+        await loadCards();
+
+      }
+    );
+
+});
 
 function scrollCards(direction) {
 

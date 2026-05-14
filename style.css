@@ -162,6 +162,10 @@ body {
 
   padding: 10px 50px;
 
+  scroll-snap-type: x mandatory;
+
+  -webkit-overflow-scrolling: touch;
+
 }
 
 .cards-container::-webkit-scrollbar {
@@ -251,6 +255,8 @@ body {
 
   flex: 0 0 340px;
 
+  scroll-snap-align: center;
+
   border-radius: 28px;
 
   overflow: hidden;
@@ -276,7 +282,11 @@ body {
 
   width: 100%;
 
+  height: auto;
+
   display: block;
+
+  object-fit: contain;
 
 }
 .nav-arrow {
@@ -399,8 +409,6 @@ body {
 
 .flyer-card img {
   width: 100%;
-
-  aspect-ratio: 9 / 16;
 
   object-fit: cover;
 
@@ -1248,7 +1256,7 @@ body {
 
   .flyer-card {
 
-    flex: 0 0 88vw;
+    flex: 0 0 82vw;
 
   }
 
@@ -1257,5 +1265,128 @@ body {
     display: none;
 
   }
+
+}
+.filters-bar {
+
+  display: flex;
+
+  overflow-x: auto;
+
+  gap: 14px;
+
+  padding-bottom: 16px;
+
+  margin-bottom: 26px;
+
+  scrollbar-width: none;
+
+}
+
+.filters-bar::-webkit-scrollbar {
+
+  display: none;
+
+}
+
+.filter-group {
+
+  display: flex;
+
+  gap: 12px;
+
+}
+
+.filter-pill {
+
+  border: none;
+
+  padding: 14px 22px;
+
+  border-radius: 999px;
+
+  background: white;
+
+  color: #111;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+
+  box-shadow:
+    0 5px 18px rgba(0,0,0,0.08);
+
+}
+
+.filter-pill.active {
+
+  background: #009dff;
+
+  color: white;
+
+}
+.toggle-pill.active {
+
+  background: linear-gradient(
+    135deg,
+    #00aaff,
+    #0066ff
+  );
+
+  color: white;
+
+}
+.zone-dropdown-wrapper {
+
+  display: flex;
+
+  align-items: center;
+
+}
+
+.zone-dropdown {
+
+  border: none;
+
+  padding: 14px 20px;
+
+  border-radius: 18px;
+
+  background: white;
+
+  color: #111;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 18px rgba(0,0,0,0.08);
+
+  outline: none;
+
+  min-width: 220px;
+
+  transition: 0.25s;
+
+}
+
+.zone-dropdown:hover {
+
+  transform: translateY(-1px);
+
+}
+
+.zone-dropdown:focus {
+
+  outline: 3px solid #00aaff55;
 
 }

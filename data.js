@@ -1,6 +1,18 @@
 const accommodations = [
 
   {
+  id: "on_the_rock_sky_view_suite",
+
+  flyer:
+    "on-the-rock-sky-view-suite.webp"
+},
+{
+  id: "marevia_beachfront_apartment_pefkohori",
+
+  flyer:
+    "marevia-beachfront-apartment-pefkohori.webp"
+},
+    {
     id: "big_app_trikorfo",
 
     flyer:
@@ -37,6 +49,18 @@ const accommodations = [
 
   flyer:
     "apartament-skala-fourka.webp"
+},
+{
+  id: "app_mola_kaliva",
+
+  flyer:
+    "app-mola-kaliva.webp"
+},
+{
+  id: "appartament_for_5_in_agia_paraskevi",
+
+  flyer:
+    "appartament-for-5-in-agia-paraskevi.webp"
 }
 
 ];
