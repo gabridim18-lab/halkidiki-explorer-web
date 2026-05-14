@@ -1,65 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
 
   <title>Halkidiki Explorer</title>
 
-  <link rel="stylesheet" href="style.css" />
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
 </head>
 
 <body>
 
-  <section class="hero">
-    <section class="discover-section">
-      
+<section class="hero">
 
- <h2>Popular Stays</h2>
+  <div class="overlay"></div>
 
-<div
-  class="cards-container"
-  id="cards">
-</div>
+  <div class="hero-content">
 
-</section>
+    <h1>
+      HALKIDIKI EXPLORER
+    </h1>
 
-    <div class="overlay"></div>
+    <p>
+      Discover beaches, accommodations and restaurants
+      in the most beautiful region of Greece.
+    </p>
 
-    <div class="hero-content">
+    <div class="hero-buttons">
 
-      <h1>HALKIDIKI EXPLORER</h1>
+      <button class="primary-btn">
+        Find Accommodation
+      </button>
 
-      <p>
-        Discover beaches, accommodations and restaurants
-        in the most beautiful region of Greece.
-      </p>
-
-      <div class="hero-buttons">
-
-        <button class="primary-btn">
-          Find Accommodation
-        </button>
-
-        <button class="secondary-btn">
-          Explore Beaches
-        </button>
-
-      </div>
+      <button class="secondary-btn">
+        Explore Beaches
+      </button>
 
     </div>
 
-  </section>
-  <script src="data.js"></script>
+  </div>
+
+</section>
+
+<section class="discover-section">
+
+  <h2>
+    Popular Stays
+  </h2>
+
+  <p class="swipe-text">
+
+    Swipe to explore accommodations
+
+  </p>
+
+  <div class="cards-wrapper">
+
+    <button
+      class="nav-arrow left-arrow"
+      onclick="scrollCards(-1)"
+    >
+      ‹
+    </button>
+
+    <div
+      class="cards-container"
+      id="cards"
+    ></div>
+
+    <button
+      class="nav-arrow right-arrow"
+      onclick="scrollCards(1)"
+    >
+      ›
+    </button>
+
+  </div>
+
+</section>
+
+<script src="data.js"></script>
+
 <script>
 
 const cardsContainer =
   document.getElementById("cards");
 
 async function loadCards() {
-
-  const cardsContainer =
-    document.getElementById("cards");
 
   for (const item of accommodations) {
 
@@ -68,10 +105,19 @@ async function loadCards() {
         `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/${item.id}/index.json`
       );
 
+    if (!response.ok) {
+
+      console.error(
+        "Failed to load:",
+        item.id
+      );
+
+      continue;
+
+    }
+
     const data =
       await response.json();
-
-    item.data = data;
 
     cardsContainer.innerHTML += `
 
@@ -93,15 +139,29 @@ async function loadCards() {
 
 }
 
-loadCards();
+function scrollCards(direction) {
+
+  cardsContainer.scrollBy({
+
+    left: direction * 380,
+
+    behavior: "smooth"
+
+  });
+
+}
+
 function openAccommodation(id) {
 
   window.location.href =
     `accommodation.html?id=${id}`;
 
 }
+
+loadCards();
+
 </script>
-  <script src="script.js"></script>
 
 </body>
+
 </html>
