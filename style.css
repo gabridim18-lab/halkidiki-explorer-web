@@ -123,19 +123,36 @@ body {
 
 .cards-container {
 
-  display: flex;
+  display: grid;
 
-  gap: 18px;
+  grid-template-columns:
+    repeat(auto-fit, minmax(320px, 1fr));
 
-  overflow-x: auto;
+  gap: 24px;
 
-  scroll-snap-type: x mandatory;
-
-  padding-bottom: 12px;
-
-  scrollbar-width: none;
+  margin-top: 24px;
 
 }
+
+@media (max-width: 768px) {
+
+  .cards-container {
+
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+
+  }
+
+  .discover-section {
+
+    padding: 14px;
+
+  }
+
+}
+
+
 
 .cards-container::-webkit-scrollbar {
 
@@ -201,33 +218,30 @@ body {
 }
 .flyer-card {
 
-  min-width: 320px;
-
-  flex: 0 0 auto;
-
-  scroll-snap-align: center;
-
   border-radius: 28px;
 
   overflow: hidden;
 
   cursor: pointer;
 
-  transition: transform 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 
 }
 
 .flyer-card:hover {
 
-  transform: scale(1.02);
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 15px 40px rgba(0,0,0,0.25);
 
 }
 
 .flyer-card img {
 
   width: 100%;
-
-  height: auto;
 
   display: block;
 
