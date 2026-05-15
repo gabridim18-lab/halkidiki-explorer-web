@@ -36,6 +36,25 @@ const accommodations = [
   flyer:
     "polichrono-summer-escape.webp"
 },
+{
+  id: "prive_villa_in_mola_kaliva",
+
+  flyer:
+    "prive-villa-in-mola-kaliva.webp"
+},
+{
+  id: "sea_view_apartment_in_agia_triada",
+
+  flyer:
+    "sea-view-apartment-in-agia-triada.webp"
+},
+{
+  id: "avra_k7_villa_in_possidi_west_beach",
+
+  flyer:
+    "avra-k7-villa-in-possidi-west-beach.webp"
+},
+
     {
     id: "big_app_trikorfo",
 
@@ -43,6 +62,18 @@ const accommodations = [
       "3-bedroom-tricorfo.webp"
   },
 
+  {
+  id: "aya_app_kallithea",
+
+  flyer:
+    "aya-app-kallithea.webp"
+},
+  {
+  id: "artes_olive_haven_apartament_in_skala_fourkas",
+
+  flyer:
+    "artes-olive-haven-apartament-in-skala-fourkas.webp"
+},
   {
     id: "amazing_view_by_the_pool",
 
@@ -75,6 +106,18 @@ const accommodations = [
     "apartament-skala-fourka.webp"
 },
 {
+  id: "beach_front_apartment_in_pefkochori",
+
+  flyer:
+    "beach-front-apartment-in-pefkochori.webp"
+},
+{
+  id: "beach_app_pefkochori",
+
+  flyer:
+    "beach-app-pefkochori.webp"
+},
+{
   id: "app_mola_kaliva",
 
   flyer:
@@ -85,6 +128,48 @@ const accommodations = [
 
   flyer:
     "appartament-for-5-in-agia-paraskevi.webp"
+},
+{
+  id: "big_villa_in_kriopigi",
+
+  flyer:
+    "big-villa-in-kriopigi.webp"
+},
+{
+  id: "big_villa_in_nea_potidea_with_7_bedrooms",
+
+  flyer:
+    "big-villa-in-nea-potidea-with-7-bedrooms.webp"
+},
+{
+  id: "blue_breeze_sykia",
+
+  flyer:
+    "blue-breeze-sykia.webp"
+},
+{
+  id: "cassa_luca_in_glarokavmos",
+
+  flyer:
+    "cassa-luca-in-glarokavmos.webp"
+},
+{
+  id: "cozy_house_in_kallithea",
+
+  flyer:
+    "cozy-house-in-kallithea.webp"
+},
+{
+  id: "detached_house_pefkochori",
+
+  flyer:
+    "detached-house-pefkochori.webp"
+},
+{
+  id: "double_room_in_agia_paraskevi",
+
+  flyer:
+    "double-room-in-agia-paraskevi.webp"
 }
 
 ];
