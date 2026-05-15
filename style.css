@@ -1521,30 +1521,46 @@ body {
 }
 
 }
-.share-btn {
+.header-actions {
 
-  width: 100%;
+  display: flex;
 
-  margin-top: 16px;
+  align-items: center;
 
-  padding: 18px;
+  gap: 12px;
+
+}
+
+.share-icon-btn {
+
+  width: 54px;
+  height: 54px;
 
   border: none;
 
-  border-radius: 22px;
+  border-radius: 50%;
 
-  background: linear-gradient(
-    135deg,
-    #2b2b2b,
-    #111
-  );
+  background: white;
 
-  color: white;
+  color: #111;
 
-  font-size: 18px;
+  display: flex;
 
-  font-weight: 700;
+  align-items: center;
+
+  justify-content: center;
 
   cursor: pointer;
+
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.12);
+
+  transition: 0.25s;
+
+}
+
+.share-icon-btn:hover {
+
+  transform: scale(1.08);
 
 }

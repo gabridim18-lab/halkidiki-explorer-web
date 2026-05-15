@@ -40,11 +40,44 @@
 
       </div>
 
-      <div class="rating-box">
+      <div class="header-actions">
 
-        <span id="rating"></span>
+  <div class="rating-box">
 
-      </div>
+    <span id="rating"></span>
+
+  </div>
+
+  <button
+    class="share-icon-btn"
+    onclick="shareAccommodation()"
+    aria-label="Share"
+  >
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+
+      <circle cx="18" cy="5" r="3"></circle>
+      <circle cx="6" cy="12" r="3"></circle>
+      <circle cx="18" cy="19" r="3"></circle>
+
+      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+
+    </svg>
+
+  </button>
+
+</div>
 
     </div>
 
@@ -236,13 +269,7 @@
 </button>
 
 
-<button
-  type="button"
-  class="share-btn"
-  onclick="shareAccommodation()"
->
-  Share Accommodation
-</button>
+
 <div
   class="booking-form"
   id="bookingForm"
@@ -682,61 +709,28 @@ async function shareAccommodation() {
   const id =
     params.get("id");
 
-  const title =
-    document.getElementById("title").innerText;
+  const shareUrl =
+`https://halkidikiexplorer.com/share/${id}.html?v=${Date.now()}`;
 
-const flyerUrl =
-`https://raw.githubusercontent.com/gabridim18-lab/halkidiki-explorer-web/main/images/${id}.webp`;
+  if (navigator.share) {
 
-  const pageUrl =
-`${window.location.origin}/accommodation.html?id=${id}`;
+    await navigator.share({
 
-  try {
+      title:
+        document.getElementById("title").innerText,
 
-    const response =
-      await fetch(flyerUrl);
+      text:
+"Discover this accommodation on Halkidiki Explorer",
 
-    const blob =
-      await response.blob();
+      url: shareUrl
 
-    const file =
-      new File(
-        [blob],
-        `${id}.webp`,
-        { type: blob.type }
-      );
+    });
 
-    if (navigator.share &&
-        navigator.canShare({
-          files: [file]
-        })) {
+  } else {
 
-      await navigator.share({
+    await navigator.clipboard.writeText(shareUrl);
 
-        title: title,
-
-        text:
-`Discover this accommodation on Halkidiki Explorer:
-
-${pageUrl}`,
-
-        files: [file]
-
-      });
-
-    } else {
-
-      await navigator.clipboard.writeText(pageUrl);
-
-      alert(
-        "Link copied!"
-      );
-
-    }
-
-  } catch (error) {
-
-    console.error(error);
+    alert("Share link copied!");
 
   }
 
