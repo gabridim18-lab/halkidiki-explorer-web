@@ -1521,3 +1521,30 @@ body {
 }
 
 }
+.share-btn {
+
+  width: 100%;
+
+  margin-top: 16px;
+
+  padding: 18px;
+
+  border: none;
+
+  border-radius: 22px;
+
+  background: linear-gradient(
+    135deg,
+    #2b2b2b,
+    #111
+  );
+
+  color: white;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+}

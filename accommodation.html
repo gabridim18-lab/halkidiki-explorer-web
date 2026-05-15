@@ -235,6 +235,14 @@
   Request Offer
 </button>
 
+
+<button
+  type="button"
+  class="share-btn"
+  onclick="shareAccommodation()"
+>
+  Share Accommodation
+</button>
 <div
   class="booking-form"
   id="bookingForm"
@@ -584,6 +592,8 @@ function renderChildrenAges() {
   }
 
 }
+
+
 function sendWhatsApp() {
 
   const name =
@@ -664,6 +674,75 @@ document.getElementById("checkinDate")
     }
 
 });
+async function shareAccommodation() {
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const id =
+    params.get("id");
+
+  const title =
+    document.getElementById("title").innerText;
+
+const flyerUrl =
+`https://raw.githubusercontent.com/gabridim18-lab/halkidiki-explorer-web/main/images/${id}.webp`;
+
+  const pageUrl =
+`${window.location.origin}/accommodation.html?id=${id}`;
+
+  try {
+
+    const response =
+      await fetch(flyerUrl);
+
+    const blob =
+      await response.blob();
+
+    const file =
+      new File(
+        [blob],
+        `${id}.webp`,
+        { type: blob.type }
+      );
+
+    if (navigator.share &&
+        navigator.canShare({
+          files: [file]
+        })) {
+
+      await navigator.share({
+
+        title: title,
+
+        text:
+`Discover this accommodation on Halkidiki Explorer:
+
+${pageUrl}`,
+
+        files: [file]
+
+      });
+
+    } else {
+
+      await navigator.clipboard.writeText(pageUrl);
+
+      alert(
+        "Link copied!"
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+}
+
+
 </script>
 
 </body>
