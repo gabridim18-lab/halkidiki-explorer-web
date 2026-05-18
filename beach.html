@@ -1165,7 +1165,69 @@ h1 {
   overflow: hidden;
 
 }
+.traveler-insights {
 
+  background:
+    rgba(255,255,255,0.78);
+
+  backdrop-filter:
+    blur(14px);
+
+  border-radius: 30px;
+
+  padding: 28px;
+
+  margin-top: 18px;
+
+  box-shadow:
+    0 10px 28px rgba(0,0,0,0.08);
+
+}
+
+.insight-row {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 18px 0;
+
+  border-bottom:
+    1px solid rgba(0,0,0,0.08);
+
+}
+
+.insight-row:last-child {
+
+  border-bottom: none;
+
+}
+
+.insight-label {
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  color: #222;
+
+}
+
+.insight-value {
+
+  font-size: 16px;
+
+  color: #555;
+
+  text-align: right;
+
+  max-width: 55%;
+
+  line-height: 1.5;
+
+}
 
 
 
@@ -1838,7 +1900,49 @@ h1 {
   font-size: 12px;
 
 }
+.traveler-insights {
 
+  padding: 22px 18px;
+
+  border-radius: 24px;
+
+}
+
+.insight-row {
+
+  display: flex;
+
+  flex-direction: row;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 14px 0;
+
+}
+
+.insight-label {
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+}
+
+.insight-value {
+
+  font-size: 13px;
+
+  text-align: right;
+
+  max-width: 48%;
+
+  line-height: 1.4;
+
+}
 
 
 
@@ -2026,8 +2130,146 @@ h1 {
   class="business-row"
   id="localBusinessesRow">
 </div>
+<div class="section-title">
 
+  Traveler Insights
 
+</div>
+
+<div
+  class="traveler-insights">
+
+  <div class="insight-row">
+
+    <div class="insight-label">
+
+      ⭐ Editor Choice
+
+    </div>
+
+    <div
+      class="insight-value"
+      id="editorChoice">
+    </div>
+
+  </div>
+
+  <div class="insight-row">
+
+    <div class="insight-label">
+
+      📏 Beach Length
+
+    </div>
+
+    <div
+      class="insight-value"
+      id="beachLength">
+    </div>
+
+  </div>
+
+  <div class="insight-row">
+
+    <div class="insight-label">
+
+      🌊 Water Entry
+
+    </div>
+
+    <div
+      class="insight-value"
+      id="waterEntry">
+    </div>
+
+  </div>
+
+  <div class="insight-row">
+
+    <div class="insight-label">
+
+      🌤 Wave Level
+
+    </div>
+
+    <div
+      class="insight-value"
+      id="waveLevel">
+    </div>
+
+  </div>
+
+  <div class="insight-row">
+
+    <div class="insight-label">
+
+      ☀️ Sunbed Price
+
+    </div>
+
+    <div
+      class="insight-value"
+      id="sunbedPrice">
+    </div>
+
+  </div>
+
+  <div class="insight-row">
+
+    <div class="insight-label">
+
+      🚗 Parking Difficulty
+
+    </div>
+
+    <div
+      class="insight-value"
+      id="parkingDifficulty">
+    </div>
+
+  </div>
+
+  <div class="insight-row">
+
+    <div class="insight-label">
+
+      🚶 Walking Distance
+
+    </div>
+
+    <div
+      class="insight-value"
+      id="walkingDistance">
+    </div>
+
+  </div>
+
+  <div class="insight-row">
+
+    <div class="insight-label">
+
+      👨‍👩‍👧 Ideal For
+
+    </div>
+
+    <div
+      class="insight-value"
+      id="idealFor">
+    </div>
+
+  </div>
+
+</div>
+<div class="section-title">
+
+  What To Do
+
+</div>
+
+<div
+  class="business-row"
+  id="whatToDoRow">
+</div>
 
 
 
@@ -2153,6 +2395,8 @@ loadBeachInfo(data);
 setupTakeMeThere(data);
 loadFacilities(data);
 loadLocalBusinesses(beachId);
+loadTravelerInsights(data);
+loadWhatToDo(beachId);
 
 
 
@@ -2856,6 +3100,170 @@ async function loadLocalBusinesses(
     window.location.href=
     'local-business.html?id=${business.id}'
   ">
+
+        <img
+          src="${image}"
+
+          class="business-card-image"
+        >
+
+        <div
+          class="business-card-content">
+
+          <div
+            class="business-category">
+
+            ${details.categoryEn}
+
+          </div>
+
+          <div
+            class="business-title">
+
+            ${details.titleEn}
+
+          </div>
+
+          <div
+            class="business-description">
+
+            ${details.descriptionEn}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+}
+function loadTravelerInsights(data) {
+
+  document.getElementById(
+    "editorChoice"
+  ).innerText =
+
+    data.editorChoice
+      ? "Highly recommended"
+      : "—";
+
+  document.getElementById(
+    "beachLength"
+  ).innerText =
+
+    data.length
+      ? data.length + "m"
+      : "—";
+
+  document.getElementById(
+    "waterEntry"
+  ).innerText =
+
+    data.beachInfo
+      ?.waterEntry?.en
+      || "—";
+
+  document.getElementById(
+    "waveLevel"
+  ).innerText =
+
+    data.beachInfo
+      ?.waveLevel?.en
+      || "—";
+
+  document.getElementById(
+    "sunbedPrice"
+  ).innerText =
+
+    data.facilities
+      ?.sunbedPrice
+      || "Not specified";
+
+  document.getElementById(
+    "parkingDifficulty"
+  ).innerText =
+
+    data.quickFacts
+      ?.parkingDifficulty?.en
+      || "—";
+
+  document.getElementById(
+    "walkingDistance"
+  ).innerText =
+
+    data.quickFacts
+      ?.walkingDistance?.en
+      || "—";
+
+  document.getElementById(
+    "idealFor"
+  ).innerText =
+
+    data.idealFor?.en
+      ?.join(" • ")
+      || "—";
+
+}
+async function loadWhatToDo(
+  beachSlug
+) {
+
+  const row =
+    document.getElementById(
+      "whatToDoRow"
+    );
+
+  row.innerHTML = "";
+
+  const response =
+    await fetch(
+
+"https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/what-to-do/what-to-do-index.json"
+
+    );
+
+  const items =
+    await response.json();
+
+  const filtered =
+    items.filter(
+
+      item =>
+
+        item.beaches?.includes(
+          beachSlug
+        )
+
+    );
+
+  for (const item of filtered) {
+
+    const detailsResponse =
+      await fetch(
+
+`https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/what-to-do/${item.id}/index.json`
+
+      );
+
+    const details =
+      await detailsResponse.json();
+
+    const image =
+
+`https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/what-to-do/${item.id}/images/${details.images[0]}`;
+
+    row.innerHTML += `
+
+      <div
+        class="business-card"
+
+        onclick="
+          window.location.href=
+          'what-to-do.html?id=${item.id}'
+        ">
 
         <img
           src="${image}"

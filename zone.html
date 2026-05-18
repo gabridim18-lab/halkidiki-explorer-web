@@ -123,9 +123,11 @@ body {
 
 .beach-card {
 
+  position: relative;
+
   min-width: 320px;
 
-  background: white;
+  height: 200px;
 
   border-radius: 28px;
 
@@ -135,18 +137,24 @@ body {
 
   cursor: pointer;
 
-  transition: 0.25s;
-
-  box-shadow:
-    0 6px 24px rgba(0,0,0,0.08);
+  transition: 0.3s ease;
 
   scroll-snap-align: start;
+
+  box-shadow:
+    0 6px 24px rgba(0,0,0,0.10);
 
 }
 
 .beach-card:hover {
 
-  transform: translateY(-6px);
+  transform: translateY(-4px);
+
+}
+
+.beach-card:hover img {
+
+  transform: scale(1.04);
 
 }
 
@@ -154,39 +162,131 @@ body {
 
   width: 100%;
 
-  height: 220px;
+  height: 100%;
 
   object-fit: cover;
 
+  transition: 0.4s ease;
+
 }
 
-.beach-content {
+.beach-overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: flex-end;
 
   padding: 18px;
 
-}
-
-.beach-name {
-
-  font-size: 24px;
-
-  font-weight: bold;
-
-  margin-bottom: 12px;
+  background:
+    linear-gradient(
+      to top,
+      rgba(0,0,0,0.18),
+      transparent 45%
+    );
 
 }
 
-.beach-info {
+.beach-temp {
+
+  position: absolute;
+
+  top: 10px;
+
+  right: 10px;
+
+  background:
+    rgba(30,30,30,0.45);
+
+  backdrop-filter: blur(6px);
+
+  color: white;
+
+  height: 28px;
+
+  padding:
+    0 8px;
+
+  border-radius: 999px;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 2px;
+
+  line-height: 1;
+
+}
+.weather-icon {
+
+  width: 18px;
+
+  height: 18px;
+
+  object-fit: contain;
+
+}
+
+.beach-bottom {
 
   display: flex;
 
   justify-content: space-between;
 
-  font-size: 16px;
+  align-items: flex-end;
 
-  color: #555;
+  margin-top: auto;
 
 }
+
+.beach-name {
+
+  color: white;
+
+  font-size: 26px;
+
+  font-weight: bold;
+
+  max-width: 70%;
+
+  text-shadow:
+    0 2px 10px rgba(0,0,0,0.35);
+
+}
+
+.beach-rating {
+
+  background:
+    rgba(255,255,255,0.20);
+
+  backdrop-filter: blur(10px);
+
+  color: white;
+
+  padding:
+    6px 12px;
+
+  border-radius: 999px;
+
+  font-size: 15px;
+
+  font-weight: bold;
+
+  margin-bottom: 4px;
+
+}
+
 
 .quick-buttons {
 
@@ -207,20 +307,56 @@ body {
 
   border-radius: 24px;
 
-  padding: 24px;
+  padding: 18px 12px;
 
-  text-align: center;
+  display: flex;
 
-  font-size: 20px;
+  flex-direction: column;
 
-  font-weight: bold;
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 14px;
 
   cursor: pointer;
 
-  transition: 0.25s;
+  transition: 0.25s ease;
 
   box-shadow:
-    0 5px 20px rgba(0,0,0,0.08);
+    0 5px 20px rgba(0,0,0,0.06);
+
+  min-height: 120px;
+
+}
+
+.quick-btn-icon {
+
+  width: 42px;
+
+  height: 42px;
+
+  object-fit: contain;
+
+}
+
+.quick-btn-text {
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+  color: #16214a;
+
+  text-align: center;
+
+  line-height: 1.2;
+
+}
+
+.quick-btn:hover {
+
+  transform: translateY(-4px);
 
 }
 
@@ -291,31 +427,85 @@ body {
 
   <div class="quick-buttons">
 
-    <div class="quick-btn">
-      🏨 Accommodation
-    </div>
+  <div class="quick-btn">
 
-    <div class="quick-btn">
-      🍴 Restaurants
-    </div>
+    <img
+      class="quick-btn-icon"
+      src="icons/accommodation.png"
+    >
 
-    <div class="quick-btn">
-      🍹 Beach Bars
-    </div>
-
-    <div class="quick-btn">
-      🚗 Car Rentals
-    </div>
-
-    <div class="quick-btn">
-      🛥 Boat Rentals
-    </div>
-
-    <div class="quick-btn">
-      🎯 Activities
+    <div class="quick-btn-text">
+      Accommodation
     </div>
 
   </div>
+
+  <div class="quick-btn">
+
+    <img
+      class="quick-btn-icon"
+      src="icons/restaurants.png"
+    >
+
+    <div class="quick-btn-text">
+      Restaurants
+    </div>
+
+  </div>
+
+  <div class="quick-btn">
+
+    <img
+      class="quick-btn-icon"
+      src="icons/beachbars.png"
+    >
+
+    <div class="quick-btn-text">
+      Beach Bars
+    </div>
+
+  </div>
+
+  <div class="quick-btn">
+
+    <img
+      class="quick-btn-icon"
+      src="icons/carrental.png"
+    >
+
+    <div class="quick-btn-text">
+      Car Rentals
+    </div>
+
+  </div>
+
+  <div class="quick-btn">
+
+    <img
+      class="quick-btn-icon"
+      src="icons/boat.png"
+    >
+
+    <div class="quick-btn-text">
+      Boat Rentals
+    </div>
+
+  </div>
+
+  <div class="quick-btn">
+
+    <img
+      class="quick-btn-icon"
+      src="icons/activities.png"
+    >
+
+    <div class="quick-btn-text">
+      Activities
+    </div>
+
+  </div>
+
+</div>
 
 </div>
 
@@ -357,54 +547,99 @@ zoneId.toLowerCase()
 
     );
 
-  const beachRow =
-    document.getElementById("beachRow");
+const beachRow =
+  document.getElementById("beachRow");
 
-  filtered.forEach(beach => {
+for (const beach of filtered) {
 
-    const image =
+  console.log(beach);
+
+  const image =
 
 `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/${beach.id}/images/${beach.previewImage}`;
 
-    beachRow.innerHTML += `
+let temp = "--";
+let weatherIcon = "";
 
-      <div
-        class="beach-card"
-        onclick="openBeach('${beach.id}')"
-      >
+if (beach.coordinates) {
 
-        <img src="${image}">
+  const weatherUrl =
 
-        <div class="beach-content">
+`https://api.weatherapi.com/v1/forecast.json?key=43c0c7ca861d47b48dc160903250408&q=${beach.coordinates.lat},${beach.coordinates.lon}&days=1&aqi=no&alerts=no`;
+
+  try {
+
+    const weatherResponse =
+      await fetch(weatherUrl);
+
+    const weatherData =
+      await weatherResponse.json();
+
+    if (weatherData.current) {
+
+      temp =
+        Math.round(
+          weatherData.current.temp_c
+        );
+
+      weatherIcon =
+        weatherData.current.condition.icon;
+
+    }
+
+  } catch (e) {
+
+    console.log(
+      "Weather error:",
+      e
+    );
+
+  }
+
+}
+
+  beachRow.innerHTML += `
+
+    <div
+      class="beach-card"
+      onclick="openBeach('${beach.id}')"
+    >
+
+      <img src="${image}">
+
+      <div class="beach-overlay">
+
+        <div class="beach-temp">
+
+          <img
+            class="weather-icon"
+            src="https:${weatherIcon}"
+          >
+
+          ${temp}°
+
+        </div>
+
+        <div class="beach-bottom">
 
           <div class="beach-name">
-
             ${beach.name.en}
-
           </div>
 
-          <div class="beach-info">
-
-            <span>
-              🌊 ${beach.waterTemperature}°C
-            </span>
-
-            <span>
-              ⭐ ${beach.rating}
-            </span>
-
+          <div class="beach-rating">
+            ⭐ ${beach.rating}
           </div>
 
         </div>
 
       </div>
 
-    `;
+    </div>
 
-  });
+  `;
 
 }
-
+}
 function openBeach(id) {
 
   window.location.href =
