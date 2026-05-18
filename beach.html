@@ -1,0 +1,3419 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
+
+<title>Beach</title>
+
+<style>
+
+body {
+
+  margin: 0;
+
+  font-family: Arial, sans-serif;
+
+  background: #f5f7fa;
+
+  color: #111;
+
+}
+
+.beach-page {
+
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  padding: 20px;
+
+}
+
+h1 {
+
+  font-size: 42px;
+
+  margin-bottom: 20px;
+
+}
+
+.gallery {
+
+  display: flex;
+
+  gap: 16px;
+
+  overflow-x: auto;
+
+  scroll-snap-type: x mandatory;
+
+  scrollbar-width: none;
+
+}
+
+.gallery::-webkit-scrollbar {
+
+  display: none;
+
+}
+
+.gallery img {
+
+  width: 100%;
+
+  max-width: 900px;
+
+  height: 500px;
+
+  object-fit: cover;
+
+  border-radius: 28px;
+
+  flex-shrink: 0;
+
+  scroll-snap-align: center;
+
+}
+
+.description {
+
+  margin-top: 30px;
+
+  background: white;
+
+  padding: 30px;
+
+  border-radius: 28px;
+
+  line-height: 1.8;
+
+  font-size: 18px;
+
+  box-shadow:
+    0 5px 20px rgba(0,0,0,0.08);
+
+}
+.section-title {
+
+  font-size: 32px;
+
+  font-weight: bold;
+
+  margin-top: 50px;
+
+  margin-bottom: 20px;
+
+}
+
+.accommodation-row {
+
+  display: flex;
+
+  gap: 20px;
+
+  overflow-x: auto;
+
+  scroll-snap-type: x mandatory;
+
+  padding-bottom: 10px;
+
+  scrollbar-width: none;
+
+}
+
+.accommodation-row::-webkit-scrollbar {
+
+  display: none;
+
+}
+
+.accommodation-card {
+
+  min-width: 320px;
+
+  background: white;
+
+  border-radius: 28px;
+
+  overflow: hidden;
+
+  flex-shrink: 0;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+
+  box-shadow:
+    0 5px 20px rgba(0,0,0,0.08);
+
+  scroll-snap-align: start;
+
+}
+
+.accommodation-card:hover {
+
+  transform: translateY(-6px);
+
+}
+
+.accommodation-card img {
+
+  width: 100%;
+
+  height: 220px;
+
+  object-fit: cover;
+
+}
+
+.accommodation-content {
+
+  padding: 18px;
+
+}
+
+.accommodation-title {
+
+  font-size: 22px;
+
+  font-weight: bold;
+
+  margin-bottom: 10px;
+
+}
+
+.accommodation-info {
+
+  color: #666;
+
+  font-size: 16px;
+
+}
+
+.weather-container {
+
+  margin-top: 30px;
+
+  background: white;
+
+  border-radius: 32px;
+
+  padding: 24px;
+
+  box-shadow:
+    0 5px 20px rgba(0,0,0,0.08);
+
+}
+
+.weather-top {
+
+  display: flex;
+
+  gap: 18px;
+
+}
+
+.weather-main {
+
+  flex: 1;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0b63f6,
+      #2a7fff
+    );
+
+  color: white;
+
+  border-radius: 28px;
+
+  padding: 22px;
+
+}
+
+.weather-main-top {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+}
+
+.weather-big-icon {
+
+  width: 140px;
+
+  height: 140px;
+
+  object-fit: contain;
+
+  transform: scale(1.8);
+
+  margin-right: 20px;
+
+  margin-top: 10px;
+
+}
+
+
+
+
+
+
+.weather-feels {
+
+  font-size: 22px;
+
+  opacity: 0.95;
+
+}
+
+.weather-temp {
+
+  font-size: 92px;
+
+  line-height: 1;
+
+  margin-top: 14px;
+
+  font-weight: 700;
+
+}
+
+.weather-condition {
+
+  margin-top: 14px;
+
+  font-size: 24px;
+
+}
+
+.weather-side {
+
+  width: 180px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+
+}
+
+.weather-mini {
+
+  background: #f5f7fa;
+
+  border-radius: 22px;
+
+  padding: 16px;
+
+}
+
+.weather-mini-title {
+
+  color: #777;
+
+  font-size: 14px;
+
+  margin-bottom: 6px;
+
+}
+
+.weather-mini-value {
+
+  font-size: 24px;
+
+  font-weight: bold;
+
+}
+
+.hourly-row {
+
+  display: flex;
+
+  gap: 14px;
+
+  overflow-x: auto;
+
+  margin-top: 24px;
+
+  padding-bottom: 6px;
+
+  scrollbar-width: none;
+
+}
+
+.hourly-row::-webkit-scrollbar {
+
+  display: none;
+
+}
+
+.hourly-item {
+
+  min-width: 70px;
+
+  background: #f5f7fa;
+
+  border-radius: 20px;
+
+  padding: 14px 10px;
+
+  text-align: center;
+
+  flex-shrink: 0;
+
+}
+
+.hourly-hour {
+
+  font-size: 14px;
+
+  color: #666;
+
+}
+
+.hourly-icon {
+
+  width: 38px;
+
+  height: 38px;
+
+  margin: 6px auto;
+
+}
+
+.hourly-temp {
+
+  font-weight: bold;
+
+  font-size: 18px;
+
+}
+.gallery-dots {
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  margin-top: 14px;
+
+}
+
+.gallery-dot {
+
+  width: 8px;
+
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: #c7d0db;
+
+}
+
+.gallery-dot.active {
+
+  background: #0b63f6;
+
+  width: 22px;
+
+  border-radius: 20px;
+
+}
+.highlights-section {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 12px;
+
+  margin-top: 28px;
+
+}
+
+.highlight-card {
+
+  background: white;
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.08);
+
+}
+.highlight-card img {
+
+  width: 100%;
+
+  aspect-ratio: 3 / 4;
+
+  object-fit: cover;
+
+  display: block;
+
+}
+
+.highlight-title {
+
+  padding: 10px 8px 12px;
+
+  text-align: center;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  line-height: 1.3;
+
+}
+@media (min-width: 769px) {
+
+  .highlights-section {
+
+    grid-template-columns:
+      repeat(4, 1fr);
+
+    gap: 18px;
+
+    max-width: 1000px;
+
+  }
+
+  .highlight-card {
+
+    border-radius: 24px;
+
+    transition: 0.25s;
+
+  }
+
+  .highlight-card:hover {
+
+    transform:
+      translateY(-4px);
+
+  }
+
+  .highlight-title {
+
+    font-size: 15px;
+
+    padding: 14px 10px;
+
+  }
+.beachbars-row {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 24px;
+
+  overflow: visible;
+
+  padding: 0;
+
+}
+
+.beachbar-card {
+
+  min-width: unset;
+
+  width: 100%;
+
+  border-radius: 28px;
+
+  transition: 0.25s;
+
+}
+
+.beachbar-card:hover {
+
+  transform:
+    translateY(-6px);
+
+}
+
+.beachbar-card img {
+
+  height: 260px;
+
+}
+
+.beachbar-title {
+
+  font-size: 24px;
+
+}
+
+.beachbar-subtitle {
+
+  font-size: 16px;
+
+}
+}
+.hero-wrapper {
+
+  position: relative;
+
+}
+
+
+
+
+
+.beach-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  gap: 20px;
+
+  padding: 22px 20px 10px;
+
+}
+
+.beach-header h1 {
+
+  margin: 12px 0 0;
+
+  font-size: 42px;
+
+  line-height: 1.05;
+
+  color: #111;
+
+}
+
+.hero-favorite {
+
+  width: 58px;
+
+  height: 58px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255,255,255,0.82);
+
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.08);
+
+  font-size: 30px;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  color: #020202;
+
+}
+.hero-favorite.active {
+
+  color: #ff3366;
+
+}
+
+.zone-badge {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 10px 18px;
+
+  border-radius: 999px;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+  color: white;
+
+  letter-spacing: 0.4px;
+
+}
+
+.beach-info-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 16px;
+
+  margin-top: 24px;
+
+}
+
+.beach-info-image-card {
+
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 28px;
+
+  height: 170px;
+
+  background-size: cover;
+
+  background-position: center;
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.10);
+
+}
+
+.beach-info-overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(255,255,255,0.78),
+      rgba(255,255,255,0.15)
+    );
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: flex-end;
+
+  padding: 18px;
+
+}
+
+.beach-info-title {
+
+  font-size: 15px;
+
+  font-weight: 800;
+
+  margin-bottom: 6px;
+
+}
+
+.beach-info-text {
+
+  font-size: 13px;
+
+  line-height: 1.45;
+
+  font-weight: 600;
+
+}
+.take-me-section {
+
+  position: relative;
+
+  margin-top: 40px;
+
+  border-radius: 38px;
+
+  overflow: hidden;
+
+  min-height: 340px;
+
+  background-image:
+    url("images/maps_preview.webp");
+
+  background-size: cover;
+
+  background-position: center;
+
+  box-shadow:
+    0 12px 40px rgba(0,0,0,0.12);
+
+}
+
+.take-me-overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0,0,0,0.62),
+      rgba(0,0,0,0.18)
+    );
+
+  display: flex;
+
+  align-items: flex-end;
+
+}
+
+.take-me-content {
+
+  padding: 38px;
+
+}
+
+.take-me-small {
+
+  color:
+    rgba(255,255,255,0.72);
+
+  font-size: 16px;
+
+  margin-bottom: 10px;
+
+}
+
+.take-me-title {
+
+  color: white;
+
+  font-size: 44px;
+
+  font-weight: 800;
+
+  line-height: 1.1;
+
+  margin-bottom: 24px;
+
+}
+
+.take-me-btn {
+
+  border: none;
+
+  padding:
+    18px 28px;
+
+  border-radius: 999px;
+
+  background: white;
+
+  color: #111;
+
+  font-size: 17px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.12);
+
+  transition: 0.25s;
+
+}
+
+.take-me-btn:hover {
+
+  transform:
+    translateY(-2px)
+    scale(1.02);
+
+}
+.restaurants-row {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 24px;
+
+  margin-top: 18px;
+
+}
+
+.restaurant-card {
+
+  background: white;
+
+  border-radius: 30px;
+
+  overflow: hidden;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+
+  box-shadow:
+    0 5px 20px rgba(0,0,0,0.08);
+
+}
+
+.restaurant-card:hover {
+
+  transform:
+    translateY(-6px);
+
+}
+
+.restaurant-card img {
+
+  width: 100%;
+
+  height: 240px;
+
+  object-fit: cover;
+
+}
+
+.restaurant-content {
+
+  padding: 18px;
+
+}
+
+.restaurant-title {
+
+  font-size: 24px;
+
+  font-weight: 800;
+
+  line-height: 1.2;
+
+}
+
+.restaurant-meta {
+
+  margin-top: 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+}
+
+.restaurant-rating {
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  color: #111;
+
+}
+
+.restaurant-price {
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  color: #666;
+
+}
+
+.restaurant-features {
+
+  display: flex;
+
+  gap: 8px;
+
+  flex-wrap: wrap;
+
+  margin-top: 14px;
+
+}
+
+.restaurant-chip {
+
+  background: #f3f5f7;
+
+  border-radius: 999px;
+
+  padding: 7px 12px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: #111;
+
+}
+.facilities-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 18px;
+
+  margin-top: 20px;
+
+}
+
+.facility-card {
+
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: 28px;
+
+  height: 170px;
+
+  background-size: cover;
+
+  background-position: center;
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.10);
+
+}
+
+.facility-overlay {
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(255,255,255,0.92),
+      rgba(255,255,255,0.18)
+    );
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: flex-end;
+
+  padding: 18px;
+
+}
+
+.facility-title {
+
+  font-size: 16px;
+
+  font-weight: 800;
+
+  margin-bottom: 6px;
+
+}
+
+.facility-status {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+}
+
+.facility-check {
+
+  color: #17b65f;
+
+  font-size: 20px;
+
+}
+
+.facility-x {
+
+  color: #ff4f6d;
+
+  font-size: 20px;
+
+}
+.business-row {
+
+  display: flex;
+
+  gap: 18px;
+
+  overflow-x: auto;
+
+  padding-bottom: 8px;
+
+  margin-top: 18px;
+
+  scrollbar-width: none;
+
+}
+
+.business-row::-webkit-scrollbar {
+
+  display: none;
+
+}
+
+.business-card {
+
+  min-width: 260px;
+
+  max-width: 260px;
+
+  border-radius: 28px;
+
+  overflow: hidden;
+
+  background: white;
+
+  box-shadow:
+    0 10px 28px rgba(0,0,0,0.10);
+
+  cursor: pointer;
+
+  transition: 0.25s;
+
+  flex-shrink: 0;
+
+}
+
+.business-card:hover {
+
+  transform: translateY(-4px);
+
+}
+
+.business-card-image {
+
+  width: 100%;
+
+  height: 170px;
+
+  object-fit: cover;
+
+}
+
+.business-card-content {
+
+  padding: 16px;
+
+}
+
+.business-category {
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  color: #4c7cf0;
+
+  margin-bottom: 6px;
+
+  text-transform: uppercase;
+
+}
+
+.business-title {
+
+  font-size: 18px;
+
+  font-weight: 800;
+
+  margin-bottom: 8px;
+
+}
+
+.business-description {
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  color: #666;
+
+  display: -webkit-box;
+
+  -webkit-line-clamp: 3;
+
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+
+}
+
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+
+  .beach-page {
+
+    padding: 0;
+
+  }
+
+  h1 {
+
+    font-size: 30px;
+
+    padding-left: 16px;
+
+    padding-right: 16px;
+
+    margin-top: 20px;
+
+  }
+
+  .gallery {
+
+    gap: 0;
+
+    margin-top: 10px;
+
+  }
+
+ .gallery img {
+
+  width: 100vw;
+
+  max-width: 100vw;
+
+  height: 320px;
+
+  object-fit: cover;
+
+  border-radius: 0;
+
+}
+
+  .weather-container {
+
+    margin-top: 0;
+
+    border-radius: 0 0 28px 28px;
+
+    padding: 16px;
+
+  }
+
+ .weather-top {
+
+  display: grid;
+
+  grid-template-columns: 1fr 95px;
+
+  gap: 10px;
+
+  align-items: stretch;
+
+}
+
+ .weather-main {
+
+  padding: 16px;
+
+  border-radius: 22px;
+
+  min-height: 130px;
+
+}
+
+  .weather-main-top {
+
+    height: 100%;
+
+  }
+
+  .weather-feels {
+
+    font-size: 16px;
+
+  }
+
+ .weather-temp {
+
+  font-size: 52px;
+
+  line-height: 1;
+
+  margin-top: 6px;
+
+}
+
+  .weather-condition {
+
+    font-size: 18px;
+
+    margin-top: 8px;
+
+    max-width: 140px;
+
+  }
+
+.weather-big-icon {
+
+  width: 64px;
+
+  height: 64px;
+
+  object-fit: contain;
+
+  transform: scale(1.3);
+
+  margin-right: -4px;
+
+  margin-top: 0;
+
+}
+
+  .weather-side {
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+  }
+
+.weather-mini {
+
+  flex: 1;
+
+  padding: 10px;
+
+  border-radius: 16px;
+
+  min-height: 38px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+}
+
+.weather-mini-title {
+
+  font-size: 11px;
+
+  margin-bottom: 2px;
+
+  white-space: nowrap;
+
+}
+
+ .weather-mini-value {
+
+  font-size: 16px;
+
+  font-weight: 700;
+
+}
+
+  .hourly-row {
+
+    margin-top: 16px;
+
+    gap: 10px;
+
+    padding-bottom: 2px;
+
+  }
+
+  .hourly-item {
+
+    min-width: 62px;
+
+    padding: 10px 8px;
+
+    border-radius: 18px;
+
+  }
+
+  .hourly-hour {
+
+    font-size: 13px;
+
+  }
+
+  .hourly-icon {
+
+    width: 34px;
+
+    height: 34px;
+
+  }
+
+  .hourly-temp {
+
+    font-size: 16px;
+
+  }
+
+  .description {
+
+    margin: 20px 16px 0 16px;
+
+    padding: 20px;
+
+    font-size: 16px;
+
+    border-radius: 24px;
+
+  }
+  .description {
+
+  position: relative;
+
+}
+
+.description.collapsed {
+
+  max-height: 115px;
+
+  overflow: hidden;
+
+}
+
+.description.collapsed::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 70px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255,0),
+      rgba(255,255,255,1)
+    );
+
+}
+
+.see-more {
+
+  margin-top: 14px;
+
+  font-weight: bold;
+
+  color: #0b63f6;
+
+  cursor: pointer;
+
+  user-select: none;
+
+}
+
+  .section-title {
+
+    font-size: 26px;
+
+    margin: 40px 16px 18px 16px;
+
+  }
+
+  .accommodation-row {
+
+    padding-left: 16px;
+
+    padding-right: 16px;
+
+  }
+
+  .accommodation-card {
+
+    min-width: 280px;
+
+    border-radius: 24px;
+
+  }
+
+  .accommodation-card img {
+
+    height: 190px;
+
+  }
+  .highlights-section {
+
+  margin:
+    24px 16px 0 16px;
+
+  gap: 10px;
+
+}
+
+.highlight-card {
+
+  border-radius: 18px;
+
+}
+
+.highlight-title {
+
+  font-size: 11px;
+
+  padding: 8px 6px 10px;
+
+}
+.beachbars-row {
+
+  display: flex;
+
+  gap: 18px;
+
+  overflow-x: auto;
+
+  padding-bottom: 10px;
+
+  scrollbar-width: none;
+
+  margin-top: 18px;
+
+}
+
+.beachbars-row::-webkit-scrollbar {
+
+  display: none;
+
+}
+
+.beachbar-card {
+
+  min-width: 280px;
+
+  background: white;
+
+  border-radius: 28px;
+
+  overflow: hidden;
+
+  flex-shrink: 0;
+
+  box-shadow:
+    0 5px 20px rgba(0,0,0,0.08);
+
+}
+
+.beachbar-card img {
+
+  width: 100%;
+
+  height: 220px;
+
+  object-fit: cover;
+
+}
+
+.beachbar-content {
+
+  padding: 16px;
+
+}
+
+.beachbar-title {
+
+  font-size: 22px;
+
+  font-weight: bold;
+
+}
+
+.beachbar-subtitle {
+
+  margin-top: 8px;
+
+  color: #666;
+
+  font-size: 15px;
+
+}
+.beachbars-row {
+
+  padding-left: 16px;
+
+  padding-right: 16px;
+
+}
+
+.beachbar-card {
+
+  min-width: 240px;
+
+  border-radius: 22px;
+
+}
+
+.beachbar-card img {
+
+  height: 180px;
+
+}
+
+
+.zone-badge {
+
+  font-size: 12px;
+
+  padding: 8px 14px;
+
+}
+.beach-header {
+
+  padding: 18px 16px 6px;
+
+}
+
+.beach-header h1 {
+
+  font-size: 32px;
+
+}
+
+.hero-favorite {
+
+  width: 52px;
+
+  height: 52px;
+
+  font-size: 24px;
+  
+
+}
+.beach-info-grid {
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 12px;
+
+  margin:
+    18px 16px 0 16px;
+
+}
+
+.beach-info-grid {
+
+  gap: 12px;
+
+  margin:
+    18px 16px 0 16px;
+
+}
+
+.beach-info-image-card {
+
+  height: 135px;
+
+  border-radius: 22px;
+
+}
+
+.beach-info-overlay {
+
+  padding: 14px;
+
+}
+
+.beach-info-title {
+
+  font-size: 13px;
+
+  margin-bottom: 4px;
+
+}
+
+.beach-info-text {
+
+  font-size: 11px;
+
+  line-height: 1.35;
+
+}
+.take-me-section {
+
+  min-height: 260px;
+
+  margin:
+    30px 16px 0 16px;
+
+  border-radius: 28px;
+
+}
+
+.take-me-content {
+
+  padding: 24px;
+
+}
+
+.take-me-small {
+
+  font-size: 13px;
+
+  margin-bottom: 8px;
+
+}
+
+.take-me-title {
+
+  font-size: 30px;
+
+  margin-bottom: 18px;
+
+}
+
+.take-me-btn {
+
+  width: 100%;
+
+  padding: 16px;
+
+  font-size: 15px;
+
+}
+.restaurants-row {
+
+  display: flex;
+
+  gap: 18px;
+
+  overflow-x: auto;
+
+  padding:
+    0 16px 10px;
+
+  scrollbar-width: none;
+
+}
+
+.restaurants-row::-webkit-scrollbar {
+
+  display: none;
+
+}
+
+.restaurant-card {
+
+  min-width: 270px;
+
+  border-radius: 24px;
+
+  flex-shrink: 0;
+
+}
+
+.restaurant-card img {
+
+  height: 190px;
+
+}
+
+.restaurant-content {
+
+  padding: 16px;
+
+}
+
+.restaurant-title {
+
+  font-size: 20px;
+
+}
+
+.restaurant-chip {
+
+  font-size: 11px;
+
+  padding: 6px 10px;
+
+}
+.facilities-grid {
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 12px;
+
+  margin:
+    18px 16px 0 16px;
+
+}
+
+.facility-card {
+
+  height: 135px;
+
+  border-radius: 22px;
+
+}
+
+.facility-overlay {
+
+  padding: 14px;
+
+}
+
+.facility-title {
+
+  font-size: 13px;
+
+  margin-bottom: 4px;
+
+}
+
+.facility-status {
+
+  font-size: 11px;
+
+}
+.business-card {
+
+  min-width: 220px;
+
+  max-width: 220px;
+
+  border-radius: 22px;
+
+}
+
+.business-card-image {
+
+  height: 145px;
+
+}
+
+.business-card-content {
+
+  padding: 14px;
+
+}
+
+.business-title {
+
+  font-size: 15px;
+
+}
+
+.business-description {
+
+  font-size: 12px;
+
+}
+
+
+
+
+
+
+
+
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="beach-page">
+
+  
+
+  <div class="hero-wrapper">
+
+  <div
+    class="gallery"
+    id="gallery">
+  </div>
+
+  
+
+
+</div>
+<div
+  class="gallery-dots"
+  id="galleryDots">
+</div>
+<div class="beach-header">
+
+  <div>
+
+    <div
+      class="zone-badge"
+      id="zoneBadge">
+    </div>
+
+    <h1 id="beachTitle"></h1>
+
+  </div>
+
+  <button
+    class="hero-favorite"
+    id="heroFavorite">
+
+    ♡
+
+  </button>
+
+</div>
+
+<div
+  class="weather-container"
+  id="weatherContainer">
+</div>
+
+<div class="section-title">
+
+  Accommodation near this beach
+
+</div>
+
+<div
+  class="accommodation-row"
+  id="accommodationRow">
+</div>
+
+<div
+  class="description collapsed"
+  id="description">
+</div>
+
+<div
+  class="see-more"
+  id="seeMore">
+  See more
+</div>
+<div
+  class="highlights-section"
+  id="highlightsSection">
+</div>
+<div
+  class="section-title"
+  id="beachBarsTitle"
+  style="display:none;">
+
+  Beach Bars nearby
+
+</div>
+
+<div
+  class="beachbars-row"
+  id="beachBarsRow">
+</div>
+
+
+
+<div
+  class="section-title"
+  id="beachInfoTitle">
+
+  Beach Info
+
+</div>
+
+<div
+  class="beach-info-grid"
+  id="beachInfoGrid">
+</div>
+<div
+  class="take-me-section">
+
+  <div
+    class="take-me-overlay">
+
+    <div
+      class="take-me-content">
+
+      <div
+        class="take-me-small">
+
+        Ready to explore?
+
+      </div>
+
+      <div
+        class="take-me-title"
+        id="takeMeTitle">
+
+        Take Me There
+
+      </div>
+
+      <button
+        class="take-me-btn"
+        id="takeMeBtn">
+
+        Open in Google Maps
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+<div
+  class="section-title"
+  id="restaurantsTitle"
+  style="display:none;">
+
+  Restaurants nearby
+
+</div>
+
+<div
+  class="restaurants-row"
+  id="restaurantsRow">
+</div>
+<div
+  class="section-title">
+
+  Beach Facilities
+
+</div>
+
+<div
+  class="facilities-grid"
+  id="facilitiesGrid">
+</div>
+<div class="section-title">
+
+  Local Businesses
+
+</div>
+
+<div
+  class="business-row"
+  id="localBusinessesRow">
+</div>
+
+
+
+
+
+
+
+<script>
+
+async function loadBeach() {
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const beachId =
+    params.get("id");
+
+  const response =
+    await fetch(
+
+`https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/${beachId}/index.json`
+
+    );
+
+  const data =
+    await response.json();
+
+  document.getElementById("beachTitle")
+    .innerText =
+      data.name.en;
+
+  document.getElementById("description")
+    .innerText =
+      data.description.en;
+
+const highlightsSection =
+  document.getElementById(
+    "highlightsSection"
+  );
+
+highlightsSection.innerHTML = "";
+
+const highlights =
+  data.highlights?.en || [];
+
+highlights.forEach(
+  (item) => {
+
+   const card =
+  document.createElement("div");
+
+card.className =
+  "highlight-card";
+
+const image =
+  getHighlightImage(item);
+
+card.innerHTML = `
+
+  <img
+    src="images/activities/${image}"
+    alt="${item}"
+  >
+
+  <div class="highlight-title">
+    ${item}
+  </div>
+
+`;
+
+    highlightsSection.appendChild(
+  card
+);
+
+  }
+);
+
+
+
+
+  const gallery =
+    document.getElementById("gallery");
+
+  const imageBase =
+
+`https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/${beachId}/images/`;
+
+  data.images.forEach(image => {
+
+    gallery.innerHTML += `
+
+      <img
+        src="${imageBase}${image}"
+        alt="${data.name.en}"
+      >
+
+    `;
+
+  });
+const dots =
+  document.getElementById(
+    "galleryDots"
+  );
+
+data.images.forEach((_, index) => {
+
+  dots.innerHTML += `
+
+    <span
+      class="gallery-dot
+      ${index === 0 ? "active" : ""}">
+    </span>
+
+  `;
+
+});
+
+
+
+
+loadAccommodations(beachId);
+loadBeachBars(beachId);
+loadRestaurants(beachId);
+loadBeachInfo(data);
+setupTakeMeThere(data);
+loadFacilities(data);
+loadLocalBusinesses(beachId);
+
+
+
+loadWeather(
+  data.coordinates.lat,
+  data.coordinates.lon,
+);
+
+setupGalleryDots();
+
+}
+
+loadBeach();
+
+function setupGalleryDots() {
+
+  const gallery =
+    document.getElementById(
+      "gallery"
+    );
+
+  const dots =
+    document.querySelectorAll(
+      ".gallery-dot"
+    );
+
+  gallery.addEventListener(
+    "scroll",
+    () => {
+
+      const index =
+        Math.round(
+          gallery.scrollLeft /
+          gallery.clientWidth
+        );
+
+      dots.forEach(dot =>
+        dot.classList.remove(
+          "active"
+        )
+      );
+
+      if(dots[index]) {
+
+        dots[index]
+          .classList.add(
+            "active"
+          );
+
+      }
+
+    }
+
+  );
+
+}
+function getHighlightImage(text) {
+
+  const a =
+    text.toLowerCase();
+
+  if (
+    a.includes("swim")
+  )
+    return "act_swimming.webp";
+
+  if (
+    a.includes("snorkel")
+  )
+    return "act_snorkeling.webp";
+
+  if (
+    a.includes("div")
+  )
+    return "act_diving.webp";
+
+  if (
+    a.includes("boat")
+  )
+    return "act_boat.webp";
+
+  if (
+    a.includes("paddle")
+  )
+    return "act_paddle.webp";
+
+  if (
+    a.includes("kayak")
+  )
+    return "act_kayak_canoe.webp";
+
+  if (
+    a.includes("wind")
+  )
+    return "act_windsurf_kite.webp";
+
+  if (
+    a.includes("sport")
+  )
+    return "act_beach_sports.webp";
+
+  if (
+    a.includes("walk")
+    ||
+    a.includes("hike")
+    ||
+    a.includes("cycling")
+  )
+    return "act_walk_hike.webp";
+
+  if (
+    a.includes("sunset")
+  )
+    return "act_photography.webp";
+
+  if (
+    a.includes("relax")
+    ||
+    a.includes("sunbath")
+  )
+    return "act_relax_sun.webp";
+
+  if (
+    a.includes("café")
+    ||
+    a.includes("cafe")
+  )
+    return "act_cafes.webp";
+
+  if (
+    a.includes("family")
+  )
+    return "act_family.webp";
+
+  if (
+    a.includes("night")
+  )
+    return "act_nightlife.webp";
+
+  if (
+    a.includes("romantic")
+  )
+    return "act_romantic.webp";
+
+  if (
+    a.includes("city")
+    ||
+    a.includes("urban")
+  )
+    return "act_city_vibes.webp";
+
+  if (
+    a.includes("food")
+    ||
+    a.includes("drink")
+  )
+    return "act_food_drinks.webp";
+
+  if (
+    a.includes("luxury")
+  )
+    return "act_luxury.webp";
+
+  return "act_hidden_gem.webp";
+
+}
+function getZoneData(beachId) {
+
+  const zones = {
+
+    thessaloniki: {
+      name: "Thessaloniki",
+      color: "#00A859"
+    },
+
+    kassandra: {
+      name: "Kassandra",
+      color: "#9B59B6"
+    },
+
+    sithonia: {
+      name: "Sithonia",
+      color: "#FF007F"
+    },
+
+    olympiada: {
+      name: "Olympiada",
+      color: "#FFEA00"
+    }
+
+  }
+
+  const lower =
+    beachId.toLowerCase()
+
+  if(lower.includes("kassandra"))
+    return zones.kassandra
+
+  if(lower.includes("sithonia"))
+    return zones.sithonia
+
+  if(lower.includes("olympiada"))
+    return zones.olympiada
+
+  return zones.thessaloniki
+
+}
+
+async function loadAccommodations(beachId) {
+
+  const response =
+    await fetch("data.js");
+
+  const text =
+    await response.text();
+
+  const match =
+    text.match(
+      /const accommodations = (\[[\s\S]*\]);/
+    );
+
+  const accommodations =
+    eval(match[1]);
+
+const filtered =
+  accommodations.filter(
+
+    item =>
+
+item.beachSlug &&
+item.beachSlug.toLowerCase() === beachId.toLowerCase()
+
+  );
+
+  const row =
+    document.getElementById(
+      "accommodationRow"
+    );
+
+  filtered.forEach(item => {
+
+const image =
+
+`https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/${item.id}/images/${item.id}.webp`;
+    const title =
+      item.id
+        .replaceAll("_", " ")
+        .replace(/\b\w/g, l => l.toUpperCase());
+
+    row.innerHTML += `
+
+      <div
+        class="accommodation-card"
+        onclick="openAccommodation('${item.id}')"
+      >
+
+        <img src="${image}">
+
+        <div class="accommodation-content">
+
+          <div class="accommodation-title">
+
+            ${title}
+
+          </div>
+
+          <div class="accommodation-info">
+
+            Explore accommodation
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+}
+async function loadBeachBars(beachId) {
+
+  const response =
+    await fetch(
+
+"https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/restaurants-index.json"
+
+    );
+
+  const places =
+    await response.json();
+
+const zone =
+  getZoneData(beachId)
+
+document
+  .getElementById("zoneBadge")
+  .innerText =
+    zone.name
+
+document
+  .getElementById("zoneBadge")
+  .style.background =
+    zone.color
+
+
+
+
+  const filtered =
+    places.filter(
+
+      item =>
+
+        item.beachSlug === beachId
+        &&
+        item.type === "beach_bar"
+
+    );
+
+  if(filtered.length === 0)
+    return;
+
+  document.getElementById(
+    "beachBarsTitle"
+  ).style.display = "block";
+
+  const row =
+    document.getElementById(
+      "beachBarsRow"
+    );
+
+  filtered.slice(0, 8).forEach(item => {
+
+    const image =
+
+`https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/${item.id}/images/${item.id}1.webp`;
+
+    const title =
+      item.titleEn
+      ||
+      item.id
+        .replaceAll("_", " ");
+
+    row.innerHTML += `
+
+      <div
+    class="beachbar-card"
+    onclick="
+      window.location.href=
+      'place.html?id=${item.id}'
+    ">
+
+        <img
+          src="${image}"
+          alt="${title}"
+        >
+
+        <div class="beachbar-content">
+
+          <div class="beachbar-title">
+
+            ${title}
+
+          </div>
+
+          <div class="beachbar-subtitle">
+
+            Beach Bar
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+}
+async function loadRestaurants(beachId) {
+
+  const response =
+    await fetch(
+
+"https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/restaurants-index.json"
+
+    );
+
+  const places =
+    await response.json();
+
+  const filtered =
+  places.filter(
+
+    item =>
+
+      item.beachSlug
+      &&
+
+      item.beachSlug
+        .toLowerCase()
+        === beachId.toLowerCase()
+
+      &&
+
+      item.type === "restaurant"
+
+  );
+
+    console.log(filtered);
+
+  if(filtered.length === 0)
+    return;
+
+  document.getElementById(
+    "restaurantsTitle"
+  ).style.display = "block";
+
+  const row =
+    document.getElementById(
+      "restaurantsRow"
+    );
+
+ for (const item of filtered.slice(0, 6)) {
+
+  const detailsResponse =
+    await fetch(
+
+`https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/${item.id}/index.json`
+
+    );
+
+  const details =
+    await detailsResponse.json();
+    console.log(details);
+
+const image =
+
+details.images?.[0]
+||
+
+`https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/${item.id}/images/${item.id}1.webp`;
+
+  const title =
+    details.titleEn
+    ||
+    item.id
+      .replaceAll("_", " ");
+
+  const rating =
+    details.rating || 4.5;
+
+  const price =
+    details.price || "$$";
+
+  const features =
+    details.features || [];
+
+  row.innerHTML += `
+
+    <div
+      class="restaurant-card"
+
+      onclick="
+        window.location.href=
+        'place.html?id=${item.id}'
+      ">
+
+      <img
+        src="${image}"
+        alt="${title}"
+      >
+
+      <div
+        class="restaurant-content">
+
+        <div
+          class="restaurant-title">
+
+          ${title}
+
+        </div>
+
+        <div
+          class="restaurant-meta">
+
+          <div
+            class="restaurant-rating">
+
+            ⭐ ${rating}
+
+          </div>
+
+          <div
+            class="restaurant-price">
+
+            ${price}
+
+          </div>
+
+        </div>
+
+        <div
+          class="restaurant-features">
+
+          ${features
+            .slice(0,3)
+            .map(feature => `
+
+              <div
+                class="restaurant-chip">
+
+                ${feature
+                  .replaceAll("_"," ")}
+
+              </div>
+
+            `)
+            .join("")}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+}
+function loadFacilities(data) {
+
+  const grid =
+    document.getElementById(
+      "facilitiesGrid"
+    );
+
+  const facilities =
+    data.facilities || {};
+
+  const items = [
+
+    {
+      title: "Sunbeds",
+      value:
+        facilities.sunbeds,
+      image:
+        "images/facilities/sunbeds.webp"
+    },
+
+    {
+      title: "Parking",
+      value:
+        facilities.parkingAvailable,
+      image:
+        "images/facilities/parking.webp"
+    },
+
+    {
+      title: "Toilets",
+      value:
+        facilities.toiletsAvailable,
+      image:
+        "images/facilities/toilets.webp"
+    },
+
+    {
+      title: "Accessible",
+      value:
+        facilities.accessible,
+      image:
+        "images/facilities/accessible.webp"
+    },
+
+    {
+      title: "Camping",
+      value:
+        facilities.campingAvailable,
+      image:
+        "images/facilities/camping.webp"
+    },
+
+    {
+      title: "Towels Allowed",
+      value:
+        facilities.towelAllowed,
+      image:
+        "images/facilities/towels.webp"
+    }
+
+  ];
+
+  items.forEach(item => {
+
+    grid.innerHTML += `
+
+      <div
+        class="facility-card"
+
+        style="
+          background-image:
+          url('${item.image}');
+        ">
+
+        <div
+          class="facility-overlay">
+
+          <div
+            class="facility-title">
+
+            ${item.title}
+
+          </div>
+
+          <div
+            class="facility-status">
+
+            <span class="
+              ${item.value
+                ? "facility-check"
+                : "facility-x"}
+            ">
+
+              ${item.value
+                ? "✔"
+                : "✖"}
+
+            </span>
+
+            ${item.value
+              ? "Available"
+              : "Not available"}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+}
+async function loadLocalBusinesses(
+  beachSlug
+) {
+
+  const row =
+    document.getElementById(
+      "localBusinessesRow"
+    );
+
+  row.innerHTML = "";
+
+  const response = await fetch(
+
+    "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/local-businesses/local-businesses-index.json"
+
+  );
+
+  const businesses =
+    await response.json();
+
+  const filtered =
+    businesses.filter(
+
+      business =>
+
+        business.beaches?.includes(
+          beachSlug
+        )
+
+    );
+
+  for (const business of filtered) {
+
+    const detailsResponse =
+      await fetch(
+
+        `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/local-businesses/${business.id}/index.json`
+
+      );
+
+    const details =
+      await detailsResponse.json();
+
+    const image =
+
+      `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/local-businesses/${business.id}/images/${details.images[0]}`;
+
+    row.innerHTML += `
+
+      <div
+  class="business-card"
+
+  onclick="
+    window.location.href=
+    'local-business.html?id=${business.id}'
+  ">
+
+        <img
+          src="${image}"
+
+          class="business-card-image"
+        >
+
+        <div
+          class="business-card-content">
+
+          <div
+            class="business-category">
+
+            ${details.categoryEn}
+
+          </div>
+
+          <div
+            class="business-title">
+
+            ${details.titleEn}
+
+          </div>
+
+          <div
+            class="business-description">
+
+            ${details.descriptionEn}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+
+function loadBeachInfo(data) {
+
+  const grid =
+    document.getElementById(
+      "beachInfoGrid"
+    );
+
+  grid.innerHTML = "";
+
+  const info = [
+
+    {
+      title: "Sand",
+      text: data.sand?.en,
+      image:
+        "beach-info/sand.webp"
+    },
+
+    {
+      title: "Water Clarity",
+      text:
+        data.water?.clarity?.en,
+      image:
+        "beach-info/clarity.webp"
+    },
+
+    {
+      title: "Kids Friendly",
+      text:
+        data.suitableForChildren
+          ? "Perfect for families with children"
+          : "Not ideal for small children",
+
+      image:
+        "beach-info/kids.webp"
+    },
+
+    {
+      title: "Depth",
+      text:
+        data.water?.depth?.en,
+      image:
+        "beach-info/depth.webp"
+    },
+
+    {
+      title: "Beach Vibe",
+      text:
+        data.beachInfo?.vibe?.en,
+      image:
+        "beach-info/vibe.webp"
+    },
+
+    {
+      title: "Best Time",
+      text:
+        data.bestTimeToVisit?.en,
+      image:
+        "beach-info/best_time.webp"
+    }
+
+  ];
+
+  info.forEach(item => {
+
+    if(!item.text)
+      return;
+
+    grid.innerHTML += `
+
+      <div
+        class="beach-info-image-card"
+
+        style="
+          background-image:
+          url('${item.image}');
+        ">
+
+        <div
+          class="beach-info-overlay">
+
+          <div
+            class="beach-info-title">
+
+            ${item.title}
+
+          </div>
+
+          <div
+            class="beach-info-text">
+
+            ${item.text}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+}
+function setupTakeMeThere(data) {
+
+  const btn =
+    document.getElementById(
+      "takeMeBtn"
+    );
+
+  const title =
+    document.getElementById(
+      "takeMeTitle"
+    );
+
+  title.innerText =
+    data.googleMapsLabel?.en
+    || "Take Me There";
+
+  btn.onclick = () => {
+
+    const lat =
+      data.coordinates?.lat;
+
+    const lon =
+      data.coordinates?.lon;
+
+    window.open(
+
+      `https://www.google.com/maps?q=${lat},${lon}`,
+
+      "_blank"
+
+    );
+
+  };
+
+}
+
+
+
+
+
+
+
+async function loadWeather(
+  lat,
+  lon,
+) {
+
+const response =
+  await fetch(
+
+`https://api.weatherapi.com/v1/forecast.json?key=43c0c7ca861d47b48dc160903250408&q=${lat},${lon}&days=2`
+
+);
+
+  const data =
+    await response.json();
+    console.log(data);
+
+  const current =
+    data.current;
+
+const waterTemps = {
+
+  north: {
+    jan: 11,
+    feb: 10,
+    mar: 11,
+    apr: 14,
+    may: 18,
+    jun: 22,
+    jul: 25,
+    aug: 26,
+    sep: 24,
+    oct: 21,
+    nov: 17,
+    dec: 13
+  },
+
+  central: {
+    jan: 12,
+    feb: 11,
+    mar: 12,
+    apr: 15,
+    may: 19,
+    jun: 23,
+    jul: 26,
+    aug: 27,
+    sep: 25,
+    oct: 22,
+    nov: 18,
+    dec: 14
+  },
+
+  south: {
+    jan: 13,
+    feb: 12,
+    mar: 13,
+    apr: 16,
+    may: 20,
+    jun: 24,
+    jul: 27,
+    aug: 28,
+    sep: 26,
+    oct: 23,
+    nov: 19,
+    dec: 15
+  }
+
+};
+
+let waterProfile = "south";
+
+if(lat > 40.1)
+  waterProfile = "north";
+
+else if(lat > 39.9)
+  waterProfile = "central";
+const month =
+  new Date()
+    .toLocaleString(
+      "en-US",
+      { month: "short" }
+    )
+    .toLowerCase();
+
+    let waterTemp =
+  waterTemps[
+    waterProfile
+  ][month];
+  if(current.temp_c >= 32)
+  waterTemp += 1;
+
+if(current.temp_c <= 18)
+  waterTemp -= 1;
+
+
+
+
+
+  const hourly =
+    data.forecast.forecastday
+      .flatMap(day => day.hour);
+
+  const currentHour =
+    new Date().getHours();
+
+  const next24 =
+    hourly.slice(
+      currentHour,
+      currentHour + 24
+    );
+
+  const container =
+    document.getElementById(
+      "weatherContainer"
+    );
+
+  container.innerHTML = `
+
+    <div class="weather-top">
+
+     <div class="weather-main">
+
+  <div class="weather-main-top">
+
+    <div>
+
+      <div class="weather-feels">
+        Feels like:
+        ${Math.round(current.feelslike_c)}°C
+      </div>
+
+      <div class="weather-temp">
+        ${Math.round(current.temp_c)}°C
+      </div>
+
+      <div class="weather-condition">
+        ${current.condition.text}
+      </div>
+
+    </div>
+
+    <img
+      class="weather-big-icon"
+      src="https:${current.condition.icon}"
+    >
+
+  </div>
+
+</div>
+
+      <div class="weather-side">
+
+        <div class="weather-mini">
+
+          <div class="weather-mini-title">
+
+🌊 Water Temp
+
+          </div>
+
+          <div class="weather-mini-value">
+
+${waterTemp}°C
+
+          </div>
+
+        </div>
+
+        <div class="weather-mini">
+
+          <div class="weather-mini-title">
+
+💨 Wind
+
+          </div>
+
+          <div class="weather-mini-value">
+
+${Math.round(current.wind_kph)} km/h
+
+          </div>
+
+        </div>
+
+        <div class="weather-mini">
+
+          <div class="weather-mini-title">
+
+💧 Humidity
+
+          </div>
+
+          <div class="weather-mini-value">
+
+${current.humidity}%
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div
+      class="hourly-row"
+      id="hourlyRow">
+    </div>
+
+  `;
+
+  const row =
+    document.getElementById(
+      "hourlyRow"
+    );
+
+  next24.forEach(hour => {
+
+    const time =
+      hour.time.split(" ")[1]
+        .slice(0, 5);
+
+    row.innerHTML += `
+
+      <div class="hourly-item">
+
+        <div class="hourly-hour">
+
+${time}
+
+        </div>
+
+        <img
+          class="hourly-icon"
+          src="https:${hour.condition.icon}"
+        >
+
+        <div class="hourly-temp">
+
+${Math.round(hour.temp_c)}°
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+}
+const seeMore =
+  document.getElementById(
+    "seeMore"
+  );
+
+seeMore.addEventListener(
+  "click",
+  () => {
+
+    const description =
+      document.getElementById(
+        "description"
+      );
+
+      
+
+    description.classList.toggle(
+      "collapsed"
+    );
+
+    seeMore.innerText =
+      description.classList.contains(
+        "collapsed"
+      )
+        ? "See more"
+        : "See less";
+
+  }
+);
+
+
+
+function openAccommodation(id) {
+
+  window.location.href =
+`accommodation.html?id=${id}`;
+
+}
+const favoriteBtn =
+  document.getElementById(
+    "heroFavorite"
+  )
+
+let favorites =
+  JSON.parse(
+
+    localStorage.getItem(
+      "favorite_beaches"
+    ) || "[]"
+
+  )
+
+const currentBeach =
+  new URLSearchParams(
+    window.location.search
+  ).get("id")
+
+updateFavorite()
+
+favoriteBtn.addEventListener(
+  "click",
+  () => {
+
+    if(
+      favorites.includes(
+        currentBeach
+      )
+    ) {
+
+      favorites =
+        favorites.filter(
+          id =>
+            id !== currentBeach
+        )
+
+    } else {
+
+      favorites.push(
+        currentBeach
+      )
+
+    }
+
+    localStorage.setItem(
+
+      "favorite_beaches",
+
+      JSON.stringify(
+        favorites
+      )
+
+    )
+
+    updateFavorite()
+
+  }
+)
+
+function updateFavorite() {
+
+  const active =
+    favorites.includes(
+      currentBeach
+    )
+
+  favoriteBtn.innerHTML =
+    active
+      ? "❤️"
+      : "♡"
+
+  favoriteBtn.classList.toggle(
+    "active",
+    active
+  )
+
+}
+
+
+
+</script>
+
+</body>
+</html>

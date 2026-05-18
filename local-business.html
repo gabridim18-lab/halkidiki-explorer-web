@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>Local Business</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  />
+
+</head>
+
+<body>
+
+<div class="place-page">
+
+  <!-- HERO GALLERY -->
+
+  <div
+    class="gallery"
+    id="gallery">
+  </div>
+
+  <!-- CONTENT -->
+
+  <div class="place-content">
+
+    <div
+      class="place-category"
+      id="businessCategory">
+    </div>
+
+    <h1
+      class="place-title"
+      id="businessTitle">
+    </h1>
+
+    <div
+      class="place-description"
+      id="businessDescription">
+    </div>
+
+    <!-- INFO GRID -->
+
+    <div class="section-title">
+
+      Business Details
+
+    </div>
+
+    <div
+      class="business-info-grid"
+      id="businessInfoGrid">
+    </div>
+
+    <!-- CONTACT -->
+
+    <div
+      id="contactSection"
+      style="display:none;">
+
+      <div class="section-title">
+
+        Contact Business
+
+      </div>
+
+      <div class="booking-form">
+
+        <input
+          type="text"
+          id="clientName"
+          placeholder="Your Name"
+        >
+
+        <input
+          type="date"
+          id="bookingDate"
+        >
+
+        <input
+          type="time"
+          id="bookingTime"
+        >
+
+        <textarea
+          id="bookingMessage"
+          placeholder="Message">
+        </textarea>
+
+        <button
+          onclick="sendBusinessWhatsApp()">
+
+          Send WhatsApp Message
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="local-business.js"></script>
+
+</body>
+</html>

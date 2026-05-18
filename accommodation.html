@@ -441,6 +441,8 @@ async function loadAccommodation() {
   document.getElementById("mapsButton")
     .onclick = () => {
 
+
+
       window.open(
         `https://www.google.com/maps?q=${data.lat},${data.lon}`
       );
@@ -621,7 +623,7 @@ function renderChildrenAges() {
 }
 
 
-function sendWhatsApp() {
+async function sendWhatsApp() {
 
   const name =
     document.getElementById("guestName").value;
@@ -675,6 +677,38 @@ This message is sent through Halkidiki Explorer App`;
 
   const phone =
     window.ownerPhone.replace("+", "");
+
+
+fetch(
+  "https://formspree.io/f/mwvzkrnq",
+  {
+
+    method: "POST",
+
+    headers: {
+
+      "Content-Type":
+        "application/json"
+
+    },
+
+    body: JSON.stringify({
+
+      accommodation: property,
+
+      ownerPhone:
+        window.ownerPhone,
+
+      timestamp:
+        Date.now()
+
+    })
+
+  }
+
+);
+
+
 
   window.open(
 

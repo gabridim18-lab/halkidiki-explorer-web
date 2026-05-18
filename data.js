@@ -170,6 +170,39 @@ const accommodations = [
 
   flyer:
     "double-room-in-agia-paraskevi.webp"
-}
+},
+
+{
+  id: "ladadika_luxury_studios_1",
+beachSlug:
+    "thessaloniki",
+  flyer:
+    "ladadika-luxury-studios-1.webp"
+},
+{
+  id: "double_room_in_loutra_beach",
+  beachSlug: "loutra_agias_paraskevis_beach",
+  flyer: "double-room-in-loutra-beach.webp"
+},
+{
+  id: "double_room_in_skala_fourka",
+  beachSlug: "skala_fourkas_beach",
+  flyer: "double-room-in-skala-fourka.webp"
+},
+{
+  id: "electra_beach_appartment_skioni",
+  beachSlug: "nea_skioni_beach",
+  flyer: "electra-beach-appartment-skioni.webp"
+},
+{
+  id: "elena_maisonette_nea_plagia",
+  beachSlug: "nea_plagia_beach",
+  flyer: "elena-maisonette-nea-plagia.webp"
+},
+{
+  id: "elia_k3_villa_in_possidi_west_beach",
+  beachSlug: "possidi_west_beach",
+  flyer: "elia-k3-villa-in-possidi-west-beach.webp"
+},
 
 ];
