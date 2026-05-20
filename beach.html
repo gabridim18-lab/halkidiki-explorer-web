@@ -133,14 +133,13 @@ h1 {
   display: none;
 
 }
-
 .accommodation-card {
 
-  min-width: 320px;
+  min-width: 280px;
 
   background: white;
 
-  border-radius: 28px;
+  border-radius: 18px;
 
   overflow: hidden;
 
@@ -150,16 +149,10 @@ h1 {
 
   transition: 0.25s;
 
-  box-shadow:
-    0 5px 20px rgba(0,0,0,0.08);
-
   scroll-snap-align: start;
 
-}
-
-.accommodation-card:hover {
-
-  transform: translateY(-6px);
+  box-shadow:
+    0 5px 16px rgba(0,0,0,0.08);
 
 }
 
@@ -167,33 +160,51 @@ h1 {
 
   width: 100%;
 
-  height: 220px;
+  height: 200px;
 
   object-fit: cover;
+
+  display: block;
 
 }
 
 .accommodation-content {
 
-  padding: 18px;
+  height: 34px;
+
+  padding: 5px 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  background: white;
 
 }
 
 .accommodation-title {
 
-  font-size: 22px;
+  font-size: 14px;
 
-  font-weight: bold;
+  font-weight: 800;
 
-  margin-bottom: 10px;
+  color: #111;
+
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+
+  width: 100%;
+
+  line-height: 1;
 
 }
 
 .accommodation-info {
 
-  color: #666;
-
-  font-size: 16px;
+  display: none;
 
 }
 
@@ -1521,19 +1532,49 @@ h1 {
 
   }
 
-  .accommodation-card {
+.accommodation-card {
 
-    min-width: 280px;
+  min-width: 230px;
 
-    border-radius: 24px;
+  border-radius: 16px;
 
-  }
+}
 
-  .accommodation-card img {
+.accommodation-card img {
 
-    height: 190px;
+  height: 165px;
 
-  }
+}
+
+.accommodation-content {
+
+  height: 28px;
+
+  padding: 0 9px;
+
+  display: flex;
+
+  align-items: center;
+
+  overflow: hidden;
+
+}
+
+.accommodation-title {
+
+  font-size: 13px;
+
+  width: 100%;
+
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+
+  line-height: 1;
+
+}
   .highlights-section {
 
   margin:
@@ -1943,7 +1984,13 @@ h1 {
   line-height: 1.4;
 
 }
+.accommodation-title {
 
+  font-size: 18px;
+
+  height: 46px;
+
+}
 
 
 
