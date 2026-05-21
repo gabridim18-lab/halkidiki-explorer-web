@@ -1,10 +1,5 @@
 const accommodations = [
 
-        {
-            id: "sea_view_luxury_apartment_in_neoi_epivates",
-            beachSlug: "neoi-epivates-beach",
-            flyer: "sea-view-luxury-apartment-in-neoi-epivates.webp"
-        },
         
 
    {
@@ -17,6 +12,12 @@ const accommodations = [
     beachSlug: "paralia-pefkochori",
     flyer: "marevia-beachfront-apartment-pefkohori.webp"
   },
+  {
+            id: "sea_view_luxury_apartment_in_neoi_epivates",
+            beachSlug: "neoi-epivates-beach",
+            flyer: "sea-view-luxury-apartment-in-neoi-epivates.webp"
+        },
+        
   {
     id: "iconic_olea_villa_pefkohori_with_pool_beach",
     beachSlug: "pefkochori-beach",
