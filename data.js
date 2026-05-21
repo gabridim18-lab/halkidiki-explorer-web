@@ -1,5 +1,12 @@
 const accommodations = [
 
+        {
+            id: "sea_view_luxury_apartment_in_neoi_epivates",
+            beachSlug: "neoi-epivates-beach",
+            flyer: "sea-view-luxury-apartment-in-neoi-epivates.webp"
+        },
+        
+
    {
     id: "on_the_rock_sky_view_suite",
     beachSlug: "athytos-beach",

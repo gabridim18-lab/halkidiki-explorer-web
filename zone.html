@@ -3,6 +3,8 @@
 
 <head>
 
+  <link rel="icon" type="image/png" href="favicon-32x32.png">
+
 <meta charset="UTF-8">
 
 <meta
@@ -523,10 +525,27 @@ async function loadZone() {
     .innerText =
       zoneId;
 
-  document.getElementById("heroImage")
-    .src =
-`https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/thessaloniki/images/thessaloniki1.webp`;
+const heroImages = {
 
+  thessaloniki:
+"images/thessaloniki1.webp",
+
+  kassandra:
+"images/kassandra1.webp",
+
+  sithonia:
+"images/sithonia1.webp",
+
+  olympiada:
+"images/olympiada1.webp"
+
+};
+
+document.getElementById("heroImage")
+  .src =
+    heroImages[
+      zoneId.toLowerCase()
+    ];
   const response =
     await fetch(
 
