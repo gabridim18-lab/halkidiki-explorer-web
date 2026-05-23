@@ -1,6 +1,9 @@
 const accommodations = [
 
         
+        
+
+        
 
    {
     id: "on_the_rock_sky_view_suite",
@@ -11,17 +14,16 @@ const accommodations = [
     id: "marevia_beachfront_apartment_pefkohori",
     beachSlug: "paralia-pefkochori",
     flyer: "marevia-beachfront-apartment-pefkohori.webp"
-  },
-  {
-            id: "sea_view_luxury_apartment_in_neoi_epivates",
-            beachSlug: "neoi-epivates-beach",
-            flyer: "sea-view-luxury-apartment-in-neoi-epivates.webp"
-        },
-        
+  },    
   {
     id: "iconic_olea_villa_pefkohori_with_pool_beach",
     beachSlug: "pefkochori-beach",
     flyer: "iconic-olea-villa-pefkohori-with-pool-beach.webp"
+  },
+  {
+    id: "sea_view_luxury_apartment_in_neoi_epivates",
+    beachSlug: "neoi-epivates-beach",
+    flyer: "sea-view-luxury-apartment-in-neoi-epivates.webp"
   },
   {
     id: "big_studio_cc_in_mola_kaliva",
@@ -48,6 +50,11 @@ const accommodations = [
     beachSlug: "agia-triada-beach",
     flyer: "sea-view-apartment-in-agia-triada.webp"
   },
+  {
+            id: "ladadika_luxury_apartment_in_thessaloniki",
+            beachSlug: "thessaloniki",
+            flyer: "ladadika-luxury-apartment-in-thessaloniki.webp"
+        },
   {
     id: "avra_k7_villa_in_possidi_west_beach",
     beachSlug: "possidi-west-beach",
@@ -191,6 +198,46 @@ const accommodations = [
   id: "kate_app_perea",
   beachSlug: "perea-beach",
   flyer: "kate-app-perea.webp"
+},
+{
+  id: "kleo_house_kalyves",
+  beachSlug: "kalyves-beach",
+  flyer: "kleo-house-kalyves.webp"
+},
+{
+  id: "lagonisi_hause_private_beach",
+  beachSlug: "private-beach",
+  flyer: "lagonisi-hause-private-beach.webp"
+},
+{
+  id: "lithos_k2_villa_in_possidi_west_beach",
+  beachSlug: "possidi-west-beach",
+  flyer: "lithos-k2-villa-in-possidi-west-beach.webp"
+},
+{
+  id: "lutra_beach_triple_room",
+  beachSlug: "loutra-agias-paraskevis-beach",
+  flyer: "lutra-beach-triple-room.webp"
+},
+{
+  id: "luxury_suite_in_nea_flogita",
+  beachSlug: "flogita-beach",
+  flyer: "luxury-suite-in-nea-flogita.webp"
+},
+{
+  id: "maisonete_glarokamvos",
+  beachSlug: "glarokavos-beach",
+  flyer: "maisonete-glarokamvos.webp"
+},
+{
+  id: "maisonete_zeus_glarokamvos",
+  beachSlug: "glarokavos-beach",
+  flyer: "maisonete-zeus-glarokamvos.webp"
+},
+{
+  id: "private_villa_sani",
+  beachSlug: "sani-beach",
+  flyer: "private-villa-sani.webp"
 }
 
 

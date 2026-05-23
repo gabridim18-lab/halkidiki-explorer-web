@@ -2500,8 +2500,12 @@ function getHighlightImage(text) {
   const a =
     text.toLowerCase();
 
+  // WATER ACTIVITIES
+
   if (
     a.includes("swim")
+    ||
+    a.includes("swimming")
   )
     return "act_swimming.webp";
 
@@ -2512,11 +2516,17 @@ function getHighlightImage(text) {
 
   if (
     a.includes("div")
+    ||
+    a.includes("scuba")
   )
     return "act_diving.webp";
 
   if (
     a.includes("boat")
+    ||
+    a.includes("cruise")
+    ||
+    a.includes("sailing")
   )
     return "act_boat.webp";
 
@@ -2527,16 +2537,37 @@ function getHighlightImage(text) {
 
   if (
     a.includes("kayak")
+    ||
+    a.includes("canoe")
   )
     return "act_kayak_canoe.webp";
 
   if (
     a.includes("wind")
+    ||
+    a.includes("kite")
+    ||
+    a.includes("surf")
   )
     return "act_windsurf_kite.webp";
 
   if (
+    a.includes("water sport")
+    ||
+    a.includes("jet ski")
+    ||
+    a.includes("parasailing")
+  )
+    return "act_water_sports.webp";
+
+  // BEACH / ACTIVE
+
+  if (
     a.includes("sport")
+    ||
+    a.includes("volley")
+    ||
+    a.includes("football")
   )
     return "act_beach_sports.webp";
 
@@ -2546,64 +2577,143 @@ function getHighlightImage(text) {
     a.includes("hike")
     ||
     a.includes("cycling")
+    ||
+    a.includes("promenade")
   )
     return "act_walk_hike.webp";
 
   if (
-    a.includes("sunset")
+    a.includes("adventure")
+    ||
+    a.includes("rocks")
+    ||
+    a.includes("cliff")
+    ||
+    a.includes("explore")
   )
-    return "act_photography.webp";
+    return "act_adventure_rocks.webp";
+
+  // RELAX / LIFESTYLE
 
   if (
     a.includes("relax")
     ||
     a.includes("sunbath")
+    ||
+    a.includes("sun")
+    ||
+    a.includes("calm")
   )
     return "act_relax_sun.webp";
+
+  if (
+    a.includes("yoga")
+    ||
+    a.includes("meditation")
+    ||
+    a.includes("wellness")
+  )
+    return "act_yoga.webp";
+
+  if (
+    a.includes("romantic")
+    ||
+    a.includes("couple")
+  )
+    return "act_romantic.webp";
+
+  if (
+    a.includes("luxury")
+    ||
+    a.includes("premium")
+    ||
+    a.includes("exclusive")
+  )
+    return "act_luxury.webp";
+
+  // SOCIAL / CITY
 
   if (
     a.includes("café")
     ||
     a.includes("cafe")
+    ||
+    a.includes("coffee")
   )
     return "act_cafes.webp";
-
-  if (
-    a.includes("family")
-  )
-    return "act_family.webp";
-
-  if (
-    a.includes("night")
-  )
-    return "act_nightlife.webp";
-
-  if (
-    a.includes("romantic")
-  )
-    return "act_romantic.webp";
-
-  if (
-    a.includes("city")
-    ||
-    a.includes("urban")
-  )
-    return "act_city_vibes.webp";
 
   if (
     a.includes("food")
     ||
     a.includes("drink")
+    ||
+    a.includes("restaurant")
+    ||
+    a.includes("taverna")
   )
     return "act_food_drinks.webp";
 
   if (
-    a.includes("luxury")
+    a.includes("night")
+    ||
+    a.includes("party")
+    ||
+    a.includes("bar")
   )
-    return "act_luxury.webp";
+    return "act_nightlife.webp";
+
+  if (
+    a.includes("city")
+    ||
+    a.includes("urban")
+    ||
+    a.includes("shopping")
+  )
+    return "act_city_vibes.webp";
+
+  // FAMILY / NATURE
+
+  if (
+    a.includes("family")
+    ||
+    a.includes("kids")
+    ||
+    a.includes("children")
+  )
+    return "act_family.webp";
+
+  if (
+    a.includes("nature")
+    ||
+    a.includes("forest")
+    ||
+    a.includes("green")
+    ||
+    a.includes("pine")
+  )
+    return "act_nature.webp";
+
+  if (
+    a.includes("fish")
+    ||
+    a.includes("fishing")
+  )
+    return "act_fishing.webp";
+
+  // PHOTO
+
+  if (
+    a.includes("sunset")
+    ||
+    a.includes("photo")
+    ||
+    a.includes("photography")
+    ||
+    a.includes("instagram")
+  )
+    return "act_photography.webp";
 
   return "act_hidden_gem.webp";
-
 }
 function getZoneData(beachId) {
 
