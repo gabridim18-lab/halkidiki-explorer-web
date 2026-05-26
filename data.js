@@ -265,14 +265,50 @@ const accommodations = [
   flyer: "suite-mare-lydia-in-agia-paraskevis.webp"
 },
 {
+  id: "thanos_house_siviri",
+  beachSlug: "siviri-beach",
+  flyer: "thanos-house-siviri.webp"
+},
+{
   id: "the_garden_comfort_appartament",
   beachSlug: "nikiti-beach",
   flyer: "the-garden-comfort-appartament.webp"
 },
 {
-  id: "thanos_house_siviri",
-  beachSlug: "siviri-beach",
-  flyer: "thanos-house-siviri.webp"
-}
+  id: "the_garden_comfort_studio",
+  beachSlug: "nikiti-beach",
+  flyer: "the-garden-comfort-studio.webp"
+},
+{
+  id: "theros_k8_villa_in_possidi_west_beach",
+  beachSlug: "possidi-west-beach",
+  flyer: "theros-k8-villa-in-possidi-west-beach.webp"
+},
+{
+  id: "triple_room_in_agia_paraskevi",
+  beachSlug: "loutra-agias-paraskevis-beach",
+  flyer: "triple-room-in-agia-paraskevi.webp"
+},
+{
+  id: "villa_christina_vourvourou",
+  beachSlug: "fava-beach",
+  flyer: "villa-christina-vourvourou.webp"
+},
+{
+  id: "villa_platskos_vol2",
+  beachSlug: "kryopigi-beach",
+  flyer: "villa-platskos-vol2.webp"
+},
+{
+  id: "villa_traditional_estate_nea_potidea_beach",
+  beachSlug: "nea-potidea-beach",
+  flyer: "villa-traditional-estate-nea-potidea-beach.webp"
+},
+{
+  id: "villa_ulyana_in_kriaritsi",
+  beachSlug: "kriaritsi-beach",
+  flyer: "villa-ulyana-in-kriaritsi.webp"
+},
+
 
 ];
