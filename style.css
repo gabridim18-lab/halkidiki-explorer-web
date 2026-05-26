@@ -2885,3 +2885,85 @@ body {
     translateY(-2px);
 
 }
+.footer-links {
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 18px;
+
+  flex-wrap: wrap;
+
+  margin-top: 25px;
+
+}
+
+.footer-links a {
+
+  color: white;
+
+  opacity: 0.85;
+
+  font-size: 14px;
+
+  text-decoration: none;
+
+}
+
+.footer-links a:hover {
+
+  opacity: 1;
+
+}
+/* ===== FOOTER ===== */
+
+.site-footer {
+
+  background: #000;
+  color: white;
+
+  padding: 30px 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 15px;
+
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-left {
+
+  font-size: 14px;
+  opacity: 0.8;
+
+}
+
+.footer-right {
+
+  display: flex;
+  gap: 18px;
+  align-items: center;
+
+}
+
+.footer-right a {
+
+  color: white;
+  text-decoration: none;
+
+  font-size: 14px;
+
+  transition: 0.3s;
+
+}
+
+.footer-right a:hover {
+
+  opacity: 0.7;
+
+}

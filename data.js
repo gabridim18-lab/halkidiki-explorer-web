@@ -238,7 +238,41 @@ const accommodations = [
   id: "private_villa_sani",
   beachSlug: "sani-beach",
   flyer: "private-villa-sani.webp"
+},
+{
+  id: "sea_blue_loft_in_nikiti",
+  beachSlug: "nikiti-beach",
+  flyer: "sea-blue-loft-in-nikiti.webp"
+},
+{
+  id: "sea_view_in_nea_potidea",
+  beachSlug: "paralia-nea-potidea",
+  flyer: "sea-view-in-nea-potidea.webp"
+},
+{
+  id: "sophies_olive_haven_room_in_posidi",
+  beachSlug: "paralia-posidi",
+  flyer: "sophies-olive-haven-room-in-posidi.webp"
+},
+{
+  id: "studio_arsinoi_in_agia_paraskevi",
+  beachSlug: "loutra-agias-paraskevis-beach",
+  flyer: "studio-arsinoi-in-agia-paraskevi.webp"
+},
+{
+  id: "suite_mare_lydia_in_agia_paraskevis",
+  beachSlug: "loutra-agias-paraskevis-beach",
+  flyer: "suite-mare-lydia-in-agia-paraskevis.webp"
+},
+{
+  id: "the_garden_comfort_appartament",
+  beachSlug: "nikiti-beach",
+  flyer: "the-garden-comfort-appartament.webp"
+},
+{
+  id: "thanos_house_siviri",
+  beachSlug: "siviri-beach",
+  flyer: "thanos-house-siviri.webp"
 }
-
 
 ];
