@@ -309,6 +309,11 @@ const accommodations = [
   beachSlug: "kriaritsi-beach",
   flyer: "villa-ulyana-in-kriaritsi.webp"
 },
+{
+  id: "villa_ulyana_in_sarti",
+  beachSlug: "sarti-beach",
+  flyer: "villa-ulyana-in-sarti.webp"
+},
 
 
 ];

@@ -32,15 +32,22 @@
 
   <div class="details">
 
-    <div class="top-header">
+<div class="top-header">
 
-      <div>
+  <button
+    class="back-btn"
+    onclick="history.back()"
+  >
+    ←
+  </button>
 
-        <h1 id="title"></h1>
+  <div class="title-area">
 
-        <div id="category"></div>
+    <h1 id="title"></h1>
 
-      </div>
+    <div class="category-actions-row">
+
+      <div id="category"></div>
 
       <div class="header-actions">
 
@@ -83,185 +90,135 @@
 
     </div>
 
+ </div>
+
+</div>
+
+
     <div class="gallery-wrapper">
 
-  <button
-    class="gallery-arrow gallery-left"
-    onclick="scrollGallery(-1)"
-  >
-    ‹
-  </button>
+     <button
+     class="gallery-arrow gallery-left"
+      onclick="scrollGallery(-1)"
+      >
+      ‹
+       </button>
+
+     <div
+      class="gallery"
+      id="gallery">
+     </div>
+
+     <button
+       class="gallery-arrow gallery-right"
+       onclick="scrollGallery(1)"
+       >
+       ›
+       </button>
+
+   </div>
+
+
+
+
+ <section class="stay-hero-panel">
 
   <div
-    class="gallery"
-    id="gallery">
-  </div>
-
-  <button
-    class="gallery-arrow gallery-right"
-    onclick="scrollGallery(1)"
+    class="connected-beach-card"
+    id="connectedBeachCard"
   >
-    ›
-  </button>
 
-</div>
+    <div class="beach-card-content">
 
+      <div class="beach-card-label">
+        Connected beach
+      </div>
 
-     <div class="beach-row">
+      <h2 id="connectedBeachName"></h2>
 
-  <div id="location"></div>
+      <p id="connectedBeachMeta"></p>
 
-          <button
-          id="mapsButton"
-           class="maps-btn"
-           >
-            Take me there
-            </button>
-
-            </div>
-
-            <div class="premium-bar">
-
-            <div class="premium-item">
-
-               <img
-                src="images/guests.png"
-                class="premium-icon"
-                >
-
-                <div class="premium-text">
-
-               <span class="premium-label">
-                   Guests
-                   </span>
-
-                   <div
-                     class="premium-value"
-                      id="guestsValue">
-                    </div>
-
-                   </div>
-
-                   </div>
-
-            <div class="premium-item">
-
-               <img
-              src="images/bedrooms.png"
-               class="premium-icon"
-                >
-
-              <div class="premium-text">
-
-               <span class="premium-label">
-                Bedrooms
-             </span>
-
-              <div
-                class="premium-value"
-                id="bedroomsValue">
-              </div>
-
-              </div>
-
-              </div>
-
-              <div class="premium-item">
-
-                <img
-               src="images/bathrooms.png"
-                class="premium-icon"
-                 >
-
-               <div class="premium-text">
-
-                <span class="premium-label">
-                  Bathrooms
-                </span>
-
-               <div
-                 class="premium-value"
-                  id="bathroomsValue">
-                </div>
-
-               </div>
-
-              </div>
-
-              </div>
-
-<div class="features-row">
-
-  <div class="feature-card size-card">
-
-    <img
-      src="images/size.webp"
-      class="feature-bg"
-    >
-
-    <div class="feature-overlay">
-
-      <span class="feature-title">
-        Size
-      </span>
-
-      <span
-        class="feature-big"
-        id="sizeValue">
-      </span>
+      <button id="openBeachBtn">
+        Explore this beach →
+      </button>
 
     </div>
 
   </div>
 
-  <div class="feature-card view-card">
+  <div class="stay-core-grid">
 
-    <img
-      src="images/view.webp"
-      class="feature-bg"
-    >
+    <div class="core-stat-card">
+      <div class="core-icon">👥</div>
+      <div class="core-value" id="guestsValue"></div>
+      <div class="core-label">Guests</div>
+    </div>
 
-    <div class="feature-overlay">
+    <div class="core-stat-card">
+      <div class="core-icon">🛏️</div>
+      <div class="core-value" id="bedroomsValue"></div>
+      <div class="core-label">Bedrooms</div>
+    </div>
 
-      <span class="feature-title">
-        View
-      </span>
-
-      <span
-        class="feature-text"
-        id="viewValue">
-      </span>
-
+    <div class="core-stat-card">
+      <div class="core-icon">🚿</div>
+      <div class="core-value" id="bathroomsValue"></div>
+      <div class="core-label">Bathrooms</div>
     </div>
 
   </div>
 
-  <div
-    class="feature-card small-feature"
-    id="poolCard"
-  >
+  <div class="stay-details-grid">
 
-    <img
-      src="images/pool.webp"
-      class="feature-bg"
-    >
+    <div class="smart-detail-card">
+      <span>📐</span>
+      <strong id="sizeValue"></strong>
+      <small>Living space</small>
+    </div>
 
-  </div>
+    <div class="smart-detail-card">
+      <span>🌅</span>
+      <strong id="viewValue"></strong>
+      <small>View</small>
+    </div>
 
-  <div
-    class="feature-card small-feature"
-    id="petCard"
-  >
-
-    <img
-      src="images/pet.webp"
-      class="feature-bg"
-    >
-
-  </div>
-
+    <div class="smart-detail-card">
+      <span>📍</span>
+      <strong id="zoneValue"></strong>
+      <small>Zone</small>
+    </div>
+<div
+  class="smart-detail-card"
+  id="poolStatusCard"
+>
+  <span>🏊</span>
+  <strong id="poolStatusValue"></strong>
+  <small>Pool</small>
 </div>
+
+<div
+  class="smart-detail-card"
+  id="petStatusCard"
+>
+  <span>🐶</span>
+  <strong id="petStatusValue"></strong>
+  <small>Pet friendly</small>
+</div>
+
+
+    <button
+      id="mapsButton"
+      class="magnetic-map-btn"
+    >
+      📍 Take me to the stay
+    </button>
+
+  </div>
+
+</section>
+
 <div class="amenities-row" id="amenitiesRow"></div>
+
 <button
   type="button"
   class="request-offer-btn"
@@ -394,9 +351,104 @@
 
 </div>
 <div
-  class="description-box"
+  class="description-box collapsed-description"
   id="descriptionBox"
 ></div>
+<button
+  class="description-see-more"
+  id="descriptionSeeMore"
+  onclick="toggleAccommodationDescription()"
+>
+  See more
+</button>
+
+
+<section class="stay-experience">
+
+  <div class="experience-header">
+
+    <div>
+      <div class="experience-kicker">
+        Your stay experience
+      </div>
+
+      <h2 id="experienceTitle"></h2>
+
+      <p id="experienceSubtitle"></p>
+    </div>
+
+    <div class="experience-score">
+      <span id="experienceRating"></span>
+      <small>Stay score</small>
+    </div>
+
+  </div>
+
+  <div class="experience-grid">
+
+    <div class="experience-card beach-card-smart">
+      <span>🏖️</span>
+      <h3>Your beach</h3>
+      <p id="smartBeach"></p>
+    </div>
+
+    <div class="experience-card">
+      <span>🌊</span>
+      <h3>Sea mood</h3>
+      <p id="smartSea"></p>
+    </div>
+
+    <div class="experience-card">
+      <span>💶</span>
+      <h3>Beach costs</h3>
+      <p id="smartCosts"></p>
+    </div>
+
+    <div class="experience-card">
+      <span>🌅</span>
+      <h3>Best for</h3>
+      <p id="smartIdeal"></p>
+    </div>
+
+  </div>
+
+<div
+  class="stay-linked-section"
+  id="nearbyBeachBarsSection"
+  style="display:none;"
+>
+  <h3>🏖️ You can go to the beach at</h3>
+  <div
+    class="linked-cards-row"
+    id="nearbyBeachBars"
+  ></div>
+</div>
+
+<div
+  class="stay-linked-section"
+  id="nearbyRestaurantsSection"
+  style="display:none;"
+>
+  <h3>🍽️ You can eat at</h3>
+  <div
+    class="linked-cards-row"
+    id="nearbyRestaurants"
+  ></div>
+</div>
+
+<div
+  class="stay-linked-section"
+  id="nearbyPlacesSection"
+  style="display:none;"
+>
+  <h3>🧭 You can visit</h3>
+  <div
+    class="linked-cards-row"
+    id="nearbyPlaces"
+  ></div>
+</div>
+
+</section>
 </div>
 
 </div>
@@ -420,6 +472,8 @@ async function loadAccommodation() {
 
   const data =
     await response.json();
+
+  loadStayExperience(data);
     window.ownerPhone =
   data.phone;
 
@@ -436,9 +490,88 @@ async function loadAccommodation() {
     .innerText =
       `${data.rating}/${data.ratingScale}`;
 
-  document.getElementById("location")
-    .innerText =
-      `📍 ${data.beachSlug} • ${data.zone}`;
+ 
+
+     document.getElementById("connectedBeachName")
+  .innerText =
+    formatBeachName(data.beachSlug);
+
+document.getElementById("connectedBeachMeta")
+  .innerText =
+    `${data.zone} • beach, food and local experiences around this stay`;
+
+document.getElementById("zoneValue")
+  .innerText =
+    data.zone;
+document.getElementById("poolStatusValue")
+  .innerText =
+    data.pool
+      ? "Available"
+      : "No pool";
+
+document.getElementById("petStatusValue")
+  .innerText =
+    data.petFriendly
+      ? "Allowed"
+      : "Not allowed";
+document.getElementById("openBeachBtn")
+  .onclick = async () => {
+
+    const current =
+      data.beachSlug
+        ?.toLowerCase()
+        .trim();
+
+    try {
+
+      const indexResponse =
+        await fetch(
+          "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/beaches-index.json"
+        );
+
+      const beaches =
+        await indexResponse.json();
+
+      const matchedBeach =
+        beaches.find(item => {
+
+          const itemId =
+            item.id?.toLowerCase();
+
+          const itemSlug =
+            item.slug?.toLowerCase();
+
+          const itemName =
+            item.name?.en?.toLowerCase();
+
+          return (
+            itemId === current ||
+            itemSlug === current ||
+            itemName === current
+          );
+
+        });
+
+      if (matchedBeach) {
+
+        window.location.href =
+          `beach.html?id=${matchedBeach.id}`;
+
+      } else {
+
+        alert("Beach page not found yet.");
+
+      }
+
+    } catch (e) {
+
+      console.log(e);
+
+      alert("Could not open beach page.");
+
+    }
+
+  };
 
   document.getElementById("mapsButton")
     .onclick = () => {
@@ -474,21 +607,7 @@ async function loadAccommodation() {
   .innerHTML = data.descriptionEn
     .replace(/\n/g, "<br>");
 
-   if (!data.pool) {
 
-  document.getElementById("poolCard")
-    .style.display = "none";
-
-     }
-
-   if (!data.petFriendly) {
-
-  document.getElementById("petCard")
-    .style.display = "none";
-
-   
-
-}
  document.getElementById("loader")
   .style.display = "none";
 const amenities = [
@@ -771,8 +890,367 @@ async function shareAccommodation() {
   }
 
 }
+async function loadStayExperience(data) {
+
+  const beachSlug =
+    data.beachSlug;
+
+  let beachData = null;
+
+  try {
+
+    const indexResponse =
+      await fetch(
+        "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/beaches-index.json"
+      );
+
+    const beaches =
+      await indexResponse.json();
+
+    const matchedBeach =
+      beaches.find(item => {
+
+        const itemId =
+          item.id?.toLowerCase();
+
+        const itemSlug =
+          item.slug?.toLowerCase();
+
+        const itemName =
+          item.name?.en?.toLowerCase();
+
+        const current =
+          beachSlug?.toLowerCase();
+
+        return (
+          itemId === current ||
+          itemSlug === current ||
+          itemName === current
+        );
+
+      });
+
+    if (matchedBeach) {
+
+      const beachResponse =
+        await fetch(
+          `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/${matchedBeach.id}/index.json`
+        );
+
+      beachData =
+        await beachResponse.json();
+
+          if (beachData.images?.length > 0) {
+
+  const beachImage =
+    `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/${matchedBeach.id}/images/${beachData.images[0]}`;
+
+  document.querySelector(".stay-experience")
+    .style.backgroundImage =
+      `linear-gradient(
+        rgba(7,17,31,0.72),
+        rgba(7,17,31,0.90)
+      ), url("${beachImage}")`;
+
+}
+  
+}
 
 
+  } catch (e) {
+
+    console.log(
+      "Beach experience data not found:",
+      e
+    );
+
+  }
+
+  document.getElementById("experienceTitle")
+    .innerText =
+      `Your stay around ${formatBeachName(data.beachSlug)}`;
+
+  document.getElementById("experienceSubtitle")
+    .innerText =
+      `This accommodation is connected to ${data.zone}, so your beach, food and local experience starts from here.`;
+
+  document.getElementById("experienceRating")
+    .innerText =
+      data.rating;
+
+  if (!beachData) {
+
+    document.getElementById("smartBeach")
+      .innerText =
+        data.beachSlug || "Nearby beach";
+
+    document.getElementById("smartSea")
+      .innerText =
+        "Beach details will be available soon";
+
+    document.getElementById("smartCosts")
+      .innerText =
+        "Beach prices not specified yet";
+
+    document.getElementById("smartIdeal")
+      .innerText =
+        data.category
+          ? data.category.replaceAll("_", " ")
+          : "Comfortable local base";
+
+   loadNearbyRestaurants(data.beachSlug);
+loadNearbyPlaces(data.beachSlug);
+
+    return;
+
+  }
+
+  document.getElementById("smartBeach")
+    .innerText =
+      `${beachData.name?.en || data.beachSlug} • ${beachData.beachInfo?.vibe?.en || beachData.beachType?.en || ""}`;
+
+  document.getElementById("smartSea")
+    .innerText =
+      `${beachData.beachInfo?.waterEntry?.en || "Easy water entry"} • ${beachData.beachInfo?.waveLevel?.en || "Usually calm"} • ${beachData.water?.clarity?.en || "Clear water"}`;
+
+  document.getElementById("smartCosts")
+    .innerText =
+      beachData.facilities?.sunbedPrice
+        ? `Sunbeds: ${beachData.facilities.sunbedPrice} • ${beachData.servicePriceCategory || ""}`
+        : `Price category: ${beachData.servicePriceCategory || "Not specified"}`;
+
+  document.getElementById("smartIdeal")
+    .innerText =
+      beachData.idealFor?.en
+        ? beachData.idealFor.en.join(" • ")
+        : "Travelers looking for a comfortable local base";
+loadNearbyRestaurants(data.beachSlug);
+loadNearbyPlaces(data.beachSlug);
+
+}
+function toggleAccommodationDescription() {
+
+  const description =
+    document.getElementById("descriptionBox");
+
+  const button =
+    document.getElementById("descriptionSeeMore");
+
+  description.classList.toggle(
+    "collapsed-description"
+  );
+
+  button.innerText =
+    description.classList.contains(
+      "collapsed-description"
+    )
+      ? "See more"
+      : "See less";
+
+}
+function normalizeSlug(value) {
+  return (value || "")
+    .toLowerCase()
+    .trim()
+    .replaceAll("_", " ");
+}
+
+function normalizeSlug(value) {
+  return (value || "")
+    .toLowerCase()
+    .trim()
+    .replaceAll("_", " ");
+}
+
+function pickRandom(items) {
+  return items[
+    Math.floor(Math.random() * items.length)
+  ];
+}
+
+function matchesBeach(item, beachSlug) {
+
+  const current =
+    normalizeSlug(beachSlug);
+
+  return (
+    normalizeSlug(item.beachSlug) === current ||
+    normalizeSlug(item.beach) === current ||
+    normalizeSlug(item.beachId) === current
+  );
+
+}
+
+async function loadNearbyRestaurants(beachSlug) {
+
+  try {
+
+    const response =
+      await fetch(
+        "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/restaurants-index.json"
+      );
+
+    const index =
+      await response.json();
+
+    const matched =
+      index.filter(item =>
+        matchesBeach(item, beachSlug)
+      );
+
+    const beachBars =
+      matched.filter(item =>
+        item.type === "beach_bar"
+      );
+
+    const restaurants =
+      matched.filter(item =>
+        item.type === "restaurant"
+      );
+
+    if (beachBars.length > 0) {
+
+      await renderLinkedBusinessCard(
+        pickRandom(beachBars),
+        "nearbyBeachBars",
+        "nearbyBeachBarsSection"
+      );
+
+    }
+
+    if (restaurants.length > 0) {
+
+      await renderLinkedBusinessCard(
+        pickRandom(restaurants),
+        "nearbyRestaurants",
+        "nearbyRestaurantsSection"
+      );
+
+    }
+
+  } catch (e) {
+
+    console.log("Nearby restaurants/beach bars not found", e);
+
+  }
+
+}
+
+async function renderLinkedBusinessCard(item, containerId, sectionId) {
+
+  const detailsResponse =
+    await fetch(
+      `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/${item.id}/index.json`
+    );
+
+  const data =
+    await detailsResponse.json();
+
+  const container =
+    document.getElementById(containerId);
+
+  container.innerHTML = `
+
+    <a
+      class="linked-mini-card"
+      href="place.html?id=${data.id}"
+    >
+
+      <img
+        src="${data.images?.[0] || ""}"
+        alt="${data.titleEn || "Place"}"
+      >
+
+      <div>
+        <strong>${data.titleEn || "Place"}</strong>
+        <span>${data.price || ""} ${data.rating ? "• ⭐ " + data.rating : ""}</span>
+      </div>
+
+    </a>
+
+  `;
+
+  document.getElementById(sectionId)
+    .style.display = "block";
+
+}
+
+async function loadNearbyPlaces(beachSlug) {
+
+  try {
+
+    const response =
+      await fetch(
+        "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/what-to-do/what-to-do-index.json"
+      );
+
+    const index =
+      await response.json();
+
+    const matched =
+      index.filter(item =>
+        matchesBeach(item, beachSlug)
+      );
+
+    if (matched.length === 0) return;
+
+    const item =
+      pickRandom(matched);
+
+    const detailsResponse =
+      await fetch(
+        `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/what-to-do/${item.id}/index.json`
+      );
+
+    const data =
+      await detailsResponse.json();
+
+    const image =
+      data.images?.[0]
+        ? `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/what-to-do/${data.id}/images/${data.images[0]}`
+        : "";
+
+    const container =
+      document.getElementById("nearbyPlaces");
+
+    container.innerHTML = `
+
+      <a
+        class="linked-mini-card"
+        href="what-to-do.html?id=${data.id}"
+      >
+
+        <img
+          src="${image}"
+          alt="${data.titleEn || "Place to visit"}"
+        >
+
+        <div>
+          <strong>${data.titleEn || "Place to visit"}</strong>
+          <span>${data.categoryEn || "Nearby experience"}</span>
+        </div>
+
+      </a>
+
+    `;
+
+    document.getElementById("nearbyPlacesSection")
+      .style.display = "block";
+
+  } catch (e) {
+
+    console.log("Nearby places not found", e);
+
+  }
+
+}
+function formatBeachName(value) {
+  return (value || "")
+    .replaceAll("-", " ")
+    .replaceAll("_", " ")
+    .replace(/\bbeach\b/gi, "Beach")
+    .replace(/\b\w/g, char => char.toUpperCase());
+}
 </script>
 
 <footer class="site-footer">
