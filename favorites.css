@@ -1,0 +1,245 @@
+body {
+
+  margin: 0;
+
+  font-family: Arial, sans-serif;
+
+  background:
+    linear-gradient(
+      rgba(255,255,255,0.78),
+      rgba(255,255,255,0.82)
+    ),
+    url("images/beach_background.webp");
+
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+}
+
+.favorites-page {
+
+  max-width: 1400px;
+
+  margin: 0 auto;
+
+  padding: 20px;
+
+}
+
+.favorites-header {
+
+  margin-bottom: 30px;
+
+}
+
+.favorites-header h1 {
+
+  color: #111;
+
+  font-size: 42px;
+
+  margin-bottom: 10px;
+
+}
+
+.favorites-header p {
+
+  color: #666;
+
+  line-height: 1.6;
+
+  max-width: 700px;
+
+}
+
+.favorites-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fill,minmax(300px,1fr));
+
+  gap: 20px;
+
+}
+
+.empty-favorites {
+
+  background: white;
+
+  border-radius: 30px;
+
+  padding: 60px 20px;
+
+  text-align: center;
+
+  color: #666;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.08);
+
+}
+
+@media (max-width: 768px) {
+
+  .favorites-page {
+
+    padding: 12px;
+
+  }
+
+  .favorites-header h1 {
+
+    font-size: 30px;
+
+  }
+
+}
+.favorite-card {
+
+    position: relative;
+
+  background: white;
+
+  border-radius: 26px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.08);
+
+}
+
+.favorite-card img {
+
+  width: 100%;
+
+  height: 280px;
+
+  object-fit: cover;
+
+}
+
+.favorite-content {
+
+  padding: 6px 12px 10px;
+
+}
+
+.favorite-content h3 {
+
+  margin-bottom: 10px;
+
+  color: #111;
+
+}
+
+.favorite-content p {
+
+  color: #666;
+
+  margin-bottom: 16px;
+
+}
+
+.favorite-content button {
+
+  width: 100%;
+
+  border: none;
+
+  border-radius: 14px;
+
+  padding: 10px;
+
+  background: #009dff;
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+}
+.favorite-title-row {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 10px;
+
+    margin-bottom: 2px;
+
+}
+
+.favorite-title-row h3 {
+
+  margin: 0;
+
+  font-size: 16px;
+
+  line-height: 1.3;
+
+}
+
+.favorite-rating {
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+
+}
+
+.favorite-type {
+
+  display: inline-block;
+
+  padding: 4px 10px;
+
+  border-radius: 999px;
+
+  background: #eaf6ff;
+
+  color: #009dff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  margin-bottom: 8px;
+
+}
+.remove-favorite-btn {
+
+  position: absolute;
+
+  top: 12px;
+
+  right: 12px;
+
+  width: 42px;
+
+  height: 42px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.95);
+
+  cursor: pointer;
+
+  font-size: 20px;
+
+  z-index: 10;
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.15);
+
+}

@@ -444,7 +444,7 @@ body {
 .title-area {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 2px;
 }
 
 .back-btn {
@@ -513,7 +513,7 @@ body {
 
   scrollbar-width: none;
 
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 
   scroll-behavior: smooth;
 
@@ -1126,25 +1126,31 @@ body {
 
   .top-header h1 {
 
-    font-size: 28px;
+    font-size: 22px;
 
-    line-height: 1.2;
+    line-height: 1.15;
 
   }
 
   #category {
 
-    font-size: 15px;
+    font-size: 13px;
 
   }
 
   .rating-box {
 
-    padding: 10px 16px;
+    padding: 8px 12px;
 
-    font-size: 18px;
+    font-size: 15px;
 
   }
+  .share-icon-btn {
+
+  width: 34px;
+  height: 34px;
+
+}
 
   .gallery {
 
@@ -1578,8 +1584,8 @@ body {
 
 .share-icon-btn {
 
-  width: 54px;
-  height: 54px;
+  width: 34px;
+  height: 34px;
 
   border: none;
 
@@ -1605,6 +1611,43 @@ body {
 }
 
 .share-icon-btn:hover {
+
+  transform: scale(1.08);
+
+}
+.favorite-icon-btn {
+
+  width: 34px;
+  height: 34px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: white;
+
+  color: #999;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  font-size: 20px;
+
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.12);
+
+  transition: 0.25s;
+
+}
+
+.favorite-icon-btn.active {
+
+  color: #ff3366;
 
   transform: scale(1.08);
 
@@ -3207,7 +3250,7 @@ display: none;
 
 }
 .stay-hero-panel {
-  margin-top: 34px;
+  margin-top: 0px;
   display: flex;
   flex-direction: column;
   gap: 22px;
@@ -3243,14 +3286,14 @@ display: none;
 
 .beach-card-label {
   display: inline-flex;
-  padding: 9px 16px;
+  padding: 6px 12px;
   border-radius: 999px;
   background: rgba(255,255,255,0.22);
-  font-size: 13px;
+  font-size: 10px;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 18px;
+  margin-bottom: 10px;
 }
 
 .connected-beach-card h2 {
@@ -3268,7 +3311,7 @@ display: none;
 
 .connected-beach-card button {
   border: none;
-  padding: 16px 24px;
+  padding: 10px 16px;
   border-radius: 999px;
   background: white;
   color: #07111f;
@@ -3362,20 +3405,21 @@ display: none;
 @media (max-width: 768px) {
 
   .connected-beach-card {
-    min-height: 230px;
-    border-radius: 30px;
+    min-height: 180px;
+    border-radius: 24px;
   }
 
   .beach-card-content {
-    padding: 24px;
+    padding: 18px;
   }
 
   .connected-beach-card h2 {
-    font-size: 36px;
+    font-size: 28px;
   }
 
   .connected-beach-card p {
-    font-size: 15px;
+    font-size: 13px;
+    line-height: 1.4;
   }
 
   .stay-core-grid {
@@ -3553,14 +3597,14 @@ display: none;
   text-decoration: none;
   overflow: hidden;
   padding: 0;
-  min-height: 210px;
+  min-height: 170px;
   display: flex;
   flex-direction: column;
 }
 
 .linked-mini-card img {
   width: 100%;
-  height: 125px;
+  height: 140px;
   object-fit: cover;
 }
 
@@ -3595,5 +3639,323 @@ display: none;
 
   .category-actions-row {
     align-items: center;
+    margin-top: -16px;
+
   }
+  .connected-beach-banner {
+
+  padding: 22px 20px;
+
+  border-radius: 28px;
+
+  min-height: auto;
+
+}
+.connected-beach-banner h2 {
+
+  font-size: 42px;
+
+  line-height: 1;
+
+  margin-bottom: 10px;
+
+}
+.connected-beach-meta {
+
+  font-size: 14px;
+
+  line-height: 1.4;
+
+}
+.connected-beach-btn {
+
+  margin-top: 18px;
+
+  padding: 14px 20px;
+
+  font-size: 15px;
+
+}
+}
+.image-modal {
+
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(0,0,0,0.96);
+
+  z-index: 999999;
+
+  display: none;
+
+  justify-content: center;
+
+  align-items: center;
+}
+
+.image-modal.active {
+
+  display: flex;
+}
+
+.modal-image {
+
+  max-width: 95vw;
+
+  max-height: 95vh;
+
+  object-fit: contain;
+}
+
+.image-close {
+
+  position: absolute;
+
+  top: 20px;
+
+  right: 20px;
+
+  width: 50px;
+
+  height: 50px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.2);
+
+  color: white;
+
+  font-size: 24px;
+
+  cursor: pointer;
+}
+
+.image-nav {
+
+  position: absolute;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 60px;
+
+  height: 60px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.2);
+
+  color: white;
+
+  font-size: 40px;
+
+  cursor: pointer;
+}
+
+.image-prev {
+
+  left: 20px;
+}
+
+.image-next {
+
+  right: 20px;
+}
+
+@media (max-width: 768px) {
+
+  .image-nav {
+
+    display: none;
+  }
+}
+.favorites-home-btn {
+
+  position: absolute;
+
+  top: 20px;
+
+  right: 20px;
+
+  width: 58px;
+
+  height: 58px;
+
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.92);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-decoration: none;
+
+  font-size: 26px;
+
+  z-index: 100;
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.12);
+
+}
+
+@media (max-width: 768px) {
+
+  .favorites-home-btn {
+
+    width: 48px;
+
+    height: 48px;
+
+    font-size: 22px;
+
+    top: 14px;
+
+    right: 14px;
+
+  }
+
+}
+.back-circle {
+
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: white;
+
+  color: #111;
+
+  text-decoration: none;
+
+  font-size: 22px;
+  font-weight: 900;
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.08);
+
+  margin-bottom: 18px;
+
+}
+.category-favorite-row {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+}
+
+.favorite-circle-btn {
+
+  width: 32px;
+  height: 32px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: white;
+
+  color: #999;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  cursor: pointer;
+
+  font-size: 18px;
+
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.08);
+
+  transition: 0.25s;
+
+}
+
+.favorite-circle-btn.active {
+
+  color: #ff3366;
+
+  transform: scale(1.08);
+
+}
+.beach-bg {
+  background-image:
+    linear-gradient(
+      rgba(0,0,0,.45),
+      rgba(0,0,0,.65)
+    ),
+    url("images/experience_beach.webp");
+}
+
+.sea-bg {
+  background-image:
+    linear-gradient(
+      rgba(0,0,0,.45),
+      rgba(0,0,0,.65)
+    ),
+    url("images/experience_sea.webp");
+}
+
+.costs-bg {
+  background-image:
+    linear-gradient(
+      rgba(0,0,0,.45),
+      rgba(0,0,0,.65)
+    ),
+    url("images/experience_costs.webp");
+}
+
+.ideal-bg {
+  background-image:
+    linear-gradient(
+      rgba(0,0,0,.45),
+      rgba(0,0,0,.65)
+    ),
+    url("images/experience_bestfor.webp");
+}
+.beach-bg,
+.sea-bg,
+.costs-bg,
+.ideal-bg {
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  position: relative;
+
+  overflow: hidden;
+
+}
+
+.beach-bg > *,
+.sea-bg > *,
+.costs-bg > *,
+.ideal-bg > * {
+
+  position: relative;
+
+  z-index: 2;
+
 }

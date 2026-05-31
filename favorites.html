@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
+
+<title>
+  My Favorites
+</title>
+
+<link
+  rel="stylesheet"
+  href="favorites.css"
+/>
+
+</head>
+
+<body>
+
+<div class="favorites-page">
+
+  <div class="favorites-header">
+
+    <a
+  href="index.html"
+  class="back-circle"
+>
+  ←
+</a>
+
+    <h1>
+      ❤️ My Favorites
+    </h1>
+
+    <p>
+      Save beaches, accommodations, restaurants,
+      beach bars and places you want to visit.
+    </p>
+
+  </div>
+
+  <div
+    id="favoritesContainer"
+    class="favorites-grid"
+  >
+
+    <div class="empty-favorites">
+
+      No favorites yet
+
+    </div>
+
+  </div>
+
+</div>
+<script>
+
+    function removeFavorite(id) {
+
+  let favorites =
+    JSON.parse(
+      localStorage.getItem("favorites")
+      || "[]"
+    );
+
+  favorites =
+    favorites.filter(
+      item => item.id !== id
+    );
+
+  localStorage.setItem(
+    "favorites",
+    JSON.stringify(favorites)
+  );
+
+  loadFavorites();
+
+}
+
+function loadFavorites() {
+
+  const container =
+    document.getElementById(
+      "favoritesContainer"
+    );
+
+  const favorites =
+    JSON.parse(
+      localStorage.getItem("favorites")
+      || "[]"
+    );
+
+  if (favorites.length === 0) {
+
+    container.innerHTML = `
+
+      <div class="empty-favorites">
+        No favorites yet
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML = "";
+
+  favorites.forEach(item => {
+
+    container.innerHTML += `
+
+      <div class="favorite-card">
+
+<button
+    class="remove-favorite-btn"
+    onclick="removeFavorite('${item.id}')"
+  >
+    ❤️
+  </button>
+
+        <img
+          src="${item.image}"
+          alt="${item.title}"
+        >
+
+        <div class="favorite-content">
+
+ <div class="favorite-title-row">
+
+  <h3>${item.title}</h3>
+
+  <span class="favorite-rating">
+    ⭐ ${item.rating || "-"}
+  </span>
+
+</div>
+
+<div class="favorite-type">
+
+  🏡 Accommodation
+
+</div>
+
+          <button
+            onclick="openFavorite(
+              '${item.type}',
+              '${item.id}'
+            )"
+          >
+            Open
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+}
+
+function openFavorite(type,id) {
+
+  if (type === "accommodation") {
+
+    window.location.href =
+      `accommodation.html?id=${id}`;
+
+  }
+
+}
+
+loadFavorites();
+
+</script>
+</body>
+
+</html>

@@ -47,7 +47,20 @@
 
     <div class="category-actions-row">
 
-      <div id="category"></div>
+      <div class="category-favorite-row">
+
+  <div id="category"></div>
+
+  <button
+    id="favoriteBtn"
+    class="favorite-circle-btn"
+    onclick="toggleFavorite()"
+    aria-label="Favorite"
+  >
+    ♡
+  </button>
+
+</div>
 
       <div class="header-actions">
 
@@ -384,33 +397,33 @@
 
   </div>
 
-  <div class="experience-grid">
+<div class="experience-grid">
 
-    <div class="experience-card beach-card-smart">
-      <span>🏖️</span>
-      <h3>Your beach</h3>
-      <p id="smartBeach"></p>
-    </div>
-
-    <div class="experience-card">
-      <span>🌊</span>
-      <h3>Sea mood</h3>
-      <p id="smartSea"></p>
-    </div>
-
-    <div class="experience-card">
-      <span>💶</span>
-      <h3>Beach costs</h3>
-      <p id="smartCosts"></p>
-    </div>
-
-    <div class="experience-card">
-      <span>🌅</span>
-      <h3>Best for</h3>
-      <p id="smartIdeal"></p>
-    </div>
-
+  <div class="experience-card beach-bg">
+    <span>🏖️</span>
+    <h3>Your beach</h3>
+    <p id="smartBeach"></p>
   </div>
+
+  <div class="experience-card sea-bg">
+    <span>🌊</span>
+    <h3>Sea mood</h3>
+    <p id="smartSea"></p>
+  </div>
+
+  <div class="experience-card costs-bg">
+    <span>💶</span>
+    <h3>Beach costs</h3>
+    <p id="smartCosts"></p>
+  </div>
+
+  <div class="experience-card ideal-bg">
+    <span>🌅</span>
+    <h3>Best for</h3>
+    <p id="smartIdeal"></p>
+  </div>
+
+</div>
 
 <div
   class="stay-linked-section"
@@ -455,6 +468,9 @@
 
 <script>
 
+  let galleryImages = [];
+let currentImageIndex = 0;
+let accommodationData = null;
 async function loadAccommodation() {
 
 
@@ -472,6 +488,9 @@ async function loadAccommodation() {
 
   const data =
     await response.json();
+
+    accommodationData = data;
+    updateFavoriteButton();
 
   loadStayExperience(data);
     window.ownerPhone =
@@ -503,17 +522,29 @@ document.getElementById("connectedBeachMeta")
 document.getElementById("zoneValue")
   .innerText =
     data.zone;
-document.getElementById("poolStatusValue")
-  .innerText =
-    data.pool
-      ? "Available"
-      : "No pool";
+if (data.pool) {
 
-document.getElementById("petStatusValue")
-  .innerText =
-    data.petFriendly
-      ? "Allowed"
-      : "Not allowed";
+  document.getElementById("poolStatusValue")
+    .innerText = "Available";
+
+} else {
+
+  document.getElementById("poolStatusCard")
+    .style.display = "none";
+
+}
+
+if (data.petFriendly) {
+
+  document.getElementById("petStatusValue")
+    .innerText = "Allowed";
+
+} else {
+
+  document.getElementById("petStatusCard")
+    .style.display = "none";
+
+}
 document.getElementById("openBeachBtn")
   .onclick = async () => {
 
@@ -649,16 +680,19 @@ amenities.forEach(item => {
   const gallery =
     document.getElementById("gallery");
 
+galleryImages = data.images;
+
   data.images.forEach(image => {
 
     gallery.innerHTML += `
 
-      <img
-        src="${image}"
-        alt="${data.titleEn}"
-      >
+  <img
+    src="${image}"
+    alt="${data.titleEn}"
+    onclick="openImageModal(${data.images.indexOf(image)})"
+  >
 
-    `;
+`;
 
   });
 
@@ -684,6 +718,8 @@ function scrollGallery(direction) {
 
   const gallery =
     document.getElementById("gallery");
+    
+   
 
   gallery.scrollBy({
 
@@ -1251,6 +1287,163 @@ function formatBeachName(value) {
     .replace(/\bbeach\b/gi, "Beach")
     .replace(/\b\w/g, char => char.toUpperCase());
 }
+function openImageModal(index) {
+
+  currentImageIndex = index;
+
+  document.getElementById("modalImage").src =
+    galleryImages[index];
+
+  document.getElementById("imageModal")
+    .classList.add("active");
+}
+
+function closeImageModal() {
+
+  document.getElementById("imageModal")
+    .classList.remove("active");
+}
+
+function changeModalImage(direction) {
+
+  currentImageIndex += direction;
+
+  if (currentImageIndex < 0) {
+    currentImageIndex = galleryImages.length - 1;
+  }
+
+  if (currentImageIndex >= galleryImages.length) {
+    currentImageIndex = 0;
+  }
+
+  document.getElementById("modalImage").src =
+    galleryImages[currentImageIndex];
+}
+let startX = 0;
+
+document.addEventListener("touchstart", e => {
+
+  startX = e.touches[0].clientX;
+
+});
+
+document.addEventListener("touchend", e => {
+
+  const endX =
+    e.changedTouches[0].clientX;
+
+  const diff =
+    startX - endX;
+
+  if (Math.abs(diff) < 50) return;
+
+  if (
+    document
+      .getElementById("imageModal")
+      .classList.contains("active")
+  ) {
+
+    if (diff > 0) {
+
+      changeModalImage(1);
+
+    } else {
+
+      changeModalImage(-1);
+
+    }
+
+  }
+
+});
+function toggleFavorite() {
+
+  if (!accommodationData) return;
+
+  const button =
+    document.getElementById("favoriteBtn");
+
+  let favorites =
+    JSON.parse(
+      localStorage.getItem("favorites")
+      || "[]"
+    );
+
+  const existingIndex =
+    favorites.findIndex(item =>
+      item.id === accommodationData.id
+    );
+
+  if (existingIndex > -1) {
+
+    favorites.splice(existingIndex, 1);
+
+    button.innerHTML = "🤍";
+
+    button.classList.remove("active");
+
+  } else {
+
+    favorites.push({
+
+      id: accommodationData.id,
+
+      type: "accommodation",
+
+      title: accommodationData.titleEn,
+
+      image:
+        accommodationData.images?.[0] || "",
+
+      beachSlug:
+        accommodationData.beachSlug || "",
+
+      rating:
+        accommodationData.rating || ""
+
+    });
+
+    button.innerHTML = "❤️";
+
+    button.classList.add("active");
+
+  }
+
+  localStorage.setItem(
+    "favorites",
+    JSON.stringify(favorites)
+  );
+
+}
+function updateFavoriteButton() {
+
+  if (!accommodationData) return;
+
+  const button =
+    document.getElementById("favoriteBtn");
+
+  const favorites =
+    JSON.parse(
+      localStorage.getItem("favorites")
+      || "[]"
+    );
+
+  const exists =
+    favorites.some(item =>
+      item.id === accommodationData.id
+    );
+
+  button.innerHTML =
+    exists ? "❤️" : "🤍";
+
+  button.classList.toggle(
+    "active",
+    exists
+  );
+
+}
+
+
 </script>
 
 <footer class="site-footer">
@@ -1276,7 +1469,37 @@ function formatBeachName(value) {
   </div>
 
 </footer>
+<div id="imageModal" class="image-modal">
 
+  <button
+    class="image-close"
+    onclick="closeImageModal()"
+  >
+    ✕
+  </button>
+
+  <button
+    class="image-nav image-prev"
+    onclick="changeModalImage(-1)"
+  >
+    ‹
+  </button>
+
+  <img
+    id="modalImage"
+    class="modal-image"
+    src=""
+    alt=""
+  >
+
+  <button
+    class="image-nav image-next"
+    onclick="changeModalImage(1)"
+  >
+    ›
+  </button>
+
+</div>
 </body>
 
 </html>
