@@ -2017,6 +2017,47 @@ h1 {
   text-decoration: none;
   font-size: 14px;
 }
+
+.beach-navigation{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:50px 0;
+}
+
+.beach-nav-btn{
+  width:64px;
+  height:64px;
+  border:none;
+  border-radius:50%;
+  background:white;
+  cursor:pointer;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.12);
+
+  transition:.25s;
+}
+
+.beach-nav-btn:hover{
+  transform:translateY(-3px);
+}
+
+.beach-nav-btn svg{
+  width:28px;
+  height:28px;
+  fill:none;
+  stroke:#0b63f6;
+  stroke-width:2.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.beach-nav-text{
+  font-size:18px;
+  font-weight:700;
+  color:#666;
+  text-align:center;
+}
 </style>
 
 </head>
@@ -2079,6 +2120,28 @@ h1 {
 <div
   class="accommodation-row"
   id="accommodationRow">
+</div>
+
+
+<div class="beach-navigation">
+
+  <button id="prevBeach" class="beach-nav-btn">
+    <svg viewBox="0 0 24 24">
+      <path d="M15 5L8 12L15 19"/>
+    </svg>
+  </button>
+
+   <div class="beach-nav-text">
+    Discover the next beach
+  </div>
+
+
+  <button id="nextBeach" class="beach-nav-btn">
+    <svg viewBox="0 0 24 24">
+      <path d="M9 5L16 12L9 19"/>
+    </svg>
+  </button>
+
 </div>
 
 <div
@@ -2472,7 +2535,72 @@ loadWeather(
 setupGalleryDots();
 
 }
+async function setupBeachNavigation() {
 
+  const currentBeach =
+    new URLSearchParams(
+      window.location.search
+    ).get("id");
+
+  const response =
+    await fetch(
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/beaches-index.json"
+    );
+
+  const beaches =
+    await response.json();
+
+  const currentIndex =
+    beaches.findIndex(
+      beach =>
+        beach.id === currentBeach
+    );
+
+  const prevBeach =
+    beaches[currentIndex - 1];
+
+  const nextBeach =
+    beaches[currentIndex + 1];
+
+  const prevBtn =
+    document.getElementById("prevBeach");
+
+  const nextBtn =
+    document.getElementById("nextBeach");
+
+  if(prevBeach){
+
+    prevBtn.onclick = () => {
+
+      window.location.href =
+        `beach.html?id=${prevBeach.id}`;
+
+    };
+
+  } else {
+
+    prevBtn.style.opacity = ".3";
+    prevBtn.disabled = true;
+
+  }
+
+  if(nextBeach){
+
+    nextBtn.onclick = () => {
+
+      window.location.href =
+        `beach.html?id=${nextBeach.id}`;
+
+    };
+
+  } else {
+
+    nextBtn.style.opacity = ".3";
+    nextBtn.disabled = true;
+
+  }
+
+}
 loadBeach();
 
 function setupGalleryDots() {
@@ -2517,6 +2645,7 @@ function setupGalleryDots() {
   );
 
 }
+setupBeachNavigation();
 function getHighlightImage(text) {
 
   const a =

@@ -1,0 +1,71 @@
+html,
+body {
+
+  margin: 0;
+  padding: 0;
+
+}
+
+.results-page {
+
+  min-height: 100vh;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  background:
+    linear-gradient(
+      rgba(255,255,255,.60),
+      rgba(255,255,255,.60)
+    ),
+    url("images/beach_background.webp");
+
+  background-size: cover;
+
+}
+
+.loading-card {
+
+  background: rgba(255,255,255,.85);
+
+  backdrop-filter: blur(14px);
+
+  padding: 40px;
+
+  border-radius: 30px;
+
+  text-align: center;
+
+  max-width: 500px;
+
+}
+
+.spinner {
+
+  width: 70px;
+  height: 70px;
+
+  border: 6px solid #ddd;
+
+  border-top-color: #00a4e4;
+
+  border-radius: 50%;
+
+  margin: 0 auto 20px;
+
+  animation: spin 1s linear infinite;
+
+}
+
+@keyframes spin {
+
+  to {
+
+    transform: rotate(360deg);
+
+  }
+
+}

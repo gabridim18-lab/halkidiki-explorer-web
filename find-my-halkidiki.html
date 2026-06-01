@@ -26,11 +26,28 @@
 <div class="find-page">
 
   <a
-    href="index.html"
-    class="back-btn"
-  >
-    ← Back
-  </a>
+  href="index.html"
+  class="back-circle"
+>
+
+<svg
+  width="22"
+  height="22"
+  viewBox="0 0 24 24"
+  fill="none"
+>
+
+<path
+  d="M15 18L9 12L15 6"
+  stroke="currentColor"
+  stroke-width="2.5"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+/>
+
+</svg>
+
+</a>
 
   <div class="find-header">
 
@@ -38,10 +55,15 @@
       ✨ Find My Halkidiki
     </h1>
 
-    <p>
-      Tell us what kind of holiday you dream about.
-      Choose as many styles as you like.
-    </p>
+    <p class="find-subtitle">
+  Choose up to 3 styles that best match your dream holiday.
+</p>
+
+<div id="selectionCounter" class="selection-counter">
+
+  0 of 3 styles selected
+
+</div>
 
   </div>
 
@@ -85,15 +107,136 @@
 
 </div>
 
+ <button
+  id="continueBtn"
+  class="continue-btn disabled"
+>
+
+  ✨ Show My Match
+
+</button>
+<div
+  id="stayPreferences"
+  class="stay-preferences"
+>
+<div class="preferences-card">
+
+  <h2 class="step-title">
+  ✨ One last thing...
+</h2>
+
+<p class="step-subtitle">
+  Tell us a little more about your perfect holiday.
+</p>
+
+  <div class="pref-group">
+
+    <h3>How many people are coming?</h3>
+
+    <select id="guestCount">
+
+  <option>2</option>
+  <option>3</option>
+  <option>4</option>
+  <option>5</option>
+  <option>6</option>
+  <option>7</option>
+  <option>8</option>
+  <option>9</option>
+  <option>10+</option>
+
+</select>
+
+  </div>
+
+  <div class="pref-group">
+
+   <h3>
+How close do you want to be to the sea?
+</h3>
+
+<div class="compact-options">
+
   <button
-    id="continueBtn"
-    class="continue-btn"
+    class="compact-option selected"
+    data-distance="100"
   >
-    Continue →
+    Beachfront
+  </button>
+
+  <button
+    class="compact-option"
+    data-distance="500"
+  >
+    Walkable
+  </button>
+
+  <button
+    class="compact-option"
+    data-distance="2000"
+  >
+    Nearby
+  </button>
+
+  <button
+    class="compact-option"
+    data-distance="999999"
+  >
+    Doesn't matter
   </button>
 
 </div>
 
+<h3>Do you want a pool?</h3>
+ <div class="compact-options">
+
+  <button
+    class="compact-option"
+    data-pool="true"
+  >
+    Yes
+  </button>
+
+  <button
+    class="compact-option selected"
+    data-pool="any"
+  >
+    Doesn't matter
+  </button>
+
+</div>
+
+<h3>Bringing your pet?</h3>
+ <div class="compact-options">
+
+  <button
+    class="compact-option"
+    data-pet="true"
+  >
+    Yes
+  </button>
+
+  <button
+    class="compact-option selected"
+    data-pet="any"
+  >
+    No
+  </button>
+
+</div>
+
+  <button
+    id="findResultsBtn"
+    class="continue-btn"
+  >
+
+    ✨ Discover My Halkidiki
+
+  </button>
+
+</div>
+</div>
+</div>
 <script src="find-my-halkidiki.js"></script>
 
 </body>
