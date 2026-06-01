@@ -4046,79 +4046,94 @@ function openAccommodation(id) {
 const favoriteBtn =
   document.getElementById(
     "heroFavorite"
-  )
-
-let favorites =
-  JSON.parse(
-
-    localStorage.getItem(
-      "favorite_beaches"
-    ) || "[]"
-
-  )
+  );
 
 const currentBeach =
   new URLSearchParams(
     window.location.search
-  ).get("id")
+  ).get("id");
 
-updateFavorite()
+let favorites =
+  JSON.parse(
+    localStorage.getItem("favorites")
+    || "[]"
+  );
+
+updateFavorite();
 
 favoriteBtn.addEventListener(
   "click",
-  () => {
+  async () => {
 
-    if(
-      favorites.includes(
-        currentBeach
-      )
-    ) {
+    const exists =
+      favorites.find(
+        item =>
+          item.id === currentBeach
+      );
+
+    if (exists) {
 
       favorites =
         favorites.filter(
-          id =>
-            id !== currentBeach
-        )
+          item =>
+            item.id !== currentBeach
+        );
 
     } else {
 
-      favorites.push(
-        currentBeach
-      )
+      const title =
+        document.getElementById(
+          "beachTitle"
+        ).innerText;
+
+      const firstImage =
+        document.querySelector(
+          "#gallery img"
+        )?.src || "";
+
+      favorites.push({
+
+        id: currentBeach,
+
+        title: title,
+
+        image: firstImage,
+
+        rating: "-",
+
+        type: "beach"
+
+      });
 
     }
 
     localStorage.setItem(
+      "favorites",
+      JSON.stringify(favorites)
+    );
 
-      "favorite_beaches",
-
-      JSON.stringify(
-        favorites
-      )
-
-    )
-
-    updateFavorite()
+    updateFavorite();
 
   }
-)
+);
 
 function updateFavorite() {
 
   const active =
-    favorites.includes(
-      currentBeach
-    )
+    favorites.some(
+      item =>
+        item.id === currentBeach
+    );
 
   favoriteBtn.innerHTML =
     active
       ? "❤️"
-      : "♡"
+      : "♡";
 
   favoriteBtn.classList.toggle(
     "active",
     active
-  )
+  );
 
 }
 

@@ -144,7 +144,11 @@ function loadFavorites() {
 
 <div class="favorite-type">
 
-  🏡 Accommodation
+  ${
+    item.type === "beach"
+      ? "🏖 Beach"
+      : "🏡 Accommodation"
+  }
 
 </div>
 
@@ -173,6 +177,13 @@ function openFavorite(type,id) {
 
     window.location.href =
       `accommodation.html?id=${id}`;
+
+  }
+
+  if (type === "beach") {
+
+    window.location.href =
+      `beach.html?id=${id}`;
 
   }
 
