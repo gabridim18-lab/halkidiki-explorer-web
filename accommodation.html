@@ -989,6 +989,32 @@ async function loadStayExperience(data) {
       ), url("${beachImage}")`;
 
 }
+const beachBaseUrl =
+  `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/${matchedBeach.id}/images/`;
+
+if (beachData.images?.[0]) {
+
+  document.querySelector(".beach-bg")
+    .style.backgroundImage =
+      `url("${beachBaseUrl}${beachData.images[0]}")`;
+
+}
+
+if (beachData.images?.[1]) {
+
+  document.querySelector(".sea-bg")
+    .style.backgroundImage =
+      `url("${beachBaseUrl}${beachData.images[1]}")`;
+
+}
+
+if (beachData.images?.[2]) {
+
+  document.querySelector(".ideal-bg")
+    .style.backgroundImage =
+      `url("${beachBaseUrl}${beachData.images[2]}")`;
+
+}
   
 }
 
