@@ -3009,16 +3009,18 @@ document
 
 
 
-  const filtered =
-    places.filter(
+ const filtered =
+  places.filter(
 
-      item =>
+    item =>
 
-        item.beachSlug === beachId
-        &&
-        item.type === "beach_bar"
+      item.beachSlug === beachId
+      &&
+      item.type === "beach_bar"
+      &&
+      item.featured === true
 
-    );
+  );
 
   if(filtered.length === 0)
     return;
@@ -3108,6 +3110,10 @@ async function loadRestaurants(beachId) {
       &&
 
       item.type === "restaurant"
+
+      &&
+
+      item.featured === true
 
   );
 

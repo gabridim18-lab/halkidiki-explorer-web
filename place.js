@@ -255,6 +255,68 @@ function buildFeatureTags(place) {
   }).join("")
 
 }
+function buildWhyPeopleCome(place) {
+
+  const cards = []
+
+  if ((place.features || []).includes("sunset_view")) {
+    cards.push({
+      emoji: "🌅",
+      title: "Sunset Views",
+      text: "One of the best sunset spots",
+      image: place.images?.[0]
+    })
+  }
+
+  if ((place.features || []).includes("cocktails")) {
+    cards.push({
+      emoji: "🍸",
+      title: "Premium Cocktails",
+      text: "Relax with drinks by the sea",
+      image: place.images?.[1] || place.images?.[0]
+    })
+  }
+
+  if ((place.musicStyles || []).includes("party")) {
+    cards.push({
+      emoji: "🎧",
+      title: "Party Atmosphere",
+      text: "Music and social vibes",
+      image: place.images?.[2] || place.images?.[0]
+    })
+  }
+
+  if ((place.features || []).includes("sea_view")) {
+    cards.push({
+      emoji: "🌊",
+      title: "Waterfront Location",
+      text: "Directly connected to the sea",
+      image: place.images?.[3] || place.images?.[0]
+    })
+  }
+
+  if ((place.features || []).includes("pet_friendly")) {
+    cards.push({
+      emoji: "🐶",
+      title: "Pet Friendly",
+      text: "Visitors with pets are welcome",
+      image: place.images?.[0]
+    })
+  }
+
+  if ((place.features || []).includes("parking")) {
+    cards.push({
+      emoji: "🅿️",
+      title: "Easy Parking",
+      text: "Convenient access nearby",
+      image: place.images?.[0]
+    })
+  }
+
+  return cards.slice(0, 4)
+}
+
+
 function getSocialLabel(place) {
 
   if(place.instagram)
@@ -674,9 +736,42 @@ function getSocialSvg(place) {
 
 </div>
 
-<section class="features-scroll">
+<section class="place-content">
 
-  ${buildFeatureTags(place)}
+  <h2 class="section-title">
+    Why People Come Here
+  </h2>
+
+  <div class="business-info-grid">
+
+    ${buildWhyPeopleCome(place).map(card => `
+
+      <div
+        class="business-info-card"
+        style="background-image:url('${card.image}')"
+      >
+
+        <div class="business-info-overlay">
+
+          <div class="business-info-title">
+
+            ${card.emoji} ${card.title}
+
+          </div>
+
+          <div class="business-info-text">
+
+            ${card.text}
+
+          </div>
+
+        </div>
+
+      </div>
+
+    `).join("")}
+
+  </div>
 
 </section>
 

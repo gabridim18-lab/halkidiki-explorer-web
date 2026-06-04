@@ -328,7 +328,7 @@ body {
   box-shadow:
     0 5px 20px rgba(0,0,0,0.06);
 
-  min-height: 120px;
+  min-height: 92px;
 
 }
 
@@ -417,7 +417,242 @@ body {
   text-decoration: none;
   font-size: 14px;
 }
+.zone-expandable-content {
+  grid-column: 1 / -1;
+  margin-top: 10px;
+  display: none;
+}
 
+.zone-expandable-content.active {
+  display: block;
+}
+
+.zone-results-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+.zone-results-row {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+}
+
+.zone-accommodation-card {
+  min-width: 300px;
+  max-width: 300px;
+  background: white;
+  border-radius: 26px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  box-shadow: 0 8px 26px rgba(0,0,0,0.10);
+}
+
+.zone-accommodation-card img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+}
+
+.zone-accommodation-info {
+  padding: 16px;
+}
+
+.zone-accommodation-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #111;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.zone-accommodation-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.zone-rating-badge {
+  background: #0077ff;
+  color: white;
+  min-width: 42px;
+  height: 34px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.zone-accommodation-details {
+  font-size: 14px;
+  font-weight: 700;
+  color: #555;
+}
+
+.zone-accommodation-category {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: #0066ff;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+.smart-quick-btn {
+  position: relative;
+}
+
+.quick-btn-hint {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0077ff;
+  opacity: 0.85;
+  margin-top: -6px;
+}
+
+.zone-expandable-content {
+  grid-column: 1 / -1;
+  margin-top: -4px;
+  margin-bottom: 20px;
+  display: none;
+}
+.zone-food-card {
+  min-width: 300px;
+  max-width: 300px;
+  background: rgb(245, 253, 172);
+  border-radius: 30px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 14px 38px rgba(0,0,0,0.14);
+  transition: 0.3s ease;
+}
+
+.zone-food-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 46px rgba(0,0,0,0.18);
+}
+
+.zone-food-image-wrap {
+  height: 210px;
+  position: relative;
+  overflow: hidden;
+}
+
+.zone-food-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.4s ease;
+}
+
+.zone-food-card:hover img {
+  transform: scale(1.06);
+}
+
+.zone-food-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.62),
+    rgba(0,0,0,0.05)
+  );
+}
+
+.zone-food-rating {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: #0077ff;
+  color: white;
+  min-width: 44px;
+  height: 36px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 900;
+  box-shadow: 0 8px 20px rgba(0,119,255,0.35);
+}
+
+.zone-food-type {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  background: rgba(255,255,255,0.92);
+  color: #0b3d91;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.zone-food-info {
+  padding: 18px;
+}
+
+.zone-food-title {
+  font-size: 20px;
+  font-weight: 900;
+  color: #111;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+.zone-food-beach {
+  font-size: 12px;
+  font-weight: 900;
+  color: #0077ff;
+  margin-bottom: 8px;
+  text-transform: capitalize;
+}
+.zone-food-desc {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  line-height: 1.35;
+  margin-bottom: 12px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.zone-food-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.zone-food-price {
+  background: #f0f6ff;
+  color: #0077ff;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.zone-food-features {
+  font-size: 12px;
+  font-weight: 800;
+  color: #16214a;
+  opacity: 0.75;
+  text-align: right;
+}
 </style>
 
 </head>
@@ -457,42 +692,87 @@ body {
 
   <div class="quick-buttons">
 
-  <div class="quick-btn">
+<div
+  class="quick-btn smart-quick-btn"
+  onclick="toggleZoneSection('accommodation')"
+>
 
-    <img
-      class="quick-btn-icon"
-      src="icons/accommodation.png"
-    >
+  <img
+    class="quick-btn-icon"
+    src="icons/accommodation.png"
+  >
 
-    <div class="quick-btn-text">
-      Accommodation
-    </div>
-
+  <div class="quick-btn-text">
+    Accommodation
   </div>
 
-  <div class="quick-btn">
-
-    <img
-      class="quick-btn-icon"
-      src="icons/restaurants.png"
-    >
-
-    <div class="quick-btn-text">
-      Restaurants
-    </div>
-
+  <div class="quick-btn-hint">
+    Tap to view stays ▼
   </div>
 
+</div>
+
+<div
+  id="zoneAccommodationContent"
+  class="zone-expandable-content"
+></div>
+
+<div
+  class="quick-btn smart-quick-btn"
+  onclick="toggleZoneSection('restaurant')"
+>
+
+  <img
+    class="quick-btn-icon"
+    src="icons/restaurants.png"
+  >
+
+  <div class="quick-btn-text">
+    Restaurants
+  </div>
+
+  <div class="quick-btn-hint">
+    Tap to view restaurants ▼
+  </div>
+
+</div>
+
+<div
+  id="zoneRestaurantContent"
+  class="zone-expandable-content"
+></div>
+
+<div
+  class="quick-btn smart-quick-btn"
+  onclick="toggleZoneSection('beach_bar')"
+>
+
+  <img
+    class="quick-btn-icon"
+    src="icons/beachbars.png"
+  >
+
+  <div class="quick-btn-text">
+    Beach Bars
+  </div>
+
+  <div class="quick-btn-hint">
+    Tap to view beach bars ▼
+  </div>
+
+</div>
+
+<div
+  id="zoneBeachBarContent"
+  class="zone-expandable-content"
+></div>
+
   <div class="quick-btn">
 
     <img
       class="quick-btn-icon"
-      src="icons/beachbars.png"
+      src="icons/carrental.png"
     >
-
-    <div class="quick-btn-text">
-      Beach Bars
-    </div>
 
   </div>
 
@@ -535,7 +815,10 @@ body {
 
   </div>
 
+ 
+
 </div>
+
 
 </div>
 
@@ -693,7 +976,224 @@ function openBeach(id) {
 `beach.html?id=${id}`;
 
 }
+function openAccommodation(id) {
 
+  window.location.href =
+    `accommodation.html?id=${id}`;
+
+}
+function openRestaurant(id) {
+
+  window.location.href =
+    `place.html?id=${id}`;
+
+}
+let currentSection = null;
+
+async function toggleZoneSection(type) {
+
+  const containers = {
+    accommodation: document.getElementById("zoneAccommodationContent"),
+    restaurant: document.getElementById("zoneRestaurantContent"),
+    beach_bar: document.getElementById("zoneBeachBarContent")
+  };
+
+  const container =
+    containers[type];
+
+  Object.values(containers).forEach(box => {
+    box.classList.remove("active");
+    box.innerHTML = "";
+  });
+
+  if (currentSection === type) {
+    currentSection = null;
+    return;
+  }
+
+  currentSection = type;
+  container.classList.add("active");
+
+  const params =
+    new URLSearchParams(window.location.search);
+
+  const zoneId =
+    params.get("id");
+
+  let items = [];
+
+  try {
+
+    if (type === "accommodation") {
+
+      const response =
+        await fetch(
+          "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/accommodations-index-v2.json"
+        );
+
+      const data =
+        await response.json();
+
+      items =
+        data.filter(item =>
+          item.zone &&
+          item.zone.toLowerCase() === zoneId.toLowerCase()
+        );
+
+    }
+
+    if (type === "restaurant" || type === "beach_bar") {
+
+      const response =
+        await fetch(
+          "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/restaurants-index.json"
+        );
+
+      const data =
+        await response.json();
+
+      items =
+        data.filter(item =>
+          item.zone &&
+          item.zone.toLowerCase() === zoneId.toLowerCase() &&
+          item.type === type
+        );
+
+    }
+
+  } catch (e) {
+    console.log(e);
+  }
+
+  const title =
+    type === "accommodation"
+      ? "Accommodation"
+      : type === "restaurant"
+        ? "Restaurants"
+        : "Beach Bars";
+
+  if (type === "accommodation") {
+
+    container.innerHTML = `
+
+      <div class="zone-results-title">
+        ${title} (${items.length})
+      </div>
+
+      <div class="zone-results-row">
+
+        ${items.map(item => `
+
+          <div
+            class="zone-accommodation-card"
+            onclick="openAccommodation('${item.id}')"
+          >
+
+            <img src="${item.image}">
+
+            <div class="zone-accommodation-info">
+
+              <div class="zone-accommodation-title">
+                ${item.titleEn}
+              </div>
+
+              <div class="zone-accommodation-meta-row">
+
+                <div class="zone-rating-badge">
+                  ${item.rating}
+                </div>
+
+                <div class="zone-accommodation-details">
+                  👥 ${item.guests} guests · 🛏 ${item.bedrooms}
+                </div>
+
+              </div>
+
+              <div class="zone-accommodation-category">
+                ${item.category.replaceAll("_", " ")}
+              </div>
+
+            </div>
+
+          </div>
+
+        `).join("")}
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML = `
+
+    <div class="zone-results-title">
+      ${title} (${items.length})
+    </div>
+
+    <div class="zone-results-row">
+
+      ${items.map(item => `
+
+        <div
+          class="zone-food-card"
+          onclick="openRestaurant('${item.id}')"
+        >
+
+          <div class="zone-food-image-wrap">
+
+            <img src="${item.image}">
+
+            <div class="zone-food-gradient"></div>
+
+            <div class="zone-food-rating">
+              ${item.rating}
+            </div>
+
+            <div class="zone-food-type">
+  ${(item.beachSlug || "").replaceAll("-", " ")}
+</div>
+
+          </div>
+
+          <div class="zone-food-info">
+
+            <div class="zone-food-title">
+              ${item.titleEn}
+            </div>
+
+<div class="zone-food-desc">
+  ${item.shortEn || ""}
+</div>
+
+            <div class="zone-food-bottom">
+
+              <div class="zone-food-price">
+                ${item.price || ""}
+              </div>
+
+              <div class="zone-food-features">
+                ${(item.cuisineTypes || item.features || [])
+                  .slice(0, 2)
+                  .map(x => x.replaceAll("_", " "))
+                  .join(" · ")}
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `).join("")}
+
+    </div>
+
+  `;
+
+}
 loadZone();
 
 </script>

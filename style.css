@@ -2565,16 +2565,18 @@ body {
 
   overflow: hidden;
 
-  border-radius: 28px;
+  border-radius: 32px;
 
-  height: 170px;
+  height: 240px;
 
   background-size: cover;
 
   background-position: center;
 
   box-shadow:
-    0 8px 24px rgba(0,0,0,0.10);
+    0 18px 40px rgba(0,0,0,0.18);
+
+  transition: 0.3s;
 
 }
 
@@ -2586,9 +2588,8 @@ body {
 
   background:
     linear-gradient(
-      to top,
-      rgba(255,255,255,0.92),
-      rgba(255,255,255,0.18)
+      transparent,
+      rgba(0,0,0,0.82)
     );
 
   display: flex;
@@ -2603,11 +2604,13 @@ body {
 
 .business-info-title {
 
-  font-size: 16px;
+  font-size: 18px;
 
-  font-weight: 800;
+  font-weight: 900;
 
   margin-bottom: 6px;
+
+  color: white;
 
 }
 
@@ -2617,7 +2620,9 @@ body {
 
   line-height: 1.45;
 
-  font-weight: 700;
+  color: rgba(255,255,255,0.88);
+
+  font-weight: 600;
 
 }
 
@@ -2625,12 +2630,22 @@ body {
 
   .business-info-grid {
 
-    grid-template-columns:
-      repeat(2, 1fr);
+  display: flex;
 
-    gap: 12px;
+  overflow-x: auto;
 
-  }
+  gap: 14px;
+
+  padding-bottom: 6px;
+
+  scrollbar-width: none;
+
+}
+.business-info-grid::-webkit-scrollbar {
+
+  display: none;
+
+}
 
   .business-info-card {
 
@@ -2698,9 +2713,11 @@ body {
 
 .business-info-card {
 
-  height: 140px;
+  flex: 0 0 78vw;
 
-  border-radius: 22px;
+  height: 115px;
+
+  border-radius: 24px;
 
 }
 
@@ -3998,4 +4015,129 @@ display: none;
 .ideal-bg {
   background-image:
     url("images/experience_bestfor.webp");
+}
+.zone-expandable-content {
+
+  margin-top: 30px;
+
+  display: none;
+
+}
+
+.zone-expandable-content.active {
+
+  display: block;
+
+}
+
+.zone-results-title {
+
+  font-size: 28px;
+
+  font-weight: 800;
+
+  margin-bottom: 20px;
+
+}
+
+.zone-results-row {
+
+  display: flex;
+
+  gap: 18px;
+
+  overflow-x: auto;
+
+  scrollbar-width: none;
+
+  padding-bottom: 10px;
+
+}
+
+.zone-results-row::-webkit-scrollbar {
+
+  display: none;
+
+}
+.zone-accommodation-card {
+
+  min-width: 300px;
+
+  max-width: 300px;
+
+  background: white;
+
+  border-radius: 26px;
+
+  overflow: hidden;
+
+  flex-shrink: 0;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 26px rgba(0,0,0,0.10);
+
+}
+
+.zone-accommodation-card img {
+
+  width: 100%;
+
+  height: 190px;
+
+  object-fit: cover;
+
+}
+
+.zone-accommodation-info {
+
+  padding: 16px;
+
+}
+
+.zone-accommodation-title {
+
+  font-size: 18px;
+
+  font-weight: 800;
+
+  color: #111;
+
+  line-height: 1.2;
+
+  margin-bottom: 10px;
+
+}
+
+.zone-accommodation-meta {
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  color: #555;
+
+  margin-bottom: 10px;
+
+}
+
+.zone-accommodation-category {
+
+  display: inline-block;
+
+  padding: 7px 12px;
+
+  border-radius: 999px;
+
+  background: #eef4ff;
+
+  color: #0066ff;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  text-transform: capitalize;
+
 }
