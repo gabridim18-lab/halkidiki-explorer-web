@@ -1211,24 +1211,33 @@ async function renderLinkedBusinessCard(item, containerId, sectionId) {
   const container =
     document.getElementById(containerId);
 
+  const isFeatured =
+    item.featured === true;
+
   container.innerHTML = `
 
-    <a
-      class="linked-mini-card"
-      href="place.html?id=${data.id}"
+    <div
+      class="linked-mini-card ${isFeatured ? "" : "locked"}"
+      ${isFeatured ? `onclick="window.location.href='place.html?id=${data.id}'"` : ""}
     >
 
       <img
-        src="${data.images?.[0] || ""}"
-        alt="${data.titleEn || "Place"}"
+        src="${data.images?.[0] || item.image || ""}"
+        alt="${data.titleEn || item.titleEn || "Place"}"
       >
 
+      ${isFeatured ? "" : `
+        <div class="zone-food-soon">
+          Preview
+        </div>
+      `}
+
       <div>
-        <strong>${data.titleEn || "Place"}</strong>
-        <span>${data.price || ""} ${data.rating ? "• ⭐ " + data.rating : ""}</span>
+        <strong>${data.titleEn || item.titleEn || "Place"}</strong>
+        <span>${data.price || item.price || ""} ${data.rating ? "• " + data.rating : ""}</span>
       </div>
 
-    </a>
+    </div>
 
   `;
 

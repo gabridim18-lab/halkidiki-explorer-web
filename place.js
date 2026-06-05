@@ -100,14 +100,33 @@ function updateFavoriteIcon() {
 
 function renderPlace(place) {
 
-    function formatBeachName(slug) {
+   function formatBeachName(slug) {
 
   return slug
+    .replaceAll("-", " ")
     .replaceAll("_", " ")
-    .replace(/\b\w/g, l => l.toUpperCase())
+    .replace(/\b\w/g, l => l.toUpperCase());
 
 }
+function getPlaceSubtitle(place) {
 
+  const cuisine =
+    place.cuisineTypes &&
+    place.cuisineTypes.length > 0
+      ? place.cuisineTypes[0].replaceAll("_", " ")
+      : "";
+
+  if (place.type === "beach_bar") {
+    return cuisine
+      ? `${cuisine} beach bar`
+      : "Beach bar";
+  }
+
+  return cuisine
+    ? `${cuisine} restaurant`
+    : "Restaurant";
+
+}
 function getVibeTag(place) {
 
   const vibes = [
@@ -151,12 +170,142 @@ function getVibeTag(place) {
 
   `
 }
+function getOpeningHoursList(place) {
+
+  if (
+    place.openingHours &&
+    place.openingHours.length > 0
+  ) {
+    return place.openingHours;
+  }
+
+  if (!place.hoursEn) {
+    return [];
+  }
+
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+
+  return days.map(day => {
+
+    const regex =
+      new RegExp(`${day}\\s*:?\\s*([^;]+)`, "i");
+
+    const match =
+      place.hoursEn.match(regex);
+
+    if (!match) return null;
+
+    const value =
+      match[1].trim();
+
+    const closed =
+      value.toLowerCase().includes("closed");
+
+    return {
+      day: day,
+      closed: closed,
+      labelEn: closed ? "Closed" : value.replace(" - ", "")
+    };
+
+  }).filter(Boolean);
+
+}
 
 function getTodayHours(place) {
 
-  return place.hoursEn || ""
+  const list =
+    getOpeningHoursList(place);
+
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ];
+
+  const todayName =
+    days[new Date().getDay()];
+
+  const today =
+    list.find(item =>
+      item.day === todayName
+    );
+
+  if (!today) return "Hours not available";
+
+  return today.closed
+    ? "Closed"
+    : today.labelEn;
 
 }
+
+function renderOpeningHours(place) {
+
+  const list =
+    getOpeningHoursList(place);
+
+  if (list.length === 0) {
+    return "";
+  }
+
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ];
+
+  const todayIndex =
+    new Date().getDay();
+
+  const orderedDays =
+    [
+      ...days.slice(todayIndex + 1),
+      ...days.slice(0, todayIndex + 1)
+    ];
+
+  return orderedDays.map(day => {
+
+    const item =
+      list.find(x => x.day === day);
+
+    if (!item) return "";
+
+    return `
+
+      <div class="hours-row">
+
+        <div class="hours-day">
+          ${item.day}
+        </div>
+
+        <div class="hours-time">
+          ${item.closed ? "Closed" : item.labelEn}
+        </div>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+}
+
+
 function buildFeatureTags(place) {
 
   const allFeatures = [
@@ -477,46 +626,75 @@ function getSocialSvg(place) {
 
     </section>
 
-    <section class="place-header">
+   <section class="place-header hero-info-card">
 
-      <div class="title-row">
+  <div class="hero-title-row">
 
-        <h1>${title}</h1>
+    <div class="hero-title-block">
 
-        <button
-  class="favorite-btn"
-  id="favoriteBtn"
->
+      <h1>
+        ${title}
+      </h1>
 
-  ♡
-
-</button>
-
+      <div class="hero-subtitle">
+        ${getPlaceSubtitle(place)}
       </div>
 
-      <div class="place-meta">
+    </div>
+
+    <button
+      class="favorite-btn hero-favorite-btn"
+      id="favoriteBtn"
+    >
+      ♡
+    </button>
+
+  </div>
 
   <a
-    href="beach.html?id=${place.beachSlug}"
-    class="beach-pill"
-  >
+  href="beach.html?id=${place.beachSlug}"
+  class="hero-beach-line"
+>
+  ${formatBeachName(place.beachSlug)}
+</a>
 
-    🌴
-    ${formatBeachName(place.beachSlug)}
-
-  </a>
-
-  ${getVibeTag(place)}
-
+ <div class="hero-highlights-text">
+  ${(place.features || [])
+    .filter(x => x !== "restaurant")
+    .slice(0, 3)
+    .map(x => formatFeatureLabel(x))
+    .join(" · ")}
 </div>
 
-<div class="today-hours">
+  <div class="hero-hours-wrap">
 
-  🕒 ${getTodayHours(place)}
+    <div class="hours-box">
 
-</div>
+      <div
+        class="hours-today"
+        onclick="toggleOpeningHours()"
+      >
+        <span>
+          Today · ${getTodayHours(place)}
+        </span>
 
-    </section>
+        <span>
+          ▼
+        </span>
+      </div>
+
+      <div
+        class="hours-list"
+        id="openingHoursList"
+      >
+        ${renderOpeningHours(place)}
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
 
     <section class="action-buttons">
 
@@ -548,7 +726,7 @@ function getSocialSvg(place) {
   </a>
 
   <a
-    href="https://maps.google.com/?q=${place.address}"
+    href="https://maps.google.com/?q=${place.lat},${place.lon}"
     target="_blank"
     class="action-item"
   >
@@ -1038,3 +1216,47 @@ loadPlace().catch(error => {
   `
 
 })
+function toggleOpeningHours() {
+
+  const list =
+    document.getElementById("openingHoursList");
+
+  if (!list) return;
+
+  list.classList.toggle("active");
+
+}
+function getPlaceSubtitle(place) {
+
+  const cuisine =
+    place.cuisineTypes && place.cuisineTypes.length > 0
+      ? place.cuisineTypes[0].replaceAll("_", " ")
+      : "";
+
+  if (cuisine) {
+    return cuisine;
+  }
+
+  if (place.type === "beach_bar") {
+    return "beach bar";
+  }
+
+  return "dining";
+}
+
+function formatFeatureLabel(feature) {
+
+  const labels = {
+    cocktails: "Cocktails",
+    sea_view: "Sea View",
+    sunset_view: "Sunset View",
+    family_friendly: "Family Friendly",
+    pet_friendly: "Pet Friendly",
+    live_music: "Live Music",
+    parking: "Parking",
+    events: "Events"
+  };
+
+  return labels[feature] || feature.replaceAll("_", " ");
+
+}

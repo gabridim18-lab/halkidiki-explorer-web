@@ -2088,5 +2088,289 @@ display: none;
     url("images/experience_bestfor.webp");
 }
 
+.hours-today {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 800;
+  color: #111;
+}
 
+.hours-list {
+  display: none;
+  margin-top: 12px;
+}
 
+.hours-list.active {
+  display: block;
+}
+
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 7px 0;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  font-size: 14px;
+}
+
+.hours-day {
+  font-weight: 800;
+  color: #111;
+}
+.hours-box {
+  margin-top: 12px;
+  display: inline-block;
+  min-width: 220px;
+  max-width: 320px;
+}
+
+.hours-today {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  color: #444;
+
+  cursor: pointer;
+}
+
+.hours-list {
+  display: none;
+  margin-top: 10px;
+  padding: 12px 0 0;
+}
+
+.hours-list.active {
+  display: block;
+}
+
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 7px 0;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  font-size: 13px;
+}
+
+.hours-day {
+  font-weight: 800;
+  color: #111;
+}
+
+.hours-time {
+  font-weight: 700;
+  color: #555;
+  text-align: right;
+}
+
+.display-address {
+  margin-top: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #777;
+}
+.place-header-clean {
+  padding: 18px 20px 8px;
+}
+
+.clean-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.clean-title-block h1 {
+  margin: 0;
+  line-height: 1.08;
+}
+
+.clean-title-block h1 span {
+  display: inline;
+  font-size: 31px;
+  font-weight: 900;
+  color: #111;
+}
+
+.clean-title-block h1 small {
+  display: inline;
+  margin-left: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #777;
+  text-transform: capitalize;
+}
+
+.clean-location-line {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #666;
+}
+
+.clean-feature-line {
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0077ff;
+  text-transform: capitalize;
+}
+
+.clean-favorite-btn {
+  width: 46px;
+  height: 46px;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.hero-info-card {
+  margin: 16px 16px 0;
+  padding: 22px;
+  border-radius: 30px;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(0, 198, 255, 0.28),
+      transparent 34%
+    ),
+    linear-gradient(
+      135deg,
+      #07111f,
+      #112f4f
+    );
+
+  color: white;
+
+  box-shadow:
+    0 18px 45px rgba(0,0,0,0.22);
+}
+
+.hero-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.hero-title-block h1 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.05;
+  font-weight: 900;
+  color: white;
+}
+
+.hero-subtitle {
+  margin-top: 6px;
+  font-size: 15px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.68);
+  text-transform: capitalize;
+}
+
+.hero-favorite-btn {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+
+  background: rgba(255,255,255,0.14);
+  color: white;
+
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: none;
+}
+
+.hero-favorite-btn.active {
+  background: rgba(255,255,255,0.22);
+  color: #ff4d7d;
+}
+
+.hero-beach-line {
+  margin-top: 14px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #5bdcff;
+}
+
+.hero-highlights {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.hero-highlights span {
+  padding: 8px 11px;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.14);
+
+  color: rgba(255,255,255,0.86);
+
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.hero-hours-wrap {
+  margin-top: 16px;
+}
+
+.hero-info-card .hours-box {
+  margin-top: 0;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.hero-info-card .hours-today {
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.hero-info-card .hours-row {
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+
+.hero-info-card .hours-day,
+.hero-info-card .hours-time {
+  color: rgba(255,255,255,0.78);
+}
+.hero-beach-line {
+  display: inline-block;
+  margin-top: 14px;
+
+  color: #5bdcff;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.hero-beach-line:hover {
+  opacity: 0.82;
+}
+
+.hero-highlights {
+  display: none;
+}
+
+.hero-highlights-text {
+  margin-top: 14px;
+
+  color: rgba(117, 116, 116, 0.82);
+
+  font-size: 13px;
+  font-weight: 800;
+
+  text-transform: capitalize;
+  line-height: 1.5;
+}

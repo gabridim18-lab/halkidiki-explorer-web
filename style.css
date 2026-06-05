@@ -4141,3 +4141,28 @@ display: none;
   text-transform: capitalize;
 
 }
+.linked-mini-card.locked {
+  cursor: default;
+}
+
+.linked-mini-card.locked:hover {
+  transform: none;
+}
+
+.linked-mini-card {
+  cursor: pointer;
+  position: relative;
+}
+
+.zone-food-soon {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(255,255,255,0.94);
+  color: #16214a;
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}

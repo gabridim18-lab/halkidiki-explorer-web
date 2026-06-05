@@ -598,7 +598,26 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.4px;
 }
+.zone-food-card.locked {
+  cursor: default;
+}
 
+.zone-food-card.locked:hover {
+  transform: none;
+}
+
+.zone-food-soon {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: rgba(255,255,255,0.94);
+  color: #16214a;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
 .zone-food-info {
   padding: 18px;
 }
@@ -1137,10 +1156,10 @@ async function toggleZoneSection(type) {
 
       ${items.map(item => `
 
-        <div
-          class="zone-food-card"
-          onclick="openRestaurant('${item.id}')"
-        >
+       <div
+  class="zone-food-card ${item.featured === true ? "" : "locked"}"
+  ${item.featured === true ? `onclick="openRestaurant('${item.id}')"` : ""}
+>
 
           <div class="zone-food-image-wrap">
 
@@ -1151,7 +1170,11 @@ async function toggleZoneSection(type) {
             <div class="zone-food-rating">
               ${item.rating}
             </div>
-
+${item.featured === true ? "" : `
+  <div class="zone-food-soon">
+    Preview
+  </div>
+`}
             <div class="zone-food-type">
   ${(item.beachSlug || "").replaceAll("-", " ")}
 </div>
