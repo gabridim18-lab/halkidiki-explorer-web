@@ -28,12 +28,7 @@
   <div class="overlay"></div>
 
   <div class="hero-content">
-    <a
-  href="favorites.html"
-  class="favorites-home-btn"
->
-  ❤️
-</a>
+    
 
     <h1>
       HALKIDIKI EXPLORER
@@ -58,6 +53,12 @@
   Explore Beaches
 
 </a>
+<a
+  href="favorites.html"
+  class="favorites-home-btn"
+>
+  Saved
+</a>
 
     </div>
 
@@ -80,40 +81,25 @@
 
   <div class="filter-group">
 
-    <button
-      class="filter-pill active"
-      data-guests="0"
-    >
-      Any Guests
-    </button>
+   <select id="guestsSelect" class="zone-dropdown">
+  <option value="0">Guests</option>
+  <option value="2">2+</option>
+  <option value="3">3+</option>
+  <option value="4">4+</option>
+  <option value="5">5+</option>
+  <option value="6">6+</option>
+  <option value="7">7+</option>
+  <option value="8">8+</option>
+  <option value="9">9+</option>
+  <option value="10">10+</option>
+</select>
 
-    <button
-      class="filter-pill"
-      data-guests="2"
-    >
-      2+
-    </button>
-
-    <button
-      class="filter-pill"
-      data-guests="4"
-    >
-      4+
-    </button>
-
-    <button
-      class="filter-pill"
-      data-guests="6"
-    >
-      6+
-    </button>
-
-    <button
-      class="filter-pill"
-      data-guests="8"
-    >
-      8+
-    </button>
+<input
+  type="text"
+  id="nameSearch"
+  class="search-input"
+  placeholder="Search by beach name"
+/>
 
     <button
   class="filter-pill toggle-pill"
@@ -165,21 +151,16 @@
   >
 
     <option value="">
-      🌍 Any Distance
-    </option>
+  🌊 Any Beach Distance
+</option>
 
-    <option value="50">
-      🏖️ Beachfront
-    </option>
+<option value="50">
+  🏖️ Beachfront
+</option>
 
-    <option value="150">
-      🚶 less than 150m
-    </option>
-
-    <option value="300">
-      ☀️ between 150m and 300m
-    </option>
-
+<option value="300">
+  🚶 Up to 300m
+</option>
   </select>
 
 </div>
@@ -227,11 +208,41 @@ const cardsContainer =
     let petOnly = false;
     let selectedZone = "";
    let selectedDistance = 0;
+let searchName = "";
+const savedFilters =
+  JSON.parse(
+    localStorage.getItem("homeFilters") || "{}"
+  );
 
+selectedGuests = savedFilters.selectedGuests || 0;
+poolOnly = savedFilters.poolOnly || false;
+petOnly = savedFilters.petOnly || false;
+selectedZone = savedFilters.selectedZone || "";
+selectedDistance = savedFilters.selectedDistance || 0;
+searchName = savedFilters.searchName || "";
+let loadVersion = 0;
 
+function saveFilters() {
 
+  localStorage.setItem(
+    "homeFilters",
+    JSON.stringify({
+      selectedGuests,
+      poolOnly,
+      petOnly,
+      selectedZone,
+      selectedDistance,
+      searchName
+    })
+  );
+
+}
 
 async function loadCards() {
+
+  const currentVersion = ++loadVersion;
+
+  cardsContainer.innerHTML = "";
 
   for (const item of accommodations) {
 
@@ -253,6 +264,10 @@ async function loadCards() {
 
     const data =
       await response.json();
+
+      if (currentVersion !== loadVersion) {
+  return;
+}
 
       if (
 
@@ -286,7 +301,13 @@ async function loadCards() {
   selectedDistance === 0 ||
   data.distanceMetersOverride <= selectedDistance
 )
+&&
 
+(
+  searchName === "" ||
+  data.titleEn.toLowerCase().includes(searchName) ||
+  data.titleRo.toLowerCase().includes(searchName)
+)
 
 
 
@@ -322,8 +343,8 @@ document
       .getElementById("poolFilter")
       .classList.toggle("active");
 
-    cardsContainer.innerHTML = "";
 
+    saveFilters();
     await loadCards();
 
 });
@@ -334,8 +355,8 @@ document
     selectedDistance =
       parseInt(e.target.value) || 0;
 
-    cardsContainer.innerHTML = "";
 
+    saveFilters();
     await loadCards();
 
 });
@@ -349,8 +370,8 @@ document
       .getElementById("petFilter")
       .classList.toggle("active");
 
-    cardsContainer.innerHTML = "";
 
+    saveFilters();
     await loadCards();
 
 });
@@ -360,8 +381,8 @@ document
 
     selectedZone = e.target.value;
 
-    cardsContainer.innerHTML = "";
 
+    saveFilters();
     await loadCards();
 
 });
@@ -369,34 +390,30 @@ document
 
 
 document
-  .querySelectorAll("[data-guests]")
-  .forEach(button => {
+  .getElementById("guestsSelect")
+  .addEventListener("change", async (e) => {
 
-    button.addEventListener(
-      "click",
-      async () => {
+    selectedGuests =
+      parseInt(e.target.value) || 0;
 
-        document
-          .querySelectorAll("[data-guests]")
-          .forEach(btn =>
-            btn.classList.remove("active")
-          );
 
-        button.classList.add("active");
+    saveFilters();
+    await loadCards();
 
-        selectedGuests =
-          parseInt(
-            button.dataset.guests
-          );
+  });
 
-        cardsContainer.innerHTML = "";
+document
+  .getElementById("nameSearch")
+  .addEventListener("input", async (e) => {
 
-        await loadCards();
+    searchName =
+      e.target.value.trim().toLowerCase();
 
-      }
-    );
 
-});
+    saveFilters();
+    await loadCards();
+
+  });
 
 function scrollCards(direction) {
 
@@ -417,7 +434,25 @@ function openAccommodation(id) {
 
 }
 
+document.getElementById("guestsSelect").value =
+  selectedGuests;
 
+document.getElementById("zoneSelect").value =
+  selectedZone;
+
+document.getElementById("distanceSelect").value =
+  selectedDistance || "";
+
+document.getElementById("nameSearch").value =
+  searchName;
+
+if (poolOnly) {
+  document.getElementById("poolFilter").classList.add("active");
+}
+
+if (petOnly) {
+  document.getElementById("petFilter").classList.add("active");
+}
 loadCards();
 
 </script>

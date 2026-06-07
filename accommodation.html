@@ -159,74 +159,111 @@
 
   </div>
 
-  <div class="stay-core-grid">
+    <section class="stay-snapshot-card">
 
-    <div class="core-stat-card">
-      <div class="core-icon">👥</div>
-      <div class="core-value" id="guestsValue"></div>
-      <div class="core-label">Guests</div>
+    <div class="snapshot-header">
+      <div>
+        <div class="snapshot-kicker">
+          Stay snapshot
+        </div>
+        <h2>Your stay at a glance</h2>
+      </div>
+
+      <button
+        id="mapsButton"
+        class="snapshot-map-btn"
+      >
+        Take me to the stay
+      </button>
     </div>
 
-    <div class="core-stat-card">
-      <div class="core-icon">🛏️</div>
-      <div class="core-value" id="bedroomsValue"></div>
-      <div class="core-label">Bedrooms</div>
+    <div class="snapshot-main-grid">
+
+      <div class="snapshot-stat">
+        <div class="snapshot-svg-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M16 11c1.66 0 3-1.34 3-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3Z"/>
+            <path d="M8 11c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3Z"/>
+            <path d="M2 19c.4-3.1 2.7-5 6-5s5.6 1.9 6 5"/>
+            <path d="M10 19c.35-2.5 2.3-4 5-4 3.1 0 5.3 1.7 6 4"/>
+          </svg>
+        </div>
+        <strong id="guestsValue"></strong>
+        <span>Guests</span>
+      </div>
+
+      <div class="snapshot-stat">
+        <div class="snapshot-svg-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 11V6a2 2 0 0 1 2-2h5a3 3 0 0 1 3 3v4"/>
+            <path d="M13 11h8v9"/>
+            <path d="M3 20V9"/>
+            <path d="M3 15h18"/>
+          </svg>
+        </div>
+        <strong id="bedroomsValue"></strong>
+        <span>Bedrooms</span>
+      </div>
+
+      <div class="snapshot-stat">
+        <div class="snapshot-svg-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 11h10v4a5 5 0 0 1-10 0v-4Z"/>
+            <path d="M5 11h14"/>
+            <path d="M9 4h6v7"/>
+            <path d="M10 20l-1 2"/>
+            <path d="M14 20l1 2"/>
+          </svg>
+        </div>
+        <strong id="bathroomsValue"></strong>
+        <span>Bathroom</span>
+      </div>
+
+      <div class="snapshot-stat">
+        <div class="snapshot-svg-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 4h16v16H4V4Z"/>
+            <path d="M8 16L16 8"/>
+            <path d="M9 8h7v7"/>
+          </svg>
+        </div>
+        <strong id="sizeValue"></strong>
+        <span>Living space</span>
+      </div>
+
     </div>
 
-    <div class="core-stat-card">
-      <div class="core-icon">🚿</div>
-      <div class="core-value" id="bathroomsValue"></div>
-      <div class="core-label">Bathrooms</div>
+    <div class="snapshot-pills">
+
+      <div class="snapshot-pill">
+        <span id="distanceValue"></span>
+      </div>
+
+      <div class="snapshot-pill">
+        <span id="viewValue"></span>
+      </div>
+
+      <div class="snapshot-pill">
+        <span id="zoneValue"></span>
+      </div>
+
+      <div
+        class="snapshot-pill"
+        id="poolStatusCard"
+      >
+        <span id="poolStatusValue"></span>
+      </div>
+
+      <div
+        class="snapshot-pill"
+        id="petStatusCard"
+      >
+        <span id="petStatusValue"></span>
+      </div>
+
     </div>
 
-  </div>
-
-  <div class="stay-details-grid">
-
-    <div class="smart-detail-card">
-      <span>📐</span>
-      <strong id="sizeValue"></strong>
-      <small>Living space</small>
-    </div>
-
-    <div class="smart-detail-card">
-      <span>🌅</span>
-      <strong id="viewValue"></strong>
-      <small>View</small>
-    </div>
-
-    <div class="smart-detail-card">
-      <span>📍</span>
-      <strong id="zoneValue"></strong>
-      <small>Zone</small>
-    </div>
-<div
-  class="smart-detail-card"
-  id="poolStatusCard"
->
-  <span>🏊</span>
-  <strong id="poolStatusValue"></strong>
-  <small>Pool</small>
-</div>
-
-<div
-  class="smart-detail-card"
-  id="petStatusCard"
->
-  <span>🐶</span>
-  <strong id="petStatusValue"></strong>
-  <small>Pet friendly</small>
-</div>
-
-
-    <button
-      id="mapsButton"
-      class="magnetic-map-btn"
-    >
-      📍 Take me to the stay
-    </button>
-
-  </div>
+  </section>
 
 </section>
 
@@ -361,6 +398,10 @@
 >
   Send via WhatsApp
 </button>
+
+<div class="booking-safe-note">
+  No payment required · You only send a request
+</div>
 
 </div>
 <div
@@ -522,10 +563,16 @@ document.getElementById("connectedBeachMeta")
 document.getElementById("zoneValue")
   .innerText =
     data.zone;
+document.getElementById("distanceValue")
+  .innerText =
+    data.distanceMetersOverride
+      ? `~${data.distanceMetersOverride} m to the beach`
+      : "Beach distance available soon";
+
 if (data.pool) {
 
   document.getElementById("poolStatusValue")
-    .innerText = "Available";
+    .innerText = "Pool available";
 
 } else {
 
@@ -537,7 +584,7 @@ if (data.pool) {
 if (data.petFriendly) {
 
   document.getElementById("petStatusValue")
-    .innerText = "Allowed";
+    .innerText = "Pet friendly";
 
 } else {
 
@@ -643,13 +690,13 @@ document.getElementById("openBeachBtn")
   .style.display = "none";
 const amenities = [
 
-  { key: "wifi", image: "wifi.png" },
-  { key: "parking", image: "parking.png" },
-  { key: "airConditioning", image: "air_conditioning.png" },
-  { key: "kitchen", image: "kitchen.png" },
-  { key: "washer", image: "washer.png" },
-  { key: "balcony", image: "balcony.png" },
-  { key: "bbq", image: "bbq.png" }
+  { key: "wifi", image: "wifi.png", label: "Wi-Fi" },
+  { key: "parking", image: "parking.png", label: "Parking" },
+  { key: "airConditioning", image: "air_conditioning.png", label: "Air conditioning" },
+  { key: "kitchen", image: "kitchen.png", label: "Kitchen" },
+  { key: "washer", image: "washer.png", label: "Washer" },
+  { key: "balcony", image: "balcony.png", label: "Balcony" },
+  { key: "bbq", image: "bbq.png", label: "BBQ" }
 
 ];
 
@@ -664,10 +711,15 @@ amenities.forEach(item => {
 
       <div class="amenity-card">
 
-        <img
-          src="images/${item.image}"
-          class="amenity-icon"
-        >
+        <div class="amenity-icon-wrap">
+          <img
+            src="images/${item.image}"
+            class="amenity-icon"
+            alt="${item.label}"
+          >
+        </div>
+
+        <span>${item.label}</span>
 
       </div>
 
@@ -1117,12 +1169,6 @@ function normalizeSlug(value) {
     .replaceAll("_", " ");
 }
 
-function normalizeSlug(value) {
-  return (value || "")
-    .toLowerCase()
-    .trim()
-    .replaceAll("_", " ");
-}
 
 function pickRandom(items) {
   return items[
