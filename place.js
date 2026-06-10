@@ -716,7 +716,7 @@ function setupShare(place) {
   ].filter(Boolean);
 
   const title = getTitle(place);
-  const url = window.location.href;
+  const url = `${window.location.origin}/place/${place.id}/`;
 
   async function sharePlace() {
     const shareData = {
