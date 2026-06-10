@@ -1,6 +1,16 @@
 const params = new URLSearchParams(window.location.search)
 
-const id = params.get("id")
+let id = params.get("id")
+
+if (!id) {
+  const parts = window.location.pathname
+    .split("/")
+    .filter(Boolean)
+
+  if (parts[0] === "place" && parts[1]) {
+    id = parts[1]
+  }
+}
 
 const lang = localStorage.getItem("lang") || "en"
 
