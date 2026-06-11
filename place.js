@@ -334,7 +334,75 @@ function buildExperienceCards(place) {
     .filter(card => card.text && card.text.trim().length > 0)
     .slice(0, 5);
 }
+function buildBeachDayCards(place) {
+  if (place.type !== "beach_bar") return [];
 
+  const images = place.images || [];
+  const menuImages = place.menuImages || [];
+
+  const sunbedText = [
+    place.sunbedPrice ? `Sunbeds: ${place.sunbedPrice}` : "",
+    ...(place.amenities || []).filter(item =>
+      item.toLowerCase().includes("sunbed") ||
+      item.toLowerCase().includes("umbrella")
+    ),
+    ...(place.features || []).filter(item =>
+      ["sunbeds", "beachfront", "sea_view"].includes(item)
+    ).map(formatLabel)
+  ].filter(Boolean).slice(0, 5).join(" · ");
+
+  const foodText = [
+    ...(place.offerings || []),
+    ...(place.cuisineTypes || []).map(formatLabel)
+  ].filter(Boolean).slice(0, 6).join(" · ");
+
+  const atmosphereText = [
+    ...(place.musicStyles || []).map(formatLabel),
+    ...(place.atmosphere || []),
+    ...(place.highlights || []).filter(item =>
+      item.toLowerCase().includes("sunset") ||
+      item.toLowerCase().includes("view") ||
+      item.toLowerCase().includes("cocktail")
+    )
+  ].filter(Boolean).slice(0, 6).join(" · ");
+
+  const perfectForText = [
+    ...(place.crowd || []),
+    ...(place.children || []),
+    ...(place.pets || [])
+  ].filter(Boolean).slice(0, 5).join(" · ");
+
+  return [
+    {
+      kicker: "Beach Setup",
+      title: "Sunbeds & Relaxation",
+      big: place.sunbedPrice || "Beach comfort",
+      text: sunbedText,
+      image: images[0] || images[1]
+    },
+    {
+      kicker: "Food & Drinks",
+      title: "Cocktails, Coffee & Snacks",
+      big: "Menu",
+      text: foodText,
+      image: menuImages[0] || images[2] || images[0]
+    },
+    {
+      kicker: "Vibe",
+      title: "Beach Atmosphere",
+      big: "Chill",
+      text: atmosphereText,
+      image: images[2] || images[3] || images[0]
+    },
+    {
+      kicker: "Perfect For",
+      title: "Your Day by the Sea",
+      big: "Relax",
+      text: perfectForText,
+      image: images[3] || images[1] || images[0]
+    }
+  ].filter(card => card.text);
+}
 function getUsedPracticalGroups(experienceCards) {
   return new Set(
     experienceCards.flatMap(card => card.usedGroups || [])
@@ -399,9 +467,9 @@ function renderPlace(place) {
   const experienceCards = buildExperienceCards(place);
   const usedPracticalGroups = getUsedPracticalGroups(experienceCards);
   const practicalInfo = renderPracticalInfo(place, usedPracticalGroups);
-
+const beachDayCards = buildBeachDayCards(place);
   page.innerHTML = `
-    <article class="place-page-premium">
+    <article class="place-page-premium ${place.type === "beach_bar" ? "beach-bar-page" : "restaurant-page"}">
 
       <section class="place-hero premium-hero">
         <div class="hero-floating-actions">
@@ -541,7 +609,7 @@ function renderPlace(place) {
         </a>
       </section>
 
-      ${experienceCards.length ? `
+     
 <section class="description-section premium-about-section">
   <h2 class="section-title">About ${title}</h2>
 
@@ -554,8 +622,34 @@ function renderPlace(place) {
   </button>
 </section>
 
+${beachDayCards.length ? `
+  <section class="beach-day-section">
+    <div class="beach-day-header">
+      <div>
+        <span>Beach Bar Premium</span>
+        <h2>Your Beach Day</h2>
+        <p>Sunbeds, drinks, food and atmosphere — all in one seaside experience.</p>
+      </div>
+    </div>
 
+    <div class="beach-day-grid">
+      ${beachDayCards.map(card => `
+        <div class="beach-day-card" style="background-image:url(&quot;${card.image}&quot;)">
+          <div class="beach-day-overlay"></div>
 
+          <div class="beach-day-content">
+            <span class="beach-day-kicker">${card.kicker}</span>
+            <strong class="beach-day-big">${card.big}</strong>
+            <h3>${card.title}</h3>
+            <p>${card.text}</p>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  </section>
+` : ""}
+
+${place.type !== "beach_bar" ? `
         <section
           class="stay-experience premium-experience"
           style="background-image:url('${place.heroImage || images[0]}')"
