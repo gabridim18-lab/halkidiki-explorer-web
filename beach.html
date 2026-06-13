@@ -2058,6 +2058,13 @@ h1 {
   color:#666;
   text-align:center;
 }
+.restaurant-price {
+  background: #f3f5f7;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: #111;
+  font-weight: 800;
+}
 </style>
 
 </head>
@@ -2403,7 +2410,69 @@ h1 {
 
 
 <script>
+let userLocation = null;
 
+function getUserLocation() {
+  return new Promise(resolve => {
+    if (!navigator.geolocation) {
+      resolve(null);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        resolve({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude
+        });
+      },
+      () => resolve(null),
+      {
+        enableHighAccuracy: true,
+        timeout: 6000,
+        maximumAge: 300000
+      }
+    );
+  });
+}
+
+function calculateDistanceKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) *
+    Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
+
+  return R * 2 * Math.atan2(
+    Math.sqrt(a),
+    Math.sqrt(1 - a)
+  );
+}
+
+function formatDistanceAway(place) {
+  if (!userLocation || !place.lat || !place.lon) {
+    return "📍 Enable location";
+  }
+
+  const km = calculateDistanceKm(
+    userLocation.lat,
+    userLocation.lon,
+    place.lat,
+    place.lon
+  );
+
+  if (km < 1) {
+    return `${Math.round(km * 1000)}m away`;
+  }
+
+  return `${km.toFixed(1)}km away`;
+}
 async function loadBeach() {
 
   const params =
@@ -2421,6 +2490,7 @@ async function loadBeach() {
 
   const data =
     await response.json();
+    userLocation = await getUserLocation();
 
   document.getElementById("beachTitle")
     .innerText =
@@ -3034,7 +3104,25 @@ document
       "beachBarsRow"
     );
 
-  filtered.slice(0, 8).forEach(item => {
+  for (const item of filtered.slice(0, 8)) {
+    const detailsResponse =
+  await fetch(
+    `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/${item.id}/index.json`
+  );
+
+const details =
+  await detailsResponse.json();
+
+const distance =
+  formatDistanceAway(details);
+
+const rating =
+  details.rating || "";
+
+const price =
+  details.price || "$$";
+
+  
 
     const image =
 
@@ -3067,7 +3155,17 @@ document
             ${title}
 
           </div>
+<div class="restaurant-meta">
 
+  <div class="restaurant-rating">
+    ${rating ? `⭐ ${rating}` : "Beach Bar"}
+  </div>
+
+  <div class="restaurant-price">
+    ${distance || price}
+  </div>
+
+</div>
           <div class="beachbar-subtitle">
 
             Beach Bar
@@ -3080,7 +3178,7 @@ document
 
     `;
 
-  });
+  }
 
 }
 async function loadRestaurants(beachId) {
@@ -3163,6 +3261,9 @@ details.images?.[0]
   const price =
     details.price || "$$";
 
+    const distance =
+  formatDistanceAway(details);
+
   const features =
     details.features || [];
 
@@ -3201,12 +3302,11 @@ details.images?.[0]
 
           </div>
 
-          <div
-            class="restaurant-price">
+         <div class="restaurant-price">
 
-            ${price}
+  ${distance || price}
 
-          </div>
+</div>
 
         </div>
 
@@ -4142,7 +4242,23 @@ function updateFavorite() {
   );
 
 }
+document.addEventListener("click", async event => {
+  if (!event.target.classList.contains("restaurant-price")) {
+    return;
+  }
 
+  if (userLocation) {
+    return;
+  }
+
+  userLocation = await getUserLocation();
+
+  if (userLocation) {
+    location.reload();
+  } else {
+    alert("Please allow location access to show distances from you.");
+  }
+});
 
 
 </script>
