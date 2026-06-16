@@ -4602,3 +4602,176 @@ display: none;
   transform: scale(0.95);
 }
 }
+.home-logo {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 18px;
+  filter: drop-shadow(0 10px 24px rgba(0,0,0,0.35));
+}
+
+.hero {
+  min-height: 620px;
+  padding: 70px 20px;
+}
+
+.hero-content {
+  max-width: 900px;
+  padding: 34px 28px;
+  border-radius: 38px;
+  background: rgba(0, 42, 95, 0.38);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.28);
+}
+
+.hero-buttons {
+  gap: 18px;
+}
+
+.primary-btn,
+.secondary-btn {
+  text-decoration: none;
+  border-radius: 22px;
+  padding: 18px 26px;
+  font-weight: 900;
+  letter-spacing: 0.3px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #005eff, #00aaff);
+}
+
+.secondary-btn {
+  background: linear-gradient(135deg, #ffb300, #ff7a00);
+}
+
+.primary-btn::before {
+  content: "🏡 ";
+}
+
+.secondary-btn::before {
+  content: "🏖️ ";
+}
+
+.discover-section {
+  margin-top: 0;
+}
+
+@media (min-width: 900px) {
+  .hero {
+    min-height: 680px;
+  }
+
+  .hero h1 {
+    font-size: 58px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-logo {
+    width: 115px;
+    height: 115px;
+  }
+
+  .hero-content {
+    padding: 24px 18px;
+    border-radius: 28px;
+  }
+
+  .hero {
+    min-height: 560px;
+    padding: 40px 16px;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    width: 100%;
+    border-radius: 22px;
+  }
+}
+.hero {
+  min-height: 650px;
+  padding: 70px 20px;
+}
+
+.hero-content {
+  max-width: 760px;
+  padding: 38px 28px;
+  border-radius: 42px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0, 94, 255, 0.34),
+      rgba(0, 170, 255, 0.14)
+    );
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.22);
+  box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+}
+
+.home-logo {
+  width: 210px;
+  height: 210px;
+  object-fit: contain;
+  margin-bottom: 22px;
+  filter: drop-shadow(0 16px 34px rgba(0,0,0,0.42));
+}
+
+.hero p {
+  max-width: 620px;
+  margin: 0 auto 34px;
+  font-size: 23px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.92);
+}
+
+.primary-btn,
+.secondary-btn {
+  border-radius: 24px;
+  padding: 18px 28px;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.28);
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #005eff, #00c6ff);
+}
+
+.secondary-btn {
+  background: linear-gradient(135deg, #ffb300, #ff7a00);
+}
+
+.primary-btn::before {
+  content: "🏡 ";
+}
+
+.secondary-btn::before {
+  content: "🏖️ ";
+}
+
+.discover-section {
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 560px;
+    padding: 40px 16px;
+  }
+
+  .hero-content {
+    padding: 26px 18px;
+    border-radius: 30px;
+  }
+
+  .home-logo {
+    width: 170px;
+    height: 170px;
+  }
+
+  .hero p {
+    font-size: 17px;
+  }
+}

@@ -144,11 +144,17 @@ function loadFavorites() {
 
 <div class="favorite-type">
 
-  ${
-    item.type === "beach"
-      ? "🏖 Beach"
-      : "🏡 Accommodation"
-  }
+ ${
+  item.type === "beach"
+    ? "🏖 Beach"
+    : item.type === "accommodation"
+      ? "🏡 Accommodation"
+      : item.type === "restaurant"
+        ? "🍽 Restaurant"
+        : item.type === "beach_bar"
+          ? "🍹 Beach Bar"
+          : "📍 Place"
+}
 
 </div>
 
@@ -186,6 +192,10 @@ function openFavorite(type,id) {
       `beach.html?id=${id}`;
 
   }
+  if (type === "restaurant" || type === "beach_bar" || type === "place") {
+  window.location.href =
+    `place.html?id=${id}`;
+}
 
 }
 

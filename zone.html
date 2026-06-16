@@ -672,6 +672,31 @@ body {
   opacity: 0.75;
   text-align: right;
 }
+.beach-nav {
+  background: white;
+  border-radius: 22px;
+  padding: 14px;
+  margin-bottom: 18px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+#beachCounter {
+  font-weight: 900;
+  color: #16214a;
+  margin-bottom: 8px;
+}
+
+#beachSlider {
+  width: 100%;
+}
+
+.car-track {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 800;
+  color: #555;
+}
 </style>
 
 </head>
@@ -704,145 +729,96 @@ body {
 
   </div>
 
+<div class="beach-nav">
+  <div id="beachCounter">1 / 1 beaches</div>
+
+  <input
+    id="beachSlider"
+    type="range"
+    min="0"
+    value="0"
+  >
+
+  <div class="car-track">
+    🚗 <span>Start</span>
+    <span>Finish 🏁</span>
+  </div>
+</div>
+
   <div
     class="beach-row"
     id="beachRow">
   </div>
 
-  <div class="quick-buttons">
-
-<div
-  class="quick-btn smart-quick-btn"
-  onclick="toggleZoneSection('accommodation')"
->
-
-  <img
-    class="quick-btn-icon"
-    src="icons/accommodation.png"
-  >
-
-  <div class="quick-btn-text">
-    Accommodation
-  </div>
-
-  <div class="quick-btn-hint">
-    Tap to view stays ▼
-  </div>
-
-</div>
-
-<div
-  id="zoneAccommodationContent"
-  class="zone-expandable-content"
-></div>
-
-<div
-  class="quick-btn smart-quick-btn"
-  onclick="toggleZoneSection('restaurant')"
->
-
-  <img
-    class="quick-btn-icon"
-    src="icons/restaurants.png"
-  >
-
-  <div class="quick-btn-text">
-    Restaurants
-  </div>
-
-  <div class="quick-btn-hint">
-    Tap to view restaurants ▼
-  </div>
-
-</div>
-
-<div
-  id="zoneRestaurantContent"
-  class="zone-expandable-content"
-></div>
-
-<div
-  class="quick-btn smart-quick-btn"
-  onclick="toggleZoneSection('beach_bar')"
->
-
-  <img
-    class="quick-btn-icon"
-    src="icons/beachbars.png"
-  >
-
-  <div class="quick-btn-text">
-    Beach Bars
-  </div>
-
-  <div class="quick-btn-hint">
-    Tap to view beach bars ▼
-  </div>
-
-</div>
-
-<div
-  id="zoneBeachBarContent"
-  class="zone-expandable-content"
-></div>
-
-  <div class="quick-btn">
-
-    <img
-      class="quick-btn-icon"
-      src="icons/carrental.png"
-    >
-
-  </div>
-
-  <div class="quick-btn">
-
-    <img
-      class="quick-btn-icon"
-      src="icons/carrental.png"
-    >
-
-    <div class="quick-btn-text">
-      Car Rentals
-    </div>
-
-  </div>
-
-  <div class="quick-btn">
-
-    <img
-      class="quick-btn-icon"
-      src="icons/boat.png"
-    >
-
-    <div class="quick-btn-text">
-      Boat Rentals
-    </div>
-
-  </div>
-
-  <div class="quick-btn">
-
-    <img
-      class="quick-btn-icon"
-      src="icons/activities.png"
-    >
-
-    <div class="quick-btn-text">
-      Activities
-    </div>
-
-  </div>
-
- 
-
-</div>
+  <div class="quick-buttons" id="quickButtons"></div>
 
 
 </div>
 
 <script>
+async function loadSmartZoneButtons(zoneId) {
+  const quickButtons = document.getElementById("quickButtons");
+  quickButtons.innerHTML = "";
 
+  const sections = [
+    {
+      type: "accommodation",
+      title: "Accommodation",
+      icon: "icons/accommodation.png",
+      contentId: "zoneAccommodationContent",
+      url: "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/accommodations-index-v2.json",
+      filter: item => item.zone?.toLowerCase() === zoneId.toLowerCase()
+    },
+    {
+      type: "restaurant",
+      title: "Restaurants",
+      icon: "icons/restaurants.png",
+      contentId: "zoneRestaurantContent",
+      url: "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/restaurants-index.json",
+      filter: item =>
+        item.zone?.toLowerCase() === zoneId.toLowerCase() &&
+        item.type === "restaurant"
+    },
+    {
+      type: "beach_bar",
+      title: "Beach Bars",
+      icon: "icons/beachbars.png",
+      contentId: "zoneBeachBarContent",
+      url: "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/restaurants-index.json",
+      filter: item =>
+        item.zone?.toLowerCase() === zoneId.toLowerCase() &&
+        item.type === "beach_bar"
+    }
+  ];
+
+  for (const section of sections) {
+    try {
+      const response = await fetch(section.url);
+      const data = await response.json();
+      const items = data.filter(section.filter);
+
+      if (items.length > 0) {
+        quickButtons.innerHTML += `
+          <div
+            class="quick-btn smart-quick-btn"
+            onclick="toggleZoneSection('${section.type}')"
+          >
+            <img class="quick-btn-icon" src="${section.icon}">
+            <div class="quick-btn-text">${section.title}</div>
+            <div class="quick-btn-hint">${items.length} available ▼</div>
+          </div>
+
+          <div
+            id="${section.contentId}"
+            class="zone-expandable-content"
+          ></div>
+        `;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
 async function loadZone() {
 
   const params =
@@ -850,6 +826,8 @@ async function loadZone() {
 
   const zoneId =
     params.get("id");
+
+    await loadSmartZoneButtons(zoneId);
 
   document.getElementById("zoneTitle")
     .innerText =
@@ -986,7 +964,38 @@ if (beach.coordinates) {
     </div>
 
   `;
+setupBeachNavigation(filtered.length);
+function setupBeachNavigation(total) {
+  const beachRow = document.getElementById("beachRow");
+  const slider = document.getElementById("beachSlider");
+  const counter = document.getElementById("beachCounter");
 
+  slider.max = total - 1;
+  counter.innerText = `1 / ${total} beaches`;
+
+  slider.addEventListener("input", () => {
+    const index = Number(slider.value);
+    const card = beachRow.children[index];
+
+    if (card) {
+      card.scrollIntoView({
+        behavior: "smooth",
+        inline: "start",
+        block: "nearest"
+      });
+    }
+
+    counter.innerText = `${index + 1} / ${total} beaches`;
+  });
+
+  beachRow.addEventListener("scroll", () => {
+    const cardWidth = beachRow.children[0]?.offsetWidth || 320;
+    const index = Math.round(beachRow.scrollLeft / (cardWidth + 20));
+
+    slider.value = index;
+    counter.innerText = `${index + 1} / ${total} beaches`;
+  });
+}
 }
 }
 function openBeach(id) {
@@ -1019,11 +1028,16 @@ async function toggleZoneSection(type) {
 
   const container =
     containers[type];
+    if (!container) {
+  return;
+}
 
   Object.values(containers).forEach(box => {
+  if (box) {
     box.classList.remove("active");
     box.innerHTML = "";
-  });
+  }
+});
 
   if (currentSection === type) {
     currentSection = null;

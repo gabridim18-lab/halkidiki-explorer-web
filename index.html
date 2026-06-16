@@ -29,10 +29,11 @@
 
   <div class="hero-content">
     
-
-    <h1>
-      HALKIDIKI EXPLORER
-    </h1>
+<img
+  src="images/logo.png"
+  class="home-logo"
+  alt="Halkidiki Explorer logo"
+/>
 
     <p>
       Discover beaches, accommodations and restaurants
@@ -41,9 +42,12 @@
 
     <div class="hero-buttons">
 
-      <button class="primary-btn">
-        Find Accommodation
-      </button>
+     <button
+  class="primary-btn"
+  onclick="scrollToStays()"
+>
+  Find Accommodation
+</button>
 
      <a
   href="zones.html"
@@ -66,7 +70,7 @@
 
 </section>
 
-<section class="discover-section">
+<section class="discover-section" id="popularStays">
 
   <h2>
     Popular Stays
@@ -452,6 +456,13 @@ if (poolOnly) {
 
 if (petOnly) {
   document.getElementById("petFilter").classList.add("active");
+}
+function scrollToStays() {
+  document
+    .getElementById("popularStays")
+    .scrollIntoView({
+      behavior: "smooth"
+    });
 }
 loadCards();
 

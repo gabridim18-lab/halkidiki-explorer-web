@@ -779,11 +779,21 @@ function setupFavorite(place) {
   if (!favoriteBtn) return;
 
   let favorites = JSON.parse(
-    localStorage.getItem("favorite_places") || "[]"
+    localStorage.getItem("favorites") || "[]"
   );
 
+  const title = getTitle(place);
+  const image =
+    place.heroImage ||
+    place.images?.[0] ||
+    "";
+
+  function isFavorite() {
+    return favorites.some(item => item.id === place.id);
+  }
+
   function updateFavoriteIcon() {
-    const active = favorites.includes(place.id);
+    const active = isFavorite();
 
     favoriteBtn.innerHTML = active ? "❤️" : "♡";
     favoriteBtn.classList.toggle("active", active);
@@ -792,13 +802,23 @@ function setupFavorite(place) {
   updateFavoriteIcon();
 
   favoriteBtn.addEventListener("click", () => {
-    if (favorites.includes(place.id)) {
-      favorites = favorites.filter(id => id !== place.id);
+    if (isFavorite()) {
+      favorites = favorites.filter(item => item.id !== place.id);
     } else {
-      favorites.push(place.id);
+      favorites.push({
+        id: place.id,
+        title: title,
+        image: image,
+        rating: place.rating || "-",
+        type: place.type || "place"
+      });
     }
 
-    localStorage.setItem("favorite_places", JSON.stringify(favorites));
+    localStorage.setItem(
+      "favorites",
+      JSON.stringify(favorites)
+    );
+
     updateFavoriteIcon();
   });
 }

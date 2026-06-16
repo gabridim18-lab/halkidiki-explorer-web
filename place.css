@@ -2774,9 +2774,6 @@ body {
 }
 
 /* Hide old static footer if place.js renders the premium owner footer */
-body > .site-footer {
-  display: none;
-}
 
 @media (min-width: 900px) {
   .premium-hero {
@@ -3431,5 +3428,23 @@ body {
   .owner-footer-actions button {
     padding: 10px 12px !important;
     font-size: 12px !important;
+  }
+}
+.home-logo {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  margin-bottom: 24px;
+  filter: drop-shadow(0 12px 28px rgba(0,0,0,0.35));
+}
+
+.hero h1 {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .home-logo {
+    width: 170px;
+    height: 170px;
   }
 }
