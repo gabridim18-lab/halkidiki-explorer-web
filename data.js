@@ -1,5 +1,12 @@
 const accommodations = [
 
+        {
+            id: "ostria_sea_view_maisonette_in_perea",
+            beachSlug: "perea-beach",
+            flyer: "ostria-sea-view-maisonette-in-perea.webp"
+        },
+        
+
         
         
 
@@ -318,6 +325,11 @@ const accommodations = [
   id: "twin_garden_suites_in_nea_potidea",
   beachSlug: "nea-potidea-beach",
   flyer: "twin-garden-suites-in-nea-potidea.webp"
+},
+{
+  id: "ostria_sea_view_maisonette_in_perea",
+  beachSlug: "perea-beach",
+  flyer: "ostria-sea-view-maisonette-in-perea.webp"
 },
 
 ];
