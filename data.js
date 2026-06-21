@@ -314,6 +314,10 @@ const accommodations = [
   beachSlug: "sarti-beach",
   flyer: "villa-ulyana-in-sarti.webp"
 },
-
+{
+  id: "twin_garden_suites_in_nea_potidea",
+  beachSlug: "nea-potidea-beach",
+  flyer: "twin-garden-suites-in-nea-potidea.webp"
+},
 
 ];
