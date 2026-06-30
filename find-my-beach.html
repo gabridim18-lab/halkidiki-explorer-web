@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<link rel="icon" type="image/png" href="favicon-32x32.png">
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+/>
+
+<title>Find My Beach | Halkidiki Explorer</title>
+
+<link
+  rel="stylesheet"
+  href="style.css"
+/>
+
+<style>
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background:
+    linear-gradient(
+      rgba(255,255,255,0.88),
+      rgba(255,255,255,0.92)
+    ),
+    url("images/beach_background.webp");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: #111;
+}
+
+.find-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.find-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.find-back {
+  text-decoration: none;
+  background: white;
+  color: #111;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 900;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+}
+
+.find-hero {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0,94,255,0.92),
+      rgba(0,198,255,0.82)
+    );
+  color: white;
+  border-radius: 38px;
+  padding: 34px;
+  margin-bottom: 24px;
+  box-shadow: 0 18px 55px rgba(0,119,255,0.25);
+}
+
+.find-hero h1 {
+  font-size: 46px;
+  line-height: 1.05;
+  margin: 0 0 12px;
+}
+
+.find-hero p {
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 760px;
+  opacity: 0.92;
+}
+
+.find-filters {
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(14px);
+  border-radius: 30px;
+  padding: 18px;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.find-search-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.find-search {
+  flex: 1;
+  min-width: 260px;
+  border: none;
+  border-radius: 18px;
+  padding: 16px 18px;
+  font-size: 16px;
+  font-weight: 800;
+  outline: none;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.find-select {
+  border: none;
+  border-radius: 18px;
+  padding: 16px 18px;
+  font-size: 15px;
+  font-weight: 800;
+  background: white;
+  color: #111;
+  outline: none;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.find-filter-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+
+.find-filter-row::-webkit-scrollbar {
+  display: none;
+}
+
+.beach-filter-pill {
+  border: none;
+  padding: 13px 18px;
+  border-radius: 999px;
+  background: white;
+  color: #111;
+  font-size: 14px;
+  font-weight: 900;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.beach-filter-pill.active {
+  background: linear-gradient(135deg, #005eff, #00aaff);
+  color: white;
+}
+
+.find-results-info {
+  font-size: 16px;
+  font-weight: 900;
+  color: #16214a;
+  margin-bottom: 16px;
+}
+
+.beach-results-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.find-beach-card {
+  background: white;
+  border-radius: 28px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.10);
+  transition: 0.25s;
+}
+
+.find-beach-card:hover {
+  transform: translateY(-5px);
+}
+
+.find-beach-image {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+  display: block;
+}
+
+.find-beach-content {
+  padding: 18px;
+}
+
+.find-beach-title {
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+.find-beach-zone {
+  display: inline-flex;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: #0066ff;
+  font-size: 12px;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+
+.find-beach-desc {
+  font-size: 14px;
+  line-height: 1.45;
+  color: #555;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.find-beach-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.find-tag {
+  background: #f3f6fb;
+  color: #111;
+  border-radius: 999px;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.find-empty {
+  background: white;
+  border-radius: 28px;
+  padding: 30px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: #555;
+}
+
+@media (max-width: 900px) {
+  .beach-results-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .find-page {
+    padding: 14px;
+  }
+
+  .find-top {
+    align-items: flex-start;
+  }
+
+  .find-hero {
+    border-radius: 28px;
+    padding: 24px 18px;
+  }
+
+  .find-hero h1 {
+    font-size: 34px;
+  }
+
+  .find-hero p {
+    font-size: 15px;
+  }
+
+  .find-filters {
+    border-radius: 24px;
+    padding: 14px;
+  }
+
+  .find-search-row {
+    flex-direction: column;
+  }
+
+  .find-search,
+  .find-select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .beach-results-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .find-beach-image {
+    height: 220px;
+  }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="find-page">
+
+  <div class="find-top">
+
+    <a
+      href="index.html"
+      class="find-back"
+    >
+      ← Home
+    </a>
+
+    <a
+      href="favorites.html"
+      class="find-back"
+    >
+      Saved
+    </a>
+
+  </div>
+
+  <section class="find-hero">
+
+    <h1>
+      Find My Beach
+    </h1>
+
+    <p>
+      Search all Halkidiki beaches alphabetically and filter by what matters most:
+      family friendly, fine sand, clear water, parking, quiet atmosphere or nearby taverns.
+    </p>
+
+  </section>
+
+  <section class="find-filters">
+
+    <div class="find-search-row">
+
+      <input
+        id="beachSearch"
+        class="find-search"
+        type="text"
+        placeholder="Search beach name..."
+      >
+
+      <select
+        id="zoneFilter"
+        class="find-select"
+      >
+        <option value="">
+          🌍 All Zones
+        </option>
+        <option value="Thessaloniki">
+          🟢 Thessaloniki
+        </option>
+        <option value="Kassandra">
+          🟣 Kassandra
+        </option>
+        <option value="Sithonia">
+          🔵 Sithonia
+        </option>
+        <option value="Olympiada">
+          🟡 Olympiada
+        </option>
+      </select>
+
+      <select
+        id="sortFilter"
+        class="find-select"
+      >
+        <option value="az">
+          A → Z
+        </option>
+        <option value="rating">
+          Best rated
+        </option>
+      </select>
+
+    </div>
+
+    <div class="find-filter-row">
+
+      <button class="beach-filter-pill" data-filter="kids">
+        👨‍👩‍👧 Family friendly
+      </button>
+
+      <button class="beach-filter-pill" data-filter="sand">
+        🏖️ Fine sand
+      </button>
+
+      <button class="beach-filter-pill" data-filter="clear">
+        💎 Clear water
+      </button>
+
+      <button class="beach-filter-pill" data-filter="parking">
+        🚗 Parking
+      </button>
+
+      <button class="beach-filter-pill" data-filter="quiet">
+        🌿 Quiet
+      </button>
+
+      <button class="beach-filter-pill" data-filter="taverns">
+        🍽️ Taverns nearby
+      </button>
+
+      <button class="beach-filter-pill" data-filter="cheap">
+        ☀️ Cheap sunbeds
+      </button>
+
+    </div>
+
+  </section>
+
+  <div
+    class="find-results-info"
+    id="resultsInfo"
+  >
+    Loading beaches...
+  </div>
+
+  <div
+    class="beach-results-grid"
+    id="beachResults"
+  ></div>
+
+</div>
+
+<footer class="site-footer">
+
+  <div class="footer-left">
+    © 2026 Halkidiki Explorer. All rights reserved.
+  </div>
+
+  <div class="footer-right">
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Use</a>
+    <a href="#">Facebook</a>
+  </div>
+
+</footer>
+
+<script>
+
+let allBeaches = [];
+let activeFilters = new Set();
+let restaurantsIndex = [];
+
+const beachResults =
+  document.getElementById("beachResults");
+
+const resultsInfo =
+  document.getElementById("resultsInfo");
+
+const beachSearch =
+  document.getElementById("beachSearch");
+
+const zoneFilter =
+  document.getElementById("zoneFilter");
+
+const sortFilter =
+  document.getElementById("sortFilter");
+
+function normalizeText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function textIncludesAny(text, words) {
+  const clean = normalizeText(text);
+  return words.some(word => clean.includes(word));
+}
+
+function getZoneName(beach) {
+  return (
+    beach.zone ||
+    beach.zoneName ||
+    beach.region ||
+    ""
+  );
+}
+
+function getBeachName(beach) {
+  return (
+    beach.name?.en ||
+    beach.nameEn ||
+    beach.titleEn ||
+    beach.id
+      .replaceAll("-", " ")
+      .replace(/\b\w/g, l => l.toUpperCase())
+  );
+}
+
+function getBeachImage(beach) {
+  const id = beach.id;
+  const firstImage =
+    beach.previewImage ||
+    beach.images?.[0] ||
+    "";
+
+  if (!firstImage) {
+    return "images/beach_background.webp";
+  }
+
+  if (firstImage.startsWith("http")) {
+    return firstImage;
+  }
+
+  return `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/${id}/images/${firstImage}`;
+}
+
+function hasRestaurantsOrTaverns(beach) {
+  const id = beach.id;
+
+  return restaurantsIndex.some(item =>
+    item.beachSlug &&
+    item.beachSlug.toLowerCase() === id.toLowerCase() &&
+    item.type === "restaurant" &&
+    item.featured === true
+  );
+}
+
+function isCheapSunbeds(beach) {
+  const value =
+    beach.facilities?.sunbedPrice ||
+    beach.sunbedPrice ||
+    "";
+
+  const clean = normalizeText(value);
+
+  return (
+    clean.includes("free") ||
+    clean.includes("included") ||
+    clean.includes("consumption") ||
+    clean.includes("low") ||
+    clean.includes("cheap") ||
+    clean.includes("5") ||
+    clean.includes("6") ||
+    clean.includes("7") ||
+    clean.includes("8") ||
+    clean.includes("10")
+  );
+}
+
+function beachMatchesFilter(beach, filter) {
+  const sand =
+    beach.sand?.en ||
+    beach.sand ||
+    "";
+
+  const clarity =
+    beach.water?.clarity?.en ||
+    beach.waterClarity ||
+    "";
+
+  const vibe =
+    beach.beachInfo?.vibe?.en ||
+    beach.vibe ||
+    "";
+
+  const idealFor =
+    (beach.idealFor?.en || beach.idealFor || [])
+      .join(" ");
+
+  if (filter === "kids") {
+    return (
+      beach.suitableForChildren === true ||
+      textIncludesAny(idealFor, ["family", "families", "kids", "children"])
+    );
+  }
+
+  if (filter === "sand") {
+    return textIncludesAny(sand, ["fine", "soft", "sandy", "sand"]);
+  }
+
+  if (filter === "clear") {
+    return textIncludesAny(clarity, ["clear", "crystal", "transparent", "turquoise"]);
+  }
+
+  if (filter === "parking") {
+    return beach.facilities?.parkingAvailable === true;
+  }
+
+  if (filter === "quiet") {
+    return textIncludesAny(vibe + " " + idealFor, ["quiet", "calm", "relax", "peaceful", "secluded"]);
+  }
+
+  if (filter === "taverns") {
+    return hasRestaurantsOrTaverns(beach);
+  }
+
+  if (filter === "cheap") {
+    return isCheapSunbeds(beach);
+  }
+
+  return true;
+}
+
+function getTags(beach) {
+  const tags = [];
+
+  if (beach.suitableForChildren) {
+    tags.push("Family friendly");
+  }
+
+  if (beach.facilities?.parkingAvailable) {
+    tags.push("Parking");
+  }
+
+  if (beach.facilities?.sunbeds) {
+    tags.push("Sunbeds");
+  }
+
+  if (hasRestaurantsOrTaverns(beach)) {
+    tags.push("Taverns nearby");
+  }
+
+  const clarity =
+    beach.water?.clarity?.en || "";
+
+  if (textIncludesAny(clarity, ["clear", "crystal", "turquoise"])) {
+    tags.push("Clear water");
+  }
+
+  return tags.slice(0, 4);
+}
+
+function renderBeaches() {
+  const search =
+    normalizeText(beachSearch.value.trim());
+
+  const zone =
+    zoneFilter.value;
+
+  let filtered = allBeaches.filter(beach => {
+    const name = getBeachName(beach);
+    const beachZone = getZoneName(beach);
+
+    if (search && !normalizeText(name).includes(search)) {
+      return false;
+    }
+
+    if (zone && beachZone !== zone) {
+      return false;
+    }
+
+    for (const filter of activeFilters) {
+      if (!beachMatchesFilter(beach, filter)) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+
+  if (sortFilter.value === "rating") {
+    filtered.sort((a, b) =>
+      (b.rating || 0) - (a.rating || 0)
+    );
+  } else {
+    filtered.sort((a, b) =>
+      getBeachName(a).localeCompare(getBeachName(b))
+    );
+  }
+
+  resultsInfo.innerText =
+    `${filtered.length} beaches found`;
+
+  beachResults.innerHTML = "";
+
+  if (filtered.length === 0) {
+    beachResults.innerHTML = `
+      <div class="find-empty">
+        No beaches match these filters. Try removing one filter.
+      </div>
+    `;
+    return;
+  }
+
+  filtered.forEach(beach => {
+    const name = getBeachName(beach);
+    const zone = getZoneName(beach) || "Halkidiki";
+    const desc =
+      beach.description?.en ||
+      beach.shortEn ||
+      "Explore this beach in Halkidiki.";
+
+    const tags = getTags(beach);
+
+    beachResults.innerHTML += `
+      <div
+        class="find-beach-card"
+        onclick="window.location.href='beach.html?id=${beach.id}'"
+      >
+        <img
+          class="find-beach-image"
+          src="${getBeachImage(beach)}"
+          alt="${name}"
+        >
+
+        <div class="find-beach-content">
+          <div class="find-beach-title">
+            ${name}
+          </div>
+
+          <div class="find-beach-zone">
+            ${zone}
+          </div>
+
+          <div class="find-beach-desc">
+            ${desc}
+          </div>
+
+          <div class="find-beach-tags">
+            ${tags.map(tag => `
+              <span class="find-tag">
+                ${tag}
+              </span>
+            `).join("")}
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+async function loadFindMyBeach() {
+  try {
+    const [beachesResponse, restaurantsResponse] = await Promise.all([
+      fetch("https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/beaches-index.json"),
+      fetch("https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/restaurants-index.json")
+    ]);
+
+    const beachIndex = await beachesResponse.json();
+
+    restaurantsIndex = restaurantsResponse.ok
+      ? await restaurantsResponse.json()
+      : [];
+
+    const detailedBeaches = await Promise.all(
+      beachIndex.map(async beach => {
+        try {
+          const detailsResponse = await fetch(
+            `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/${beach.id}/index.json`
+          );
+
+          if (!detailsResponse.ok) {
+            return beach;
+          }
+
+          const details = await detailsResponse.json();
+
+          return {
+            ...beach,
+            ...details,
+            id: beach.id
+          };
+        } catch (e) {
+          return beach;
+        }
+      })
+    );
+
+    allBeaches = detailedBeaches;
+
+    renderBeaches();
+
+  } catch (e) {
+    resultsInfo.innerText =
+      "Could not load beaches. Please try again.";
+    console.log(e);
+  }
+}
+
+beachSearch.addEventListener("input", renderBeaches);
+zoneFilter.addEventListener("change", renderBeaches);
+sortFilter.addEventListener("change", renderBeaches);
+
+document
+  .querySelectorAll(".beach-filter-pill")
+  .forEach(button => {
+    button.addEventListener("click", () => {
+      const filter = button.dataset.filter;
+
+      if (activeFilters.has(filter)) {
+        activeFilters.delete(filter);
+      } else {
+        activeFilters.add(filter);
+      }
+
+      button.classList.toggle("active");
+      renderBeaches();
+    });
+  });
+
+loadFindMyBeach();
+
+</script>
+
+</body>
+</html>

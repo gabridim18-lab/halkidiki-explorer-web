@@ -1,16 +1,4 @@
-const accommodations = [
-
-        {
-            id: "ostria_sea_view_maisonette_in_perea",
-            beachSlug: "perea-beach",
-            flyer: "ostria-sea-view-maisonette-in-perea.webp"
-        },
-        
-
-        
-        
-
-        
+const accommodations = [    
 
    {
     id: "on_the_rock_sky_view_suite",
