@@ -4775,3 +4775,15 @@ display: none;
     font-size: 17px;
   }
 }
+.find-beach-home-btn {
+  background:
+    linear-gradient(
+      135deg,
+      #00a859,
+      #00d084
+    );
+}
+
+.find-beach-home-btn::before {
+  content: "🔎 ";
+}
