@@ -408,7 +408,7 @@ function setupBusinessShare(data, businessId, imageBase, allImages) {
       : "";
 
   const shareUrl =
-    `${window.location.origin}/local-business.html?id=${businessId}`;
+  `${window.location.origin}/local-business/${businessId}/`;
 
   shareBtn.onclick = async function () {
 
