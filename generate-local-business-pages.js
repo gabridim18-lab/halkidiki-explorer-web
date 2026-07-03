@@ -117,11 +117,19 @@ function pageHtml(business) {
 
   <link rel="canonical" href="${url}">
 
-  <meta http-equiv="refresh" content="0; url=${redirectUrl}">
+<script>
 
-  <script>
-    window.location.replace("${redirectUrl}")
-  </script>
+const bot =
+/facebookexternalhit|Facebot|WhatsApp|TelegramBot|Twitterbot|LinkedInBot|Slackbot/i
+.test(navigator.userAgent);
+
+if (!bot) {
+
+    window.location.replace("${redirectUrl}");
+
+}
+
+</script>
 </head>
 <body>
   <p>
