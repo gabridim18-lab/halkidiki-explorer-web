@@ -34,10 +34,36 @@ async function loadBusiness() {
 
   // DESCRIPTION
 
-  document.getElementById(
-    "businessDescription"
-  ).innerText =
-    data.descriptionEn;
+const description =
+  document.getElementById("businessDescription");
+
+description.textContent = data.descriptionEn;
+
+if (data.descriptionEn.length > 300) {
+
+  description.classList.add("collapsed");
+
+  description.insertAdjacentHTML(
+    "afterend",
+    `<button id="toggleDescription" class="see-more-btn">
+      Show more
+    </button>`
+  );
+
+  document
+    .getElementById("toggleDescription")
+    .addEventListener("click", function () {
+
+      description.classList.toggle("collapsed");
+
+      this.textContent =
+        description.classList.contains("collapsed")
+          ? "Show more"
+          : "Show less";
+
+    });
+
+}
 
   // GALLERY
 
@@ -50,7 +76,12 @@ async function loadBusiness() {
 
 `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/local-businesses/${businessId}/images/`;
 
-  data.images.forEach(image => {
+  const allImages = [
+  data.heroImage,
+  ...(data.images || [])
+].filter(Boolean);
+
+allImages.forEach(image => {
 
     console.log(imageBase + image);
 
@@ -63,6 +94,68 @@ async function loadBusiness() {
     `;
 
   });
+
+  // ---------- GALLERY DOTS + AUTOPLAY ----------
+
+const dotsContainer =
+  document.getElementById("galleryDots");
+
+allImages.forEach((image, index) => {
+
+  const dot =
+    document.createElement("div");
+
+  dot.className = "gallery-dot";
+
+  if (index === 0) {
+    dot.classList.add("active");
+  }
+
+  dotsContainer.appendChild(dot);
+
+});
+
+const dots =
+  dotsContainer.querySelectorAll(".gallery-dot");
+
+let currentSlide = 0;
+
+function goToSlide(index) {
+
+  currentSlide = index;
+
+  gallery.scrollTo({
+
+    left: gallery.clientWidth * index,
+
+    behavior: "smooth"
+
+  });
+
+  dots.forEach((dot, i) => {
+
+    dot.classList.toggle(
+      "active",
+      i === index
+    );
+
+  });
+
+}
+
+setInterval(() => {
+
+  currentSlide++;
+
+  if (currentSlide >= allImages.length) {
+
+    currentSlide = 0;
+
+  }
+
+  goToSlide(currentSlide);
+
+}, 5000);
 
   // INFO GRID
 
@@ -84,87 +177,22 @@ async function loadBusiness() {
   window.currentBusiness =
     data;
 
+    setupBusinessActions(data);
+renderOpeningHours(data);
+setupBusinessShare(data, businessId, imageBase, allImages);
 }
 
-function loadBusinessInfo(data) {
 
-  const grid =
-    document.getElementById(
-      "businessInfoGrid"
-    );
+  function loadBusinessInfo(data) {
 
- const items = [
+  document.getElementById("businessAddress").textContent =
+    data.address || "Not available";
 
-  {
-    title: "Working Hours",
-
-    text:
-      data.hours?.en,
-
-    image:
-      "beach-info/best_time.webp"
-  },
-
-  {
-    title: "WhatsApp",
-
-    text:
-      data.whatsapp,
-
-    image:
-      "images/facilities/towels.webp"
-  },
-
-  {
-    title: "Website",
-
-    text:
-      data.website || "No website",
-
-    image:
-      "images/maps_preview.webp"
-  }
-
-];
-
-  items.forEach(item => {
-
-    grid.innerHTML += `
-
-      <div
-        class="business-info-card"
-
-        style="
-          background-image:
-          url('${item.image}');
-        ">
-
-        <div
-          class="business-info-overlay">
-
-          <div
-            class="business-info-title">
-
-            ${item.title}
-
-          </div>
-
-          <div
-            class="business-info-text">
-
-            ${item.text}
-
-          </div>
-
-        </div>
-
-      </div>
-
-    `;
-
-  });
+  document.getElementById("businessDistance").textContent =
+    data.distance || "Not available";
 
 }
+
 
 function sendBusinessWhatsApp() {
 
@@ -204,7 +232,12 @@ Time:
 ${time}
 
 Message:
-${message}`;
+${message}
+
+----------------------------------
+
+This message was sent from the Halkidiki Explorer ecosystem for:
+${business.categoryEn}`;
 
   const url =
 
@@ -216,5 +249,188 @@ ${message}`;
   );
 
 }
+function setupBusinessActions(data) {
 
+  const requestBtn =
+    document.getElementById("requestBtn");
+
+  const contactSection =
+    document.getElementById("contactSection");
+
+  requestBtn.onclick = function () {
+
+    const form =
+        contactSection.querySelector(".booking-form");
+
+    if (contactSection.style.display === "block") {
+
+        contactSection.style.display = "none";
+        form.style.display = "none";
+
+    } else {
+
+        contactSection.style.display = "block";
+        form.style.display = "flex";
+
+        contactSection.scrollIntoView({
+
+            behavior: "smooth",
+            block: "start"
+
+        });
+
+    }
+
+};
+
+  document.getElementById("takeMeThereBtn").onclick = function () {
+
+    window.open(
+      `https://www.google.com/maps/dir/?api=1&destination=${data.lat},${data.lon}`,
+      "_blank"
+    );
+
+  };
+
+  const websiteBtn =
+  document.getElementById("businessWebsiteBtn");
+
+if (data.website && data.website.trim() !== "") {
+
+  websiteBtn.href = data.website;
+  websiteBtn.style.display = "flex";
+
+} else {
+
+  websiteBtn.style.display = "none";
+
+}
+
+}
+
+function renderOpeningHours(data) {
+
+  const statusEl =
+    document.getElementById("businessHoursStatus");
+
+  const detailsEl =
+    document.getElementById("businessHoursDetails");
+
+  const toggleBtn =
+    document.getElementById("hoursToggleBtn");
+
+  const hoursText =
+    data.hours?.en || "Opening hours not available";
+
+  const now =
+    new Date();
+
+  const day =
+    now.getDay();
+
+  const match =
+    hoursText.match(/(\d{2}:\d{2})-(\d{2}:\d{2})/);
+
+  let isOpen = false;
+  let opensAt = "";
+  let closesAt = "";
+
+  if (match) {
+
+    opensAt = match[1];
+    closesAt = match[2];
+
+    const currentMinutes =
+      now.getHours() * 60 + now.getMinutes();
+
+    const openMinutes =
+      Number(opensAt.split(":")[0]) * 60 +
+      Number(opensAt.split(":")[1]);
+
+    const closeMinutes =
+      Number(closesAt.split(":")[0]) * 60 +
+      Number(closesAt.split(":")[1]);
+
+    const openToday =
+      hoursText.includes("Mo - Sa")
+        ? day >= 1 && day <= 6
+        : true;
+
+    isOpen =
+      openToday &&
+      currentMinutes >= openMinutes &&
+      currentMinutes <= closeMinutes;
+
+  }
+
+  if (isOpen) {
+
+    statusEl.innerHTML = `
+      <span class="status-dot open"></span>
+      <strong>Open now until ${closesAt}</strong>
+    `;
+
+  } else {
+
+    statusEl.innerHTML = `
+      <span class="status-dot closed"></span>
+      <strong>Closed • Opens tomorrow at ${opensAt || "09:00"}</strong>
+    `;
+
+  }
+
+  detailsEl.innerText =
+    hoursText;
+
+  toggleBtn.onclick = function () {
+
+    detailsEl.classList.toggle("active");
+
+    toggleBtn.innerText =
+      detailsEl.classList.contains("active")
+        ? "⌃"
+        : "⌄";
+
+  };
+
+}
+
+function setupBusinessShare(data, businessId, imageBase, allImages) {
+
+  const shareBtn =
+    document.getElementById("shareBusinessBtn");
+
+  if (!shareBtn) return;
+
+  const image =
+    allImages?.[0]
+      ? imageBase + allImages[0]
+      : "";
+
+  const shareUrl =
+    `${window.location.origin}/local-business.html?id=${businessId}`;
+
+  shareBtn.onclick = async function () {
+
+    const shareData = {
+      title: data.titleEn,
+      text: `${data.titleEn} • ${data.categoryEn} on Halkidiki Explorer`,
+      url: shareUrl
+    };
+
+    if (navigator.share) {
+
+      try {
+        await navigator.share(shareData);
+      } catch (error) {}
+
+    } else {
+
+      await navigator.clipboard.writeText(shareUrl);
+      alert("Link copied!");
+    }
+
+  };
+
+}
 loadBusiness();

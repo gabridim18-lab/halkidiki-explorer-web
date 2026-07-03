@@ -2256,7 +2256,7 @@ h1 {
 </div>
 <div class="section-title">
 
-  Local Businesses
+  Travel Essentials
 
 </div>
 
@@ -2456,8 +2456,9 @@ function calculateDistanceKm(lat1, lon1, lat2, lon2) {
 }
 
 function formatDistanceAway(place) {
+
   if (!userLocation || !place.lat || !place.lon) {
-    return "📍 Enable location";
+    return "";
   }
 
   const km = calculateDistanceKm(
@@ -2467,11 +2468,15 @@ function formatDistanceAway(place) {
     place.lon
   );
 
-  if (km < 1) {
-    return `${Math.round(km * 1000)}m away`;
+  if (km > 150) {
+    return "";
   }
 
-  return `${km.toFixed(1)}km away`;
+  if (km < 1) {
+    return `📍 ${Math.round(km * 1000)} m away`;
+  }
+
+  return `📍 ${km.toFixed(1)} km away`;
 }
 async function loadBeach() {
 
@@ -3536,7 +3541,8 @@ async function loadLocalBusinesses(
           <div
             class="business-description">
 
-            ${details.descriptionEn}
+           ${formatDistanceAway(details)}
+
 
           </div>
 

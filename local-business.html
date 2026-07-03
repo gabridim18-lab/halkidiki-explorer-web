@@ -27,10 +27,51 @@
 
   <!-- HERO GALLERY -->
 
-  <div
-    class="gallery"
-    id="gallery">
-  </div>
+  <div class="gallery-wrapper">
+
+    <div
+        class="gallery"
+        id="gallery">
+    </div>
+
+<button
+  class="share-icon-btn"
+  id="shareBusinessBtn"
+  aria-label="Share">
+
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2.2"
+       stroke-linecap="round" stroke-linejoin="round">
+
+    <circle cx="18" cy="5" r="3"/>
+    <circle cx="6" cy="12" r="3"/>
+    <circle cx="18" cy="19" r="3"/>
+
+    <path d="M8.6 10.7l6.8-3.4"/>
+    <path d="M8.6 13.3l6.8 3.4"/>
+
+  </svg>
+
+</button>
+
+    <div
+        class="gallery-dots"
+        id="galleryDots">
+    </div>
+
+    <button
+        class="gallery-arrow gallery-left"
+        id="galleryPrev">
+        ❮
+    </button>
+
+    <button
+        class="gallery-arrow gallery-right"
+        id="galleryNext">
+        ❯
+    </button>
+
+</div>
 
   <!-- CONTENT -->
 
@@ -45,11 +86,79 @@
       class="place-title"
       id="businessTitle">
     </h1>
+    
 
-    <div
-      class="place-description"
-      id="businessDescription">
+    <!-- OPENING HOURS -->
+
+<div class="business-hours-card">
+
+  <div class="business-hours-top">
+
+    <div>
+      <div class="business-hours-title">
+        Opening Hours
+      </div>
+
+      <div
+        class="business-hours-status"
+        id="businessHoursStatus">
+      </div>
     </div>
+
+    <button
+      class="business-hours-toggle"
+      id="hoursToggleBtn">
+      ⌄
+    </button>
+
+  </div>
+
+  <div
+    class="business-hours-details"
+    id="businessHoursDetails">
+  </div>
+
+</div>
+
+<!-- MAIN ACTIONS -->
+
+<div class="business-main-actions">
+
+  <button
+    class="business-action-primary"
+    id="requestBtn">
+    <strong>Send Request</strong>
+    <span>Ask a question or book</span>
+  </button>
+
+  <button
+    class="business-action-dark"
+    id="takeMeThereBtn">
+    <strong>Take me there</strong>
+    <span>Open navigation</span>
+  </button>
+
+</div>
+
+<!-- DESCRIPTION -->
+
+<div
+  class="place-description"
+  id="businessDescription">
+</div>
+
+<!-- SECONDARY ACTIONS -->
+
+<div class="business-secondary-actions">
+
+  <a
+    class="business-secondary-link"
+    id="businessWebsiteBtn"
+    target="_blank">
+    Visit website
+  </a>
+
+</div>
 
     <!-- INFO GRID -->
 
@@ -59,10 +168,37 @@
 
     </div>
 
-    <div
-      class="business-info-grid"
-      id="businessInfoGrid">
+    <div class="business-details-card">
+
+    <div class="detail-row">
+
+        📍
+
+        <div>
+
+            <strong>Address</strong>
+
+            <span id="businessAddress"></span>
+
+        </div>
+
     </div>
+
+    <div class="detail-row distance-row">
+
+        🚗
+
+        <div>
+
+            <strong>Distance</strong>
+
+            <span id="businessDistance"></span>
+
+        </div>
+
+    </div>
+
+</div>
 
     <!-- CONTACT -->
 
@@ -70,11 +206,6 @@
       id="contactSection"
       style="display:none;">
 
-      <div class="section-title">
-
-        Contact Business
-
-      </div>
 
       <div class="booking-form">
 
