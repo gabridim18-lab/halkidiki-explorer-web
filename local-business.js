@@ -223,6 +223,8 @@ function sendBusinessWhatsApp() {
 
 `Hello!
 
+I'm writing to request a reservation at ${business.name}.
+
 My name is ${name}
 
 Date:
@@ -233,9 +235,7 @@ ${time}
 
 Message:
 ${message}
-
 ----------------------------------
-
 This message was sent from the Halkidiki Explorer ecosystem for:
 ${business.categoryEn}`;
 
