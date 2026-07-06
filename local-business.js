@@ -176,7 +176,7 @@ setInterval(() => {
 
   window.currentBusiness =
     data;
-
+populateBookingTimes(data);
     setupBusinessActions(data);
 renderOpeningHours(data);
 setupBusinessShare(data, businessId, imageBase, allImages);
@@ -192,7 +192,63 @@ setupBusinessShare(data, businessId, imageBase, allImages);
     data.distance || "Not available";
 
 }
+function populateBookingTimes(business) {
 
+  const select =
+    document.getElementById("bookingTime");
+
+  if (!select || !business.hours?.en)
+    return;
+
+  // Exemplu:
+  // "Daily: 11:00 - 20:30"
+
+  const match =
+    business.hours.en.match(/(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})/);
+
+  if (!match)
+    return;
+
+  const start = match[1];
+  const end = match[2];
+
+  const [startHour, startMinute] =
+    start.split(":").map(Number);
+
+  const [endHour, endMinute] =
+    end.split(":").map(Number);
+
+  const startDate = new Date();
+  startDate.setHours(startHour, startMinute, 0, 0);
+
+  const endDate = new Date();
+  endDate.setHours(endHour, endMinute, 0, 0);
+
+  select.innerHTML = "";
+
+  while (startDate <= endDate) {
+
+    const h =
+      String(startDate.getHours()).padStart(2, "0");
+
+    const m =
+      String(startDate.getMinutes()).padStart(2, "0");
+
+    const time = `${h}:${m}`;
+
+    select.innerHTML += `
+      <option value="${time}">
+        ${time}
+      </option>
+    `;
+
+    startDate.setMinutes(
+      startDate.getMinutes() + 30
+    );
+
+  }
+
+}
 
 function sendBusinessWhatsApp() {
 
