@@ -260,10 +260,19 @@ function sendBusinessWhatsApp() {
       "clientName"
     ).value;
 
-  const date =
-    document.getElementById(
-      "bookingDate"
-    ).value;
+  const rawDate =
+  document.getElementById("bookingDate").value;
+
+let date = rawDate;
+
+if (rawDate) {
+
+  const [year, month, day] =
+    rawDate.split("-");
+
+  date = `${day}/${month}/${year}`;
+
+}
 
   const time =
     document.getElementById(
@@ -385,7 +394,7 @@ function renderOpeningHours(data) {
     now.getDay();
 
   const match =
-    hoursText.match(/(\d{2}:\d{2})-(\d{2}:\d{2})/);
+  hoursText.match(/(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})/);
 
   let isOpen = false;
   let opensAt = "";
