@@ -564,6 +564,12 @@ const beachDayCards = buildBeachDayCards(place);
 
         <select id="reserveHour">
           <option value="">Select Hour</option>
+          <option>09:00</option>
+          <option>09:30</option>
+          <option>10:00</option>
+          <option>10:30</option>
+          <option>11:00</option>
+          <option>11:30</option>
           <option>11:00</option>
           <option>11:30</option>
           <option>12:00</option>
@@ -955,6 +961,10 @@ Name: ${name}
 Date: ${date}
 Hour: ${hour}
 ${label}: ${guests}
+────────────────────
+This reservation request was sent through the Halkidiki Explorer ecosystem.
+
+
 `;
 
     window.open(
