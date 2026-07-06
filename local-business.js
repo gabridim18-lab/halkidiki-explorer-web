@@ -279,7 +279,7 @@ function sendBusinessWhatsApp() {
 
 `Hello!
 
-I'm writing to request a reservation at ${business.name}.
+I'm writing to request a reservation at ${business.titleEn}.
 
 My name is ${name}
 
