@@ -29,6 +29,48 @@
 
   <div class="hero-content">
     
+   <div class="language-selector">
+
+    <button id="languageButton" class="language-button">
+
+        <img
+            id="currentFlag"
+            src="images/flag_en.png"
+            alt="Language">
+
+        <span class="language-arrow">▼</span>
+
+    </button>
+
+    <div
+        id="languageMenu"
+        class="language-menu">
+
+        <div
+            class="language-option"
+            data-lang="en">
+
+            <img
+                src="images/flag_en.png">
+
+            <span>English</span>
+
+        </div>
+
+        <div
+            class="language-option"
+            data-lang="ro">
+
+            <img
+                src="images/flag_ro.png">
+
+            <span>Română</span>
+
+        </div>
+
+    </div>
+
+</div>
 <img
   src="images/logo.png"
   class="home-logo"
@@ -45,29 +87,28 @@
      <button
   class="primary-btn"
   onclick="scrollToStays()"
->
-  Find Accommodation
+  data-i18n="findAccommodation">
 </button>
 
-     <a
+    <a
   href="zones.html"
   class="secondary-btn"
->
-
-  Explore Halkidiki
-
+  data-i18n="exploreHalkidiki">
 </a>
 <a
   href="find-my-beach.html"
   class="secondary-btn find-beach-home-btn"
->
-  Find My Beach
+  data-i18n="findMyBeach">
+</a>
+<a
+  href="important-for-tourists.html"
+  class="secondary-btn tourist-alert-home-btn"
+  data-i18n="importantForTourists">
 </a>
 <a
   href="favorites.html"
   class="favorites-home-btn"
->
-  Saved
+  data-i18n="saved">
 </a>
 
 
@@ -80,21 +121,18 @@
 
 <section class="discover-section" id="popularStays">
 
-  <h2>
-    Popular Stays
-  </h2>
+  <h2 data-i18n="popularStays"></h2>
 
-  <p class="swipe-text">
-
-    Swipe to explore and click for details
-
-  </p>
+  <p
+  class="swipe-text"
+  data-i18n="swipe">
+</p>
 <div class="filters-bar">
 
   <div class="filter-group">
 
    <select id="guestsSelect" class="zone-dropdown">
-  <option value="0">Guests</option>
+  <option value="0" data-i18n="guests"></option><option value="0">Guests</option>
   <option value="2">2+</option>
   <option value="3">3+</option>
   <option value="4">4+</option>
@@ -110,7 +148,7 @@
   type="text"
   id="nameSearch"
   class="search-input"
-  placeholder="Search by beach name"
+  data-i18n-placeholder="searchBeach"
 />
 
     <button
@@ -131,9 +169,10 @@
 
   <select id="zoneSelect" class="zone-dropdown">
 
-    <option value="">
-      🌍 All Zones
-    </option>
+    <option
+    value=""
+    data-i18n="allZones">
+</option>
 
     <option value="Kassandra">
       🟣 Kassandra
@@ -162,16 +201,19 @@
     class="zone-dropdown"
   >
 
-    <option value="">
-  🌊 Any Beach Distance
+    <option
+    value=""
+    data-i18n="anyBeachDistance">
 </option>
 
-<option value="50">
-  🏖️ Beachfront
+<option
+    value="50"
+    data-i18n="beachfront">
 </option>
 
-<option value="300">
-  🚶 Up to 300m
+<option
+    value="300"
+    data-i18n="upTo300">
 </option>
   </select>
 
@@ -209,6 +251,7 @@
 </section>
 
 <script src="data.js"></script>
+<script src="translations.js"></script>
 
 <script>
 
@@ -472,6 +515,66 @@ function scrollToStays() {
       behavior: "smooth"
     });
 }
+const languageButton =
+document.getElementById("languageButton");
+
+const languageMenu =
+document.getElementById("languageMenu");
+
+const currentFlag =
+document.getElementById("currentFlag");
+
+
+currentFlag.src =
+currentLanguage==="ro"
+?
+"images/flag_ro.png"
+:
+"images/flag_en.png";
+
+languageButton.onclick=()=>{
+
+languageMenu.classList.toggle("show");
+
+};
+
+document
+.querySelectorAll(".language-option")
+.forEach(option=>{
+
+option.onclick=()=>{
+
+const lang=
+option.dataset.lang;
+
+localStorage.setItem(
+"language",
+lang
+);
+
+location.reload();
+
+};
+
+});
+
+document.onclick=(e)=>{
+
+if(
+!document
+.querySelector(".language-selector")
+.contains(e.target)
+){
+
+languageMenu.classList.remove("show");
+
+}
+
+};
+
+
+    applyTranslations();
+
 loadCards();
 
 </script>
