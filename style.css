@@ -4795,7 +4795,21 @@ display: none;
 .find-beach-home-btn::before {
   content: "🔎 ";
 }
+.tourist-alert-home-btn{
 
+background:linear-gradient(
+135deg,
+#d32f2f,
+#ff5722
+);
+
+}
+
+.tourist-alert-home-btn::before{
+
+content:"";
+
+}
 
 
 

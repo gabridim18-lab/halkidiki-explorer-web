@@ -191,7 +191,18 @@ resetChecklist: "Reset Checklist",
 completedSuffix: "completed",
 
 footerTitle: "🇬🇷 Have a Wonderful Holiday!",
-footerText: "Drive safely • Respect nature • Enjoy Halkidiki ❤️"
+footerText: "Drive safely • Respect nature • Enjoy Halkidiki ❤️",
+
+licenceSuspensionLabel: "🚫 Licence suspension:",
+
+finePhoneSuspension: "30 days. Repeat offences may lead to much longer suspension.",
+fineSeatbeltSuspension: "30 days for the driver.",
+fineHelmetSuspension: "30 days for the driver.",
+fineAlcoholSuspension: "Depends on alcohol level. Can lead to long suspension and criminal consequences.",
+fineRedLightSuspension: "60 days.",
+fineStop: "STOP Sign",
+fineStopDesc: "Ignoring a STOP sign.",
+fineStopSuspension: "30 days if no crash occurs."
 
   },
 
@@ -396,7 +407,17 @@ resetChecklist: "Resetează lista",
 completedSuffix: "completat",
 
 footerTitle: "🇬🇷 Vacanță plăcută!",
-footerText: "Condu prudent • Respectă natura • Bucură-te de Halkidiki ❤️"
+footerText: "Condu prudent • Respectă natura • Bucură-te de Halkidiki ❤️",
+licenceSuspensionLabel: "🚫 Suspendarea dreptului de conducere:",
+
+finePhoneSuspension: "30 de zile. La recidivă, suspendarea poate fi mult mai mare.",
+fineSeatbeltSuspension: "30 de zile pentru șofer.",
+fineHelmetSuspension: "30 de zile pentru șofer.",
+fineAlcoholSuspension: "Depinde de alcoolemie. Poate duce la suspendare lungă și consecințe penale.",
+fineRedLightSuspension: "60 de zile.",
+fineStop: "Indicator STOP",
+fineStopDesc: "Nerespectarea indicatorului STOP.",
+fineStopSuspension: "30 de zile dacă nu are loc accident."
   }
 
 };
