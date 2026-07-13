@@ -14,6 +14,61 @@
 
 <title>Beach</title>
 
+<meta
+  property="og:type"
+  content="website"
+>
+
+<meta
+  property="og:title"
+  content="Discover Halkidiki with Halkidiki Explorer"
+>
+
+<meta
+  property="og:description"
+  content="Explore the best beaches, restaurants, beach bars, accommodation and experiences in Halkidiki."
+>
+
+<meta
+  property="og:image"
+  content="https://https://halkidikiexplorer.com/share_beaches.jpg"
+>
+
+<meta
+  property="og:image:width"
+  content="1200"
+>
+
+<meta
+  property="og:image:height"
+  content="630"
+>
+
+<meta
+  property="og:image:alt"
+  content="Discover Halkidiki with Halkidiki Explorer"
+>
+
+<meta
+  name="twitter:card"
+  content="summary_large_image"
+>
+
+<meta
+  name="twitter:title"
+  content="Discover Halkidiki with Halkidiki Explorer"
+>
+
+<meta
+  name="twitter:description"
+  content="Explore the best beaches, restaurants, beach bars, accommodation and experiences in Halkidiki."
+>
+
+<meta
+  name="twitter:image"
+  content="https://halkidikiexplorer.com/share_beaches.jpg"
+>
+
 <style>
 
 body {
@@ -650,6 +705,68 @@ h1 {
 .hero-favorite.active {
 
   color: #ff3366;
+
+}
+
+.hero-actions {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  flex-shrink: 0;
+
+}
+
+.hero-share {
+
+  width: 58px;
+
+  height: 58px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255,255,255,0.82);
+
+  backdrop-filter: blur(14px);
+
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.08);
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #020202;
+
+  flex-shrink: 0;
+
+}
+
+.hero-share svg {
+
+  width: 25px;
+
+  height: 25px;
+
+  fill: none;
+
+  stroke: currentColor;
+
+  stroke-width: 2.2;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
 
 }
 
@@ -1723,6 +1840,22 @@ h1 {
   
 
 }
+
+.hero-share {
+
+  width: 52px;
+
+  height: 52px;
+
+}
+
+.hero-share svg {
+
+  width: 23px;
+
+  height: 23px;
+
+} 
 .beach-info-grid {
 
   grid-template-columns:
@@ -2103,13 +2236,35 @@ h1 {
 
   </div>
 
+  <div class="hero-actions">
+
+  <button
+    class="hero-share"
+    id="heroShare"
+    type="button"
+    aria-label="Share beach">
+
+    <svg viewBox="0 0 24 24">
+      <circle cx="18" cy="5" r="3"></circle>
+      <circle cx="6" cy="12" r="3"></circle>
+      <circle cx="18" cy="19" r="3"></circle>
+      <path d="M8.6 10.6L15.4 6.4"></path>
+      <path d="M8.6 13.4L15.4 17.6"></path>
+    </svg>
+
+  </button>
+
   <button
     class="hero-favorite"
-    id="heroFavorite">
+    id="heroFavorite"
+    type="button"
+    aria-label="Add to favorites">
 
     ♡
 
   </button>
+
+</div>
 
 </div>
 
@@ -2494,8 +2649,14 @@ async function loadBeach() {
     );
 
   const data =
-    await response.json();
-    userLocation = await getUserLocation();
+  await response.json();
+
+renderZoneBadge(
+  data.zone
+);
+
+userLocation =
+  await getUserLocation();
 
   document.getElementById("beachTitle")
     .innerText =
@@ -2630,6 +2791,7 @@ async function setupBeachNavigation() {
       beach =>
         beach.id === currentBeach
     );
+
 
   const prevBeach =
     beaches[currentIndex - 1];
@@ -2941,47 +3103,71 @@ function getHighlightImage(text) {
 
   return "act_hidden_gem.webp";
 }
-function getZoneData(beachId) {
+function renderZoneBadge(zoneName) {
 
   const zones = {
 
     thessaloniki: {
       name: "Thessaloniki",
-      color: "#00A859"
+      color: "#00A859",
+      textColor: "#ffffff"
     },
 
     kassandra: {
       name: "Kassandra",
-      color: "#9B59B6"
+      color: "#9B59B6",
+      textColor: "#ffffff"
     },
 
     sithonia: {
       name: "Sithonia",
-      color: "#FF007F"
+      color: "#FF007F",
+      textColor: "#ffffff"
     },
 
     olympiada: {
       name: "Olympiada",
-      color: "#FFEA00"
+      color: "#FFEA00",
+      textColor: "#111111"
     }
+
+  };
+
+  const key =
+    String(zoneName || "")
+      .trim()
+      .toLowerCase();
+
+  const zone =
+    zones[key];
+
+  if (!zone) {
+
+    console.error(
+      "Unknown beach zone:",
+      zoneName
+    );
+
+    return;
 
   }
 
-  const lower =
-    beachId.toLowerCase()
+  const badge =
+    document.getElementById(
+      "zoneBadge"
+    );
 
-  if(lower.includes("kassandra"))
-    return zones.kassandra
+  badge.innerText =
+    zone.name;
 
-  if(lower.includes("sithonia"))
-    return zones.sithonia
+  badge.style.background =
+    zone.color;
 
-  if(lower.includes("olympiada"))
-    return zones.olympiada
-
-  return zones.thessaloniki
+  badge.style.color =
+    zone.textColor;
 
 }
+
 
 async function loadAccommodations(beachId) {
 
@@ -3068,18 +3254,7 @@ async function loadBeachBars(beachId) {
   const places =
     await response.json();
 
-const zone =
-  getZoneData(beachId)
 
-document
-  .getElementById("zoneBadge")
-  .innerText =
-    zone.name
-
-document
-  .getElementById("zoneBadge")
-  .style.background =
-    zone.color
 
 
 
@@ -4153,6 +4328,109 @@ function openAccommodation(id) {
 
   window.location.href =
 `accommodation.html?id=${id}`;
+
+}
+const shareBtn =
+  document.getElementById(
+    "heroShare"
+  );
+
+shareBtn.addEventListener(
+  "click",
+  async () => {
+
+    const beachName =
+      document.getElementById(
+        "beachTitle"
+      ).innerText
+      || "Halkidiki Explorer";
+
+    const shareData = {
+
+      title: beachName,
+
+      text:
+        `Discover ${beachName} with Halkidiki Explorer`,
+
+      url:
+        window.location.href
+
+    };
+
+    try {
+
+      if (navigator.share) {
+
+        await navigator.share(
+          shareData
+        );
+
+      } else {
+
+        await copyBeachLink();
+
+      }
+
+    } catch (error) {
+
+      if (
+        error.name !== "AbortError"
+      ) {
+
+        await copyBeachLink();
+
+      }
+
+    }
+
+  }
+);
+
+async function copyBeachLink() {
+
+  const url =
+    window.location.href;
+
+  if (
+    navigator.clipboard
+    &&
+    window.isSecureContext
+  ) {
+
+    await navigator.clipboard
+      .writeText(url);
+
+  } else {
+
+    const temporaryInput =
+      document.createElement(
+        "textarea"
+      );
+
+    temporaryInput.value =
+      url;
+
+    temporaryInput.style.position =
+      "fixed";
+
+    temporaryInput.style.opacity =
+      "0";
+
+    document.body.appendChild(
+      temporaryInput
+    );
+
+    temporaryInput.select();
+
+    document.execCommand(
+      "copy"
+    );
+
+    temporaryInput.remove();
+
+  }
+
+  alert("Link copied!");
 
 }
 const favoriteBtn =
