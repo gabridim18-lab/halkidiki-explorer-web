@@ -455,7 +455,7 @@
         font-size: 14px;
       }
     }
-  
+
 
     /* ===== MOBILE SWIPE ARROWS ===== */
     @media (max-width: 768px) {
@@ -498,7 +498,7 @@
         opacity: 0.22 !important;
       }
     }
-</style>
+  </style>
 
 </head>
 
@@ -1033,21 +1033,30 @@ async function loadCards() {
 
     const cardData = await Promise.all(
       filteredAccommodations.map(async accommodation => {
-        const beachSlug =
-          accommodation.beachSlug || "";
+        const normalizedBeachSlug =
+          normalizeHomeId(
+            accommodation.beachSlug || ""
+          );
 
         const beachIndex =
           beachesIndexMap.get(
-            normalizeHomeId(beachSlug)
+            normalizedBeachSlug
           ) || null;
 
+        const officialBeachId =
+          beachIndex?.id ||
+          normalizedBeachSlug;
+
         const beachDetails =
-          await getHomeBeachDetails(beachSlug);
+          await getHomeBeachDetails(
+            officialBeachId
+          );
 
         return {
           accommodation,
           beachIndex,
-          beachDetails
+          beachDetails,
+          officialBeachId
         };
       })
     );
@@ -1082,7 +1091,8 @@ async function loadCards() {
 function renderHomeStayCard({
   accommodation,
   beachIndex,
-  beachDetails
+  beachDetails,
+  officialBeachId
 }) {
   const title =
     currentLanguage === "ro"
@@ -1120,6 +1130,10 @@ function renderHomeStayCard({
 
   const beachImage =
     getHomeBeachImageUrl(beachIndex) ||
+    getHomeBeachDetailsImageUrl(
+      beachDetails,
+      officialBeachId
+    ) ||
     thirdImage;
 
   const zone =
@@ -1154,8 +1168,8 @@ function renderHomeStayCard({
   const distance =
     formatHomeDistance(accommodation);
 
-  const beachHref = accommodation.beachSlug
-    ? `beach.html?id=${encodeURIComponent(accommodation.beachSlug)}`
+  const beachHref = officialBeachId
+    ? `beach.html?id=${encodeURIComponent(officialBeachId)}`
     : "#";
 
   return `
@@ -1336,8 +1350,13 @@ window.addEventListener(
 
 function normalizeHomeId(value) {
   return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .trim()
-    .toLowerCase();
+    .toLowerCase()
+    .replace(/&/g, " and ")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 function getHomeTranslatedValue(value) {
@@ -1364,6 +1383,30 @@ function getHomeBeachImageUrl(beachIndex) {
     `${HOME_BEACHES_BASE_URL}/` +
     `${encodeURIComponent(beachIndex.id)}/images/` +
     `${encodeURIComponent(beachIndex.previewImage)}`
+  );
+}
+
+function getHomeBeachDetailsImageUrl(
+  beachDetails,
+  officialBeachId
+) {
+  const firstBeachImage =
+    Array.isArray(beachDetails?.images)
+      ? beachDetails.images.find(Boolean)
+      : "";
+
+  if (!firstBeachImage || !officialBeachId) {
+    return "";
+  }
+
+  if (/^https?:\/\//i.test(firstBeachImage)) {
+    return firstBeachImage;
+  }
+
+  return (
+    `${HOME_BEACHES_BASE_URL}/` +
+    `${encodeURIComponent(officialBeachId)}/images/` +
+    `${encodeURIComponent(firstBeachImage)}`
   );
 }
 
@@ -1533,6 +1576,73 @@ function escapeHomeHtml(value) {
 function escapeHomeAttribute(value) {
   return escapeHomeHtml(value);
 }
+
+document
+  .getElementById("poolFilter")
+  .addEventListener("click", async () => {
+    poolOnly = !poolOnly;
+
+    document
+      .getElementById("poolFilter")
+      .classList.toggle("active", poolOnly);
+
+    saveFilters();
+    await loadCards();
+  });
+
+document
+  .getElementById("petFilter")
+  .addEventListener("click", async () => {
+    petOnly = !petOnly;
+
+    document
+      .getElementById("petFilter")
+      .classList.toggle("active", petOnly);
+
+    saveFilters();
+    await loadCards();
+  });
+
+document
+  .getElementById("zoneSelect")
+  .addEventListener("change", async event => {
+    selectedZone = event.target.value;
+
+    saveFilters();
+    await loadCards();
+  });
+
+document
+  .getElementById("distanceSelect")
+  .addEventListener("change", async event => {
+    selectedDistance =
+      Number.parseInt(event.target.value, 10) || 0;
+
+    saveFilters();
+    await loadCards();
+  });
+
+document
+  .getElementById("guestsSelect")
+  .addEventListener("change", async event => {
+    selectedGuests =
+      Number.parseInt(event.target.value, 10) || 0;
+
+    saveFilters();
+    await loadCards();
+  });
+
+document
+  .getElementById("nameSearch")
+  .addEventListener("input", async event => {
+    searchName =
+      event.target.value
+        .trim()
+        .toLowerCase();
+
+    saveFilters();
+    await loadCards();
+  });
 
 
 document.getElementById("guestsSelect").value =
