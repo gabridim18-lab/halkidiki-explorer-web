@@ -32,50 +32,72 @@
 
   <div class="overlay"></div>
 
-  <div class="hero-content">
-    
-   <div class="language-selector">
+  
+  <a
+    href="last-minute.html"
+    id="lastMinuteHomeButton"
+    class="last-minute-home-btn"
+    aria-label="Last Minute Offers"
+  >
+    <span class="last-minute-home-icon">⚡</span>
 
-    <button id="languageButton" class="language-button">
+    <span
+      id="lastMinuteHomeText"
+      class="last-minute-full-text"
+    >
+      Last Minute Offers
+    </span>
 
-        <img
-            id="currentFlag"
-            src="images/flag_en.png"
-            alt="Language">
+    <span class="last-minute-short-text">
+      Last Minute
+    </span>
+  </a>
 
-        <span class="language-arrow">▼</span>
+  <div class="language-selector">
 
+    <button
+      id="languageButton"
+      class="language-button"
+    >
+      <img
+        id="currentFlag"
+        src="images/flag_en.png"
+        alt="Language"
+      >
+
+      <span class="language-arrow">▼</span>
     </button>
 
     <div
-        id="languageMenu"
-        class="language-menu">
+      id="languageMenu"
+      class="language-menu"
+    >
+      <div
+        class="language-option"
+        data-lang="en"
+      >
+        <img src="images/flag_en.png">
 
-        <div
-            class="language-option"
-            data-lang="en">
+        <span>English</span>
+      </div>
 
-            <img
-                src="images/flag_en.png">
+      <div
+        class="language-option"
+        data-lang="ro"
+      >
+        <img src="images/flag_ro.png">
 
-            <span>English</span>
-
-        </div>
-
-        <div
-            class="language-option"
-            data-lang="ro">
-
-            <img
-                src="images/flag_ro.png">
-
-            <span>Română</span>
-
-        </div>
-
+        <span>Română</span>
+      </div>
     </div>
 
-</div>
+  </div>
+
+  <div class="hero-content">
+
+
+
+
 <img
   src="images/logo.png"
   class="home-logo"
@@ -528,6 +550,31 @@ document.getElementById("languageMenu");
 
 const currentFlag =
 document.getElementById("currentFlag");
+
+const lastMinuteHomeButton =
+document.getElementById(
+  "lastMinuteHomeButton"
+);
+
+const lastMinuteHomeText =
+document.getElementById(
+  "lastMinuteHomeText"
+);
+
+const lastMinuteLabel =
+currentLanguage === "ro"
+?
+"Oferte Last Minute"
+:
+"Last Minute Offers";
+
+lastMinuteHomeText.textContent =
+lastMinuteLabel;
+
+lastMinuteHomeButton.setAttribute(
+  "aria-label",
+  lastMinuteLabel
+);
 
 
 currentFlag.src =

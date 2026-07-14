@@ -5184,3 +5184,160 @@ height:30px;
 border-radius:50%;
 
 }
+/* =====================================================
+   HOME HERO CORNER ACTIONS
+===================================================== */
+
+.hero > .last-minute-home-btn {
+
+  position: absolute;
+
+  top: 20px;
+  left: 20px;
+
+  z-index: 9999;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  height: 50px;
+
+  padding: 0 17px;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e23c4a,
+      #ff7a00
+    );
+
+  color: white;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 900;
+
+  white-space: nowrap;
+
+  box-shadow:
+    0 8px 24px
+    rgba(0, 0, 0, 0.24);
+
+  transition: 0.25s;
+
+}
+
+.hero > .last-minute-home-btn:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 30px
+    rgba(226, 60, 74, 0.35);
+
+}
+
+.last-minute-home-icon {
+
+  font-size: 17px;
+
+  line-height: 1;
+
+}
+
+.last-minute-short-text {
+
+  display: none;
+
+}
+
+/* Selectorul este acum raportat la HERO,
+   nu la cardul central */
+
+.hero > .language-selector {
+
+  position: absolute;
+
+  top: 20px;
+  right: 20px;
+
+  z-index: 9999;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .hero > .last-minute-home-btn {
+
+    top: 14px;
+    left: 14px;
+
+    height: 46px;
+
+    max-width:
+      calc(100% - 105px);
+
+    padding: 0 12px;
+
+    gap: 6px;
+
+    border-radius: 13px;
+
+    font-size: 12px;
+
+  }
+
+  .last-minute-home-icon {
+
+    font-size: 15px;
+
+  }
+
+  .last-minute-full-text {
+
+    display: none;
+
+  }
+
+  .last-minute-short-text {
+
+    display: inline;
+
+  }
+
+  .hero > .language-selector {
+
+    top: 14px;
+    right: 14px;
+
+  }
+
+  .hero > .language-selector
+  .language-button {
+
+    height: 46px;
+
+    padding: 6px 9px;
+
+  }
+
+  .hero > .language-selector
+  .language-button img {
+
+    width: 31px;
+    height: 31px;
+
+  }
+
+}

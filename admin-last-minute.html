@@ -1,0 +1,2017 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Last Minute Admin | Halkidiki Explorer</title>
+
+  <style>
+    :root {
+      --navy: #071a33;
+      --blue: #087df1;
+      --blue-dark: #005ec7;
+      --sky: #eaf5ff;
+      --green: #16a35b;
+      --red: #d94343;
+      --orange: #f59e0b;
+      --text: #10213a;
+      --muted: #66758d;
+      --line: #dbe5f0;
+      --surface: #ffffff;
+      --background: #f4f8fc;
+      --shadow: 0 16px 45px rgba(16, 45, 80, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(8, 125, 241, 0.14), transparent 32%),
+        linear-gradient(180deg, #eef7ff 0%, var(--background) 48%, #edf3f9 100%);
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .login-screen {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .login-card {
+      width: min(440px, 100%);
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(8, 125, 241, 0.12);
+      border-radius: 30px;
+      padding: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .brand-mark {
+      width: 74px;
+      height: 74px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 22px;
+      color: white;
+      font-size: 34px;
+      background: linear-gradient(135deg, var(--blue), #04b9ee);
+      box-shadow: 0 14px 32px rgba(8, 125, 241, 0.28);
+    }
+
+    .login-card h1 {
+      margin: 0 0 10px;
+      font-size: 30px;
+    }
+
+    .login-card p {
+      margin: 0 0 26px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 800;
+      color: #40516b;
+    }
+
+    .field input,
+    .field select,
+    .search-input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+      color: var(--text);
+      padding: 14px 15px;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .search-input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(8, 125, 241, 0.12);
+    }
+
+    .primary-button,
+    .secondary-button,
+    .danger-button,
+    .ghost-button {
+      border: 0;
+      border-radius: 16px;
+      padding: 13px 18px;
+      font-weight: 850;
+      transition: 0.2s;
+    }
+
+    .primary-button {
+      color: white;
+      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+      box-shadow: 0 10px 24px rgba(8, 125, 241, 0.25);
+    }
+
+    .secondary-button {
+      color: #075db4;
+      background: var(--sky);
+    }
+
+    .danger-button {
+      color: white;
+      background: var(--red);
+    }
+
+    .ghost-button {
+      color: var(--text);
+      background: #edf3f8;
+    }
+
+    .primary-button:hover,
+    .secondary-button:hover,
+    .danger-button:hover,
+    .ghost-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary-button:disabled,
+    .secondary-button:disabled,
+    .danger-button:disabled,
+    .ghost-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none;
+    }
+
+    .full-width {
+      width: 100%;
+    }
+
+    .message {
+      display: none;
+      margin-top: 16px;
+      padding: 13px 15px;
+      border-radius: 15px;
+      font-size: 14px;
+      font-weight: 750;
+      line-height: 1.45;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      color: #8b1d1d;
+      background: #ffecec;
+      border: 1px solid #ffc7c7;
+    }
+
+    .message.success {
+      color: #086736;
+      background: #e7f9ef;
+      border: 1px solid #b8eacb;
+    }
+
+    .dashboard {
+      min-height: 100vh;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px 28px;
+      color: white;
+      background: rgba(7, 26, 51, 0.96);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 8px 24px rgba(7, 26, 51, 0.16);
+    }
+
+    .topbar-title {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .topbar-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--blue), #04b9ee);
+      font-size: 22px;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 21px;
+    }
+
+    .topbar small {
+      display: block;
+      margin-top: 4px;
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .logout-button {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      padding: 11px 16px;
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      font-weight: 800;
+    }
+
+    .page-shell {
+      width: min(1320px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 30px 0 60px;
+    }
+
+    .intro-panel,
+    .form-panel,
+    .offers-panel {
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(18, 66, 112, 0.09);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .intro-panel {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: center;
+      padding: 26px;
+      margin-bottom: 22px;
+    }
+
+    .intro-panel h2 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    .intro-panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .status-chip {
+      flex-shrink: 0;
+      padding: 11px 15px;
+      border-radius: 999px;
+      color: #086736;
+      background: #e6f8ed;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .form-panel,
+    .offers-panel {
+      padding: 26px;
+      margin-bottom: 22px;
+    }
+
+    .panel-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .panel-heading h2 {
+      margin: 0 0 7px;
+      font-size: 24px;
+    }
+
+    .panel-heading p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .accommodation-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .accommodation-picker {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #f9fbfd;
+    }
+
+    .accommodation-preview {
+      min-height: 220px;
+      overflow: hidden;
+      border-radius: 22px;
+      background: var(--navy);
+      color: white;
+      position: relative;
+    }
+
+    .preview-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      opacity: 0.78;
+    }
+
+    .preview-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 20px;
+      background: linear-gradient(to top, rgba(7, 26, 51, 0.92), rgba(7, 26, 51, 0.08));
+    }
+
+    .preview-overlay h3 {
+      margin: 0 0 8px;
+      font-size: 21px;
+    }
+
+    .preview-overlay p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.45;
+    }
+
+    .periods-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin: 28px 0 14px;
+    }
+
+    .periods-header h3 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .periods-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .period-card {
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #fbfdff;
+      padding: 18px;
+    }
+
+    .period-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .period-number {
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--blue-dark);
+    }
+
+    .remove-period {
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: #a32626;
+      background: #ffeded;
+      font-weight: 800;
+    }
+
+    .period-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 13px;
+      align-items: end;
+    }
+
+    .checkbox-field {
+      min-height: 49px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+      font-weight: 800;
+    }
+
+    .checkbox-field input {
+      width: 19px;
+      height: 19px;
+      accent-color: var(--blue);
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .editing-note {
+      display: none;
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      color: #7b4d00;
+      background: #fff4d8;
+      border: 1px solid #f4d28b;
+      font-weight: 800;
+    }
+
+    .editing-note.show {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .offers-toolbar {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .offers-summary {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .offers-list {
+      display: grid;
+      gap: 18px;
+    }
+
+    .offer-group {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: white;
+    }
+
+    .offer-group-header {
+      display: grid;
+      grid-template-columns: 90px minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      padding: 16px;
+      background: #f8fbfe;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .offer-thumb {
+      width: 90px;
+      height: 72px;
+      border-radius: 16px;
+      object-fit: cover;
+      background: #dce7f1;
+    }
+
+    .offer-group-header h3 {
+      margin: 0 0 5px;
+      font-size: 18px;
+    }
+
+    .offer-group-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .period-count {
+      padding: 9px 12px;
+      border-radius: 999px;
+      color: #075db4;
+      background: var(--sky);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .stored-periods {
+      display: grid;
+    }
+
+    .stored-period {
+      display: grid;
+      grid-template-columns: minmax(190px, 1fr) minmax(120px, 0.45fr) minmax(110px, 0.4fr) auto;
+      gap: 14px;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid #edf2f7;
+    }
+
+    .stored-period:last-child {
+      border-bottom: 0;
+    }
+
+    .stored-period strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .stored-period small {
+      color: var(--muted);
+    }
+
+    .price-text {
+      font-weight: 900;
+      color: var(--blue-dark);
+    }
+
+    .period-status {
+      justify-self: start;
+      padding: 8px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .status-active {
+      color: #086736;
+      background: #e6f8ed;
+    }
+
+    .status-scheduled {
+      color: #795000;
+      background: #fff3d1;
+    }
+
+    .status-inactive {
+      color: #7a2830;
+      background: #ffe8eb;
+    }
+
+    .status-expired {
+      color: #5e6672;
+      background: #e9edf2;
+    }
+
+    .period-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .small-button {
+      border: 0;
+      border-radius: 12px;
+      padding: 9px 11px;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .edit-button {
+      color: #075db4;
+      background: var(--sky);
+    }
+
+    .toggle-button {
+      color: #614000;
+      background: #fff1c9;
+    }
+
+    .delete-button {
+      color: #a32626;
+      background: #ffeded;
+    }
+
+    .empty-state {
+      padding: 42px 20px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed #cbd8e5;
+      border-radius: 22px;
+      background: #fafcff;
+    }
+
+    .loading-state {
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    @media (max-width: 980px) {
+      .accommodation-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .period-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stored-period {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .period-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .topbar {
+        padding: 14px 16px;
+      }
+
+      .topbar h1 {
+        font-size: 17px;
+      }
+
+      .topbar small {
+        display: none;
+      }
+
+      .page-shell {
+        width: min(100% - 20px, 1320px);
+        padding-top: 18px;
+      }
+
+      .intro-panel,
+      .form-panel,
+      .offers-panel {
+        border-radius: 22px;
+        padding: 18px;
+      }
+
+      .intro-panel {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .panel-heading {
+        flex-direction: column;
+      }
+
+      .period-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .offers-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      .offer-group-header {
+        grid-template-columns: 72px minmax(0, 1fr);
+      }
+
+      .offer-thumb {
+        width: 72px;
+        height: 64px;
+      }
+
+      .period-count {
+        grid-column: 1 / -1;
+        justify-self: start;
+      }
+
+      .stored-period {
+        grid-template-columns: 1fr;
+      }
+
+      .form-actions {
+        flex-direction: column-reverse;
+      }
+
+      .form-actions button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section id="loginScreen" class="login-screen">
+    <form id="loginForm" class="login-card">
+      <div class="brand-mark">⚡</div>
+      <h1>Last Minute Admin</h1>
+      <p>Autentificare privată pentru administrarea ofertelor Halkidiki Explorer.</p>
+
+      <div class="field">
+        <label for="loginEmail">E-mail</label>
+        <input
+          id="loginEmail"
+          type="email"
+          value="halkidikiexplorer@gmail.com"
+          autocomplete="username"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="loginPassword">Parolă</label>
+        <input
+          id="loginPassword"
+          type="password"
+          autocomplete="current-password"
+          required
+        >
+      </div>
+
+      <button id="loginButton" class="primary-button full-width" type="submit">
+        Intră în administrare
+      </button>
+
+      <div id="loginMessage" class="message"></div>
+    </form>
+  </section>
+
+  <main id="dashboard" class="dashboard hidden">
+    <header class="topbar">
+      <div class="topbar-title">
+        <div class="topbar-logo">⚡</div>
+        <div>
+          <h1>Halkidiki Explorer · Last Minute</h1>
+          <small>Administrare perioade și prețuri promoționale</small>
+        </div>
+      </div>
+
+      <button id="logoutButton" class="logout-button" type="button">
+        Deconectare
+      </button>
+    </header>
+
+    <div class="page-shell">
+      <section class="intro-panel">
+        <div>
+          <h2>Oferte Last Minute</h2>
+          <p>
+            Cazările sunt încărcate automat din indexul GitHub.
+            Fiecare perioadă este salvată separat, iar aceeași cazare poate avea mai multe perioade.
+          </p>
+        </div>
+        <div class="status-chip">● Conectat securizat</div>
+      </section>
+
+      <section class="form-panel">
+        <div class="panel-heading">
+          <div>
+            <h2 id="formTitle">Publică o ofertă</h2>
+            <p>Alege cazarea și adaugă una sau mai multe perioade.</p>
+          </div>
+        </div>
+
+        <div id="editingNote" class="editing-note">
+          <span>Editezi o perioadă existentă.</span>
+          <button id="cancelEditTop" class="small-button toggle-button" type="button">
+            Anulează editarea
+          </button>
+        </div>
+
+        <div class="accommodation-layout">
+          <div class="accommodation-picker">
+            <div class="field">
+              <label for="accommodationSearch">Caută cazarea</label>
+              <input
+                id="accommodationSearch"
+                class="search-input"
+                type="search"
+                placeholder="Scrie numele, zona sau plaja..."
+              >
+            </div>
+
+            <div class="field">
+              <label for="accommodationSelect">Cazare</label>
+              <select id="accommodationSelect" required>
+                <option value="">Se încarcă lista...</option>
+              </select>
+            </div>
+          </div>
+
+          <article id="accommodationPreview" class="accommodation-preview">
+            <div class="preview-overlay">
+              <h3>Alege o cazare</h3>
+              <p>Imaginea și informațiile de bază vor apărea aici.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="periods-header">
+          <h3>Perioade disponibile</h3>
+          <button id="addPeriodButton" class="secondary-button" type="button">
+            + Adaugă perioadă
+          </button>
+        </div>
+
+        <div id="periodsList" class="periods-list"></div>
+
+        <div class="form-actions">
+          <button id="resetFormButton" class="ghost-button" type="button">
+            Golește formularul
+          </button>
+          <button id="publishButton" class="primary-button" type="button">
+            Publică oferta
+          </button>
+        </div>
+
+        <div id="formMessage" class="message"></div>
+      </section>
+
+      <section class="offers-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Oferte salvate</h2>
+            <p>Vezi, modifică, dezactivează sau șterge perioadele existente.</p>
+          </div>
+        </div>
+
+        <div class="offers-toolbar">
+          <input
+            id="offersSearch"
+            class="search-input"
+            type="search"
+            placeholder="Caută în ofertele salvate..."
+          >
+          <div id="offersSummary" class="offers-summary">0 perioade</div>
+        </div>
+
+        <div id="offersList" class="offers-list">
+          <div class="loading-state">Se încarcă ofertele...</div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL =
+      "https://bjywllpzvckllydflxbd.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_2CYR00gmzcodRcOqbjIBIQ_X450DFQh";
+
+    const ADMIN_UID =
+      "e4dc294e-4a0d-476c-869e-e6bc8810c49b";
+
+    const ACCOMMODATIONS_INDEX_URL =
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/refs/heads/main/data/accommodations/accommodations-index-v2.json";
+
+    const ACCOMMODATION_DETAILS_BASE_URL =
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations";
+
+    const db = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const loginScreen = document.getElementById("loginScreen");
+    const dashboard = document.getElementById("dashboard");
+    const loginForm = document.getElementById("loginForm");
+    const loginButton = document.getElementById("loginButton");
+    const loginMessage = document.getElementById("loginMessage");
+    const logoutButton = document.getElementById("logoutButton");
+
+    const accommodationSearch =
+      document.getElementById("accommodationSearch");
+    const accommodationSelect =
+      document.getElementById("accommodationSelect");
+    const accommodationPreview =
+      document.getElementById("accommodationPreview");
+
+    const periodsList = document.getElementById("periodsList");
+    const addPeriodButton = document.getElementById("addPeriodButton");
+    const publishButton = document.getElementById("publishButton");
+    const resetFormButton = document.getElementById("resetFormButton");
+    const formMessage = document.getElementById("formMessage");
+    const formTitle = document.getElementById("formTitle");
+    const editingNote = document.getElementById("editingNote");
+    const cancelEditTop = document.getElementById("cancelEditTop");
+
+    const offersList = document.getElementById("offersList");
+    const offersSearch = document.getElementById("offersSearch");
+    const offersSummary = document.getElementById("offersSummary");
+
+    let accommodations = [];
+    let filteredAccommodations = [];
+    let savedPeriods = [];
+    let editingPeriodId = null;
+    let previewRequestVersion = 0;
+
+    function showMessage(element, text, type) {
+      element.textContent = text;
+      element.className = `message show ${type}`;
+    }
+
+    function clearMessage(element) {
+      element.textContent = "";
+      element.className = "message";
+    }
+
+    function formatDate(dateValue) {
+      if (!dateValue) return "—";
+
+      const date = new Date(`${dateValue}T12:00:00`);
+      return new Intl.DateTimeFormat("ro-RO", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      }).format(date);
+    }
+
+    function todayString() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function getAccommodationById(id) {
+      return accommodations.find(item => item.id === id) || null;
+    }
+
+    function getAccommodationLabel(item) {
+      const title = item.titleEn || item.titleRo || item.id;
+      const location = [item.zone, item.beachSlug]
+        .filter(Boolean)
+        .join(" · ");
+
+      return location ? `${title} — ${location}` : title;
+    }
+
+    async function validateAdminSession(session) {
+      if (!session || !session.user) return false;
+
+      if (session.user.id !== ADMIN_UID) {
+        await db.auth.signOut();
+        showMessage(
+          loginMessage,
+          "Acest cont nu are drepturi de administrare.",
+          "error"
+        );
+        return false;
+      }
+
+      return true;
+    }
+
+    async function showDashboard() {
+      loginScreen.classList.add("hidden");
+      dashboard.classList.remove("hidden");
+
+      try {
+        await loadAccommodations();
+        await loadSavedPeriods();
+      } catch (error) {
+        console.error(error);
+        showMessage(
+          formMessage,
+          "Pagina s-a deschis, dar unele date nu au putut fi încărcate. Reîncarcă pagina.",
+          "error"
+        );
+      }
+    }
+
+    async function showLogin() {
+      dashboard.classList.add("hidden");
+      loginScreen.classList.remove("hidden");
+    }
+
+    async function initializePage() {
+      const {
+        data: { session },
+        error
+      } = await db.auth.getSession();
+
+      if (error) {
+        console.error(error);
+        showLogin();
+        return;
+      }
+
+      if (await validateAdminSession(session)) {
+        await showDashboard();
+      } else {
+        await showLogin();
+      }
+    }
+
+    loginForm.addEventListener("submit", async event => {
+      event.preventDefault();
+      clearMessage(loginMessage);
+
+      loginButton.disabled = true;
+      loginButton.textContent = "Se verifică...";
+
+      const email = document
+        .getElementById("loginEmail")
+        .value
+        .trim();
+
+      const password =
+        document.getElementById("loginPassword").value;
+
+      const { data, error } =
+        await db.auth.signInWithPassword({
+          email,
+          password
+        });
+
+      loginButton.disabled = false;
+      loginButton.textContent = "Intră în administrare";
+
+      if (error) {
+        showMessage(
+          loginMessage,
+          "Autentificarea a eșuat. Verifică e-mailul și parola.",
+          "error"
+        );
+        return;
+      }
+
+      if (!(await validateAdminSession(data.session))) {
+        return;
+      }
+
+      document.getElementById("loginPassword").value = "";
+      await showDashboard();
+    });
+
+    logoutButton.addEventListener("click", async () => {
+      await db.auth.signOut();
+      await showLogin();
+    });
+
+    async function loadAccommodations() {
+      accommodationSelect.innerHTML =
+        '<option value="">Se încarcă lista...</option>';
+
+      const response = await fetch(
+        `${ACCOMMODATIONS_INDEX_URL}?v=${Date.now()}`,
+        { cache: "no-store" }
+      );
+
+      if (!response.ok) {
+        throw new Error("Nu s-a putut încărca indexul cazărilor.");
+      }
+
+      const result = await response.json();
+
+      if (!Array.isArray(result)) {
+        throw new Error("Indexul cazărilor nu are formatul corect.");
+      }
+
+      accommodations = result
+        .filter(item => item && item.id)
+        .sort((a, b) =>
+          getAccommodationLabel(a).localeCompare(
+            getAccommodationLabel(b),
+            "ro"
+          )
+        );
+
+      filteredAccommodations = [...accommodations];
+      renderAccommodationOptions();
+    }
+
+    function renderAccommodationOptions() {
+      const currentValue = accommodationSelect.value;
+
+      const options = filteredAccommodations
+        .map(item => `
+          <option value="${escapeHtml(item.id)}">
+            ${escapeHtml(getAccommodationLabel(item))}
+          </option>
+        `)
+        .join("");
+
+      accommodationSelect.innerHTML = `
+        <option value="">Alege cazarea...</option>
+        ${options}
+      `;
+
+      if (
+        currentValue &&
+        filteredAccommodations.some(item => item.id === currentValue)
+      ) {
+        accommodationSelect.value = currentValue;
+      }
+    }
+
+    accommodationSearch.addEventListener("input", () => {
+      const query = accommodationSearch.value
+        .trim()
+        .toLowerCase();
+
+      filteredAccommodations = accommodations.filter(item => {
+        const searchText = [
+          item.id,
+          item.titleEn,
+          item.titleRo,
+          item.zone,
+          item.beachSlug
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        return searchText.includes(query);
+      });
+
+      renderAccommodationOptions();
+    });
+
+    accommodationSelect.addEventListener("change", async () => {
+      const item = getAccommodationById(accommodationSelect.value);
+      await renderAccommodationPreview(item);
+    });
+
+    async function renderAccommodationPreview(item) {
+      const requestVersion = ++previewRequestVersion;
+
+      if (!item) {
+        accommodationPreview.innerHTML = `
+          <div class="preview-overlay">
+            <h3>Alege o cazare</h3>
+            <p>Imaginea și informațiile de bază vor apărea aici.</p>
+          </div>
+        `;
+        return;
+      }
+
+      accommodationPreview.innerHTML = `
+        <img
+          class="preview-image"
+          src="${escapeAttribute(item.image || "")}"
+          alt="${escapeAttribute(item.titleEn || item.id)}"
+        >
+        <div class="preview-overlay">
+          <h3>${escapeHtml(item.titleEn || item.titleRo || item.id)}</h3>
+          <p>
+            ${escapeHtml(item.zone || "Zonă nespecificată")}
+            · ${escapeHtml(item.beachSlug || "Locație nespecificată")}
+            · ${Number(item.guests) || "—"} persoane
+            · ${Number(item.bedrooms) || "—"} dormitoare
+          </p>
+        </div>
+      `;
+
+      try {
+        const response = await fetch(
+          `${ACCOMMODATION_DETAILS_BASE_URL}/${encodeURIComponent(item.id)}/index.json?v=${Date.now()}`,
+          { cache: "no-store" }
+        );
+
+        if (!response.ok) return;
+
+        const details = await response.json();
+
+        if (requestVersion !== previewRequestVersion) return;
+
+        const image =
+          Array.isArray(details.images) && details.images.length
+            ? details.images[0]
+            : item.image;
+
+        accommodationPreview.innerHTML = `
+          <img
+            class="preview-image"
+            src="${escapeAttribute(image || "")}"
+            alt="${escapeAttribute(details.titleEn || item.titleEn || item.id)}"
+          >
+          <div class="preview-overlay">
+            <h3>
+              ${escapeHtml(details.titleEn || item.titleEn || item.id)}
+            </h3>
+            <p>
+              ${escapeHtml(details.zone || item.zone || "—")}
+              · ${escapeHtml(details.beachSlug || item.beachSlug || "—")}
+              · ${Number(details.guests ?? item.guests) || "—"} persoane
+              · ${Number(details.bedrooms ?? item.bedrooms) || "—"} dormitoare
+              · ${Number(details.bathrooms) || "—"} băi
+            </p>
+          </div>
+        `;
+      } catch (error) {
+        console.warn("Detaliile complete nu au putut fi încărcate.", error);
+      }
+    }
+
+    function addPeriodRow(values = {}) {
+      const card = document.createElement("article");
+      card.className = "period-card";
+
+      const startDate = values.start_date || "";
+      const endDate = values.end_date || "";
+      const price =
+        values.price === 0 || values.price
+          ? Number(values.price)
+          : "";
+      const priceType = values.price_type || "per_night";
+      const minimumNights =
+        values.minimum_nights === 0 || values.minimum_nights
+          ? Number(values.minimum_nights)
+          : "";
+      const active =
+        typeof values.active === "boolean"
+          ? values.active
+          : true;
+
+      card.innerHTML = `
+        <div class="period-card-header">
+          <span class="period-number"></span>
+          <button class="remove-period" type="button">
+            Elimină
+          </button>
+        </div>
+
+        <div class="period-grid">
+          <div class="field">
+            <label>Disponibil de la</label>
+            <input
+              class="period-start"
+              type="date"
+              value="${escapeAttribute(startDate)}"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>Disponibil până la</label>
+            <input
+              class="period-end"
+              type="date"
+              value="${escapeAttribute(endDate)}"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>Preț (€)</label>
+            <input
+              class="period-price"
+              type="number"
+              min="0.01"
+              step="0.01"
+              value="${escapeAttribute(price)}"
+              placeholder="Ex. 120"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label>Tip preț</label>
+            <select class="period-price-type">
+              <option value="per_night" ${priceType === "per_night" ? "selected" : ""}>
+                Pe noapte
+              </option>
+              <option value="per_stay" ${priceType === "per_stay" ? "selected" : ""}>
+                Pe sejur
+              </option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Nopți minime</label>
+            <input
+              class="period-minimum-nights"
+              type="number"
+              min="1"
+              step="1"
+              value="${escapeAttribute(minimumNights)}"
+              placeholder="Opțional"
+            >
+          </div>
+        </div>
+
+        <label class="checkbox-field">
+          <input
+            class="period-active"
+            type="checkbox"
+            ${active ? "checked" : ""}
+          >
+          Perioadă activă
+        </label>
+      `;
+
+      card
+        .querySelector(".remove-period")
+        .addEventListener("click", () => {
+          if (periodsList.children.length === 1) {
+            showMessage(
+              formMessage,
+              "Trebuie să existe cel puțin o perioadă.",
+              "error"
+            );
+            return;
+          }
+
+          card.remove();
+          updatePeriodNumbers();
+        });
+
+      const startInput = card.querySelector(".period-start");
+      const endInput = card.querySelector(".period-end");
+
+      startInput.addEventListener("change", () => {
+        endInput.min = startInput.value;
+
+        if (
+          endInput.value &&
+          startInput.value &&
+          endInput.value < startInput.value
+        ) {
+          endInput.value = startInput.value;
+        }
+      });
+
+      if (startInput.value) {
+        endInput.min = startInput.value;
+      }
+
+      periodsList.appendChild(card);
+      updatePeriodNumbers();
+    }
+
+    function updatePeriodNumbers() {
+      [...periodsList.querySelectorAll(".period-card")]
+        .forEach((card, index) => {
+          card.querySelector(".period-number").textContent =
+            `Perioada ${index + 1}`;
+        });
+    }
+
+    addPeriodButton.addEventListener("click", () => {
+      clearMessage(formMessage);
+      addPeriodRow();
+    });
+
+    function collectPeriodsFromForm() {
+      const cards =
+        [...periodsList.querySelectorAll(".period-card")];
+
+      if (!cards.length) {
+        throw new Error("Adaugă cel puțin o perioadă.");
+      }
+
+      const periods = cards.map((card, index) => {
+        const startDate =
+          card.querySelector(".period-start").value;
+
+        const endDate =
+          card.querySelector(".period-end").value;
+
+        const price =
+          Number(card.querySelector(".period-price").value);
+
+        const priceType =
+          card.querySelector(".period-price-type").value;
+
+        const minimumNightsRaw =
+          card.querySelector(".period-minimum-nights").value;
+
+        const active =
+          card.querySelector(".period-active").checked;
+
+        if (!startDate || !endDate) {
+          throw new Error(
+            `Completează ambele date pentru perioada ${index + 1}.`
+          );
+        }
+
+        if (endDate < startDate) {
+          throw new Error(
+            `Data de final este înaintea datei de început la perioada ${index + 1}.`
+          );
+        }
+
+        if (!Number.isFinite(price) || price <= 0) {
+          throw new Error(
+            `Introdu un preț valid pentru perioada ${index + 1}.`
+          );
+        }
+
+        let minimumNights = null;
+
+        if (minimumNightsRaw !== "") {
+          minimumNights = Number(minimumNightsRaw);
+
+          if (
+            !Number.isInteger(minimumNights) ||
+            minimumNights < 1
+          ) {
+            throw new Error(
+              `Nopțile minime nu sunt valide la perioada ${index + 1}.`
+            );
+          }
+        }
+
+        return {
+          start_date: startDate,
+          end_date: endDate,
+          price,
+          price_type: priceType,
+          minimum_nights: minimumNights,
+          active
+        };
+      });
+
+      const uniqueKeys = new Set();
+
+      periods.forEach(period => {
+        const key = `${period.start_date}|${period.end_date}`;
+
+        if (uniqueKeys.has(key)) {
+          throw new Error(
+            "Ai introdus de două ori aceeași perioadă."
+          );
+        }
+
+        uniqueKeys.add(key);
+      });
+
+      return periods;
+    }
+
+    publishButton.addEventListener("click", async () => {
+      clearMessage(formMessage);
+
+      const accommodationId = accommodationSelect.value;
+
+      if (!accommodationId) {
+        showMessage(
+          formMessage,
+          "Alege cazarea înainte de publicare.",
+          "error"
+        );
+        return;
+      }
+
+      let periods;
+
+      try {
+        periods = collectPeriodsFromForm();
+      } catch (error) {
+        showMessage(formMessage, error.message, "error");
+        return;
+      }
+
+      publishButton.disabled = true;
+      publishButton.textContent =
+        editingPeriodId
+          ? "Se salvează..."
+          : "Se publică...";
+
+      try {
+        if (editingPeriodId) {
+          if (periods.length !== 1) {
+            throw new Error(
+              "În modul de editare poate fi salvată o singură perioadă."
+            );
+          }
+
+          const { error } = await db
+            .from("last_minute_periods")
+            .update({
+              accommodation_id: accommodationId,
+              ...periods[0]
+            })
+            .eq("id", editingPeriodId);
+
+          if (error) throw error;
+
+          showMessage(
+            formMessage,
+            "Perioada a fost actualizată.",
+            "success"
+          );
+        } else {
+          const existingKeys = new Set(
+            savedPeriods
+              .filter(item =>
+                item.accommodation_id === accommodationId
+              )
+              .map(item =>
+                `${item.start_date}|${item.end_date}`
+              )
+          );
+
+          const duplicate = periods.find(period =>
+            existingKeys.has(
+              `${period.start_date}|${period.end_date}`
+            )
+          );
+
+          if (duplicate) {
+            throw new Error(
+              `Perioada ${formatDate(duplicate.start_date)} – ${formatDate(duplicate.end_date)} există deja pentru această cazare.`
+            );
+          }
+
+          const rows = periods.map(period => ({
+            accommodation_id: accommodationId,
+            ...period
+          }));
+
+          const { error } = await db
+            .from("last_minute_periods")
+            .insert(rows);
+
+          if (error) throw error;
+
+          showMessage(
+            formMessage,
+            rows.length === 1
+              ? "Oferta a fost publicată."
+              : `${rows.length} perioade au fost publicate.`,
+            "success"
+          );
+        }
+
+        await loadSavedPeriods();
+        resetForm(false);
+      } catch (error) {
+        console.error(error);
+        showMessage(
+          formMessage,
+          error.message ||
+            "Oferta nu a putut fi salvată.",
+          "error"
+        );
+      } finally {
+        publishButton.disabled = false;
+        publishButton.textContent =
+          editingPeriodId
+            ? "Salvează modificarea"
+            : "Publică oferta";
+      }
+    });
+
+    function resetForm(clearFeedback = true) {
+      editingPeriodId = null;
+      formTitle.textContent = "Publică o ofertă";
+      publishButton.textContent = "Publică oferta";
+      editingNote.classList.remove("show");
+      accommodationSearch.disabled = false;
+      accommodationSelect.disabled = false;
+      addPeriodButton.disabled = false;
+
+      accommodationSelect.value = "";
+      accommodationSearch.value = "";
+      filteredAccommodations = [...accommodations];
+      renderAccommodationOptions();
+      renderAccommodationPreview(null);
+
+      periodsList.innerHTML = "";
+      addPeriodRow();
+
+      if (clearFeedback) {
+        clearMessage(formMessage);
+      }
+    }
+
+    resetFormButton.addEventListener("click", () => {
+      resetForm();
+    });
+
+    cancelEditTop.addEventListener("click", () => {
+      resetForm();
+    });
+
+    async function loadSavedPeriods() {
+      offersList.innerHTML =
+        '<div class="loading-state">Se încarcă ofertele...</div>';
+
+      const { data, error } = await db
+        .from("last_minute_periods")
+        .select("*")
+        .order("start_date", { ascending: true })
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error(error);
+        offersList.innerHTML = `
+          <div class="empty-state">
+            Ofertele nu au putut fi încărcate.
+          </div>
+        `;
+        return;
+      }
+
+      savedPeriods = Array.isArray(data) ? data : [];
+      renderSavedPeriods();
+    }
+
+    offersSearch.addEventListener("input", renderSavedPeriods);
+
+    function getPeriodStatus(period) {
+      const today = todayString();
+
+      if (!period.active) {
+        return {
+          text: "Inactivă",
+          className: "status-inactive"
+        };
+      }
+
+      if (period.end_date < today) {
+        return {
+          text: "Expirată",
+          className: "status-expired"
+        };
+      }
+
+      if (period.start_date > today) {
+        return {
+          text: "Programată",
+          className: "status-scheduled"
+        };
+      }
+
+      return {
+        text: "Activă",
+        className: "status-active"
+      };
+    }
+
+    function renderSavedPeriods() {
+      const query = offersSearch.value
+        .trim()
+        .toLowerCase();
+
+      const visiblePeriods = savedPeriods.filter(period => {
+        const accommodation =
+          getAccommodationById(period.accommodation_id);
+
+        const searchText = [
+          period.accommodation_id,
+          accommodation?.titleEn,
+          accommodation?.titleRo,
+          accommodation?.zone,
+          accommodation?.beachSlug,
+          period.start_date,
+          period.end_date
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        return searchText.includes(query);
+      });
+
+      offersSummary.textContent =
+        visiblePeriods.length === 1
+          ? "1 perioadă"
+          : `${visiblePeriods.length} perioade`;
+
+      if (!visiblePeriods.length) {
+        offersList.innerHTML = `
+          <div class="empty-state">
+            ${
+              savedPeriods.length
+                ? "Nu există rezultate pentru căutarea curentă."
+                : "Nu există încă oferte Last Minute."
+            }
+          </div>
+        `;
+        return;
+      }
+
+      const groups = new Map();
+
+      visiblePeriods.forEach(period => {
+        if (!groups.has(period.accommodation_id)) {
+          groups.set(period.accommodation_id, []);
+        }
+
+        groups.get(period.accommodation_id).push(period);
+      });
+
+      const sortedGroups = [...groups.entries()]
+        .sort(([idA], [idB]) => {
+          const accommodationA = getAccommodationById(idA);
+          const accommodationB = getAccommodationById(idB);
+
+          return getAccommodationLabel(
+            accommodationA || { id: idA }
+          ).localeCompare(
+            getAccommodationLabel(
+              accommodationB || { id: idB }
+            ),
+            "ro"
+          );
+        });
+
+      offersList.innerHTML = sortedGroups
+        .map(([accommodationId, periods]) => {
+          const accommodation =
+            getAccommodationById(accommodationId);
+
+          const title =
+            accommodation?.titleEn ||
+            accommodation?.titleRo ||
+            accommodationId;
+
+          const meta = [
+            accommodation?.zone,
+            accommodation?.beachSlug
+          ]
+            .filter(Boolean)
+            .join(" · ");
+
+          const image =
+            accommodation?.image || "";
+
+          return `
+            <article class="offer-group">
+              <header class="offer-group-header">
+                <img
+                  class="offer-thumb"
+                  src="${escapeAttribute(image)}"
+                  alt="${escapeAttribute(title)}"
+                >
+
+                <div>
+                  <h3>${escapeHtml(title)}</h3>
+                  <p>${escapeHtml(meta || accommodationId)}</p>
+                </div>
+
+                <span class="period-count">
+                  ${periods.length}
+                  ${periods.length === 1 ? "perioadă" : "perioade"}
+                </span>
+              </header>
+
+              <div class="stored-periods">
+                ${periods
+                  .sort((a, b) =>
+                    a.start_date.localeCompare(b.start_date)
+                  )
+                  .map(renderStoredPeriod)
+                  .join("")}
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+
+      bindStoredPeriodButtons();
+    }
+
+    function renderStoredPeriod(period) {
+      const status = getPeriodStatus(period);
+
+      const minimumNightsText =
+        period.minimum_nights
+          ? `Minimum ${period.minimum_nights} ${
+              Number(period.minimum_nights) === 1
+                ? "noapte"
+                : "nopți"
+            }`
+          : "Fără minimum specificat";
+
+      const priceTypeText =
+        period.price_type === "per_stay"
+          ? "pe sejur"
+          : "pe noapte";
+
+      return `
+        <div class="stored-period" data-period-id="${period.id}">
+          <div>
+            <strong>
+              ${escapeHtml(formatDate(period.start_date))}
+              –
+              ${escapeHtml(formatDate(period.end_date))}
+            </strong>
+            <small>${escapeHtml(minimumNightsText)}</small>
+          </div>
+
+          <div class="price-text">
+            €${escapeHtml(formatPrice(period.price))}
+            ${escapeHtml(priceTypeText)}
+          </div>
+
+          <span class="period-status ${status.className}">
+            ${status.text}
+          </span>
+
+          <div class="period-actions">
+            <button
+              class="small-button edit-button"
+              type="button"
+              data-action="edit"
+              data-id="${period.id}"
+            >
+              Modifică
+            </button>
+
+            <button
+              class="small-button toggle-button"
+              type="button"
+              data-action="toggle"
+              data-id="${period.id}"
+            >
+              ${period.active ? "Dezactivează" : "Activează"}
+            </button>
+
+            <button
+              class="small-button delete-button"
+              type="button"
+              data-action="delete"
+              data-id="${period.id}"
+            >
+              Șterge
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function bindStoredPeriodButtons() {
+      offersList
+        .querySelectorAll("[data-action]")
+        .forEach(button => {
+          button.addEventListener("click", async () => {
+            const id = Number(button.dataset.id);
+            const action = button.dataset.action;
+            const period =
+              savedPeriods.find(item => Number(item.id) === id);
+
+            if (!period) return;
+
+            if (action === "edit") {
+              startEditingPeriod(period);
+              return;
+            }
+
+            if (action === "toggle") {
+              await togglePeriod(period, button);
+              return;
+            }
+
+            if (action === "delete") {
+              await deletePeriod(period, button);
+            }
+          });
+        });
+    }
+
+    function startEditingPeriod(period) {
+      editingPeriodId = period.id;
+      formTitle.textContent = "Modifică perioada";
+      publishButton.textContent = "Salvează modificarea";
+      editingNote.classList.add("show");
+
+      accommodationSearch.value = "";
+      filteredAccommodations = [...accommodations];
+      renderAccommodationOptions();
+      accommodationSelect.value = period.accommodation_id;
+      accommodationSearch.disabled = true;
+      accommodationSelect.disabled = true;
+      addPeriodButton.disabled = true;
+
+      renderAccommodationPreview(
+        getAccommodationById(period.accommodation_id)
+      );
+
+      periodsList.innerHTML = "";
+      addPeriodRow(period);
+
+      clearMessage(formMessage);
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    async function togglePeriod(period, button) {
+      button.disabled = true;
+
+      const { error } = await db
+        .from("last_minute_periods")
+        .update({ active: !period.active })
+        .eq("id", period.id);
+
+      button.disabled = false;
+
+      if (error) {
+        alert("Perioada nu a putut fi actualizată.");
+        console.error(error);
+        return;
+      }
+
+      await loadSavedPeriods();
+    }
+
+    async function deletePeriod(period, button) {
+      const accommodation =
+        getAccommodationById(period.accommodation_id);
+
+      const title =
+        accommodation?.titleEn ||
+        accommodation?.titleRo ||
+        period.accommodation_id;
+
+      const confirmed = window.confirm(
+        `Ștergi definitiv perioada ${formatDate(period.start_date)} – ${formatDate(period.end_date)} pentru ${title}?`
+      );
+
+      if (!confirmed) return;
+
+      button.disabled = true;
+
+      const { error } = await db
+        .from("last_minute_periods")
+        .delete()
+        .eq("id", period.id);
+
+      button.disabled = false;
+
+      if (error) {
+        alert("Perioada nu a putut fi ștearsă.");
+        console.error(error);
+        return;
+      }
+
+      if (Number(editingPeriodId) === Number(period.id)) {
+        resetForm();
+      }
+
+      await loadSavedPeriods();
+    }
+
+    function formatPrice(value) {
+      const number = Number(value);
+
+      if (!Number.isFinite(number)) return value;
+
+      return new Intl.NumberFormat("ro-RO", {
+        minimumFractionDigits: Number.isInteger(number) ? 0 : 2,
+        maximumFractionDigits: 2
+      }).format(number);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function escapeAttribute(value) {
+      return escapeHtml(value);
+    }
+
+    addPeriodRow();
+    initializePage();
+  </script>
+</body>
+</html>

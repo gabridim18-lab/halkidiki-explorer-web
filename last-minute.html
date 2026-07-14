@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Discover active Last Minute accommodation offers in Halkidiki and Thessaloniki."
+  >
+
+  <title>Last Minute Offers | Halkidiki Explorer</title>
+
+  <style>
+    :root {
+      --navy: #071a33;
+      --navy-soft: #102b4d;
+      --blue: #087df1;
+      --blue-dark: #005ec7;
+      --sky: #eaf5ff;
+      --orange: #ff9f1c;
+      --orange-dark: #f26b0a;
+      --green: #16a35b;
+      --red: #e23c4a;
+      --text: #10213a;
+      --muted: #66758d;
+      --line: #dce7f1;
+      --surface: #ffffff;
+      --background: #f2f7fc;
+      --shadow: 0 18px 55px rgba(16, 45, 80, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(
+          circle at top left,
+          rgba(8, 125, 241, 0.14),
+          transparent 30%
+        ),
+        linear-gradient(
+          180deg,
+          #eaf5ff 0%,
+          var(--background) 42%,
+          #edf3f9 100%
+        );
+    }
+
+    button,
+    a {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* =========================
+       HERO
+    ========================= */
+
+    .lm-hero {
+      position: relative;
+      min-height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 80px 22px 70px;
+      color: white;
+      text-align: center;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(5, 22, 44, 0.28),
+          rgba(5, 22, 44, 0.82)
+        ),
+        url("images/beach_background.webp");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .lm-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(
+          circle at 20% 15%,
+          rgba(0, 192, 255, 0.28),
+          transparent 32%
+        ),
+        radial-gradient(
+          circle at 85% 80%,
+          rgba(255, 159, 28, 0.20),
+          transparent 30%
+        );
+      pointer-events: none;
+    }
+
+    .lm-home-link {
+      position: absolute;
+      top: 22px;
+      left: 22px;
+      z-index: 4;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 12px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 999px;
+      color: white;
+      background: rgba(7, 26, 51, 0.48);
+      backdrop-filter: blur(14px);
+      text-decoration: none;
+      font-weight: 850;
+      transition: 0.2s;
+    }
+
+    .lm-home-link:hover {
+      transform: translateY(-2px);
+      background: rgba(7, 26, 51, 0.68);
+    }
+
+    .lm-language {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      z-index: 5;
+    }
+
+    .lm-language-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 16px;
+      padding: 8px 11px;
+      color: var(--navy);
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+    }
+
+    .lm-language-button img,
+    .lm-language-option img {
+      width: 31px;
+      height: 31px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .lm-language-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 165px;
+      display: none;
+      overflow: hidden;
+      border-radius: 16px;
+      background: white;
+      box-shadow: 0 14px 38px rgba(0, 0, 0, 0.22);
+    }
+
+    .lm-language-menu.show {
+      display: block;
+    }
+
+    .lm-language-option {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      border: 0;
+      padding: 12px 14px;
+      color: var(--text);
+      background: white;
+      text-align: left;
+    }
+
+    .lm-language-option:hover {
+      background: #f2f7fc;
+    }
+
+    .lm-hero-content {
+      position: relative;
+      z-index: 2;
+      width: min(790px, 100%);
+      padding: 34px 30px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 38px;
+      background:
+        linear-gradient(
+          135deg,
+          rgba(0, 94, 255, 0.30),
+          rgba(7, 26, 51, 0.46)
+        );
+      backdrop-filter: blur(15px);
+      box-shadow: 0 26px 75px rgba(0, 0, 0, 0.34);
+    }
+
+    .lm-logo {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      margin-bottom: 14px;
+      filter: drop-shadow(0 13px 30px rgba(0, 0, 0, 0.38));
+    }
+
+    .lm-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      color: #fff1d3;
+      background: rgba(255, 159, 28, 0.22);
+      border: 1px solid rgba(255, 189, 91, 0.30);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .lm-hero h1 {
+      margin: 0 0 14px;
+      font-size: clamp(38px, 6vw, 68px);
+      line-height: 0.98;
+      letter-spacing: -1.8px;
+    }
+
+    .lm-hero p {
+      max-width: 650px;
+      margin: 0 auto;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    /* =========================
+       OFFERS SECTION
+    ========================= */
+
+    .lm-main {
+      padding: 42px 0 70px;
+    }
+
+    .lm-section-heading {
+      width: min(1280px, calc(100% - 34px));
+      margin: 0 auto 24px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .lm-section-heading h2 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 42px);
+    }
+
+    .lm-section-heading p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .lm-count {
+      flex-shrink: 0;
+      padding: 11px 15px;
+      border-radius: 999px;
+      color: var(--blue-dark);
+      background: var(--sky);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .lm-carousel-shell {
+      position: relative;
+      width: 100%;
+    }
+
+    .lm-carousel {
+      width: 100%;
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      padding: 12px max(24px, calc((100vw - 1040px) / 2)) 28px;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .lm-carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .lm-arrow {
+      position: absolute;
+      z-index: 12;
+      top: 50%;
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: var(--navy);
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 10px 30px rgba(8, 30, 58, 0.20);
+      font-size: 32px;
+      transform: translateY(-50%);
+      transition: 0.2s;
+    }
+
+    .lm-arrow:hover {
+      transform: translateY(-50%) scale(1.07);
+    }
+
+    .lm-arrow:disabled {
+      opacity: 0.35;
+      cursor: default;
+      transform: translateY(-50%);
+    }
+
+    .lm-arrow-left {
+      left: 18px;
+    }
+
+    .lm-arrow-right {
+      right: 18px;
+    }
+
+    .lm-offer-card {
+      flex: 0 0 min(980px, calc(100vw - 110px));
+      scroll-snap-align: center;
+      overflow: hidden;
+      border: 1px solid rgba(15, 56, 100, 0.09);
+      border-radius: 32px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    /* =========================
+       COMPACT OFFER CARD
+    ========================= */
+
+    .lm-gallery {
+      display: grid;
+      grid-template-rows: 390px 190px;
+      gap: 6px;
+      background: #dce8f3;
+    }
+
+    .lm-gallery-main,
+    .lm-gallery-secondary,
+    .lm-gallery-beach {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+      background: #dce8f3;
+    }
+
+    .lm-gallery-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .lm-gallery img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .lm-offer-card:hover .lm-gallery img {
+      transform: scale(1.02);
+    }
+
+    .lm-gallery-main::after,
+    .lm-gallery-secondary::after,
+    .lm-gallery-beach::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: linear-gradient(
+        to top,
+        rgba(7, 26, 51, 0.82) 0%,
+        rgba(7, 26, 51, 0.14) 45%,
+        transparent 68%
+      );
+    }
+
+    .lm-main-title {
+      position: absolute;
+      z-index: 4;
+      left: 22px;
+      right: 22px;
+      bottom: 20px;
+      max-width: 760px;
+      margin: 0;
+      color: white;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.08;
+      text-shadow: 0 3px 14px rgba(0, 0, 0, 0.65);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+
+    .lm-last-minute-badge {
+      position: absolute;
+      z-index: 5;
+      top: 18px;
+      right: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      color: white;
+      background: rgba(7, 26, 51, 0.72);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 9px 24px rgba(0, 0, 0, 0.22);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.45px;
+      text-transform: uppercase;
+    }
+
+    .lm-price-corner {
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      left: 0;
+      width: 165px;
+      height: 112px;
+      padding: 15px 0 0 16px;
+      color: white;
+      background: linear-gradient(
+        135deg,
+        var(--red),
+        #ff7a00
+      );
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+      filter: drop-shadow(7px 8px 12px rgba(0, 0, 0, 0.22));
+    }
+
+    .lm-price-corner strong {
+      display: block;
+      max-width: 95px;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .lm-price-corner small {
+      display: block;
+      max-width: 92px;
+      margin-top: 5px;
+      font-size: 11px;
+      font-weight: 850;
+      line-height: 1.15;
+    }
+
+    .lm-photo-label,
+    .lm-beach-name {
+      position: absolute;
+      z-index: 4;
+      left: 15px;
+      right: 15px;
+      bottom: 13px;
+      color: white;
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.2;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.72);
+    }
+
+    .lm-beach-rating,
+    .lm-child-friendly {
+      position: absolute;
+      z-index: 5;
+      top: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      border-radius: 999px;
+      color: var(--navy);
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 7px 20px rgba(7, 26, 51, 0.22);
+      backdrop-filter: blur(8px);
+      font-weight: 950;
+    }
+
+    .lm-beach-rating {
+      right: 12px;
+      gap: 5px;
+      padding: 7px 11px;
+      font-size: 13px;
+    }
+
+    .lm-beach-rating span:first-child {
+      color: #f0a500;
+    }
+
+    .lm-child-friendly {
+      left: 12px;
+      width: 36px;
+      padding: 0;
+      font-size: 18px;
+    }
+
+    /* =========================
+       COMPACT CARD INFORMATION
+    ========================= */
+
+    .lm-card-content {
+      padding: 17px 22px 23px;
+    }
+
+    .lm-offer-meta {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .lm-meta-item {
+      min-width: 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+    }
+
+    .lm-meta-icon {
+      flex: 0 0 auto;
+      margin-top: 1px;
+      font-size: 18px;
+    }
+
+    .lm-meta-item strong,
+    .lm-meta-item span {
+      display: block;
+    }
+
+    .lm-meta-item strong {
+      margin-bottom: 3px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: 0.55px;
+      text-transform: uppercase;
+    }
+
+    .lm-meta-item span {
+      overflow: hidden;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.25;
+      text-overflow: ellipsis;
+    }
+
+    .lm-meta-period {
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+  .lm-compact-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  margin-top: 13px;
+
+  border: 1px solid var(--line);
+  border-radius: 17px;
+
+  background: #f8fbfe;
+}
+
+.lm-compact-fact {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 14px 10px;
+
+  text-align: center;
+  white-space: nowrap;
+}
+
+.lm-compact-fact + .lm-compact-fact {
+  border-left: 1px solid var(--line);
+}
+
+.lm-compact-fact-label {
+  overflow: hidden;
+
+  color: var(--muted);
+
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+
+  text-overflow: ellipsis;
+}
+
+.lm-compact-fact-value {
+  flex-shrink: 0;
+
+  margin: 0;
+
+  color: var(--navy);
+
+  font-size: 17px;
+  font-weight: 950;
+  line-height: 1.1;
+}
+
+    .lm-card-actions {
+      width: min(560px, 100%);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 18px auto 0;
+    }
+
+    .lm-primary-action,
+    .lm-secondary-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 52px;
+      border: 0;
+      border-radius: 16px;
+      padding: 13px 18px;
+      text-decoration: none;
+      font-weight: 900;
+      transition: 0.2s;
+    }
+
+    .lm-primary-action {
+      color: white;
+      background: linear-gradient(
+        135deg,
+        var(--blue),
+        var(--blue-dark)
+      );
+      box-shadow: 0 12px 28px rgba(8, 125, 241, 0.24);
+    }
+
+    .lm-secondary-action {
+      color: white;
+      background: linear-gradient(
+        135deg,
+        #17b45f,
+        #0b9148
+      );
+      box-shadow: 0 12px 28px rgba(11, 145, 72, 0.22);
+    }
+
+    .lm-primary-action:hover,
+    .lm-secondary-action:hover {
+      transform: translateY(-2px);
+    }
+
+    /* =========================
+       DOTS / STATES
+    ========================= */
+
+    .lm-dots {
+      width: min(1280px, calc(100% - 34px));
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 2px auto 0;
+    }
+
+    .lm-dot {
+      width: 9px;
+      height: 9px;
+      border: 0;
+      border-radius: 999px;
+      padding: 0;
+      background: #b8c8d8;
+      transition: 0.25s;
+    }
+
+    .lm-dot.active {
+      width: 28px;
+      background: var(--blue);
+    }
+
+    .lm-loading,
+    .lm-empty,
+    .lm-error {
+      width: min(760px, calc(100% - 34px));
+      margin: 24px auto;
+      padding: 36px 24px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .lm-loading-icon,
+    .lm-state-icon {
+      width: 70px;
+      height: 70px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 17px;
+      border-radius: 23px;
+      color: white;
+      background: linear-gradient(
+        135deg,
+        var(--blue),
+        #04b9ee
+      );
+      font-size: 31px;
+      box-shadow: 0 12px 28px rgba(8, 125, 241, 0.22);
+    }
+
+    .lm-loading-icon {
+      animation: lmPulse 1.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes lmPulse {
+      to {
+        transform: scale(1.06);
+        opacity: 0.72;
+      }
+    }
+
+    .lm-loading h3,
+    .lm-empty h3,
+    .lm-error h3 {
+      margin: 0 0 9px;
+      font-size: 24px;
+    }
+
+    .lm-loading p,
+    .lm-empty p,
+    .lm-error p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .lm-retry {
+      margin-top: 18px;
+      border: 0;
+      border-radius: 15px;
+      padding: 12px 17px;
+      color: white;
+      background: var(--blue);
+      font-weight: 900;
+    }
+
+    .lm-swipe-hint {
+      width: min(1280px, calc(100% - 34px));
+      margin: 0 auto 10px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    .lm-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      padding: 28px max(24px, calc((100vw - 1280px) / 2));
+      color: rgba(255, 255, 255, 0.78);
+      background: var(--navy);
+      font-size: 13px;
+    }
+
+    .lm-footer-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .lm-footer a {
+      color: white;
+      text-decoration: none;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 900px) {
+      .lm-offer-card {
+        flex-basis: calc(100vw - 44px);
+      }
+
+      .lm-carousel {
+        padding-left: 22px;
+        padding-right: 22px;
+      }
+
+      .lm-gallery {
+        grid-template-rows: 340px 165px;
+      }
+
+      .lm-arrow {
+        display: none;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .lm-hero {
+        min-height: 500px;
+        padding: 90px 14px 50px;
+      }
+
+      .lm-home-link {
+        top: 14px;
+        left: 14px;
+        padding: 10px 13px;
+        font-size: 13px;
+      }
+
+      .lm-language {
+        top: 14px;
+        right: 14px;
+      }
+
+      .lm-hero-content {
+        padding: 27px 18px;
+        border-radius: 29px;
+      }
+
+      .lm-logo {
+        width: 120px;
+        height: 120px;
+      }
+
+      .lm-hero p {
+        font-size: 16px;
+      }
+
+      .lm-main {
+        padding-top: 28px;
+      }
+
+      .lm-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .lm-carousel {
+        gap: 14px;
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .lm-offer-card {
+        flex-basis: calc(100vw - 28px);
+        border-radius: 25px;
+      }
+
+      .lm-gallery {
+        grid-template-rows: 260px 135px;
+        gap: 4px;
+      }
+
+      .lm-gallery-bottom {
+        gap: 4px;
+      }
+
+      .lm-main-title {
+        left: 15px;
+        right: 15px;
+        bottom: 14px;
+        font-size: 21px;
+      }
+
+      .lm-last-minute-badge {
+        top: 12px;
+        right: 12px;
+        max-width: 160px;
+        padding: 8px 10px;
+        font-size: 9px;
+      }
+
+      .lm-price-corner {
+        width: 132px;
+        height: 91px;
+        padding: 12px 0 0 12px;
+      }
+
+      .lm-price-corner strong {
+        max-width: 78px;
+        font-size: 19px;
+      }
+
+      .lm-price-corner small {
+        max-width: 76px;
+        margin-top: 4px;
+        font-size: 9px;
+      }
+
+      .lm-photo-label,
+      .lm-beach-name {
+        left: 10px;
+        right: 10px;
+        bottom: 9px;
+        font-size: 12px;
+      }
+
+      .lm-beach-rating,
+      .lm-child-friendly {
+        top: 8px;
+        min-height: 30px;
+      }
+
+      .lm-beach-rating {
+        right: 8px;
+        padding: 5px 8px;
+        font-size: 11px;
+      }
+
+      .lm-child-friendly {
+        left: 8px;
+        width: 30px;
+        font-size: 15px;
+      }
+
+      .lm-card-content {
+        padding: 14px 13px 18px;
+      }
+
+      .lm-offer-meta {
+        grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+        gap: 8px;
+        padding-bottom: 11px;
+      }
+
+      .lm-meta-item {
+        gap: 6px;
+      }
+
+      .lm-meta-icon {
+        font-size: 15px;
+      }
+
+      .lm-meta-item strong {
+        font-size: 8px;
+      }
+
+      .lm-meta-item span {
+        font-size: 11px;
+      }
+
+    .lm-compact-facts {
+  margin-top: 10px;
+  border-radius: 14px;
+}
+
+.lm-compact-fact {
+  gap: 5px;
+
+  padding: 12px 5px;
+
+  justify-content: center;
+
+  text-align: center;
+}
+
+.lm-compact-fact-label,
+.lm-compact-fact-value {
+  font-size: 15px;
+}
+
+      .lm-card-actions {
+        gap: 9px;
+        margin-top: 14px;
+      }
+
+      .lm-primary-action,
+      .lm-secondary-action {
+        min-height: 48px;
+        border-radius: 14px;
+        padding: 11px 14px;
+        font-size: 13px;
+      }
+
+      .lm-footer {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <header class="lm-hero">
+    <a
+      class="lm-home-link"
+      href="index.html"
+      aria-label="Back to home"
+    >
+      <span>←</span>
+      <span data-i18n="home">Home</span>
+    </a>
+
+    <div class="lm-language">
+      <button
+        id="languageButton"
+        class="lm-language-button"
+        type="button"
+        aria-label="Choose language"
+      >
+        <img
+          id="currentFlag"
+          src="images/flag_en.png"
+          alt=""
+        >
+        <span>▼</span>
+      </button>
+
+      <div
+        id="languageMenu"
+        class="lm-language-menu"
+      >
+        <button
+          class="lm-language-option"
+          type="button"
+          data-language="en"
+        >
+          <img src="images/flag_en.png" alt="">
+          <span>English</span>
+        </button>
+
+        <button
+          class="lm-language-option"
+          type="button"
+          data-language="ro"
+        >
+          <img src="images/flag_ro.png" alt="">
+          <span>Română</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="lm-hero-content">
+      <img
+        class="lm-logo"
+        src="images/logo.png"
+        alt="Halkidiki Explorer"
+      >
+
+      <div class="lm-kicker">
+        <span>⚡</span>
+        <span data-i18n="limitedAvailability">
+          Limited availability
+        </span>
+      </div>
+
+      <h1 data-i18n="pageTitle">
+        Last Minute Offers
+      </h1>
+
+      <p data-i18n="pageSubtitle">
+        Discover special accommodation prices for limited available periods in Halkidiki and Thessaloniki.
+      </p>
+    </div>
+  </header>
+
+  <main class="lm-main">
+    <div class="lm-section-heading">
+      <div>
+        <h2 data-i18n="availableOffers">
+          Available offers
+        </h2>
+
+        <p data-i18n="availableOffersSubtitle">
+          Swipe through the cards and choose the period that suits your trip.
+        </p>
+      </div>
+
+      <div
+        id="offersCount"
+        class="lm-count hidden"
+      ></div>
+    </div>
+
+    <p
+      id="swipeHint"
+      class="lm-swipe-hint hidden"
+      data-i18n="swipeHint"
+    >
+      Swipe left or right to see more offers.
+    </p>
+
+    <section
+      id="loadingState"
+      class="lm-loading"
+    >
+      <div class="lm-loading-icon">⚡</div>
+
+      <h3 data-i18n="loadingTitle">
+        Loading Last Minute offers
+      </h3>
+
+      <p data-i18n="loadingText">
+        We are checking the latest active periods.
+      </p>
+    </section>
+
+    <section
+      id="emptyState"
+      class="lm-empty hidden"
+    >
+      <div class="lm-state-icon">🏖️</div>
+
+      <h3 data-i18n="emptyTitle">
+        No active offers right now
+      </h3>
+
+      <p data-i18n="emptyText">
+        New Last Minute periods will appear here as soon as they become available.
+      </p>
+    </section>
+
+    <section
+      id="errorState"
+      class="lm-error hidden"
+    >
+      <div class="lm-state-icon">!</div>
+
+      <h3 data-i18n="errorTitle">
+        The offers could not be loaded
+      </h3>
+
+      <p data-i18n="errorText">
+        Please check your internet connection and try again.
+      </p>
+
+      <button
+        id="retryButton"
+        class="lm-retry"
+        type="button"
+        data-i18n="retry"
+      >
+        Try again
+      </button>
+    </section>
+
+    <section
+      id="carouselShell"
+      class="lm-carousel-shell hidden"
+      aria-label="Last Minute accommodation offers"
+    >
+      <button
+        id="previousButton"
+        class="lm-arrow lm-arrow-left"
+        type="button"
+        aria-label="Previous offer"
+      >
+        ‹
+      </button>
+
+      <div
+        id="offersCarousel"
+        class="lm-carousel"
+      ></div>
+
+      <button
+        id="nextButton"
+        class="lm-arrow lm-arrow-right"
+        type="button"
+        aria-label="Next offer"
+      >
+        ›
+      </button>
+    </section>
+
+    <div
+      id="carouselDots"
+      class="lm-dots hidden"
+    ></div>
+  </main>
+
+  <footer class="lm-footer">
+    <div>
+      © 2026 Halkidiki Explorer.
+      <span data-i18n="allRightsReserved">
+        All rights reserved.
+      </span>
+    </div>
+
+    <div class="lm-footer-links">
+      <a href="privacy.html" data-i18n="privacy">
+        Privacy Policy
+      </a>
+
+      <a href="terms.html" data-i18n="terms">
+        Terms of Use
+      </a>
+
+      <a href="index.html" data-i18n="home">
+        Home
+      </a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    /* =====================================================
+       CONFIGURATION
+    ===================================================== */
+
+    const SUPABASE_URL =
+      "https://bjywllpzvckllydflxbd.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_2CYR00gmzcodRcOqbjIBIQ_X450DFQh";
+
+    const ACCOMMODATIONS_INDEX_URL =
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/refs/heads/main/data/accommodations/accommodations-index-v2.json";
+
+    const ACCOMMODATION_DETAILS_BASE_URL =
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations";
+
+    const BEACHES_INDEX_URL =
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/refs/heads/main/data/beaches/beaches-index.json";
+
+    const BEACH_IMAGES_BASE_URL =
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches";
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
+
+    /* =====================================================
+       TRANSLATIONS
+    ===================================================== */
+
+    const translations = {
+      en: {
+        home: "Home",
+        limitedAvailability: "Limited availability",
+        pageTitle: "Last Minute Offers",
+        pageSubtitle:
+          "Discover special accommodation prices for limited available periods in Halkidiki and Thessaloniki.",
+        availableOffers: "Available offers",
+        availableOffersSubtitle:
+          "Swipe through the cards and choose the period that suits your trip.",
+        swipeHint:
+          "Swipe left or right to see more offers.",
+        loadingTitle: "Loading Last Minute offers",
+        loadingText:
+          "We are checking the latest active periods.",
+        emptyTitle: "No active offers right now",
+        emptyText:
+          "New Last Minute periods will appear here as soon as they become available.",
+        errorTitle: "The offers could not be loaded",
+        errorText:
+          "Please check your internet connection and try again.",
+        retry: "Try again",
+        offers: "offers",
+        offer: "offer",
+        lastMinute: "Last Minute",
+        lastMinuteOffer: "Last Minute Offer",
+        nearestPeriod: "Nearest available period",
+        upToGuests: "Up to {count} guests",
+        childFriendly: "Suitable for children",
+        zoneLabel: "Zone",
+        offerPeriod: "Period",
+        period: "period",
+        periods: "periods",
+        guests: "Guests",
+        bedrooms: "Bedrooms",
+        bathrooms: "Bathrooms",
+        fromBeach: "Beach",
+        location: "Location",
+        availability: "Promotional availability",
+        available: "Available",
+        minimumOneNight: "Minimum 1 night",
+        minimumNights: "Minimum {count} nights",
+        noMinimum: "No minimum stay specified",
+        perNight: "per night",
+        perStay: "per stay",
+        viewAccommodation: "View accommodation",
+        requestOffer: "Request this offer",
+        requestMessage:
+            "Hello! I am interested in the Last Minute offer for {title}, available from {start} to {end}, at {price}.\n\nThis message was sent through the Halkidiki Explorer app.",
+        distanceMeters: "{count} m",
+        distanceKilometers: "{count} km",
+        distanceUnavailable: "Not specified",
+        allRightsReserved: "All rights reserved.",
+        privacy: "Privacy Policy",
+        terms: "Terms of Use"
+      },
+
+      ro: {
+        home: "Acasă",
+        limitedAvailability: "Disponibilitate limitată",
+        pageTitle: "Oferte Last Minute",
+        pageSubtitle:
+          "Descoperă prețuri speciale pentru perioadele libere ale cazărilor din Halkidiki și Salonic.",
+        availableOffers: "Oferte disponibile",
+        availableOffersSubtitle:
+          "Glisează printre carduri și alege perioada potrivită pentru călătoria ta.",
+        swipeHint:
+          "Glisează spre stânga sau dreapta pentru a vedea mai multe oferte.",
+        loadingTitle: "Se încarcă ofertele Last Minute",
+        loadingText:
+          "Verificăm cele mai recente perioade active.",
+        emptyTitle: "Momentan nu există oferte active",
+        emptyText:
+          "Noile perioade Last Minute vor apărea aici imediat ce devin disponibile.",
+        errorTitle: "Ofertele nu au putut fi încărcate",
+        errorText:
+          "Verifică legătura la internet și încearcă din nou.",
+        retry: "Încearcă din nou",
+        offers: "oferte",
+        offer: "ofertă",
+        lastMinute: "Last Minute",
+        lastMinuteOffer: "Ofertă Last Minute",
+        nearestPeriod: "Cea mai apropiată perioadă",
+        upToGuests: "Până la {count} persoane",
+        childFriendly: "Potrivită pentru copii",
+        zoneLabel: "Zonă",
+        offerPeriod: "Perioadă",
+        period: "perioadă",
+        periods: "perioade",
+        guests: "Persoane",
+        bedrooms: "Dormitoare",
+        bathrooms: "Băi",
+        fromBeach: "Plajă",
+        location: "Locație",
+        availability: "Disponibilitate promoțională",
+        available: "Disponibilă",
+        minimumOneNight: "Minimum 1 noapte",
+        minimumNights: "Minimum {count} nopți",
+        noMinimum: "Fără sejur minim specificat",
+        perNight: "pe noapte",
+        perStay: "pe sejur",
+        viewAccommodation: "Vezi cazarea",
+        requestOffer: "Solicită oferta",
+        requestMessage:
+            "Hello! I am interested in the Last Minute offer for {title}, available from {start} to {end}, at {price}.\n\nThis message was sent through the Halkidiki Explorer app.",
+        distanceMeters: "{count} m",
+        distanceKilometers: "{count} km",
+        distanceUnavailable: "Nespecificată",
+        allRightsReserved: "Toate drepturile rezervate.",
+        privacy: "Politica de confidențialitate",
+        terms: "Termeni de utilizare"
+      }
+    };
+
+    const queryLanguage =
+      new URLSearchParams(window.location.search)
+        .get("lang");
+
+    let currentLanguage =
+      queryLanguage === "ro" || queryLanguage === "en"
+        ? queryLanguage
+        : localStorage.getItem("language") === "ro"
+          ? "ro"
+          : "en";
+
+    function t(key, replacements = {}) {
+      let text =
+        translations[currentLanguage][key] ??
+        translations.en[key] ??
+        key;
+
+      Object.entries(replacements).forEach(
+        ([placeholder, value]) => {
+          text = text.replaceAll(
+            `{${placeholder}}`,
+            String(value)
+          );
+        }
+      );
+
+      return text;
+    }
+
+    function applyStaticTranslations() {
+      document.documentElement.lang = currentLanguage;
+
+      document
+        .querySelectorAll("[data-i18n]")
+        .forEach(element => {
+          const key = element.dataset.i18n;
+          element.textContent = t(key);
+        });
+
+      document.getElementById("currentFlag").src =
+        currentLanguage === "ro"
+          ? "images/flag_ro.png"
+          : "images/flag_en.png";
+
+      document.title =
+        currentLanguage === "ro"
+          ? "Oferte Last Minute | Halkidiki Explorer"
+          : "Last Minute Offers | Halkidiki Explorer";
+    }
+
+    /* =====================================================
+       ELEMENTS / STATE
+    ===================================================== */
+
+    const loadingState =
+      document.getElementById("loadingState");
+
+    const emptyState =
+      document.getElementById("emptyState");
+
+    const errorState =
+      document.getElementById("errorState");
+
+    const carouselShell =
+      document.getElementById("carouselShell");
+
+    const offersCarousel =
+      document.getElementById("offersCarousel");
+
+    const carouselDots =
+      document.getElementById("carouselDots");
+
+    const offersCount =
+      document.getElementById("offersCount");
+
+    const swipeHint =
+      document.getElementById("swipeHint");
+
+    const previousButton =
+      document.getElementById("previousButton");
+
+    const nextButton =
+      document.getElementById("nextButton");
+
+    let offerGroups = [];
+    let currentCardIndex = 0;
+    let scrollTimer = null;
+
+    /* =====================================================
+       LANGUAGE MENU
+    ===================================================== */
+
+    const languageButton =
+      document.getElementById("languageButton");
+
+    const languageMenu =
+      document.getElementById("languageMenu");
+
+    languageButton.addEventListener("click", event => {
+      event.stopPropagation();
+      languageMenu.classList.toggle("show");
+    });
+
+    document
+      .querySelectorAll(".lm-language-option")
+      .forEach(button => {
+        button.addEventListener("click", () => {
+          const language =
+            button.dataset.language === "ro"
+              ? "ro"
+              : "en";
+
+          localStorage.setItem("language", language);
+          currentLanguage = language;
+
+          languageMenu.classList.remove("show");
+          applyStaticTranslations();
+          renderOffers();
+        });
+      });
+
+    document.addEventListener("click", () => {
+      languageMenu.classList.remove("show");
+    });
+
+    /* =====================================================
+       DATA LOADING
+    ===================================================== */
+
+    function getTodayString() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    async function loadOffers() {
+      setViewState("loading");
+
+      try {
+        const today = getTodayString();
+
+        /*
+          Client-side filters are intentionally included,
+          even though RLS already protects public access.
+          This keeps the public page limited to active and
+          non-expired periods even if an admin session exists
+          in the same browser.
+        */
+        const {
+          data: periods,
+          error: periodsError
+        } = await supabaseClient
+          .from("last_minute_periods")
+          .select("*")
+          .eq("active", true)
+          .gte("end_date", today)
+          .order("start_date", { ascending: true });
+
+        if (periodsError) {
+          throw periodsError;
+        }
+
+        if (!Array.isArray(periods) || !periods.length) {
+          offerGroups = [];
+          setViewState("empty");
+          return;
+        }
+
+        const indexResponse = await fetch(
+          `${ACCOMMODATIONS_INDEX_URL}?v=${Date.now()}`,
+          { cache: "no-store" }
+        );
+
+        if (!indexResponse.ok) {
+          throw new Error(
+            "The accommodation index could not be loaded."
+          );
+        }
+
+        const accommodationsIndex =
+          await indexResponse.json();
+
+        if (!Array.isArray(accommodationsIndex)) {
+          throw new Error(
+            "The accommodation index has an invalid format."
+          );
+        }
+
+        let beachesIndex = [];
+
+        try {
+          const beachesResponse = await fetch(
+            `${BEACHES_INDEX_URL}?v=${Date.now()}`,
+            { cache: "no-store" }
+          );
+
+          if (beachesResponse.ok) {
+            const beachData = await beachesResponse.json();
+
+            if (Array.isArray(beachData)) {
+              beachesIndex = beachData;
+            }
+          }
+        } catch (beachError) {
+          console.warn(
+            "The beaches index could not be loaded.",
+            beachError
+          );
+        }
+
+        const beachesMap = new Map(
+          beachesIndex
+            .filter(beach => beach && beach.id)
+            .map(beach => [
+              normalizeDataId(beach.id),
+              beach
+            ])
+        );
+
+        const indexMap = new Map(
+          accommodationsIndex
+            .filter(item => item && item.id)
+            .map(item => [item.id, item])
+        );
+
+        const groupedPeriods = new Map();
+
+        periods.forEach(period => {
+          if (!groupedPeriods.has(period.accommodation_id)) {
+            groupedPeriods.set(
+              period.accommodation_id,
+              []
+            );
+          }
+
+          groupedPeriods
+            .get(period.accommodation_id)
+            .push(period);
+        });
+
+        const detailRequests =
+          [...groupedPeriods.entries()].map(
+            async ([accommodationId, groupPeriods]) => {
+              const indexItem =
+                indexMap.get(accommodationId) || {
+                  id: accommodationId
+                };
+
+              let details = null;
+
+              try {
+                const detailsResponse = await fetch(
+                  `${ACCOMMODATION_DETAILS_BASE_URL}/${encodeURIComponent(accommodationId)}/index.json?v=${Date.now()}`,
+                  { cache: "no-store" }
+                );
+
+                if (detailsResponse.ok) {
+                  details = await detailsResponse.json();
+                }
+              } catch (error) {
+                console.warn(
+                  `Details unavailable for ${accommodationId}`,
+                  error
+                );
+              }
+
+              const accommodation = {
+                ...indexItem,
+                ...(details || {}),
+                id: accommodationId
+              };
+
+              const sortedPeriods =
+                [...groupPeriods].sort(
+                  (a, b) =>
+                    a.start_date.localeCompare(
+                      b.start_date
+                    )
+                );
+
+              const beach =
+                beachesMap.get(
+                  normalizeDataId(
+                    accommodation.beachSlug
+                  )
+                ) || null;
+
+              return {
+                accommodation,
+                beach,
+                periods: sortedPeriods,
+                nearestStart:
+                  sortedPeriods[0]?.start_date || ""
+              };
+            }
+          );
+
+        offerGroups =
+          (await Promise.all(detailRequests))
+            .sort(
+              (a, b) =>
+                a.nearestStart.localeCompare(
+                  b.nearestStart
+                )
+            );
+
+        if (!offerGroups.length) {
+          setViewState("empty");
+          return;
+        }
+
+        renderOffers();
+        setViewState("offers");
+      } catch (error) {
+        console.error(error);
+        setViewState("error");
+      }
+    }
+
+    function setViewState(state) {
+      loadingState.classList.toggle(
+        "hidden",
+        state !== "loading"
+      );
+
+      emptyState.classList.toggle(
+        "hidden",
+        state !== "empty"
+      );
+
+      errorState.classList.toggle(
+        "hidden",
+        state !== "error"
+      );
+
+      carouselShell.classList.toggle(
+        "hidden",
+        state !== "offers"
+      );
+
+      carouselDots.classList.toggle(
+        "hidden",
+        state !== "offers" ||
+        offerGroups.length <= 1
+      );
+
+      offersCount.classList.toggle(
+        "hidden",
+        state !== "offers"
+      );
+
+      swipeHint.classList.toggle(
+        "hidden",
+        state !== "offers" ||
+        offerGroups.length <= 1
+      );
+    }
+
+    /* =====================================================
+       RENDERING
+    ===================================================== */
+
+    function renderOffers() {
+      if (!offerGroups.length) {
+        return;
+      }
+
+      offersCount.textContent =
+        `${offerGroups.length} ${
+          offerGroups.length === 1
+            ? t("offer")
+            : t("offers")
+        }`;
+
+      offersCarousel.innerHTML =
+        offerGroups
+          .map((group, index) =>
+            renderOfferCard(group, index)
+          )
+          .join("");
+
+      carouselDots.innerHTML =
+        offerGroups
+          .map(
+            (_, index) => `
+              <button
+                class="lm-dot ${
+                  index === currentCardIndex
+                    ? "active"
+                    : ""
+                }"
+                type="button"
+                data-index="${index}"
+                aria-label="Offer ${index + 1}"
+              ></button>
+            `
+          )
+          .join("");
+
+      bindCardActions();
+      bindDots();
+
+      currentCardIndex = Math.min(
+        currentCardIndex,
+        offerGroups.length - 1
+      );
+
+      updateCarouselControls();
+    }
+
+    function renderOfferCard(group, index) {
+      const accommodation = group.accommodation;
+      const beach = group.beach;
+      const nearestPeriod = group.periods[0];
+
+      const title =
+        currentLanguage === "ro"
+          ? accommodation.titleRo ||
+            accommodation.titleEn ||
+            accommodation.id
+          : accommodation.titleEn ||
+            accommodation.titleRo ||
+            accommodation.id;
+
+      const images =
+        getAccommodationImages(accommodation);
+
+      const mainImage =
+        images[0] ||
+        accommodation.image ||
+        "images/beach_background.webp";
+
+      const secondImage =
+        images[1] ||
+        images[0] ||
+        accommodation.image ||
+        "images/beach_background.webp";
+
+      const beachImage =
+        getBeachImageUrl(beach) ||
+        images[2] ||
+        secondImage;
+
+      const beachName =
+        getBeachName(
+          beach,
+          accommodation.beachSlug
+        );
+
+      const zoneName =
+        humanizeLocation(
+          accommodation.zone || beach?.zone
+        ) || t("location");
+
+      const guests =
+        positiveNumber(accommodation.guests);
+
+      const bedrooms =
+        positiveNumber(accommodation.bedrooms);
+
+      const bathrooms =
+        positiveNumber(accommodation.bathrooms);
+
+      const distance =
+        getDistanceText(accommodation);
+
+      const rating =
+        positiveNumber(beach?.rating);
+
+      const isChildFriendly =
+        beach?.suitableForChildren === true;
+
+      const phone =
+        normalizePhone(accommodation.phone);
+
+      const requestUrl =
+        phone
+          ? buildWhatsAppUrl(
+              phone,
+              title,
+              nearestPeriod
+            )
+          : `accommodation.html?id=${encodeURIComponent(accommodation.id)}&offerId=${encodeURIComponent(nearestPeriod.id)}`;
+
+      const requestTarget =
+        phone ? "_blank" : "_self";
+
+      const requestRel =
+        phone ? 'rel="noopener noreferrer"' : "";
+
+      const priceTypeText =
+        nearestPeriod.price_type === "per_stay"
+          ? t("perStay")
+          : t("perNight");
+
+      const minimumText =
+        getMinimumStayText(nearestPeriod);
+
+      return `
+        <article
+          class="lm-offer-card"
+          data-card-index="${index}"
+        >
+          <div class="lm-gallery">
+            <div class="lm-gallery-main">
+              <img
+                src="${escapeAttribute(mainImage)}"
+                alt="${escapeAttribute(title)}"
+                loading="${index === 0 ? "eager" : "lazy"}"
+                onerror="this.onerror=null;this.src='images/beach_background.webp'"
+              >
+
+              <div class="lm-price-corner">
+                <strong>
+                  ${escapeHtml(formatPrice(nearestPeriod.price))}
+                </strong>
+                <small>${escapeHtml(priceTypeText)}</small>
+              </div>
+
+              <div class="lm-last-minute-badge">
+                <span>⚡</span>
+                <span>
+                  ${escapeHtml(t("lastMinuteOffer"))}
+                </span>
+              </div>
+
+              <h3 class="lm-main-title">
+                ${escapeHtml(title)}
+              </h3>
+            </div>
+
+            <div class="lm-gallery-bottom">
+              <div class="lm-gallery-secondary">
+                <img
+                  src="${escapeAttribute(secondImage)}"
+                  alt="${escapeAttribute(title)}"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='${escapeAttribute(mainImage)}'"
+                >
+
+                <div class="lm-photo-label">
+                  ${escapeHtml(
+                    guests
+                      ? t("upToGuests", { count: guests })
+                      : title
+                  )}
+                </div>
+              </div>
+
+              <div
+                class="lm-gallery-beach"
+                aria-label="${escapeAttribute(beachName)}"
+              >
+                <img
+                  src="${escapeAttribute(beachImage)}"
+                  alt="${escapeAttribute(beachName)}"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='${escapeAttribute(secondImage)}'"
+                >
+
+                ${
+                  isChildFriendly
+                    ? `
+                      <div
+                        class="lm-child-friendly"
+                        role="img"
+                        aria-label="${escapeAttribute(t("childFriendly"))}"
+                        title="${escapeAttribute(t("childFriendly"))}"
+                      >
+                        👶
+                      </div>
+                    `
+                    : ""
+                }
+
+                ${
+                  rating
+                    ? `
+                      <div
+                        class="lm-beach-rating"
+                        aria-label="Rating ${escapeAttribute(rating)}"
+                      >
+                        <span>★</span>
+                        <span>${escapeHtml(rating)}</span>
+                      </div>
+                    `
+                    : ""
+                }
+
+                <div class="lm-beach-name">
+                  ${escapeHtml(beachName)}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lm-card-content">
+            <div class="lm-offer-meta">
+              <div class="lm-meta-item">
+                <span class="lm-meta-icon">📍</span>
+
+                <div>
+                  <strong>${escapeHtml(t("zoneLabel"))}</strong>
+                  <span>${escapeHtml(zoneName)}</span>
+                </div>
+              </div>
+
+              <div class="lm-meta-item lm-meta-period">
+                <div>
+                  <strong>${escapeHtml(t("offerPeriod"))}</strong>
+                  <span>
+                    ${escapeHtml(formatDate(nearestPeriod.start_date))}
+                    –
+                    ${escapeHtml(formatDate(nearestPeriod.end_date))}
+                  </span>
+                  <span style="margin-top:3px;color:var(--muted);font-size:10px;font-weight:750;">
+                    ${escapeHtml(minimumText)}
+                  </span>
+                </div>
+
+                <span class="lm-meta-icon">📅</span>
+              </div>
+            </div>
+
+            <div class="lm-compact-facts">
+             ${renderCompactFact(
+             t("bedrooms"),
+             bedrooms || "—"
+                 )}
+
+                 ${renderCompactFact(
+                 t("bathrooms"),
+                 bathrooms || "—"
+                     )}
+
+                ${renderCompactFact(
+              t("fromBeach"),
+              distance
+              )}
+                </div>
+
+            <div class="lm-card-actions">
+              <a
+                class="lm-primary-action"
+                href="accommodation.html?id=${encodeURIComponent(accommodation.id)}"
+              >
+                <span>🏡</span>
+                <span>
+                  ${escapeHtml(t("viewAccommodation"))}
+                </span>
+              </a>
+
+              <a
+                class="lm-secondary-action"
+                href="${escapeAttribute(requestUrl)}"
+                target="${requestTarget}"
+                ${requestRel}
+              >
+                <span>💬</span>
+                <span>
+                  ${escapeHtml(t("requestOffer"))}
+                </span>
+              </a>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderCompactFact(label, value) {
+  return `
+    <div class="lm-compact-fact">
+      <span class="lm-compact-fact-label">
+        ${escapeHtml(label)}
+      </span>
+
+      <strong class="lm-compact-fact-value">
+        ${escapeHtml(value)}
+      </strong>
+    </div>
+  `;
+}
+
+    /* =====================================================
+       CAROUSEL
+    ===================================================== */
+
+    function bindDots() {
+      carouselDots
+        .querySelectorAll(".lm-dot")
+        .forEach(dot => {
+          dot.addEventListener("click", () => {
+            scrollToCard(
+              Number(dot.dataset.index)
+            );
+          });
+        });
+    }
+
+    function bindCardActions() {
+      /*
+        Reserved for future interactions inside cards.
+        Links already work without additional JavaScript.
+      */
+    }
+
+    function scrollToCard(index) {
+      const cards =
+        offersCarousel.querySelectorAll(
+          ".lm-offer-card"
+        );
+
+      if (!cards.length) return;
+
+      const safeIndex = Math.max(
+        0,
+        Math.min(index, cards.length - 1)
+      );
+
+      cards[safeIndex].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center"
+      });
+
+      currentCardIndex = safeIndex;
+      updateCarouselControls();
+    }
+
+    previousButton.addEventListener("click", () => {
+      scrollToCard(currentCardIndex - 1);
+    });
+
+    nextButton.addEventListener("click", () => {
+      scrollToCard(currentCardIndex + 1);
+    });
+
+    offersCarousel.addEventListener("scroll", () => {
+      clearTimeout(scrollTimer);
+
+      scrollTimer = setTimeout(() => {
+        const cards =
+          [...offersCarousel.querySelectorAll(
+            ".lm-offer-card"
+          )];
+
+        if (!cards.length) return;
+
+        const carouselCenter =
+          offersCarousel.scrollLeft +
+          offersCarousel.clientWidth / 2;
+
+        let nearestIndex = 0;
+        let nearestDistance = Infinity;
+
+        cards.forEach((card, index) => {
+          const cardCenter =
+            card.offsetLeft +
+            card.offsetWidth / 2;
+
+          const distance =
+            Math.abs(cardCenter - carouselCenter);
+
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestIndex = index;
+          }
+        });
+
+        currentCardIndex = nearestIndex;
+        updateCarouselControls();
+      }, 80);
+    });
+
+    function updateCarouselControls() {
+      previousButton.disabled =
+        currentCardIndex <= 0;
+
+      nextButton.disabled =
+        currentCardIndex >=
+        offerGroups.length - 1;
+
+      carouselDots
+        .querySelectorAll(".lm-dot")
+        .forEach((dot, index) => {
+          dot.classList.toggle(
+            "active",
+            index === currentCardIndex
+          );
+        });
+    }
+
+    /* =====================================================
+       HELPERS
+    ===================================================== */
+
+    function normalizeDataId(value) {
+      return String(value || "")
+        .trim()
+        .toLowerCase();
+    }
+
+    function getBeachName(beach, fallbackSlug) {
+      const translatedName =
+        beach?.name?.[currentLanguage] ||
+        beach?.name?.en ||
+        beach?.name?.ro;
+
+      return translatedName ||
+        humanizeLocation(fallbackSlug) ||
+        t("location");
+    }
+
+    function getBeachImageUrl(beach) {
+      if (!beach?.id || !beach?.previewImage) {
+        return "";
+      }
+
+      const beachId =
+        encodeURIComponent(String(beach.id));
+
+      const imageFile =
+        encodeURIComponent(String(beach.previewImage));
+
+      return (
+        `${BEACH_IMAGES_BASE_URL}/` +
+        `${beachId}/images/${imageFile}`
+      );
+    }
+
+    function getMinimumStayText(period) {
+      if (!period?.minimum_nights) {
+        return t("noMinimum");
+      }
+
+      return Number(period.minimum_nights) === 1
+        ? t("minimumOneNight")
+        : t("minimumNights", {
+            count: period.minimum_nights
+          });
+    }
+
+    function getAccommodationImages(accommodation) {
+      if (
+        Array.isArray(accommodation.images) &&
+        accommodation.images.length
+      ) {
+        return accommodation.images.filter(Boolean);
+      }
+
+      if (accommodation.image) {
+        return [accommodation.image];
+      }
+
+      return [];
+    }
+
+    function positiveNumber(value) {
+      const number = Number(value);
+
+      return Number.isFinite(number) && number > 0
+        ? number
+        : null;
+    }
+
+    function buildLocationText(accommodation) {
+      const zone =
+        humanizeLocation(accommodation.zone);
+
+      const beach =
+        humanizeLocation(
+          accommodation.beachSlug
+        );
+
+      const values = [];
+
+      if (zone) values.push(zone);
+
+      if (
+        beach &&
+        beach.toLowerCase() !==
+          zone.toLowerCase()
+      ) {
+        values.push(beach);
+      }
+
+      return values.length
+        ? values.join(" · ")
+        : t("location");
+    }
+
+    function humanizeLocation(value) {
+      if (!value) return "";
+
+      const text = String(value)
+        .replaceAll("-", " ")
+        .replaceAll("_", " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      if (!text) return "";
+
+      return text
+        .split(" ")
+        .map(word => {
+          if (!word) return word;
+
+          return (
+            word.charAt(0).toUpperCase() +
+            word.slice(1)
+          );
+        })
+        .join(" ");
+    }
+
+    function getDistanceValue(accommodation) {
+      const possibleValues = [
+        accommodation.distanceMetersOverride,
+        accommodation.distanceToSeaMeters,
+        accommodation.distanceMeters,
+        accommodation.beachDistanceMeters,
+        accommodation.distanceToBeachMeters,
+        accommodation.distanceToSea
+      ];
+
+      for (const value of possibleValues) {
+        if (
+          typeof value === "number" &&
+          Number.isFinite(value) &&
+          value >= 0
+        ) {
+          return value;
+        }
+
+        if (
+          typeof value === "string" &&
+          value.trim()
+        ) {
+          const numericValue =
+            Number(
+              value
+                .replace(",", ".")
+                .replace(/[^\d.]/g, "")
+            );
+
+          if (
+            Number.isFinite(numericValue) &&
+            numericValue >= 0
+          ) {
+            return numericValue;
+          }
+        }
+      }
+
+      return null;
+    }
+
+    function getDistanceText(accommodation) {
+      const meters =
+        getDistanceValue(accommodation);
+
+      if (meters === null) {
+        return t("distanceUnavailable");
+      }
+
+      if (meters < 1000) {
+        return t("distanceMeters", {
+          count: Math.round(meters)
+        });
+      }
+
+      return t("distanceKilometers", {
+        count: new Intl.NumberFormat(
+          currentLanguage === "ro"
+            ? "ro-RO"
+            : "en-GB",
+          {
+            maximumFractionDigits: 1
+          }
+        ).format(meters / 1000)
+      });
+    }
+
+    function formatDate(dateValue) {
+      if (!dateValue) return "—";
+
+      const date =
+        new Date(`${dateValue}T12:00:00`);
+
+      return new Intl.DateTimeFormat(
+        currentLanguage === "ro"
+          ? "ro-RO"
+          : "en-GB",
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric"
+        }
+      ).format(date);
+    }
+
+    function formatMoneyValue(value) {
+      const number = Number(value);
+
+      if (!Number.isFinite(number)) {
+        return String(value ?? "");
+      }
+
+      return new Intl.NumberFormat(
+        currentLanguage === "ro"
+          ? "ro-RO"
+          : "en-GB",
+        {
+          minimumFractionDigits:
+            Number.isInteger(number) ? 0 : 2,
+          maximumFractionDigits: 2
+        }
+      ).format(number);
+    }
+
+    function formatPrice(value) {
+      return `€${formatMoneyValue(value)}`;
+    }
+
+    function formatPeriodPrice(period) {
+      if (!period) return "—";
+
+      const priceType =
+        period.price_type === "per_stay"
+          ? t("perStay")
+          : t("perNight");
+
+      return `${formatPrice(period.price)} ${priceType}`;
+    }
+
+    function normalizePhone(phone) {
+      if (!phone) return "";
+
+      const digits =
+        String(phone).replace(/[^\d]/g, "");
+
+      return digits.length >= 8 ? digits : "";
+    }
+
+    function buildWhatsAppUrl(
+      phone,
+      title,
+      period
+    ) {
+      const message = t("requestMessage", {
+        title,
+        start: formatDate(period.start_date),
+        end: formatDate(period.end_date),
+        price: formatPeriodPrice(period)
+      });
+
+      return (
+        `https://wa.me/${encodeURIComponent(phone)}` +
+        `?text=${encodeURIComponent(message)}`
+      );
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function escapeAttribute(value) {
+      return escapeHtml(value);
+    }
+
+    /* =====================================================
+       RETRY / START
+    ===================================================== */
+
+    document
+      .getElementById("retryButton")
+      .addEventListener("click", loadOffers);
+
+    applyStaticTranslations();
+    loadOffers();
+  </script>
+</body>
+</html>
