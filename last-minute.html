@@ -501,10 +501,48 @@
       right: 15px;
       bottom: 13px;
       color: white;
-      font-size: 15px;
       font-weight: 900;
+      line-height: 1;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.78);
+    }
+
+    .lm-beach-name {
+      font-size: 15px;
       line-height: 1.2;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.72);
+    }
+
+    .lm-photo-label {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 8px;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .lm-guest-prefix,
+    .lm-guest-suffix {
+      font-size: 30px;
+      font-weight: 950;
+      letter-spacing: -0.7px;
+    }
+
+    .lm-guest-number {
+      flex-shrink: 0;
+      font-size: 45px;
+      font-weight: 1000;
+      letter-spacing: -1.5px;
+      line-height: 0.85;
+    }
+
+    .lm-photo-title-fallback {
+      display: block;
+      overflow: hidden;
+      font-size: 15px;
+      line-height: 1.2;
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .lm-beach-rating,
@@ -954,7 +992,26 @@
         left: 10px;
         right: 10px;
         bottom: 9px;
+      }
+
+      .lm-beach-name,
+      .lm-photo-title-fallback {
         font-size: 12px;
+      }
+
+      .lm-photo-label {
+        gap: 5px;
+      }
+
+      .lm-guest-prefix,
+      .lm-guest-suffix {
+        font-size: 20px;
+        letter-spacing: -0.5px;
+      }
+
+      .lm-guest-number {
+        font-size: 32px;
+        letter-spacing: -1px;
       }
 
       .lm-beach-rating,
@@ -1318,6 +1375,9 @@
         lastMinuteOffer: "Last Minute Offer",
         nearestPeriod: "Nearest available period",
         upToGuests: "Up to {count} guests",
+        upTo: "Up to",
+        guestSingular: "guest",
+        guestPlural: "guests",
         childFriendly: "Suitable for children",
         zoneLabel: "Zone",
         offerPeriod: "Period",
@@ -1374,6 +1434,9 @@
         lastMinuteOffer: "Ofertă Last Minute",
         nearestPeriod: "Cea mai apropiată perioadă",
         upToGuests: "Până la {count} persoane",
+        upTo: "Până la",
+        guestSingular: "persoană",
+        guestPlural: "persoane",
         childFriendly: "Potrivită pentru copii",
         zoneLabel: "Zonă",
         offerPeriod: "Perioadă",
@@ -1840,10 +1903,22 @@
         accommodation.image ||
         "images/beach_background.webp";
 
+      const beachImageCandidates =
+        getBeachImageUrls(
+          beach,
+          accommodation.beachSlug
+        );
+
       const beachImage =
-        getBeachImageUrl(beach) ||
+        beachImageCandidates[0] ||
         images[2] ||
         secondImage;
+
+      const beachImageFallbacks = [
+        ...beachImageCandidates.slice(1),
+        images[2],
+        secondImage
+      ].filter(Boolean);
 
       const beachName =
         getBeachName(
@@ -1942,13 +2017,7 @@
                   onerror="this.onerror=null;this.src='${escapeAttribute(mainImage)}'"
                 >
 
-                <div class="lm-photo-label">
-                  ${escapeHtml(
-                    guests
-                      ? t("upToGuests", { count: guests })
-                      : title
-                  )}
-                </div>
+                ${renderGuestOverlay(guests, title)}
               </div>
 
               <div
@@ -1959,7 +2028,8 @@
                   src="${escapeAttribute(beachImage)}"
                   alt="${escapeAttribute(beachName)}"
                   loading="lazy"
-                  onerror="this.onerror=null;this.src='${escapeAttribute(secondImage)}'"
+                  data-fallbacks="${escapeAttribute(JSON.stringify(beachImageFallbacks))}"
+                  onerror="loadNextImageFallback(this)"
                 >
 
                 ${
@@ -2068,6 +2138,42 @@
             </div>
           </div>
         </article>
+      `;
+    }
+
+    function renderGuestOverlay(guests, fallbackTitle) {
+      if (!guests) {
+        return `
+          <div class="lm-photo-label">
+            <span class="lm-photo-title-fallback">
+              ${escapeHtml(fallbackTitle)}
+            </span>
+          </div>
+        `;
+      }
+
+      const guestLabel =
+        Number(guests) === 1
+          ? t("guestSingular")
+          : t("guestPlural");
+
+      return `
+        <div
+          class="lm-photo-label"
+          aria-label="${escapeAttribute(t("upToGuests", { count: guests }))}"
+        >
+          <span class="lm-guest-prefix">
+            ${escapeHtml(t("upTo"))}
+          </span>
+
+          <strong class="lm-guest-number">
+            ${escapeHtml(guests)}
+          </strong>
+
+          <span class="lm-guest-suffix">
+            ${escapeHtml(guestLabel)}
+          </span>
+        </div>
       `;
     }
 
@@ -2201,7 +2307,9 @@
     function normalizeDataId(value) {
       return String(value || "")
         .trim()
-        .toLowerCase();
+        .toLowerCase()
+        .replace(/[_\s-]+/g, "-")
+        .replace(/^-+|-+$/g, "");
     }
 
     function getBeachName(beach, fallbackSlug) {
@@ -2215,21 +2323,89 @@
         t("location");
     }
 
-    function getBeachImageUrl(beach) {
-      if (!beach?.id || !beach?.previewImage) {
-        return "";
+    function getSlugVariants(...values) {
+      const variants = [];
+
+      values.forEach(value => {
+        const original = String(value || "").trim();
+
+        if (!original) return;
+
+        const candidates = [
+          original,
+          original.replaceAll("_", "-"),
+          original.replaceAll("-", "_")
+        ];
+
+        candidates.forEach(candidate => {
+          if (candidate && !variants.includes(candidate)) {
+            variants.push(candidate);
+          }
+        });
+      });
+
+      return variants;
+    }
+
+    function getBeachImageUrls(beach, fallbackSlug) {
+      if (!beach?.previewImage) {
+        return [];
       }
 
-      const beachId =
-        encodeURIComponent(String(beach.id));
-
-      const imageFile =
-        encodeURIComponent(String(beach.previewImage));
-
-      return (
-        `${BEACH_IMAGES_BASE_URL}/` +
-        `${beachId}/images/${imageFile}`
+      const beachIds = getSlugVariants(
+        beach.id,
+        fallbackSlug
       );
+
+      const imageFiles = getSlugVariants(
+        beach.previewImage
+      );
+
+      const urls = [];
+
+      beachIds.forEach(beachId => {
+        imageFiles.forEach(imageFile => {
+          const url =
+            `${BEACH_IMAGES_BASE_URL}/` +
+            `${encodeURIComponent(beachId)}/images/` +
+            `${encodeURIComponent(imageFile)}`;
+
+          if (!urls.includes(url)) {
+            urls.push(url);
+          }
+        });
+      });
+
+      return urls;
+    }
+
+    function loadNextImageFallback(image) {
+      let fallbacks = [];
+
+      try {
+        fallbacks = JSON.parse(
+          image.dataset.fallbacks || "[]"
+        );
+      } catch (error) {
+        console.warn(
+          "Invalid image fallback list.",
+          error
+        );
+      }
+
+      const currentIndex = Number(
+        image.dataset.fallbackIndex || 0
+      );
+
+      if (currentIndex >= fallbacks.length) {
+        image.onerror = null;
+        return;
+      }
+
+      image.dataset.fallbackIndex =
+        String(currentIndex + 1);
+
+      image.src = fallbacks[currentIndex];
     }
 
     function getMinimumStayText(period) {
