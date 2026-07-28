@@ -3169,79 +3169,224 @@ function renderZoneBadge(zoneName) {
 }
 
 
-async function loadAccommodations(beachId) {
-
-  const response =
-    await fetch("data.js");
-
-  const text =
-    await response.text();
-
-  const match =
-    text.match(
-      /const accommodations = (\[[\s\S]*\]);/
-    );
-
-  const accommodations =
-    eval(match[1]);
-
-const filtered =
-  accommodations.filter(
-
-    item =>
-
-item.beachSlug &&
-item.beachSlug.toLowerCase() === beachId.toLowerCase()
-
-  );
-
-  const row =
-    document.getElementById(
-      "accommodationRow"
-    );
-
-  filtered.forEach(item => {
-
-const image =
-
-`https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/${item.id}/images/${item.id}.webp`;
-    const title =
-      item.id
-        .replaceAll("_", " ")
-        .replace(/\b\w/g, l => l.toUpperCase());
-
-    row.innerHTML += `
-
-      <div
-        class="accommodation-card"
-        onclick="openAccommodation('${item.id}')"
-      >
-
-        <img src="${image}">
-
-        <div class="accommodation-content">
-
-          <div class="accommodation-title">
-
-            ${title}
-
-          </div>
-
-          <div class="accommodation-info">
-
-            Explore accommodation
-
-          </div>
-
-        </div>
-
-      </div>
-
-    `;
-
-  });
-
+function normalizeBeachKey(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, " and ")
+    .replace(/\b(plaja|paralia)\b/g, " ")
+    .replace(/\bbeach\b/g, " ")
+    .replace(/[_\-\s]+/g, "")
+    .replace(/[^a-z0-9]/g, "");
 }
+
+function beachSlugsMatch(firstValue, secondValue) {
+  const first = normalizeBeachKey(firstValue);
+  const second = normalizeBeachKey(secondValue);
+
+  return Boolean(first && second && first === second);
+}
+
+function getAccommodationImageCandidates(item, details) {
+  const base =
+    `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/${encodeURIComponent(item.id)}/images/`;
+
+  const candidates = [];
+
+  const addCandidate = value => {
+    if (!value) return;
+
+    const image = String(value).trim();
+
+    if (!image || candidates.includes(image)) {
+      return;
+    }
+
+    if (/^https?:\/\//i.test(image)) {
+      candidates.push(image);
+    } else {
+      candidates.push(base + encodeURIComponent(image));
+    }
+  };
+
+  if (Array.isArray(details?.images)) {
+    details.images.forEach(addCandidate);
+  }
+
+  if (Array.isArray(item?.images)) {
+    item.images.forEach(addCandidate);
+  }
+
+  addCandidate(details?.thumbnail);
+  addCandidate(item?.thumbnail);
+  addCandidate(details?.image);
+  addCandidate(item?.image);
+
+  addCandidate(`${item.id}.webp`);
+  addCandidate(`${item.id.replaceAll("-", "_")}.webp`);
+  addCandidate(`${item.id.replaceAll("_", "-")}.webp`);
+
+  return candidates;
+}
+
+function setImageFallbacks(imageElement, candidates) {
+  const validCandidates =
+    [...new Set(candidates.filter(Boolean))];
+
+  let currentIndex = 0;
+
+  const loadNext = () => {
+    if (currentIndex >= validCandidates.length) {
+      imageElement.onerror = null;
+      imageElement.src = "images/beach_background.webp";
+      return;
+    }
+
+    imageElement.src =
+      validCandidates[currentIndex++];
+
+    imageElement.onerror = loadNext;
+  };
+
+  loadNext();
+}
+
+async function loadAccommodations(beachId) {
+  const row =
+    document.getElementById("accommodationRow");
+
+  row.innerHTML = "";
+
+  try {
+    const response = await fetch(
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/accommodations-index-v2.json",
+      { cache: "no-store" }
+    );
+
+    if (!response.ok) {
+      throw new Error("Accommodation index could not be loaded.");
+    }
+
+    const accommodations =
+      await response.json();
+
+    const filtered =
+      accommodations.filter(item =>
+        item &&
+        item.id &&
+        beachSlugsMatch(
+          item.beachSlug,
+          beachId
+        )
+      );
+
+    for (const item of filtered) {
+      let details = {};
+
+      try {
+        const detailsResponse = await fetch(
+          `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/${encodeURIComponent(item.id)}/index.json`,
+          { cache: "no-store" }
+        );
+
+        if (detailsResponse.ok) {
+          details = await detailsResponse.json();
+        }
+      } catch (detailsError) {
+        console.warn(
+          `Accommodation details unavailable for ${item.id}`,
+          detailsError
+        );
+      }
+
+      const merged = {
+        ...item,
+        ...details,
+        id: item.id
+      };
+
+      const title =
+        merged.titleEn ||
+        merged.titleRo ||
+        item.id
+          .replaceAll("_", " ")
+          .replaceAll("-", " ")
+          .replace(/\b\w/g, letter =>
+            letter.toUpperCase()
+          );
+
+      const card =
+        document.createElement("div");
+
+      card.className = "accommodation-card";
+      card.addEventListener("click", () =>
+        openAccommodation(item.id)
+      );
+
+      const image =
+        document.createElement("img");
+
+      image.alt = title;
+      image.loading = "lazy";
+
+      setImageFallbacks(
+        image,
+        getAccommodationImageCandidates(
+          item,
+          merged
+        )
+      );
+
+      const content =
+        document.createElement("div");
+
+      content.className =
+        "accommodation-content";
+
+      const titleElement =
+        document.createElement("div");
+
+      titleElement.className =
+        "accommodation-title";
+
+      titleElement.textContent = title;
+
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "accommodation-info";
+
+      info.textContent =
+        "Explore accommodation";
+
+      content.appendChild(titleElement);
+      content.appendChild(info);
+
+      card.appendChild(image);
+      card.appendChild(content);
+
+      row.appendChild(card);
+    }
+
+    if (!filtered.length) {
+      console.warn(
+        "No accommodation matched beach:",
+        beachId,
+        "Normalized:",
+        normalizeBeachKey(beachId)
+      );
+    }
+  } catch (error) {
+    console.error(
+      "Accommodation loading failed:",
+      error
+    );
+  }
+}
+
 async function loadBeachBars(beachId) {
 
   const response =
