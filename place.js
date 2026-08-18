@@ -87,9 +87,15 @@ function formatBeachName(slug = "") {
 }
 
 function formatLabel(value = "") {
+
   const labels = {
+
     restaurant: "Restaurant",
     beach_bar: "Beach Bar",
+    taverna: "Taverna",
+    bar: "Bar",
+    cocktail_bar: "Cocktail Bar",
+
     seafood: "Seafood",
     greek: "Greek",
     mediterranean: "Mediterranean",
@@ -105,25 +111,37 @@ function formatLabel(value = "") {
     chill: "Chill",
     parking: "Parking",
     events: "Events"
+
   };
 
-  return labels[value] || value.replaceAll("_", " ");
+  return (
+    labels[value]
+    ||
+    String(value || "")
+      .replaceAll("_", " ")
+      .replace(/\b\w/g, letter =>
+        letter.toUpperCase()
+      )
+  );
+
 }
 
 function getSubtitle(place) {
-  const cuisines = (place.cuisineTypes || [])
-    .map(formatLabel)
-    .join(" · ");
 
-  if (cuisines) {
-    return place.type === "beach_bar"
-      ? `${cuisines} · Beach Bar`
-      : `${cuisines} · Restaurant`;
-  }
+  const cuisines =
+    (place.cuisineTypes || [])
+      .map(formatLabel)
+      .join(" · ");
 
-  return place.type === "beach_bar"
-    ? "Beach Bar"
-    : "Restaurant";
+  const typeLabel =
+    formatLabel(
+      place.type || "restaurant"
+    );
+
+  return cuisines
+    ? `${cuisines} · ${typeLabel}`
+    : typeLabel;
+
 }
 
 function getOpeningHoursList(place) {
@@ -254,7 +272,39 @@ function phoneSvg() {
 function buildExperienceCards(place) {
   const cards = [];
   const images = place.images || [];
+const identityByType = {
 
+  restaurant: {
+    emoji: "🍽️",
+    title: "Dining Identity"
+  },
+
+  beach_bar: {
+    emoji: "🏖️",
+    title: "Beach Bar Identity"
+  },
+
+  taverna: {
+    emoji: "🍽️",
+    title: "Taverna Identity"
+  },
+
+  bar: {
+    emoji: "🍸",
+    title: "Bar Identity"
+  },
+
+  cocktail_bar: {
+    emoji: "🍹",
+    title: "Cocktail Bar Identity"
+  }
+
+};
+
+const identity =
+  identityByType[place.type]
+  ||
+  identityByType.restaurant;
   const serviceOptions = place.serviceOptions || [];
   const highlights = place.highlights || [];
   const offerings = place.offerings || [];
@@ -269,21 +319,30 @@ function buildExperienceCards(place) {
   const cuisines = place.cuisineTypes || [];
   const music = place.musicStyles || [];
 
-  if (cuisines.length || features.includes("restaurant") || features.includes("sea_view")) {
+  if (
+  place.type
+  ||
+  cuisines.length
+  ||
+  features.length
+) {
     cards.push({
-      emoji: place.type === "beach_bar" ? "🏖️" : "🍽️",
-      title: place.type === "beach_bar"
-        ? "Beach Bar Identity"
-        : "Dining Identity",
-      text: [
-        ...cuisines.map(formatLabel),
-        ...features
-          .filter(x => x !== "restaurant")
-          .map(formatLabel)
-      ].slice(0, 5).join(" · "),
-      image: images[0],
-      usedGroups: ["Cuisine Types", "Features"]
-    });
+  emoji: identity.emoji,
+  title: identity.title,
+  text: [
+    ...cuisines.map(formatLabel),
+    ...features
+      .filter(item => item !== "restaurant")
+      .map(formatLabel)
+  ]
+    .slice(0, 5)
+    .join(" · "),
+  image: images[0],
+  usedGroups: [
+    "Cuisine Types",
+    "Features"
+  ]
+});
   }
 
   if (highlights.length || music.length || atmosphere.length) {
@@ -663,9 +722,7 @@ ${place.type !== "beach_bar" ? `
           <div class="experience-header">
             <div>
               <div class="experience-kicker">
-                ${place.type === "beach_bar"
-                  ? "Beach Bar Experience"
-                  : "Restaurant Experience"}
+                ${formatLabel(place.type || "restaurant")} Experience
               </div>
 
               <h2>Why people come here</h2>

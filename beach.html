@@ -2281,6 +2281,51 @@ h1 {
   color: #111;
   font-weight: 800;
 }
+.place-image-wrapper {
+  position: relative;
+}
+
+.restaurant-card img.pet-friendly-badge,
+.beachbar-card img.pet-friendly-badge {
+  position: absolute;
+
+  top: 8px;
+  right: 8px;
+
+  width: 10%;
+  height: auto;
+
+  max-width: 42px;
+  min-width: 28px;
+
+  object-fit: contain;
+
+  z-index: 5;
+
+  filter:
+    drop-shadow(0 3px 5px rgba(0,0,0,0.28));
+
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+
+  .restaurant-card img.pet-friendly-badge,
+  .beachbar-card img.pet-friendly-badge {
+    width: 10%;
+    height: auto;
+
+    max-width: 34px;
+    min-width: 26px;
+
+    top: 7px;
+    right: 7px;
+  }
+
+}
+
+
+
 </style>
 
 </head>
@@ -3285,6 +3330,38 @@ function beachSlugsMatch(firstValue, secondValue) {
   return Boolean(first && second && first === second);
 }
 
+function formatPlaceType(type) {
+
+  const labels = {
+    restaurant: "Restaurant",
+    taverna: "Taverna",
+    beach_bar: "Beach Bar",
+    bar: "Bar",
+    cocktail_bar: "Cocktail Bar"
+  };
+
+  return (
+    labels[type]
+    ||
+    String(type || "")
+      .replaceAll("_", " ")
+      .replace(/\b\w/g, letter =>
+        letter.toUpperCase()
+      )
+  );
+}
+
+const BEACH_BAR_TYPES = [
+  "beach_bar",
+  "bar",
+  "cocktail_bar"
+];
+
+const RESTAURANT_TYPES = [
+  "restaurant",
+  "taverna"
+];
+
 function getAccommodationImageCandidates(item, details) {
   const base =
     `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/${encodeURIComponent(item.id)}/images/`;
@@ -3505,9 +3582,14 @@ async function loadBeachBars(beachId) {
 
     item =>
 
-      item.beachSlug === beachId
+      beachSlugsMatch(
+        item.beachSlug,
+        beachId
+      )
       &&
-      item.type === "beach_bar"
+      BEACH_BAR_TYPES.includes(
+        item.type
+      )
       &&
       item.featured === true
 
@@ -3534,6 +3616,16 @@ async function loadBeachBars(beachId) {
 const details =
   await detailsResponse.json();
 
+  const isPetFriendly =
+  Array.isArray(details.pets) &&
+  details.pets.some(
+    pet =>
+      String(pet)
+        .trim()
+        .toLowerCase() ===
+      "dogs allowed"
+  );
+
 const distance =
   formatDistanceAway(details);
 
@@ -3542,6 +3634,11 @@ const rating =
 
 const price =
   details.price || "$$";
+
+const typeLabel =
+  formatPlaceType(
+    details.type || item.type
+  );
 
   
 
@@ -3564,10 +3661,26 @@ const price =
       'place.html?id=${item.id}'
     ">
 
+        <div class="place-image-wrapper">
+
+  <img
+    src="${image}"
+    alt="${title}"
+  >
+
+  ${
+    isPetFriendly
+      ? `
         <img
-          src="${image}"
-          alt="${title}"
+          class="pet-friendly-badge"
+          src="images/badges/pet_friendly.png"
+          alt="Dogs allowed"
         >
+      `
+      : ""
+  }
+
+</div>
 
         <div class="beachbar-content">
 
@@ -3579,7 +3692,7 @@ const price =
 <div class="restaurant-meta">
 
   <div class="restaurant-rating">
-    ${rating ? `⭐ ${rating}` : "Beach Bar"}
+    ${rating ? `⭐ ${rating}` : typeLabel}
   </div>
 
   <div class="restaurant-price">
@@ -3589,7 +3702,7 @@ const price =
 </div>
           <div class="beachbar-subtitle">
 
-            Beach Bar
+            ${typeLabel}
 
           </div>
 
@@ -3619,16 +3732,16 @@ async function loadRestaurants(beachId) {
 
     item =>
 
-      item.beachSlug
-      &&
-
-      item.beachSlug
-        .toLowerCase()
-        === beachId.toLowerCase()
+      beachSlugsMatch(
+        item.beachSlug,
+        beachId
+      )
 
       &&
 
-      item.type === "restaurant"
+      RESTAURANT_TYPES.includes(
+        item.type
+      )
 
       &&
 
@@ -3661,6 +3774,18 @@ async function loadRestaurants(beachId) {
 
   const details =
     await detailsResponse.json();
+
+    const isPetFriendly =
+  Array.isArray(details.pets) &&
+  details.pets.some(
+    pet =>
+      String(pet)
+        .trim()
+        .toLowerCase() ===
+      "dogs allowed"
+  );
+
+
     console.log(details);
 
 const image =
@@ -3685,8 +3810,10 @@ details.images?.[0]
     const distance =
   formatDistanceAway(details);
 
-  const features =
-    details.features || [];
+  const typeLabel =
+    formatPlaceType(
+      details.type || item.type
+    );
 
   row.innerHTML += `
 
@@ -3698,10 +3825,26 @@ details.images?.[0]
         'place.html?id=${item.id}'
       ">
 
-      <img
-        src="${image}"
-        alt="${title}"
-      >
+      <div class="place-image-wrapper">
+
+  <img
+    src="${image}"
+    alt="${title}"
+  >
+
+  ${
+    isPetFriendly
+      ? `
+        <img
+          class="pet-friendly-badge"
+          src="images/badges/pet_friendly.png"
+          alt="Dogs allowed"
+        >
+      `
+      : ""
+  }
+
+</div>
 
       <div
         class="restaurant-content">
@@ -3734,20 +3877,12 @@ details.images?.[0]
         <div
           class="restaurant-features">
 
-          ${features
-            .slice(0,3)
-            .map(feature => `
+          <div
+            class="restaurant-chip">
 
-              <div
-                class="restaurant-chip">
+            ${typeLabel}
 
-                ${feature
-                  .replaceAll("_"," ")}
-
-              </div>
-
-            `)
-            .join("")}
+          </div>
 
         </div>
 
@@ -3916,6 +4051,16 @@ async function loadLocalBusinesses(
 
     const details =
       await detailsResponse.json();
+
+      const isPetFriendly =
+  Array.isArray(details.pets) &&
+  details.pets.some(
+    pet =>
+      String(pet)
+        .trim()
+        .toLowerCase() ===
+      "dogs allowed"
+  );
 
     const image =
 

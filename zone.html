@@ -756,6 +756,49 @@ body {
 </div>
 
 <script>
+const RESTAURANT_PLACE_TYPES = [
+  "restaurant",
+  "taverna"
+];
+
+const BEACH_BAR_PLACE_TYPES = [
+  "beach_bar",
+  "bar",
+  "cocktail_bar"
+];
+
+function formatPlaceType(value = "") {
+  const labels = {
+    restaurant: "Restaurant",
+    beach_bar: "Beach Bar",
+    taverna: "Taverna",
+    bar: "Bar",
+    cocktail_bar: "Cocktail Bar"
+  };
+
+  return (
+    labels[value]
+    ||
+    String(value || "")
+      .replaceAll("_", " ")
+      .replace(/\b\w/g, letter =>
+        letter.toUpperCase()
+      )
+  );
+}
+
+function placeMatchesSection(itemType, sectionType) {
+  if (sectionType === "restaurant") {
+    return RESTAURANT_PLACE_TYPES.includes(itemType);
+  }
+
+  if (sectionType === "beach_bar") {
+    return BEACH_BAR_PLACE_TYPES.includes(itemType);
+  }
+
+  return false;
+}
+
 async function loadSmartZoneButtons(zoneId) {
   const quickButtons = document.getElementById("quickButtons");
   quickButtons.innerHTML = "";
@@ -777,7 +820,10 @@ async function loadSmartZoneButtons(zoneId) {
       url: "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/restaurants-index.json",
       filter: item =>
         item.zone?.toLowerCase() === zoneId.toLowerCase() &&
-        item.type === "restaurant"
+        placeMatchesSection(
+          item.type,
+          "restaurant"
+        )
     },
     {
       type: "beach_bar",
@@ -787,7 +833,10 @@ async function loadSmartZoneButtons(zoneId) {
       url: "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/restaurants-index.json",
       filter: item =>
         item.zone?.toLowerCase() === zoneId.toLowerCase() &&
-        item.type === "beach_bar"
+        placeMatchesSection(
+          item.type,
+          "beach_bar"
+        )
     }
   ];
 
@@ -1089,7 +1138,10 @@ async function toggleZoneSection(type) {
         data.filter(item =>
           item.zone &&
           item.zone.toLowerCase() === zoneId.toLowerCase() &&
-          item.type === type
+          placeMatchesSection(
+            item.type,
+            type
+          )
         );
 
     }
@@ -1212,10 +1264,7 @@ ${item.featured === true ? "" : `
               </div>
 
               <div class="zone-food-features">
-                ${(item.cuisineTypes || item.features || [])
-                  .slice(0, 2)
-                  .map(x => x.replaceAll("_", " "))
-                  .join(" · ")}
+                ${formatPlaceType(item.type)}
               </div>
 
             </div>
