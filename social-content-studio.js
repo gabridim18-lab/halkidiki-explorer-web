@@ -64,21 +64,6 @@ const connectInstagramButton = document.getElementById("connectInstagramButton")
 const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: { storage: window.localStorage, storageKey: ADMIN_AUTH_STORAGE_KEY, persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
 }) : null;
-
-function logStudioAuthDiagnostic(session, getSessionError = false, sessionChecked = false) {
-  console.log("AUTH_DIAG page=studio");
-  console.log(`AUTH_DIAG storageKey=${ADMIN_AUTH_STORAGE_KEY}`);
-  console.log(`AUTH_DIAG keyExists=${Boolean(window.localStorage.getItem(ADMIN_AUTH_STORAGE_KEY))}`);
-  if (!sessionChecked) return;
-  if (getSessionError) {
-    console.log("AUTH_DIAG getSessionError=true");
-    return;
-  }
-  console.log(`AUTH_DIAG hasSession=${Boolean(session)}`);
-  console.log(`AUTH_DIAG hasUser=${Boolean(session?.user)}`);
-}
-
-logStudioAuthDiagnostic();
 const listingCache = new Map();
 let canonicalImages = [];
 let heroImageId = "";
@@ -178,7 +163,7 @@ async function getAccessToken() {
 
 async function updateAuthStatus() {
   if (!supabaseClient) { authStatus.textContent = "Authentication unavailable"; return; }
-  try { const { data: { session }, error } = await supabaseClient.auth.getSession(); if (error) { logStudioAuthDiagnostic(null, true, true); authStatus.textContent = "Authentication unavailable"; return; } logStudioAuthDiagnostic(session, false, true); authStatus.textContent = session?.access_token ? "🔒 Admin session detected" : "🔒 Sign in through Admin first"; } catch { logStudioAuthDiagnostic(null, true, true); authStatus.textContent = "Authentication unavailable"; }
+  try { const { data: { session }, error } = await supabaseClient.auth.getSession(); if (error) throw error; authStatus.textContent = session?.access_token ? "🔒 Admin session detected" : "🔒 Sign in through Admin first"; } catch (error) { console.error("Studio session check failed", error); authStatus.textContent = "Authentication unavailable"; }
 }
 
 function platformElements(platform) {
