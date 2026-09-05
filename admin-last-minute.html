@@ -899,6 +899,9 @@
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_2CYR00gmzcodRcOqbjIBIQ_X450DFQh";
 
+    const ADMIN_AUTH_STORAGE_KEY =
+      "sb-bjywllpzvckllydflxbd-auth-token";
+
     const ADMIN_UID =
       "e4dc294e-4a0d-476c-869e-e6bc8810c49b";
 
@@ -912,6 +915,21 @@
       SUPABASE_URL,
       SUPABASE_PUBLISHABLE_KEY
     );
+
+    function logAdminAuthDiagnostic(session, getSessionError = false, sessionChecked = false) {
+      console.log("AUTH_DIAG page=admin");
+      console.log(`AUTH_DIAG storageKey=${ADMIN_AUTH_STORAGE_KEY}`);
+      console.log(`AUTH_DIAG keyExists=${Boolean(window.localStorage.getItem(ADMIN_AUTH_STORAGE_KEY))}`);
+      if (!sessionChecked) return;
+      if (getSessionError) {
+        console.log("AUTH_DIAG getSessionError=true");
+        return;
+      }
+      console.log(`AUTH_DIAG hasSession=${Boolean(session)}`);
+      console.log(`AUTH_DIAG hasUser=${Boolean(session?.user)}`);
+    }
+
+    logAdminAuthDiagnostic();
 
     const loginScreen = document.getElementById("loginScreen");
     const dashboard = document.getElementById("dashboard");
@@ -1023,16 +1041,26 @@
     }
 
     async function initializePage() {
-      const {
-        data: { session },
-        error
-      } = await db.auth.getSession();
-
-      if (error) {
-        console.error(error);
+      let session;
+      let error;
+      try {
+        ({
+          data: { session },
+          error
+        } = await db.auth.getSession());
+      } catch {
+        logAdminAuthDiagnostic(null, true, true);
         showLogin();
         return;
       }
+
+      if (error) {
+        logAdminAuthDiagnostic(null, true, true);
+        showLogin();
+        return;
+      }
+
+      logAdminAuthDiagnostic(session, false, true);
 
       if (await validateAdminSession(session)) {
         await showDashboard();
