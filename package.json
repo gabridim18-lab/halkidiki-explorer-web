@@ -1,0 +1,12 @@
+{
+  "name": "halkidiki-explorer-web",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Halkidiki Explorer static site and internal Social Content Studio",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "sharp": "^0.35.4"
+  }
+}

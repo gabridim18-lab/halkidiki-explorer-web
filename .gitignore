@@ -1,0 +1,10 @@
+# Local environment files can contain deployment secrets.
+.env
+.env.local
+.env.*.local
+
+
+.vercel
+
+# Installed server-side dependencies.
+node_modules/

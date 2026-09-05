@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Social Content Studio | Halkidiki Explorer</title>
+  <link rel="icon" type="image/png" href="favicon-32x32.png">
+  <link rel="stylesheet" href="social-content-studio.css">
+</head>
+<body>
+  <main class="studio-shell">
+    <header class="studio-header">
+      <a class="brand" href="index.html" aria-label="Halkidiki Explorer home">
+        <span class="brand-mark" aria-hidden="true">⌁</span>
+        <span><strong>Halkidiki Explorer</strong><small>Social Content Studio</small></span>
+      </a>
+      <span class="draft-badge">Internal draft workspace</span>
+    </header>
+
+    <section class="studio-hero" aria-labelledby="page-title">
+      <p class="eyebrow">Content creation, grounded in your listings</p>
+      <h1 id="page-title">Turn a place into a ready-to-publish social post.</h1>
+      <p>Choose published photos and build a branded visual from verified Halkidiki Explorer listing data.</p>
+    </section>
+
+    <nav class="workflow-tabs" aria-label="Studio workflow">
+      <button class="workflow-tab is-active" type="button" data-workflow="poster" aria-pressed="true">Social poster studio</button>
+      <button class="workflow-tab" type="button" data-workflow="creative-pack" aria-pressed="false">AI Creative Pack <span>OpenAI-free</span></button>
+    </nav>
+
+    <section class="studio-grid">
+      <form id="studioForm" class="studio-card controls-card">
+        <div class="card-heading">
+          <div><p class="eyebrow">Step 1</p><h2>Post brief</h2></div>
+          <span id="authStatus" class="secure-note">Checking admin session…</span>
+        </div>
+
+        <div class="field-grid">
+          <label class="field"><span>Category</span>
+            <select id="category" name="category" required>
+              <option value="accommodation">Accommodation</option><option value="beach">Beach</option>
+              <option value="restaurant">Restaurant</option><option value="local-business">Local business</option>
+              <option value="what-to-do">What to do</option>
+            </select>
+          </label>
+          <label class="field"><span>Listing</span>
+            <select id="listingId" name="listingId" required disabled><option>Loading listings…</option></select>
+          </label>
+          <label class="field"><span>Language</span>
+            <select id="language" name="language" required><option value="en">English</option><option value="ro">Romanian</option><option value="el">Greek</option></select>
+          </label>
+          <label class="field"><span>Platform</span>
+            <select id="platform" name="platform" required><option value="facebook">Facebook</option><option value="instagram">Instagram</option><option value="tiktok">TikTok</option></select>
+          </label>
+        </div>
+
+        <fieldset class="angle-fieldset poster-only">
+          <legend>Content angle</legend>
+          <div class="angle-options">
+            <label><input type="radio" name="angle" value="general" checked><span>General spotlight</span></label>
+            <label><input type="radio" name="angle" value="family"><span>Family</span></label>
+            <label><input type="radio" name="angle" value="relaxation"><span>Relaxation</span></label>
+            <label><input type="radio" name="angle" value="location"><span>Location</span></label>
+            <label><input type="radio" name="angle" value="facilities"><span>Facilities / features</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="mode-fieldset poster-only">
+          <legend>Generation mode</legend>
+          <label class="mode-option recommended"><input type="radio" name="generationMode" value="safe" checked>
+            <span><strong>Safe branded layout <em>Recommended</em></strong><small>Uses original photos without modifying the property. No image-generation API credits.</small></span>
+          </label>
+          <label class="mode-option"><input type="radio" name="generationMode" value="enhanced">
+            <span><strong>AI enhanced visual</strong><small>More creative. Uses OpenAI image generation and costs additional API credits.</small></span>
+          </label>
+        </fieldset>
+
+        <section id="imagePickerSection" class="image-picker-section" aria-labelledby="image-picker-title">
+          <div class="section-label-row"><div><p class="eyebrow">Step 2</p><h3 id="image-picker-title">Published listing photos</h3></div><span id="imagePickerStatus">Select a listing</span></div>
+          <p class="helper-text">Choose one hero image and up to three supporting images. Only canonical listing images can be selected.</p>
+          <div id="imagePicker" class="image-picker" aria-live="polite"></div>
+        </section>
+
+        <section id="supportingLabelEditor" class="supporting-label-editor" hidden aria-labelledby="supporting-label-title">
+          <div><p class="eyebrow">Selected photos</p><h3 id="supporting-label-title">Supporting-photo labels</h3></div>
+          <p class="helper-text">Edit only after confirming the label is true for the selected photo. These are admin draft labels, not canonical listing data.</p>
+          <div id="supportingLabelFields" class="supporting-label-fields"></div>
+        </section>
+
+        <section id="accommodationPromotion" class="accommodation-promotion" hidden aria-labelledby="promotion-title">
+          <div><p class="eyebrow">Accommodation promotion</p><h3 id="promotion-title">Promotional price from</h3></div>
+          <div class="promotion-fields"><label class="field"><span>Amount</span><input id="promotionalPriceAmount" type="number" min="0" max="100000" step="0.01" inputmode="decimal" placeholder="80"></label><label class="field"><span>Currency</span><select id="promotionalPriceCurrency"><option value="EUR">EUR</option><option value="RON">RON</option><option value="USD">USD</option><option value="GBP">GBP</option></select></label><label class="field"><span>Unit</span><select id="promotionalPriceUnit"><option value="night">/ night</option><option value="stay">/ stay</option><option value="person">/ person</option></select></label></div>
+          <p class="manual-note">Manual promotional value — not stored in canonical listing data. Leave blank to omit the price badge.</p>
+        </section>
+
+        <section id="creativeSelection" class="creative-selection" hidden aria-labelledby="creative-selection-title">
+          <div class="section-label-row"><div><p class="eyebrow">Creative Pack</p><h3 id="creative-selection-title">Verified facts to include</h3></div><span id="creativeFactStatus">Select a listing</span></div>
+          <p class="helper-text">Choose only the canonical facts and descriptions you want to hand off to an AI. No text or images are generated here.</p>
+          <div class="selection-actions"><button id="selectAllFactsButton" class="subtle-button" type="button">Select all facts</button><button id="clearFactsButton" class="subtle-button" type="button">Clear facts</button></div>
+          <div id="creativeFactPicker" class="creative-fact-picker" aria-live="polite"></div>
+          <fieldset class="description-toggles"><legend>Descriptions</legend><label><input id="includeShortDescription" type="checkbox" checked><span>Include short description</span></label><label><input id="includeLongDescription" type="checkbox"><span>Include long description</span></label></fieldset>
+        </section>
+
+        <section class="on-image-section poster-only" aria-labelledby="on-image-title">
+          <div class="draft-label-row"><h3 id="on-image-title">Text on image</h3><button id="suggestTextButton" class="subtle-button" type="button">AI suggest text</button></div>
+          <textarea id="textOnImage" class="draft-text" maxlength="72" rows="2" placeholder="Short, verified on-image copy"></textarea>
+          <label class="field compact-field"><span>On-image subheadline</span><textarea id="textOnImageSubheadline" class="draft-text" maxlength="100" rows="2" placeholder="2–4 concise verified benefits"></textarea></label>
+          <p class="helper-text">Keep it short. AI suggestions use only published listing data; manual text is an editable admin draft.</p>
+          <label class="logo-toggle"><input id="includeLogo" type="checkbox" checked><span>Include Halkidiki Explorer logo</span></label>
+        </section>
+
+        <div class="poster-only"><p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
+          <button id="generateButton" class="generate-button" type="submit"><span aria-hidden="true">✦</span> Generate social image</button>
+          <p class="helper-text">A social visual is generated only when you click this button. Changing controls never creates an image.</p></div>
+      </form>
+
+      <section class="studio-card preview-card" aria-labelledby="preview-title">
+        <div id="posterPreviewHeading" class="card-heading"><div><p class="eyebrow">Step 3</p><h2 id="preview-title">Final social visual</h2></div><span class="editable-badge">Editable draft</span></div>
+        <div id="emptyPreview" class="empty-preview poster-only"><div class="empty-icon" aria-hidden="true">✦</div><h3>Your final visual will appear here</h3><p>Select published photos, then generate a 1080 × 1350 post.</p></div>
+        <div id="visualPreview" class="visual-preview poster-only" hidden>
+          <img id="finalVisual" alt="Generated Halkidiki Explorer social visual">
+          <div class="visual-actions">
+            <button id="regenerateButton" class="subtle-button" type="button">Regenerate</button>
+            <a id="downloadButton" class="download-button" href="#" download>Download</a>
+            <button id="changeTextButton" class="subtle-button" type="button">Change text</button>
+            <button id="changePhotosButton" class="subtle-button" type="button">Change photos</button>
+          </div>
+        </div>
+
+        <div id="draftPreview" class="generated-preview secondary-draft poster-only" hidden>
+          <div class="secondary-heading"><h3>Caption, CTA and hashtags</h3><span>Optional supporting copy</span></div>
+          <section class="draft-section"><div class="draft-label-row"><h3>Hook</h3><button class="copy-button" type="button" data-copy="hook">Copy</button></div><textarea id="hook" class="draft-text" rows="2" aria-label="Editable hook"></textarea></section>
+          <section class="draft-section"><div class="draft-label-row"><h3>Caption</h3><button class="copy-button" type="button" data-copy="caption">Copy</button></div><textarea id="caption" class="draft-text" rows="8" aria-label="Editable caption"></textarea></section>
+          <section class="draft-section"><div class="draft-label-row"><h3>CTA</h3><button class="copy-button" type="button" data-copy="cta">Copy</button></div><textarea id="cta" class="draft-text" rows="2" aria-label="Editable call to action"></textarea></section>
+          <section class="draft-section"><div class="draft-label-row"><h3>Hashtags</h3><button class="copy-button" type="button" data-copy="hashtags">Copy</button></div><textarea id="hashtags" class="draft-text" rows="3" aria-label="Editable hashtags"></textarea></section>
+        </div>
+
+        <section id="creativePackPreview" class="creative-pack-preview" hidden aria-live="polite">
+          <div class="card-heading"><div><p class="eyebrow">Screenshot handoff</p><h2>AI Creative Pack</h2></div><span id="creativeProfileBadge" class="profile-badge">Verified data</span></div>
+          <div id="creativePackEmpty" class="creative-pack-empty"><div class="empty-icon" aria-hidden="true">✦</div><h3>Choose a listing to build a Creative Pack</h3><p>It will use selected canonical facts and photos only.</p></div>
+          <div id="creativePackContent" hidden>
+            <section class="creative-page visual-brief"><div class="pack-kicker">PAGE 1 · VISUAL BRIEF</div><div id="packIdentity" class="pack-identity"></div><div id="packImages" class="pack-images"></div><div><h3>Key facts</h3><div id="packKeyFacts" class="pack-facts"></div></div></section>
+            <section class="creative-page content-brief"><div class="pack-kicker">PAGE 2 · CONTENT BRIEF</div><div id="packDescriptions" class="pack-descriptions"></div><div><h3>Location & practical information</h3><div id="packPracticalFacts" class="pack-facts"></div></div></section>
+            <div class="creative-copy-actions"><button id="copyAllFactsButton" class="copy-button" type="button">Copy all selected facts</button><button id="copyShortDescriptionButton" class="copy-button" type="button">Copy short description</button><button id="copyLongDescriptionButton" class="copy-button" type="button">Copy long description</button><button id="copyAiBriefButton" class="generate-button compact-generate" type="button">Copy AI brief</button></div>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="social-content-studio.js"></script>
+</body>
+</html>
