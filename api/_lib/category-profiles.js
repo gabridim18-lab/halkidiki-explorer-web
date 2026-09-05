@@ -81,6 +81,109 @@ function restaurantSupportingLabelOptions(record = {}, facts = {}, language = "e
   return [...new Map(options.map(option => [option.toLocaleLowerCase(), option])).values()].slice(0, 40);
 }
 
+function restaurantDisplayType(record = {}, facts = {}) {
+  const rawType = clean(record.type || facts.type, 42).toLocaleLowerCase();
+  const knownTypes = { restaurant: "Restaurant", taverna: "Taverna", beach_bar: "Beach Bar", cocktail_bar: "Cocktail Bar", bar: "Bar" };
+  return knownTypes[rawType] || displayCanonicalTerm(rawType);
+}
+
+function isRestaurantFamilyProfile(profile) {
+  return profile?.id === "restaurant" || profile?.id === "beachBar";
+}
+
+function restaurantTerms(collection, language, maximum = 4) {
+  if (!Array.isArray(collection)) return [];
+  return collection.map(value => typeof value === "string" ? displayCanonicalTerm(value) : localized(value, language)).filter(Boolean).slice(0, maximum);
+}
+
+function normalizedTerms(record = {}, facts = {}) {
+  return [record.features, record.highlights, record.children, record.crowd, facts.features, facts.highlights, facts.children]
+    .flatMap(value => Array.isArray(value) ? value : [])
+    .filter(value => typeof value === "string")
+    .map(value => value.toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim());
+}
+
+function restaurantFamilyDetails(record = {}, facts = {}, language = "en") {
+  const cuisine = restaurantTerms(record.cuisineTypes || facts.cuisineTypes, language, 2);
+  const offerings = restaurantTerms(record.offerings || facts.offerings, language, 2);
+  const atmosphere = restaurantTerms(record.atmosphere || facts.atmosphere, language, 2);
+  const service = restaurantTerms(record.serviceOptions || facts.serviceOptions, language, 1);
+  const dining = restaurantTerms(record.diningOptions || facts.diningOptions, language, 1);
+  const terms = normalizedTerms(record, facts);
+  const hasTerm = value => terms.some(term => term === value || term.includes(value));
+  return {
+    type: restaurantDisplayType(record, facts),
+    food: (cuisine.length ? cuisine : offerings).join(" · "),
+    atmosphere,
+    seaView: hasTerm("sea view"),
+    familyFriendly: hasTerm("family friendly") || hasTerm("good for kids"),
+    diningOption: service[0] || dining[0] || ""
+  };
+}
+
+function restaurantFamilySupportingLabels(record = {}, facts = {}, language = "en", count = 0) {
+  const details = restaurantFamilyDetails(record, facts, language);
+  const atmosphere = details.atmosphere.length ? `${details.atmosphere.join(" · ")} atmosphere` : "";
+  const viewAndFamily = [details.seaView ? "Sea View" : "", details.familyFriendly ? "Family Friendly" : ""].filter(Boolean).join(" • ");
+  const second = viewAndFamily || details.diningOption;
+  return Array.from({ length: count }, (_, index) => [atmosphere, second, details.diningOption][index] || "");
+}
+
+function localBusinessAddress(record = {}, facts = {}) {
+  const address = clean(record.address || facts.address, 140);
+  if (!address) return "";
+  const segments = address.split(",").map(segment => segment.trim()).filter(Boolean)
+    .filter(segment => !/^greece$/i.test(segment) && !/^\d[\d\s-]*$/.test(segment))
+    .map(segment => segment.replace(/\b\d{3}\s?\d{2}\b/g, "").replace(/\s{2,}/g, " ").trim())
+    .filter(Boolean);
+  return clean(segments.slice(0, 2).join(", "), 60);
+}
+
+function localBusinessDescription(record = {}, facts = {}, language = "en") {
+  const suffix = { en: "En", ro: "Ro", el: "El" }[language] || "En";
+  return clean(record[`description${suffix}`] || facts[`description${suffix}`] || record.description || facts.description, 2200);
+}
+
+function localBusinessServiceTerms(record = {}, facts = {}, language = "en") {
+  const description = localBusinessDescription(record, facts, language);
+  const candidates = [
+    [/\bjet ski\b/i, "Jet Ski"], [/\binflatable rides?\b/i, "Inflatable Rides"], [/\btowable water sports?\b/i, "Towable Water Sports"],
+    [/\bairport transfers?\b/i, "Airport Transfers"], [/\bprivate transfers?\b/i, "Private Transfers"], [/\bdiving\b/i, "Diving"],
+    [/\bsnorkeling\b/i, "Snorkeling"], [/\bboat rentals?\b/i, "Boat Rentals"], [/\bsea tours?\b/i, "Sea Tours"], [/\bcatamarans?\b/i, "Catamaran Rentals"]
+  ].filter(([pattern]) => pattern.test(description)).map(([, label]) => label);
+  if (candidates.length) return [...new Set(candidates)].slice(0, 3);
+  const category = clean(record[`category${language === "ro" ? "Ro" : language === "el" ? "El" : "En"}`] || facts.categoryEn || facts.category, 70);
+  return category ? [category] : [];
+}
+
+function localBusinessDetails(record = {}, facts = {}, language = "en", linkedBeachNames = []) {
+  const category = clean(record[`category${language === "ro" ? "Ro" : language === "el" ? "El" : "En"}`] || record.categoryEn || facts.categoryEn || facts.category, 70);
+  const services = localBusinessServiceTerms(record, facts, language);
+  return {
+    category,
+    subtitle: clean(services.join(" · "), 90),
+    location: localBusinessAddress(record, facts),
+    linkedBeaches: Array.isArray(linkedBeachNames) ? linkedBeachNames.filter(Boolean).slice(0, 2) : [],
+    booking: Boolean(record.booking ?? facts.booking)
+  };
+}
+
+function localBusinessSupportingLabels(details = {}, count = 0) {
+  const beachesForFirstCard = (details.linkedBeaches || []).slice(0, count >= 3 ? 1 : 2);
+  const labels = [
+    clean(beachesForFirstCard.join(" • "), 42),
+    clean(details.location, 42),
+    clean((details.linkedBeaches || [])[1] || (details.booking ? "Booking available" : "") || details.category || details.subtitle, 42)
+  ];
+  return Array.from({ length: count }, (_, index) => labels[index] || "");
+}
+
+function localBusinessLabelOptions(details = {}) {
+  return [...new Map([
+    ...(details.linkedBeaches || []), ...localBusinessSupportingLabels(details, 3), details.location, details.category, details.subtitle, details.booking ? "Booking available" : ""
+  ].filter(Boolean).map(value => [value.toLocaleLowerCase(), clean(value, 42)])).values()];
+}
+
 const PROFILE_DEFINITIONS = Object.freeze({
   accommodation: {
     id: "accommodation", displayName: "Accommodation", posterVariant: "property", headlineStyle: "stay", ctaStyle: "stay",
@@ -126,7 +229,7 @@ function profileFacts(category, record, facts, language = "en") {
   const location = clean(record.zone || facts.zone || record.beachSlug || facts.beachSlug || record.address || facts.address);
   const identity = [
     add("identity", "category", "Category", profile.displayName, 100),
-    add("identity", "location", "Location", location, 95)
+    isRestaurantFamilyProfile(profile) ? null : add("identity", "location", "Location", location, 95)
   ];
   push("identity", "Identity", identity);
 
@@ -165,33 +268,43 @@ function profileFacts(category, record, facts, language = "en") {
       truth("beach-experience", "accessible", "Accessible", facilities.accessible, 63)
     ]);
   } else if (profile.id === "beachBar") {
+    const dining = restaurantFamilyDetails(record, facts, language);
     push("beach-bar", "Beach bar details", [
-      add("beach-bar", "price", "Price", record.price || facts.price, 70), add("beach-bar", "sunbed-price", "Sunbed price", record.sunbedPrice, 92),
+      add("beach-bar", "restaurant-type", "Type", restaurantDisplayType(record, facts), 99), add("beach-bar", "price", "Price", record.price || facts.price, 70), add("beach-bar", "sunbed-price", "Sunbed price", record.sunbedPrice, 92),
       truth("beach-bar", "consumption-included", "Sunbed consumption included", record.sunbedConsumationIncluded, 88), add("beach-bar", "music", "Music style", joinValues(record.musicStyles, language, 4), 82),
-      add("beach-bar", "hours", "Opening hours", localized(record.hours, language) || record.hoursEn || facts.hoursEn || facts.hours, 65), add("beach-bar", "rating", "Rating", record.rating || facts.rating, 62)
+      add("beach-bar", "rating", "Rating", record.rating || facts.rating, 62)
     ]);
     push("food-drink", "Food & drink", [
-      add("food-drink", "cuisine", "Cuisine", joinValues(record.cuisineTypes, language, 5), 70), add("food-drink", "features", "Features", joinValues(record.features, language, 5), 76),
-      add("food-drink", "atmosphere", "Atmosphere", joinValues(record.atmosphere, language, 4), 75), add("food-drink", "offerings", "Offerings", joinValues(record.offerings, language, 4), 62),
-      add("food-drink", "service", "Service options", joinValues(record.serviceOptions, language, 4), 60)
-    ]);
-  } else if (profile.id === "restaurant") {
-    push("dining", "Dining details", [
-      add("dining", "restaurant-type", "Type", displayCanonicalTerm(record.type || facts.type), 99), add("dining", "cuisine", "Cuisine", restaurantSupportingLabelOptions({ cuisineTypes: record.cuisineTypes || facts.cuisineTypes }, {}, language).slice(0, 3).join(" · "), 100), add("dining", "price", "Price", record.price || facts.price, 76),
-      add("dining", "rating", "Rating", record.rating || facts.rating, 75),
-      add("dining", "atmosphere", "Atmosphere", joinValues(record.atmosphere, language, 4), 82), add("dining", "features", "Features", joinValues(record.features, language, 5), 80),
-      add("dining", "service", "Service options", joinValues(record.serviceOptions, language, 4), 65), add("dining", "dining-options", "Dining options", joinValues(record.diningOptions, language, 4), 60)
+      add("food-drink", "cuisine", "Cuisine", dining.food, 90), add("food-drink", "atmosphere", "Atmosphere", dining.atmosphere.join(" · "), 84),
+      add("food-drink", "sea-view", "Sea view", dining.seaView ? "Verified" : "", 82), add("food-drink", "family-friendly", "Family friendly", dining.familyFriendly ? "Verified" : "", 82),
+      add("food-drink", "dining-options", "Dining options", dining.diningOption, 78), add("food-drink", "features", "Features", joinValues(record.features, language, 5), 45),
+      add("food-drink", "offerings", "Offerings", joinValues(record.offerings, language, 4), 60), add("food-drink", "service", "Service options", joinValues(record.serviceOptions, language, 4), 60)
     ]);
     push("practical", "Practical information", [
+      add("practical", "zone", "Zone", location, 25),
+      add("practical", "hours", "Opening hours", localized(record.hours, language) || record.hoursEn || facts.hoursEn || facts.hours, 25)
+    ]);
+  } else if (profile.id === "restaurant") {
+    const dining = restaurantFamilyDetails(record, facts, language);
+    push("dining", "Dining details", [
+      add("dining", "restaurant-type", "Type", dining.type, 99), add("dining", "cuisine", "Cuisine", dining.food, 100), add("dining", "price", "Price", record.price || facts.price, 76),
+      add("dining", "rating", "Rating", record.rating || facts.rating, 75),
+      add("dining", "atmosphere", "Atmosphere", dining.atmosphere.join(" · "), 84), add("dining", "sea-view", "Sea view", dining.seaView ? "Verified" : "", 82),
+      add("dining", "family-friendly", "Family friendly", dining.familyFriendly ? "Verified" : "", 82), add("dining", "dining-options", "Dining options", dining.diningOption, 78),
+      add("dining", "features", "Features", joinValues(record.features, language, 5), 45), add("dining", "service", "Service options", joinValues(record.serviceOptions, language, 4), 60)
+    ]);
+    push("practical", "Practical information", [
+      add("practical", "zone", "Zone", location, 25),
       add("practical", "hours", "Opening hours", localized(record.hours, language) || record.hoursEn || facts.hoursEn || facts.hours, 25)
     ]);
   } else if (profile.id === "localBusiness") {
+    const business = localBusinessDetails(record, facts, language);
     push("service", "Service details", [
-      add("service", "business-category", "Service type", localized(record.categoryEn, language) || record.categoryEn || facts.categoryEn || facts.category, 100),
-      add("service", "booking", "Booking", record.booking, 78), add("service", "hours", "Hours", localized(record.hours, language) || record.hoursEn || facts.hoursEn || facts.hours, 72),
-      add("service", "linked-beaches", "Linked beaches", joinValues(record.beaches, language, 5), 60)
+      add("service", "business-category", "Service type", business.category, 100), add("service", "service-subtitle", "Service focus", business.subtitle, 95),
+      add("service", "linked-beaches", "Linked beaches", joinValues(record.beaches, language, 2), 90), add("service", "business-location", "Location", business.location, 88),
+      add("service", "booking", "Booking", business.booking ? "Available" : "", 70)
     ]);
-    push("practical", "Practical information", [add("practical", "address", "Address", record.address || facts.address, 70), add("practical", "phone", "Phone", record.phone, 55), add("practical", "website", "Website", record.website, 45)]);
+    push("practical", "Practical information", [add("practical", "hours", "Hours", localized(record.hours, language) || record.hoursEn || facts.hoursEn || facts.hours, 25), add("practical", "address", "Address", record.address || facts.address, 55), add("practical", "phone", "Phone", record.phone, 55), add("practical", "website", "Website", record.website, 45)]);
   } else {
     push("activity", "Experience details", [
       add("activity", "activity-category", "Activity type", record.categoryEn || facts.categoryEn || facts.category, 100), add("activity", "price", "Price", record.price || facts.price, 78),
@@ -236,4 +349,4 @@ function supportingPhotoLabels(profile, count) {
   return Array.from({ length: count }, (_, index) => profile.photoLabels[index + 1] || profile.photoLabels[profile.photoLabels.length - 1] || "Listing detail");
 }
 
-module.exports = { PROFILE_DEFINITIONS, displayCanonicalTerm, localized, localizedValues, profileCta, profileFacts, profileHeadline, posterFacts, resolveCategoryProfile, restaurantSupportingLabelOptions, supportingPhotoLabels, titleFor };
+module.exports = { PROFILE_DEFINITIONS, displayCanonicalTerm, isRestaurantFamilyProfile, localBusinessDetails, localBusinessLabelOptions, localBusinessSupportingLabels, localized, localizedValues, profileCta, profileFacts, profileHeadline, posterFacts, resolveCategoryProfile, restaurantDisplayType, restaurantFamilyDetails, restaurantFamilySupportingLabels, restaurantSupportingLabelOptions, supportingPhotoLabels, titleFor };

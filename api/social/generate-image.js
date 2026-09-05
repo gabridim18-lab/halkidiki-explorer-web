@@ -6,7 +6,9 @@ const {
   CATEGORIES,
   canonicalFacts,
   collectListingImageAssets,
-  fetchCanonicalListing
+  fetchCanonicalListing,
+  resolveLinkedBeachNames,
+  resolveRestaurantDestination
 } = require("../_lib/halkidiki-data");
 const {
   OUTPUT_HEIGHT,
@@ -16,7 +18,7 @@ const {
   downloadCanonicalImage,
   imageError
 } = require("../_lib/social-image");
-const { resolveCategoryProfile, restaurantSupportingLabelOptions } = require("../_lib/category-profiles");
+const { localBusinessDetails, localBusinessLabelOptions, restaurantSupportingLabelOptions } = require("../_lib/category-profiles");
 const { createDraft, createFallbackDraft } = require("./generate");
 
 const ALLOWED_LANGUAGES = new Set(["en", "ro", "el"]);
@@ -88,6 +90,17 @@ function validateCanonicalRestaurantLabels(labels, record, facts, language) {
     if (!label) return "";
     const verified = byNormalizedValue.get(label.toLocaleLowerCase());
     if (!verified) throw requestError("Restaurant supporting labels must be selected from verified dining details.");
+    return verified;
+  });
+}
+
+function validateCanonicalLocalBusinessLabels(labels, details) {
+  const allowed = localBusinessLabelOptions(details);
+  const byNormalizedValue = new Map(allowed.map(value => [value.toLocaleLowerCase(), value]));
+  return labels.map(label => {
+    if (!label) return "";
+    const verified = byNormalizedValue.get(label.toLocaleLowerCase());
+    if (!verified) throw requestError("Local Business supporting labels must be selected from verified listing details.");
     return verified;
   });
 }
@@ -187,16 +200,30 @@ module.exports = async function handler(request, response) {
 
     const canonical = await fetchCanonicalListing(parameters.category, parameters.listingId);
     const facts = canonicalFacts(canonical.record, canonical.indexItem, canonical.listingId);
-    const profile = resolveCategoryProfile(parameters.category, canonical.record);
-    if (profile.id === "restaurant" && ![2, 3].includes(parameters.supportingImageIds.length)) {
+    const restaurantFamily = parameters.category === "restaurant";
+    const localBusiness = parameters.category === "local-business";
+    const promotionalLocation = restaurantFamily
+      ? await resolveRestaurantDestination(canonical.record, parameters.language)
+      : "";
+    const localBusinessContext = localBusiness
+      ? { linkedBeachNames: await resolveLinkedBeachNames(canonical.record.beaches, parameters.language, 2) }
+      : {};
+    if (restaurantFamily && ![2, 3].includes(parameters.supportingImageIds.length)) {
       throw requestError("Restaurant posters require two or three supporting images.");
     }
-    if (profile.id === "restaurant") {
+    if (restaurantFamily) {
       parameters.supportingImageLabels = validateCanonicalRestaurantLabels(
         parameters.supportingImageLabels,
         canonical.record,
         facts,
         parameters.language
+      );
+    }
+    if (localBusiness) {
+      if (![2, 3].includes(parameters.supportingImageIds.length)) throw requestError("Local Business posters require two or three supporting images.");
+      parameters.supportingImageLabels = validateCanonicalLocalBusinessLabels(
+        parameters.supportingImageLabels,
+        localBusinessDetails(canonical.record, facts, parameters.language, localBusinessContext.linkedBeachNames)
       );
     }
     const assets = collectListingImageAssets(
@@ -261,7 +288,9 @@ module.exports = async function handler(request, response) {
       record: canonical.record,
       language: parameters.language,
       copy: posterCopy,
-      includeLogo: parameters.includeLogo
+      includeLogo: parameters.includeLogo,
+      promotionalLocation,
+      localBusinessContext
     });
 
     return response.status(200).json({

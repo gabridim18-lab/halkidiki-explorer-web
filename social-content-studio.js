@@ -53,6 +53,13 @@ const accommodationPromotion = document.getElementById("accommodationPromotion")
 const promotionalPriceAmount = document.getElementById("promotionalPriceAmount");
 const promotionalPriceCurrency = document.getElementById("promotionalPriceCurrency");
 const promotionalPriceUnit = document.getElementById("promotionalPriceUnit");
+const metaSetupNotice = document.getElementById("metaSetupNotice");
+const facebookAccountName = document.getElementById("facebookAccountName");
+const facebookConnectionStatus = document.getElementById("facebookConnectionStatus");
+const connectFacebookButton = document.getElementById("connectFacebookButton");
+const instagramAccountName = document.getElementById("instagramAccountName");
+const instagramConnectionStatus = document.getElementById("instagramConnectionStatus");
+const connectInstagramButton = document.getElementById("connectInstagramButton");
 
 const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: { storage: window.localStorage, storageKey: ADMIN_AUTH_STORAGE_KEY, persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
@@ -159,6 +166,78 @@ async function updateAuthStatus() {
   try { const { data: { session }, error } = await supabaseClient.auth.getSession(); if (error) throw error; authStatus.textContent = session?.access_token ? "🔒 Admin session detected" : "🔒 Sign in through Admin first"; } catch (error) { console.error("Studio session check failed", error); authStatus.textContent = "Authentication unavailable"; }
 }
 
+function platformElements(platform) {
+  return platform === "facebook"
+    ? { account: facebookAccountName, status: facebookConnectionStatus, button: connectFacebookButton, name: "Facebook" }
+    : { account: instagramAccountName, status: instagramConnectionStatus, button: connectInstagramButton, name: "Instagram" };
+}
+
+function setPlatformConnection(platform, details = {}) {
+  const elements = platformElements(platform);
+  const connected = details.connected === true;
+  const state = connected ? "connected" : details.state === "connecting" ? "connecting" : details.state === "error" ? "error" : "not-connected";
+  const statusText = state === "connected" ? "Connected" : state === "connecting" ? "Connecting…" : state === "error" && details.message ? details.message : state === "error" ? "Connection error" : "Not connected";
+  const accountName = platform === "facebook" ? details.name : details.username ? `@${String(details.username).replace(/^@/, "")}` : "";
+  elements.account.textContent = accountName || (platform === "facebook" ? "No Page connected" : "No professional account connected");
+  elements.status.className = `connection-status ${state}`;
+  elements.status.replaceChildren();
+  const icon = document.createElement("span"); icon.setAttribute("aria-hidden", "true"); icon.textContent = state === "connected" ? "●" : state === "error" ? "⚠" : state === "connecting" ? "◌" : "○";
+  elements.status.append(icon, document.createTextNode(` ${statusText}`));
+  elements.button.disabled = state === "connecting";
+  elements.button.querySelector("span:last-child").textContent = state === "connected" ? `${elements.name} connected ✓` : state === "connecting" ? `Connecting ${elements.name}…` : `Connect ${elements.name}`;
+  elements.status.removeAttribute("title");
+}
+
+function metaResultNotice() {
+  const result = new URLSearchParams(window.location.search).get("meta");
+  const messages = {
+    connected: "Meta account setup completed. Account status has been refreshed.",
+    cancelled: "Meta account connection was cancelled.",
+    invalid_state: "Meta connection could not be verified. Start the connection again from the Studio.",
+    error: "Meta account setup could not be completed. Please try again."
+  };
+  if (!messages[result]) return "";
+  window.history.replaceState({}, "", `${window.location.pathname}${window.location.hash}`);
+  return messages[result];
+}
+
+async function loadMetaStatus() {
+  setPlatformConnection("facebook", { state: "connecting" });
+  setPlatformConnection("instagram", { state: "connecting" });
+  const callbackNotice = metaResultNotice();
+  try {
+    const accessToken = await getAccessToken();
+    const response = await fetch("/api/social/meta/status", { headers: { Authorization: `Bearer ${accessToken}` }, credentials: "same-origin" });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(result.error || "Meta account status is unavailable.");
+    setPlatformConnection("facebook", result.facebook || {});
+    setPlatformConnection("instagram", result.instagram || {});
+    const connectionMessage = [result.facebook, result.instagram].find(platform => platform?.message && !["Connected", "Not connected"].includes(platform.message))?.message;
+    metaSetupNotice.textContent = callbackNotice || connectionMessage || (result.configured ? "Account setup is ready. Publishing is not enabled in this phase." : "Meta account setup needs server configuration before an account can be connected.");
+  } catch (error) {
+    setPlatformConnection("facebook", { state: "error", message: "Sign in is required to inspect Meta account status." });
+    setPlatformConnection("instagram", { state: "error", message: "Sign in is required to inspect Meta account status." });
+    metaSetupNotice.textContent = callbackNotice || "Sign in as a Studio administrator to inspect Meta account status.";
+  }
+}
+
+async function connectMeta(platform) {
+  const elements = platformElements(platform);
+  setPlatformConnection(platform, { state: "connecting" });
+  metaSetupNotice.textContent = `Opening ${elements.name} account setup…`;
+  try {
+    const accessToken = await getAccessToken();
+    const response = await fetch("/api/social/meta/connect", { method: "POST", headers: { Authorization: `Bearer ${accessToken}` }, credentials: "same-origin" });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || typeof result.authorizationUrl !== "string") throw new Error(result.error || "Meta account setup could not be started.");
+    // The URL is server-generated and carries only OAuth state, never a token.
+    window.location.assign(result.authorizationUrl);
+  } catch (error) {
+    setPlatformConnection(platform, { state: "error", message: "Meta account setup could not be started." });
+    metaSetupNotice.textContent = error.message || "Meta account setup could not be started.";
+  }
+}
+
 function renderImagePicker() {
   imagePicker.replaceChildren();
   if (!canonicalImages.length) return resetImagePicker("No published listing photos are available.");
@@ -182,7 +261,7 @@ function suggestedSupportingLabel(imageId, index) {
 }
 
 function renderSupportingLabelEditor() {
-  const supportsPhotoLabels = ["accommodation", "beach", "restaurant"].includes(categorySelect.value);
+  const supportsPhotoLabels = ["accommodation", "beach", "restaurant", "local-business"].includes(categorySelect.value);
   supportingLabelEditor.hidden = !supportsPhotoLabels || !supportingImageIds.size;
   supportingLabelFields.replaceChildren();
   if (supportingLabelEditor.hidden) return;
@@ -190,11 +269,11 @@ function renderSupportingLabelEditor() {
     const label = document.createElement("label");
     label.textContent = `Supporting ${index + 1}`;
     const input = document.createElement("input");
-    input.type = "text"; input.maxLength = 42; input.placeholder = categorySelect.value === "restaurant" ? "Choose a verified dining detail" : "Optional verified label";
+    input.type = "text"; input.maxLength = 42; input.placeholder = ["restaurant", "local-business"].includes(categorySelect.value) ? "Choose a verified listing detail" : "Optional verified label";
     input.value = supportingImageLabels.get(imageId) || "";
     input.setAttribute("aria-label", `Supporting image ${index + 1} label`);
-    if (categorySelect.value === "restaurant") {
-      const listId = `restaurant-label-options-${index}`;
+    if (["restaurant", "local-business"].includes(categorySelect.value)) {
+      const listId = `${categorySelect.value}-label-options-${index}`;
       const options = Array.isArray(creativePack?.supportingLabelOptions) ? creativePack.supportingLabelOptions : [];
       input.setAttribute("list", listId);
       const dataList = document.createElement("datalist"); dataList.id = listId;
@@ -226,9 +305,9 @@ function renderCreativePack() {
   if (!creativePack) { creativePackEmpty.hidden = false; creativePackContent.hidden = true; return; }
   creativePackEmpty.hidden = true; creativePackContent.hidden = false; creativeProfileBadge.textContent = creativePack.profile.displayName;
   packIdentity.replaceChildren(); const title = document.createElement("h3"); title.textContent = creativePack.identity.title; const meta = document.createElement("p"); meta.textContent = [creativePack.identity.category, creativePack.identity.location].filter(Boolean).join(" · "); packIdentity.append(title, meta);
-  packImages.replaceChildren(); selectedPackImages().forEach((image, index) => { const card = document.createElement("div"); card.className = "pack-image"; const photo = document.createElement("img"); photo.src = image.url; photo.alt = index === 0 ? "Hero image" : `Supporting image ${index}`; if (!["accommodation", "beach", "restaurant"].includes(creativePack.profile.id)) { const label = document.createElement("span"); const customLabel = supportingImageLabels.get(image.id) || suggestedSupportingLabel(image.id, index - 1); label.textContent = index === 0 ? "Hero" : `Supporting ${index} · ${customLabel}`; card.appendChild(label); } card.prepend(photo); packImages.appendChild(card); });
+  packImages.replaceChildren(); selectedPackImages().forEach((image, index) => { const card = document.createElement("div"); card.className = "pack-image"; const photo = document.createElement("img"); photo.src = image.url; photo.alt = index === 0 ? "Hero image" : `Supporting image ${index}`; if (!["accommodation", "beach", "restaurant", "beachBar", "localBusiness"].includes(creativePack.profile.id)) { const label = document.createElement("span"); const customLabel = supportingImageLabels.get(image.id) || suggestedSupportingLabel(image.id, index - 1); label.textContent = index === 0 ? "Hero" : `Supporting ${index} · ${customLabel}`; card.appendChild(label); } card.prepend(photo); packImages.appendChild(card); });
   if (!packImages.childElementCount) { const note = document.createElement("p"); note.className = "picker-empty"; note.textContent = "Choose published photos to include them in the visual brief."; packImages.appendChild(note); }
-  const selected = selectedCreativeFacts(); const practicalGroups = new Set(["practical", "service"]); const beachPrimary = creativePack.profile.id === "beach" ? selectedBeachPrimaryFacts(selected) : []; const beachPrimaryIds = new Set(beachPrimary.map(fact => fact.id)); packKeyFacts.replaceChildren(); packPracticalFacts.replaceChildren(); selected.forEach(fact => ((creativePack.profile.id === "beach" && !beachPrimaryIds.has(fact.id)) || practicalGroups.has(fact.group) ? packPracticalFacts : packKeyFacts).appendChild(packFactElement(fact)));
+  const selected = selectedCreativeFacts(); const localBusiness = categorySelect.value === "local-business"; const practicalGroups = new Set(["practical", ...(localBusiness ? [] : ["service"])]); const restaurantFamily = categorySelect.value === "restaurant"; const restaurantSecondaryIds = new Set(["features", "price", "sunbed-price", "hours"]); const beachPrimary = creativePack.profile.id === "beach" ? selectedBeachPrimaryFacts(selected) : []; const beachPrimaryIds = new Set(beachPrimary.map(fact => fact.id)); packKeyFacts.replaceChildren(); packPracticalFacts.replaceChildren(); selected.forEach(fact => ((creativePack.profile.id === "beach" && !beachPrimaryIds.has(fact.id)) || (restaurantFamily && restaurantSecondaryIds.has(fact.id)) || practicalGroups.has(fact.group) ? packPracticalFacts : packKeyFacts).appendChild(packFactElement(fact)));
   if (!packKeyFacts.childElementCount) packKeyFacts.textContent = "Select verified facts from the left panel."; if (!packPracticalFacts.childElementCount) packPracticalFacts.textContent = "No practical information selected.";
   packDescriptions.replaceChildren();
   const addDescription = (heading, value) => { if (!value) return; const block = document.createElement("article"); block.className = "pack-description"; const titleElement = document.createElement("h3"); titleElement.textContent = heading; const copy = document.createElement("div"); copy.textContent = value; block.append(titleElement, copy); packDescriptions.appendChild(block); };
@@ -247,7 +326,7 @@ async function loadCanonicalImages() {
     // dedicated layout always uses the hero plus two clean supporting views.
     // This only changes the Studio selection state; it never generates an image.
     supportingImageIds = category === "beach" ? new Set(canonicalImages.slice(1, 3).map(image => image.id)) : new Set();
-    creativePack = result.creativePack || null; selectedFactIds = new Set((creativePack?.profile?.id === "beach" ? selectedBeachPrimaryFacts() : allCreativeFacts().filter(fact => fact.priority >= 70 && !(creativePack?.profile?.id === "restaurant" && fact.id === "hours"))).map(fact => fact.id));
+    creativePack = result.creativePack || null; selectedFactIds = new Set((creativePack?.profile?.id === "beach" ? selectedBeachPrimaryFacts() : allCreativeFacts().filter(fact => fact.priority >= 70 && !(category === "restaurant" && ["hours", "features", "price", "sunbed-price"].includes(fact.id)))).map(fact => fact.id));
     includeShortDescription.disabled = !creativePack?.descriptions?.short; includeShortDescription.checked = Boolean(creativePack?.descriptions?.short);
     includeLongDescription.disabled = !creativePack?.descriptions?.long; includeLongDescription.checked = false;
     accommodationPromotion.hidden = categorySelect.value !== "accommodation";
@@ -274,13 +353,49 @@ async function generateImage() {
 }
 
 async function copyText(value, button, success = "Copied") { if (!value) return; try { await navigator.clipboard.writeText(value); const original = button.textContent; button.textContent = success; window.setTimeout(() => { button.textContent = original; }, 1400); } catch (error) { console.error("Copy failed", error); creativeFactStatus.textContent = "Copy is unavailable. Select the text and copy it manually."; } }
+function restaurantFamilyCreativeBrief() {
+  const selected = selectedCreativeFacts().filter(fact => !["features", "price", "sunbed-price", "hours", "zone"].includes(fact.id));
+  const byId = new Map(selected.map(fact => [fact.id, fact]));
+  const text = id => byId.get(id)?.value || "";
+  const type = text("restaurant-type");
+  const food = text("cuisine") || text("offerings");
+  const hospitality = [text("sea-view") ? "Sea View" : "", text("family-friendly") ? "Family Friendly" : ""].filter(Boolean).join(" • ");
+  const lines = ["Create a professional restaurant promotional social image.", "", "NAME + TYPE", [creativePack.identity.title, type].filter(Boolean).join(" · ")];
+  if (food || type) lines.push("", "TYPE + CUISINE / FOOD TYPE", [type, food].filter(Boolean).join(" · "));
+  if (creativePack.identity.location) lines.push("", "BEACH / LOCAL DESTINATION", creativePack.identity.location);
+  if (text("atmosphere")) lines.push("", "ATMOSPHERE", text("atmosphere"));
+  if (hospitality) lines.push("", "SEA VIEW / FAMILY FRIENDLY", hospitality);
+  if (text("dining-options") || text("service")) lines.push("", "DINING OPTIONS", text("dining-options") || text("service"));
+  const used = new Set(["restaurant-type", "cuisine", "offerings", "atmosphere", "sea-view", "family-friendly", "dining-options", "service"]);
+  const remaining = selected.filter(fact => !used.has(fact.id)); if (remaining.length) lines.push("", "OTHER VERIFIED HOSPITALITY DETAILS", ...remaining.map(fact => `- ${fact.label}: ${fact.value}`));
+  const descriptions = []; if (includeShortDescription.checked && creativePack.descriptions.short) descriptions.push(creativePack.descriptions.short); if (includeLongDescription.checked && creativePack.descriptions.long) descriptions.push(creativePack.descriptions.long); if (descriptions.length) lines.push("", "DESCRIPTION", ...descriptions);
+  const images = selectedPackImages(); if (images.length) lines.push("", "SELECTED REFERENCE IMAGES", "Hero image", ...images.slice(1).map((image, index) => { const label = supportingImageLabels.get(image.id); return label ? `Supporting image ${index + 1} — ${label}` : `Supporting image ${index + 1}`; }));
+  lines.push("", "Use the supplied real restaurant and food photos. Do not invent dishes, cuisine types, prices, services or facilities.", "Use only the verified information above.");
+  return lines.join("\n");
+}
+function localBusinessCreativeBrief() {
+  const selected = selectedCreativeFacts().filter(fact => !["hours", "address", "phone", "website"].includes(fact.id));
+  const byId = new Map(selected.map(fact => [fact.id, fact])); const text = id => byId.get(id)?.value || "";
+  const lines = ["Create a professional local-business promotional social image using the supplied real photos and verified listing information.", "", "BUSINESS NAME", creativePack.identity.title];
+  if (text("business-category")) lines.push("", "CATEGORY / TYPE", text("business-category"));
+  if (text("service-subtitle")) lines.push("", "SHORT SERVICE DESCRIPTION", text("service-subtitle"));
+  if (text("linked-beaches")) lines.push("", "LINKED BEACHES", text("linked-beaches"));
+  if (text("business-location") || creativePack.identity.location) lines.push("", "LOCATION", text("business-location") || creativePack.identity.location);
+  const remaining = selected.filter(fact => !["business-category", "service-subtitle", "linked-beaches", "business-location"].includes(fact.id)); if (remaining.length) lines.push("", "OTHER VERIFIED LISTING DETAILS", ...remaining.map(fact => `- ${fact.label}: ${fact.value}`));
+  const descriptions = []; if (includeShortDescription.checked && creativePack.descriptions.short) descriptions.push(creativePack.descriptions.short); if (includeLongDescription.checked && creativePack.descriptions.long) descriptions.push(creativePack.descriptions.long); if (descriptions.length) lines.push("", "CANONICAL DESCRIPTION", ...descriptions);
+  const images = selectedPackImages(); if (images.length) lines.push("", "SELECTED IMAGES", "Hero image", ...images.slice(1).map((image, index) => { const label = supportingImageLabels.get(image.id); return label ? `Supporting image ${index + 1} — ${label}` : `Supporting image ${index + 1}`; }));
+  lines.push("", "Do not invent services, locations, linked beaches, booking options or facilities.", "Use only the verified information above.");
+  return lines.join("\n");
+}
 function creativeBrief() {
   if (!creativePack) return "";
+  if (categorySelect.value === "restaurant") return restaurantFamilyCreativeBrief();
+  if (categorySelect.value === "local-business") return localBusinessCreativeBrief();
   const lines = ["Create a professional social-media promotional image for this listing.", "", "LISTING", creativePack.identity.title, "", "CATEGORY", creativePack.identity.category];
   if (creativePack.identity.location) lines.push("", "LOCATION", creativePack.identity.location);
   const facts = selectedCreativeFacts(); if (facts.length) lines.push("", "VERIFIED FACTS", ...facts.map(fact => `- ${fact.label}: ${fact.value}`));
   const descriptions = []; if (includeShortDescription.checked && creativePack.descriptions.short) descriptions.push(creativePack.descriptions.short); if (includeLongDescription.checked && creativePack.descriptions.long) descriptions.push(creativePack.descriptions.long); if (descriptions.length) lines.push("", "DESCRIPTION", ...descriptions);
-  const images = selectedPackImages(); if (images.length) lines.push("", "SELECTED REFERENCE IMAGES", "Hero image", ...images.slice(1).map((image, index) => { const customLabel = supportingImageLabels.get(image.id); const label = ["accommodation", "beach", "restaurant"].includes(categorySelect.value) ? customLabel : customLabel || suggestedSupportingLabel(image.id, index); return label ? `Supporting image ${index + 1} — ${label}` : `Supporting image ${index + 1}`; }));
+  const images = selectedPackImages(); if (images.length) lines.push("", "SELECTED REFERENCE IMAGES", "Hero image", ...images.slice(1).map((image, index) => { const customLabel = supportingImageLabels.get(image.id); const label = ["accommodation", "beach", "restaurant", "local-business"].includes(categorySelect.value) ? customLabel : customLabel || suggestedSupportingLabel(image.id, index); return label ? `Supporting image ${index + 1} — ${label}` : `Supporting image ${index + 1}`; }));
   if (categorySelect.value === "accommodation") lines.push("", "Create a unique accommodation promotional design. Use the supplied real property photos as references. Do not invent rooms, pools, views, facilities or prices.");
   if (categorySelect.value === "beach") lines.push("", "Create a unique scenic beach promotional design. Use the supplied real beach photos as references. Do not invent facilities, services, beach type, water conditions, Blue Flag status or activities.");
   if (categorySelect.value === "restaurant") lines.push("", "Create a professional restaurant promotional social image. Use the supplied real restaurant and food photos. Do not invent dishes, cuisine types, prices, services or facilities.");
@@ -318,4 +433,6 @@ document.getElementById("copyAllFactsButton").addEventListener("click", event =>
 document.getElementById("copyShortDescriptionButton").addEventListener("click", event => copyText(includeShortDescription.checked ? creativePack?.descriptions?.short : "", event.currentTarget));
 document.getElementById("copyLongDescriptionButton").addEventListener("click", event => copyText(includeLongDescription.checked ? creativePack?.descriptions?.long : "", event.currentTarget));
 document.getElementById("copyAiBriefButton").addEventListener("click", event => copyText(creativeBrief(), event.currentTarget, "AI brief copied"));
-Promise.all([loadListings(categorySelect.value), updateAuthStatus()]);
+connectFacebookButton.addEventListener("click", () => connectMeta("facebook"));
+connectInstagramButton.addEventListener("click", () => connectMeta("instagram"));
+Promise.all([loadListings(categorySelect.value), updateAuthStatus(), loadMetaStatus()]);

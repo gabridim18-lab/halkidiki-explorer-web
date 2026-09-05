@@ -3,7 +3,7 @@
 const crypto = require("crypto");
 const path = require("path");
 const sharp = require("sharp");
-const { profileCta, profileFacts, profileHeadline, resolveCategoryProfile, supportingPhotoLabels } = require("./category-profiles");
+const { localBusinessDetails, localBusinessSupportingLabels, profileCta, profileFacts, profileHeadline, resolveCategoryProfile, restaurantFamilyDetails, restaurantFamilySupportingLabels, supportingPhotoLabels } = require("./category-profiles");
 
 const OUTPUT_WIDTH = 1080;
 const OUTPUT_HEIGHT = 1350;
@@ -74,13 +74,32 @@ const RESTAURANT_LAYOUT = Object.freeze({
   supportHeight: 405,
   supportGap: 10,
   titleX: 54,
-  titleY: 740,
-  titleLineHeight: 60,
+  // The former title baseline was 765px.  840px moves the one-line identity
+  // group roughly 10% lower in the hero while preserving gallery clearance.
+  titleY: 840,
   metaGap: 18,
   detailGap: 30,
   logoX: 38,
   logoY: 42,
   // 108px is 50% larger than the former generic 72px restaurant logo.
+  logoWidth: 108,
+  heroGradientY: 650
+});
+
+// Local Business deliberately reuses the approved photo-first proportions,
+// while retaining separate constants and content hierarchy from Restaurant.
+const LOCAL_BUSINESS_LAYOUT = Object.freeze({
+  heroY: 0,
+  heroHeight: 945,
+  supportY: 945,
+  supportHeight: 405,
+  supportGap: 10,
+  titleX: 54,
+  titleY: 840,
+  metaGap: 18,
+  detailGap: 30,
+  logoX: 38,
+  logoY: 42,
   logoWidth: 108,
   heroGradientY: 650
 });
@@ -199,19 +218,11 @@ function beachPrimaryFacts(facts, record, language) {
   }));
 }
 
-function restaurantIdentity(facts, record, language) {
-  const available = new Map(profileFacts("restaurant", record, facts, language).groups.flatMap(group => group.facts).map(item => [item.id, item]));
-  const get = id => clean(available.get(id)?.value, 78);
-  return {
-    type: get("restaurant-type"),
-    cuisine: get("cuisine"),
-    atmosphere: get("atmosphere"),
-    highlights: get("features") || get("highlights")
-  };
-}
+function restaurantIdentity(facts, record, language) { return restaurantFamilyDetails(record, facts, language); }
 
-function posterData({ category, facts, language, copy, supportingCount, record = facts }) {
+function posterData({ category, facts, language, copy, supportingCount, record = facts, promotionalLocation = "", localBusinessContext = {} }) {
   const profile = resolveCategoryProfile(category, record);
+  const business = category === "local-business" ? localBusinessDetails(record, facts, language, localBusinessContext.linkedBeachNames) : null;
   const headline = clean(copy?.onImageHeadline || copy?.onImageText || fallbackHeadline(category, facts, language, record), 72);
   const subheadline = clean(copy?.onImageSubheadline || "", 90) || categoryFacts(category, facts, language, record).slice(0, 3).map(item => item.value).join(" • ");
   const cta = clean(profile.id === "accommodation" ? "Find this stay on Halkidiki Explorer" : copy?.cta || profileCta(profile, language), 64);
@@ -220,16 +231,25 @@ function posterData({ category, facts, language, copy, supportingCount, record =
     headline,
     subheadline,
     cta,
-    location: clean(facts.zone || facts.beachSlug || facts.address, 45),
+    location: category === "restaurant"
+      ? clean(promotionalLocation, 100)
+      : category === "local-business"
+        ? clean(business?.location || business?.linkedBeaches?.[0], 100)
+      : clean(facts.zone || facts.beachSlug || facts.address, 45),
     facts: categoryFacts(category, facts, language, record),
-    supportingLabels: profile.id === "accommodation" || profile.id === "beach" || profile.id === "restaurant"
-      ? Array.from({ length: supportingCount }, (_, index) => clean(copy?.supportingImageLabels?.[index], 28))
+    supportingLabels: category === "restaurant"
+      ? Array.from({ length: supportingCount }, (_, index) => clean(copy?.supportingImageLabels?.[index], 42) || restaurantFamilySupportingLabels(record, facts, language, supportingCount)[index] || "")
+      : category === "local-business"
+        ? Array.from({ length: supportingCount }, (_, index) => clean(copy?.supportingImageLabels?.[index], 42) || localBusinessSupportingLabels(business, supportingCount)[index] || "")
+      : profile.id === "accommodation" || profile.id === "beach"
+        ? Array.from({ length: supportingCount }, (_, index) => clean(copy?.supportingImageLabels?.[index], 28))
       : supportingLabels(category, facts, language, supportingCount, record)
         .map((label, index) => clean(copy?.supportingImageLabels?.[index] || label, 28)),
     variant: profile.posterVariant,
     primaryFacts: profile.id === "accommodation" ? accommodationPrimaryFacts(facts, record, language, copy?.manualPromotion) : [],
     beachFacts: profile.id === "beach" ? beachPrimaryFacts(facts, record, language) : [],
-    restaurantIdentity: profile.id === "restaurant" ? restaurantIdentity(facts, record, language) : {},
+    restaurantIdentity: category === "restaurant" ? restaurantIdentity(facts, record, language) : {},
+    localBusiness: business || {},
     priceText: profile.id === "accommodation" ? promotionText(copy?.manualPromotion, facts) : ""
   };
 }
@@ -440,13 +460,48 @@ function restaurantPositions(count) {
   return Array.from({ length: 3 }, (_, index) => ({ left: index * (width + RESTAURANT_LAYOUT.supportGap), top: RESTAURANT_LAYOUT.supportY, width, height: RESTAURANT_LAYOUT.supportHeight }));
 }
 
+function restaurantTitleLines(value) {
+  const words = clean(value, 100).split(" ").filter(Boolean);
+  const lines = [];
+  let current = "";
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (candidate.length <= 26 || !current) current = candidate;
+    else if (lines.length === 0) { lines.push(current); current = word; }
+    else current = candidate;
+  }
+  if (current) lines.push(current);
+  if (lines.length <= 2) return lines;
+  return [lines[0], clean(lines.slice(1).join(" "), 34)];
+}
+
+function restaurantTitleFontSize(lines) {
+  const longest = Math.max(...lines.map(line => line.length), 1);
+  const sizeForWidth = longest <= 21 ? 93 : Math.floor(972 / (longest * 0.54));
+  // Short, normal names receive the requested ~60% increase (58px → 93px).
+  // Two-line or unusually long names reduce only as far as required to fit.
+  const maximum = lines.length > 1 ? 76 : 93;
+  return Math.max(32, Math.min(maximum, sizeForWidth));
+}
+
+function restaurantDisplayTitle(title, type) {
+  const text = clean(title, 100);
+  const normalizedTitle = text.toLocaleLowerCase();
+  const hasExplicitType = /\b(?:restaurant|taverna|tavern|beach bar|cocktail bar|bar)\b/i.test(normalizedTitle);
+  return clean(hasExplicitType || !type ? text : `${text} ${type}`, 110);
+}
+
 function restaurantPosterSvg(poster, positions) {
   const layout = RESTAURANT_LAYOUT;
-  const title = wordsToLines(poster.title, 27, 2);
-  const titleSvg = title.map((line, index) => `<text x="${layout.titleX}" y="${layout.titleY + index * layout.titleLineHeight}" class="restaurantName">${escapeXml(line)}</text>`).join("");
-  const metaY = layout.titleY + title.length * layout.titleLineHeight + layout.metaGap;
-  const cuisineAndType = [poster.restaurantIdentity.type, poster.restaurantIdentity.cuisine].filter(Boolean).join(" · ");
-  const detail = [poster.location, poster.restaurantIdentity.atmosphere || poster.restaurantIdentity.highlights].filter(Boolean).join(" · ");
+  const title = restaurantTitleLines(restaurantDisplayTitle(poster.title, poster.restaurantIdentity.type));
+  const titleFontSize = restaurantTitleFontSize(title);
+  const titleLineHeight = Math.round(titleFontSize * 1.05);
+  const titleY = title.length > 1 ? 792 : layout.titleY;
+  const titleSvg = title.map((line, index) => `<text x="${layout.titleX}" y="${titleY + index * titleLineHeight}" class="restaurantName" style="font-size:${titleFontSize}px">${escapeXml(line)}</text>`).join("");
+  const lastTitleBaseline = titleY + (title.length - 1) * titleLineHeight;
+  const metaY = lastTitleBaseline + Math.round(titleFontSize * (title.length > 1 ? 0.42 : 0.5));
+  const cuisineAndType = [poster.restaurantIdentity.type, poster.restaurantIdentity.food].filter(Boolean).join(" · ");
+  const detail = poster.location;
   const labelsSvg = positions.map((position, index) => poster.supportingLabels[index] ? `<g><rect x="${position.left}" y="${position.top + position.height - 62}" width="${position.width}" height="62" fill="url(#supportShade)"/><text x="${position.left + 18}" y="${position.top + position.height - 22}" class="supportLabel">${escapeXml(poster.supportingLabels[index])}</text></g>` : "").join("");
   return Buffer.from(`<svg width="1080" height="1350" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
     <defs><linearGradient id="restaurantShade" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#071a33" stop-opacity="0"/><stop offset="1" stop-color="#071a33" stop-opacity=".42"/></linearGradient><linearGradient id="supportShade" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#071a33" stop-opacity="0"/><stop offset="1" stop-color="#071a33" stop-opacity=".62"/></linearGradient></defs>
@@ -457,7 +512,7 @@ function restaurantPosterSvg(poster, positions) {
   </svg>`);
 }
 
-async function composeRestaurantImage({ hero, supporting = [], facts, language, copy, includeLogo, record }) {
+async function composeRestaurantImage({ hero, supporting = [], facts, language, copy, includeLogo, record, promotionalLocation }) {
   if (![2, 3].includes(supporting.length)) throw imageError("Restaurant posters require two or three supporting images.");
   const positions = restaurantPositions(supporting.length);
   const composites = [{ input: await toCardImage(hero, OUTPUT_WIDTH, RESTAURANT_LAYOUT.heroHeight), left: 0, top: 0 }];
@@ -465,7 +520,7 @@ async function composeRestaurantImage({ hero, supporting = [], facts, language, 
     const position = positions[index];
     composites.push({ input: await toCardImage(supporting[index], position.width, position.height), left: position.left, top: position.top });
   }
-  const poster = posterData({ category: "restaurant", facts, language, copy, supportingCount: positions.length, record });
+  const poster = posterData({ category: "restaurant", facts, language, copy, supportingCount: positions.length, record, promotionalLocation });
   composites.push({ input: restaurantPosterSvg(poster, positions), left: 0, top: 0 });
   if (includeLogo) {
     const logoPath = path.join(process.cwd(), "images", "logo.png");
@@ -477,10 +532,58 @@ async function composeRestaurantImage({ hero, supporting = [], facts, language, 
   return sharp({ create: { width: OUTPUT_WIDTH, height: OUTPUT_HEIGHT, channels: 3, background: "#000000" } }).composite(composites).jpeg({ quality: 88, mozjpeg: true }).toBuffer();
 }
 
-async function composeSocialImage({ hero, supporting = [], facts, category, language, copy, includeLogo, record }) {
+function localBusinessPositions(count) {
+  if (count === 2) {
+    const width = Math.floor((OUTPUT_WIDTH - LOCAL_BUSINESS_LAYOUT.supportGap) / 2);
+    return [{ left: 0, top: LOCAL_BUSINESS_LAYOUT.supportY, width, height: LOCAL_BUSINESS_LAYOUT.supportHeight }, { left: width + LOCAL_BUSINESS_LAYOUT.supportGap, top: LOCAL_BUSINESS_LAYOUT.supportY, width, height: LOCAL_BUSINESS_LAYOUT.supportHeight }];
+  }
+  const width = Math.floor((OUTPUT_WIDTH - LOCAL_BUSINESS_LAYOUT.supportGap * 2) / 3);
+  return Array.from({ length: 3 }, (_, index) => ({ left: index * (width + LOCAL_BUSINESS_LAYOUT.supportGap), top: LOCAL_BUSINESS_LAYOUT.supportY, width, height: LOCAL_BUSINESS_LAYOUT.supportHeight }));
+}
+
+function localBusinessPosterSvg(poster, positions) {
+  const layout = LOCAL_BUSINESS_LAYOUT;
+  const title = restaurantTitleLines(poster.title);
+  const titleFontSize = restaurantTitleFontSize(title);
+  const titleLineHeight = Math.round(titleFontSize * 1.05);
+  const titleY = title.length > 1 ? 792 : layout.titleY;
+  const titleSvg = title.map((line, index) => `<text x="${layout.titleX}" y="${titleY + index * titleLineHeight}" class="businessName" style="font-size:${titleFontSize}px">${escapeXml(line)}</text>`).join("");
+  const lastTitleBaseline = titleY + (title.length - 1) * titleLineHeight;
+  const subtitleY = lastTitleBaseline + Math.round(titleFontSize * (title.length > 1 ? 0.42 : 0.5));
+  const locationY = subtitleY + layout.detailGap;
+  const labelsSvg = positions.map((position, index) => poster.supportingLabels[index] ? `<g><rect x="${position.left}" y="${position.top + position.height - 62}" width="${position.width}" height="62" fill="url(#businessSupportShade)"/><text x="${position.left + 18}" y="${position.top + position.height - 22}" class="businessSupportLabel">${escapeXml(poster.supportingLabels[index])}</text></g>` : "").join("");
+  return Buffer.from(`<svg width="1080" height="1350" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="businessShade" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#071a33" stop-opacity="0"/><stop offset="1" stop-color="#071a33" stop-opacity=".42"/></linearGradient><linearGradient id="businessSupportShade" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#071a33" stop-opacity="0"/><stop offset="1" stop-color="#071a33" stop-opacity=".62"/></linearGradient></defs>
+    <style>.businessName{fill:#fff;font-family:Arial,Helvetica,sans-serif;font-size:58px;font-weight:800;letter-spacing:-1.1px;paint-order:stroke;stroke:#071a33;stroke-opacity:.26;stroke-width:3px}.businessSubtitle{fill:#fff;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:800;paint-order:stroke;stroke:#071a33;stroke-opacity:.28;stroke-width:2px}.businessLocation{fill:#f3f8fa;font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:700;paint-order:stroke;stroke:#071a33;stroke-opacity:.3;stroke-width:2px}.businessSupportLabel{fill:#fff;font-family:Arial,Helvetica,sans-serif;font-size:17px;font-weight:800;paint-order:stroke;stroke:#071a33;stroke-opacity:.4;stroke-width:2px}</style>
+    <rect y="${layout.heroGradientY}" width="1080" height="${layout.heroHeight - layout.heroGradientY}" fill="url(#businessShade)"/>
+    ${titleSvg}${poster.localBusiness.subtitle ? `<text x="${layout.titleX}" y="${subtitleY}" class="businessSubtitle">${escapeXml(poster.localBusiness.subtitle)}</text>` : ""}${poster.location ? `<text x="${layout.titleX}" y="${locationY}" class="businessLocation">${escapeXml(poster.location)}</text>` : ""}
+    ${labelsSvg}
+  </svg>`);
+}
+
+async function composeLocalBusinessImage({ hero, supporting = [], facts, language, copy, includeLogo, record, localBusinessContext }) {
+  if (![2, 3].includes(supporting.length)) throw imageError("Local Business posters require two or three supporting images.");
+  const positions = localBusinessPositions(supporting.length);
+  const composites = [{ input: await toCardImage(hero, OUTPUT_WIDTH, LOCAL_BUSINESS_LAYOUT.heroHeight), left: 0, top: 0 }];
+  for (let index = 0; index < positions.length; index += 1) {
+    const position = positions[index];
+    composites.push({ input: await toCardImage(supporting[index], position.width, position.height), left: position.left, top: position.top });
+  }
+  const poster = posterData({ category: "local-business", facts, language, copy, supportingCount: positions.length, record, localBusinessContext });
+  composites.push({ input: localBusinessPosterSvg(poster, positions), left: 0, top: 0 });
+  if (includeLogo) {
+    const logoPath = path.join(process.cwd(), "images", "logo.png");
+    const logo = await sharp(logoPath).resize({ width: LOCAL_BUSINESS_LAYOUT.logoWidth, height: LOCAL_BUSINESS_LAYOUT.logoWidth, fit: "inside", withoutEnlargement: true }).png().toBuffer();
+    composites.push({ input: logo, left: LOCAL_BUSINESS_LAYOUT.logoX, top: LOCAL_BUSINESS_LAYOUT.logoY });
+  }
+  return sharp({ create: { width: OUTPUT_WIDTH, height: OUTPUT_HEIGHT, channels: 3, background: "#000000" } }).composite(composites).jpeg({ quality: 88, mozjpeg: true }).toBuffer();
+}
+
+async function composeSocialImage({ hero, supporting = [], facts, category, language, copy, includeLogo, record, promotionalLocation = "", localBusinessContext = {} }) {
   if (category === "accommodation") return composeAccommodationImage({ hero, supporting, facts, language, copy, includeLogo, record });
   if (category === "beach") return composeBeachImage({ hero, supporting, facts, language, copy, includeLogo, record });
-  if (category === "restaurant" && resolveCategoryProfile(category, record).id === "restaurant") return composeRestaurantImage({ hero, supporting, facts, language, copy, includeLogo, record });
+  if (category === "restaurant") return composeRestaurantImage({ hero, supporting, facts, language, copy, includeLogo, record, promotionalLocation });
+  if (category === "local-business") return composeLocalBusinessImage({ hero, supporting, facts, language, copy, includeLogo, record, localBusinessContext });
   const positions = supportPositions(Math.min(supporting.length, 3));
   const composites = [{ input: await toCardImage(hero, OUTPUT_WIDTH, 718), left: 0, top: 98 }];
   for (let index = 0; index < positions.length; index += 1) {

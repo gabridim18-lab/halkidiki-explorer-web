@@ -147,6 +147,36 @@
         </section>
       </section>
     </section>
+
+    <section class="publishing-section" aria-labelledby="publishing-title">
+      <div class="publishing-heading">
+        <div><p class="eyebrow">Account setup</p><h2 id="publishing-title">Social publishing</h2><p>Connect your social accounts and choose where your finished post will be published.</p></div>
+        <span id="metaSetupNotice" class="publishing-notice" role="status" aria-live="polite">Checking account setup…</span>
+      </div>
+
+      <div class="platform-cards">
+        <article class="platform-card facebook-card" aria-labelledby="facebook-title">
+          <div class="platform-card-heading"><span class="platform-icon facebook-icon" aria-hidden="true">f</span><div><h3 id="facebook-title">Facebook</h3><p id="facebookAccountName">No Page connected</p></div></div>
+          <p id="facebookConnectionStatus" class="connection-status not-connected"><span aria-hidden="true">○</span> Not connected</p>
+          <button id="connectFacebookButton" class="platform-connect facebook-connect" type="button"><span class="platform-button-icon" aria-hidden="true">f</span><span>Connect Facebook</span></button>
+        </article>
+
+        <article class="platform-card instagram-card" aria-labelledby="instagram-title">
+          <div class="platform-card-heading"><span class="platform-icon instagram-icon" aria-hidden="true">◎</span><div><h3 id="instagram-title">Instagram</h3><p id="instagramAccountName">No professional account connected</p></div></div>
+          <p id="instagramConnectionStatus" class="connection-status not-connected"><span aria-hidden="true">○</span> Not connected</p>
+          <button id="connectInstagramButton" class="platform-connect instagram-connect" type="button"><span class="platform-button-icon" aria-hidden="true">◎</span><span>Connect Instagram</span></button>
+        </article>
+      </div>
+
+      <div class="future-publishing" aria-labelledby="future-publishing-title">
+        <div><p class="eyebrow">Next phase</p><h3 id="future-publishing-title">Publishing destinations</h3><p>Publishing controls will appear after account setup is verified.</p></div>
+        <div class="future-destinations" aria-label="Future publishing destinations"><button type="button" disabled>Facebook</button><button type="button" disabled>Instagram</button><button type="button" disabled>TikTok</button></div>
+      </div>
+
+      <section class="post-preview-placeholder" aria-labelledby="post-preview-title">
+        <p class="eyebrow">Future post</p><h3 id="post-preview-title">Post preview</h3><p>Generate your finished poster and caption to prepare a social post.</p>
+      </section>
+    </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="social-content-studio.js"></script>

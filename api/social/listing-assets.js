@@ -5,7 +5,9 @@ const {
   CATEGORIES,
   canonicalFacts,
   collectListingImageAssets,
-  fetchCanonicalListing
+  fetchCanonicalListing,
+  resolveLinkedBeachNames,
+  resolveRestaurantDestination
 } = require("../_lib/halkidiki-data");
 const { buildCreativePack } = require("../_lib/creative-pack");
 
@@ -58,12 +60,20 @@ module.exports = async function handler(request, response) {
       canonical.listingId
     );
     const language = ["en", "ro", "el"].includes(body.language) ? body.language : "en";
+    const promotionalLocation = category === "restaurant"
+      ? await resolveRestaurantDestination(canonical.record, language)
+      : "";
+    const localBusinessContext = category === "local-business"
+      ? { linkedBeachNames: await resolveLinkedBeachNames(canonical.record.beaches, language, 2) }
+      : {};
     const creativePack = buildCreativePack({
       category,
       record: canonical.record,
       facts,
       language,
-      images
+      images,
+      promotionalLocation,
+      localBusinessContext
     });
 
     return response.status(200).json({

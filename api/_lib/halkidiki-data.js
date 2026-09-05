@@ -180,6 +180,79 @@ function canonicalFacts(record, indexItem, listingId) {
   return facts;
 }
 
+function displaySlug(slug) {
+  if (typeof slug !== "string" || !SAFE_ID.test(slug)) return "";
+  return slug.replace(/[_-]+/g, " ").replace(/\s+/g, " ").trim()
+    .replace(/\b\p{L}/gu, character => character.toLocaleUpperCase());
+}
+
+function localizedRecordTitle(record, language = "en") {
+  const suffix = { en: "En", ro: "Ro", el: "El" }[language] || "En";
+  const title = shortString(record?.[`title${suffix}`], 100)
+    || shortString(record?.title, 100)
+    || shortString(record?.title?.[language], 100)
+    || shortString(record?.title?.en, 100)
+    || shortString(record?.title?.ro, 100)
+    || shortString(record?.title?.el, 100)
+    || shortString(record?.name?.[language], 100)
+    || shortString(record?.name?.en, 100)
+    || shortString(record?.name?.ro, 100)
+    || shortString(record?.name?.el, 100);
+  return title || "";
+}
+
+/**
+ * Restaurant promotional locations must name the linked local destination,
+ * never substitute the broad restaurant zone.  The beach slug is validated
+ * before it is used in a canonical index lookup, and a readable slug is a
+ * bounded fallback when the linked beach record is absent.
+ */
+async function resolveRestaurantDestination(record, language = "en") {
+  const slug = typeof record?.beachSlug === "string" ? record.beachSlug : "";
+  const fallback = displaySlug(slug);
+  if (fallback) {
+    try {
+      const linkedBeach = await fetchCanonicalListing("beach", slug);
+      return localizedRecordTitle(linkedBeach.record, language) || fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  return shortString(record?.address || record?.displayAddress, 100) || "";
+}
+
+function beachIdCandidates(value) {
+  if (typeof value !== "string") return [];
+  const candidates = [value.trim(), value.trim().replace(/_/g, "-"), value.trim().replace(/-/g, "_")];
+  return [...new Set(candidates.filter(candidate => SAFE_ID.test(candidate)))];
+}
+
+async function resolveLinkedBeachName(value, language = "en") {
+  const candidates = beachIdCandidates(value);
+  for (const candidate of candidates) {
+    try {
+      const linkedBeach = await fetchCanonicalListing("beach", candidate);
+      const title = localizedRecordTitle(linkedBeach.record, language);
+      if (title) return title;
+    } catch {
+      // Try the next normalized canonical ID, then use a safe display fallback.
+    }
+  }
+  return displaySlug(candidates[0] || "");
+}
+
+async function resolveLinkedBeachNames(values, language = "en", maximum = 2) {
+  if (!Array.isArray(values) || maximum < 1) return [];
+  const resolved = [];
+  for (const value of values.slice(0, Math.min(values.length, 12))) {
+    const name = await resolveLinkedBeachName(value, language);
+    if (name && !resolved.some(existing => existing.toLocaleLowerCase() === name.toLocaleLowerCase())) resolved.push(name);
+    if (resolved.length >= maximum) break;
+  }
+  return resolved;
+}
+
 function toImageUrl(value, config, listingId) {
   if (typeof value !== "string" || !value.trim()) return null;
   const image = value.trim();
@@ -219,5 +292,7 @@ module.exports = {
   canonicalFacts,
   collectListingImages,
   collectListingImageAssets,
-  fetchCanonicalListing
+  fetchCanonicalListing,
+  resolveLinkedBeachNames,
+  resolveRestaurantDestination
 };
