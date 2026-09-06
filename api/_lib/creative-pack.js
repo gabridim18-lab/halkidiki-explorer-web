@@ -1,6 +1,6 @@
 "use strict";
 
-const { localBusinessDetails, localBusinessLabelOptions, localized, profileFacts, restaurantSupportingLabelOptions, supportingPhotoLabels } = require("./category-profiles");
+const { localBusinessDetails, localized, profileFacts } = require("./category-profiles");
 
 function clean(value, maximum = 2200) {
   return typeof value === "string" ? value.replace(/\s+/g, " ").trim().slice(0, maximum) : "";
@@ -71,7 +71,11 @@ function beachExcerpt(value) {
     count += sentenceWords.length;
     if (count >= 45) break;
   }
-  return excerpt.length ? excerpt.join(" ") : words(value).slice(0, 50).join(" ");
+  // Some canonical records use bullets rather than sentence punctuation. If
+  // a complete first sentence is too short, retain a bounded canonical excerpt
+  // instead of returning an unusably small summary.
+  if (count >= 45) return excerpt.join(" ");
+  return words(value).slice(0, 58).join(" ");
 }
 
 function beachDescriptionFor(record, language) {
@@ -83,8 +87,36 @@ function beachDescriptionFor(record, language) {
   // sentences near 50 words makes the Page 1 brief useful but screenshot-safe.
   const excerpt = beachExcerpt(long);
   const hashtags = beachHashtags(record, language);
-  const short = `${excerpt}\n\n${hashtags.join(" ")}`;
+  const short = excerpt;
   return { short, long: long !== excerpt ? long : "", hashtags };
+}
+
+function accommodationHashtags(record, language) {
+  const candidates = [
+    record[`title${{ en: "En", ro: "Ro", el: "El" }[language] || "En"}`] || canonicalBeachText(record.name, language),
+    record.zone,
+    "Halkidiki",
+    "Accommodation",
+    "Greek Holiday"
+  ];
+  const unique = [];
+  candidates.forEach(value => {
+    const tag = hashtag(value);
+    if (tag && !unique.some(item => item.toLocaleLowerCase() === tag.toLocaleLowerCase()) && unique.length < 4) unique.push(tag);
+  });
+  const fallback = ["#Halkidiki", "#Accommodation", "#GreekHoliday", "#Travel"];
+  fallback.forEach(tag => {
+    if (!unique.some(item => item.toLocaleLowerCase() === tag.toLocaleLowerCase()) && unique.length < 4) unique.push(tag);
+  });
+  return [...unique.slice(0, 4), "#HalkidikiExplorer"];
+}
+
+function accommodationDescriptionFor(record, language) {
+  const suffix = { en: "En", ro: "Ro", el: "El" }[language] || "En";
+  const long = clean(record[`description${suffix}`] || localizedDescription(record.description, language) || record.descriptionEn || record.descriptionRo, 2200);
+  if (!long) return { short: "", long: "", hashtags: accommodationHashtags(record, language) };
+  const excerpt = beachExcerpt(long);
+  return { short: excerpt, long: long !== excerpt ? long : "", hashtags: accommodationHashtags(record, language) };
 }
 
 function buildCreativePack({ category, record, facts, language, images, promotionalLocation = "", localBusinessContext = {} }) {
@@ -93,11 +125,9 @@ function buildCreativePack({ category, record, facts, language, images, promotio
   const localBusiness = category === "local-business" ? localBusinessDetails(record, facts, language, localBusinessContext.linkedBeachNames) : null;
   const descriptions = category === "beach"
     ? beachDescriptionFor(record, language)
-    : descriptionFor(record, language);
-  const imageLabels = (images || []).map((image, index) => ({
-    id: image.id,
-    label: index === 0 ? "Hero image" : supportingPhotoLabels(details.profile, index)[index - 1] || `Supporting image ${index}`
-  }));
+    : category === "accommodation"
+      ? accommodationDescriptionFor(record, language)
+      : descriptionFor(record, language);
 
   const factGroups = localBusiness ? details.groups.map(group => ({ ...group, facts: group.facts.map(fact => {
     if (fact.id === "linked-beaches") return { ...fact, value: localBusiness.linkedBeaches.join(" · ") };
@@ -109,8 +139,7 @@ function buildCreativePack({ category, record, facts, language, images, promotio
     identity: { title: details.title, location: restaurantFamily ? clean(promotionalLocation, 100) : localBusiness ? localBusiness.location : details.location, category: details.profile.displayName },
     factGroups,
     descriptions,
-    imageLabels,
-    supportingLabelOptions: restaurantFamily ? restaurantSupportingLabelOptions(record, facts, language) : localBusiness ? localBusinessLabelOptions(localBusiness) : []
+    imageLabels: (images || []).map(image => ({ id: image.id }))
   };
 }
 
