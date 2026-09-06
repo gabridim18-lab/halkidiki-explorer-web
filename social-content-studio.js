@@ -305,6 +305,24 @@ function renderDescription(target, value, heading) {
   target.appendChild(block);
 }
 
+function canonicalCaptionText() {
+  const profileId = creativePack?.profile?.id;
+  if (!['accommodation', 'beach'].includes(profileId)) return "";
+  const description = typeof creativePack?.descriptions?.short === "string"
+    ? creativePack.descriptions.short.replace(/\s+/g, " ").trim()
+    : "";
+  const hashtags = Array.isArray(creativePack?.descriptions?.hashtags)
+    ? creativePack.descriptions.hashtags.filter(tag => typeof tag === "string" && tag.trim()).slice(0, 5)
+    : [];
+  if (!description || hashtags.length !== 5 || !hashtags.includes("#HalkidikiExplorer")) return "";
+  return `${description}\n\n${hashtags.join(" ")}`;
+}
+
+function refreshCanonicalCaption() {
+  const caption = document.getElementById("caption");
+  caption.value = canonicalCaptionText();
+}
+
 function renderCreativePack() {
   if (!creativePack) {
     creativePackEmpty.hidden = false;
@@ -422,6 +440,7 @@ async function loadCanonicalImages() {
     accommodationPromotion.hidden = category !== "accommodation";
     renderImagePicker();
     renderCreativePack();
+    refreshCanonicalCaption();
   } catch (error) {
     if (category === "beach" && beachRequestId !== beachAssetsRequest) return;
     console.error("Listing assets error", error);
@@ -438,7 +457,7 @@ function setBusy(busy, label = "Generating social image…") {
 
 function renderDraft(draft) {
   document.getElementById("hook").value = draft.hook || "";
-  document.getElementById("caption").value = draft.caption || "";
+  document.getElementById("caption").value = canonicalCaptionText() || draft.caption || "";
   document.getElementById("cta").value = draft.cta || "";
   document.getElementById("hashtags").value = Array.isArray(draft.hashtags) ? draft.hashtags.join(" ") : "";
   draftPreview.hidden = false;
