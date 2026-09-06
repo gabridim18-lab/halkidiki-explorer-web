@@ -37,6 +37,9 @@ fieldset { min-width:0; margin:0; padding:0; border:0; } legend { margin-bottom:
 .pack-image span { display:none; }
 .compact-pack-summary { display:grid; gap:8px; }
 .compact-pack-description,.compact-pack-practical { padding:9px 10px; border:1px solid #d8e9f4; border-radius:10px; background:#f8fcff; color:#314966; }
+.compact-pack-practical .pack-facts { gap:5px 9px; }
+.compact-pack-practical .pack-fact { padding:6px 8px; border-radius:9px; font-size:11px; }
+.compact-pack-practical .pack-fact strong { font-size:9px; }
 .compact-pack-description { font-size:12px; line-height:1.42; white-space:pre-wrap; }
 .compact-pack-description h3,.compact-pack-practical h3 { margin:0 0 5px; color:#30435e; font-size:12px; }
 .pack-hashtags { display:flex; flex-wrap:wrap; gap:5px; margin-top:9px; }

@@ -40,6 +40,7 @@ const packPageOnePractical = document.getElementById("packPageOnePractical");
 const packPageOnePracticalTitle = document.getElementById("packPageOnePracticalTitle");
 const packPageOnePracticalFacts = document.getElementById("packPageOnePracticalFacts");
 const packDescriptions = document.getElementById("packDescriptions");
+const packPageTwoFactsSection = document.getElementById("packPageTwoFactsSection");
 const packPracticalFacts = document.getElementById("packPracticalFacts");
 const generateButton = document.getElementById("generateButton");
 const formMessage = document.getElementById("formMessage");
@@ -319,7 +320,9 @@ function renderCreativePack() {
   const profileId = creativePack.profile.id;
   const accommodation = profileId === "accommodation";
   const beach = profileId === "beach";
-  const facts = selectedCreativeFacts();
+  // The Page 1 brief is canonical-only. A manual poster-price override stays
+  // available to the poster request, but is never presented as listing data.
+  const facts = selectedCreativeFacts().filter(fact => !fact.isManual);
   const selectedImages = selectedPackImages();
 
   packIdentity.replaceChildren();
@@ -355,13 +358,11 @@ function renderCreativePack() {
   if (accommodation) {
     primary = accommodationPrimaryFacts(facts);
     const primaryIds = new Set(primary.map(fact => fact.id));
-    pageTwoSecondary = facts.filter(fact => !primaryIds.has(fact.id) && fact.group !== "identity");
+    pageOneSecondary = facts.filter(fact => !primaryIds.has(fact.id) && fact.group !== "identity");
     packKeyFactsTitle.textContent = "Primary facts";
   } else if (beach) {
     primary = selectedBeachPrimaryFacts(facts);
     pageOneSecondary = selectedBeachPracticalFacts(facts);
-    const pageOneIds = new Set([...primary, ...pageOneSecondary].map(fact => fact.id));
-    pageTwoSecondary = facts.filter(fact => !pageOneIds.has(fact.id));
     packKeyFactsTitle.textContent = "Key facts";
   } else {
     const restaurantFamily = categorySelect.value === "restaurant";
@@ -380,13 +381,17 @@ function renderCreativePack() {
   packHashtags.replaceChildren();
   const tags = Array.isArray(creativePack.descriptions.hashtags) ? creativePack.descriptions.hashtags : [];
   if (showSummary && tags.length) tags.forEach(tag => { const item = document.createElement("span"); item.textContent = tag; packHashtags.appendChild(item); });
-  packPageOnePractical.hidden = !(beach && pageOneSecondary.length);
-  if (beach) {
+  const profileUsesPageOnePractical = accommodation || beach;
+  packPageOnePractical.hidden = !(profileUsesPageOnePractical && pageOneSecondary.length);
+  if (profileUsesPageOnePractical) {
     packPageOnePracticalTitle.textContent = "Local & practical information";
-    pageOneSecondary.forEach(fact => packPageOnePracticalFacts.appendChild(compactFactElement(fact)));
+    pageOneSecondary.forEach(fact => packPageOnePracticalFacts.appendChild(accommodation ? packFactElement(fact) : compactFactElement(fact)));
   }
-  pageTwoSecondary.forEach(fact => packPracticalFacts.appendChild(packFactElement(fact)));
-  if (!packPracticalFacts.childElementCount) packPracticalFacts.textContent = "No secondary verified facts are available.";
+  packPageTwoFactsSection.hidden = profileUsesPageOnePractical;
+  if (!profileUsesPageOnePractical) {
+    pageTwoSecondary.forEach(fact => packPracticalFacts.appendChild(packFactElement(fact)));
+    if (!packPracticalFacts.childElementCount) packPracticalFacts.textContent = "No secondary verified facts are available.";
+  }
 
   renderDescription(packDescriptions, creativePack.descriptions.long, "Canonical description");
   if (!packDescriptions.childElementCount) packDescriptions.textContent = "No extended canonical description is available.";
