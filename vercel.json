@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/social/generate-image.js": {
+      "includeFiles": "assets/fonts/**"
+    }
+  }
+}

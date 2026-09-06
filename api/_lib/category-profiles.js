@@ -259,7 +259,7 @@ function profileFacts(category, record, facts, language = "en") {
       add("coast", "sand", "Sand", localized(record.sand, language), 72), add("coast", "water-clarity", "Water clarity", localized(water.clarity, language), 82),
       add("coast", "water-entry", "Water entry", localized(beachInfo.waterEntry, language), 94), add("coast", "water-depth", "Water depth", localized(water.depth, language), 76),
       add("coast", "blue-flag", "Blue Flag", record.blueFlag ? "Verified" : "", 92), add("coast", "family-friendly", "Family suitability", record.suitableForChildren ? "Kids friendly" : "", 96), truth("coast", "sunset", "Sunset view", record.sunsetView, 70),
-      add("coast", "occupancy", "Occupancy", record.occupancy, 55), add("coast", "parking-difficulty", "Parking", localized(quick.parkingDifficulty, language), 55)
+      add("coast", "occupancy", "Occupancy", record.occupancy, 55), add("coast", "recommendation-rating", "Recommendation", number(record.recommendationRating) === null ? "" : String(record.recommendationRating), 65), add("coast", "parking-difficulty", "Parking", localized(quick.parkingDifficulty, language), 55)
     ]);
     push("beach-experience", "Beach experience", [
       add("beach-experience", "activities", "Activities", localizedValues(record.activities, language, 2).join(" · "), 78), add("beach-experience", "ideal-for", "Ideal for", localizedValues(record.idealFor, language, 3).join(" · "), 74),

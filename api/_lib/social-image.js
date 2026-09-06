@@ -1,7 +1,17 @@
 "use strict";
 
 const crypto = require("crypto");
+const fs = require("fs");
 const path = require("path");
+
+// Vercel's serverless image runtime cannot be assumed to contain a font with
+// Romanian and Greek glyph coverage. Bundle Noto Sans and tell fontconfig about
+// it before Sharp/librsvg is loaded; this keeps SVG text deterministic.
+const FONTCONFIG_FILE = path.join(process.cwd(), "assets", "fonts", "fonts.conf");
+if (!process.env.FONTCONFIG_FILE && fs.existsSync(FONTCONFIG_FILE)) {
+  process.env.FONTCONFIG_FILE = FONTCONFIG_FILE;
+}
+
 const sharp = require("sharp");
 const { localBusinessDetails, localBusinessSupportingLabels, profileCta, profileFacts, profileHeadline, resolveCategoryProfile, restaurantFamilyDetails, restaurantFamilySupportingLabels, supportingPhotoLabels } = require("./category-profiles");
 
@@ -58,10 +68,10 @@ const BEACH_LAYOUT = Object.freeze({
   supportGap: 10,
   footerY: 1070,
   footerHeight: 280,
-  heroGradientY: 480,
+  heroGradientY: 420,
   logoX: 34,
-  logoY: 74,
-  logoWidth: 122
+  logoY: 48,
+  logoWidth: 154
 });
 
 // Restaurant / Taverna Safe Branded layout.  It deliberately has no coloured
@@ -420,18 +430,19 @@ function beachPosterSvg(poster, positions) {
   const factTop = locationY + layout.factRowGap;
   const factSvg = poster.beachFacts.map((item, index) => {
     const x = layout.factX + index * (layout.factWidth + layout.factGap);
-    return `<g><rect x="${x}" y="${factTop}" width="${layout.factWidth}" height="${layout.factRowHeight}" rx="18" fill="#06324d" fill-opacity=".76" stroke="#c8f4fa" stroke-opacity=".3"/><text x="${x + 18}" y="${factTop + 26}" class="beachFactLabel">${escapeXml(item.label)}</text><text x="${x + 18}" y="${factTop + 52}" class="beachFactValue">${escapeXml(item.value)}</text></g>`;
+    const valueSize = item.value.length > 26 ? 14 : item.value.length > 20 ? 16 : 18;
+    return `<g><rect x="${x}" y="${factTop}" width="${layout.factWidth}" height="${layout.factRowHeight}" rx="18" fill="#062b43" fill-opacity=".9" stroke="#d5fbff" stroke-opacity=".5"/><text x="${x + 18}" y="${factTop + 26}" class="beachFactLabel">${escapeXml(item.label)}</text><text x="${x + 18}" y="${factTop + 52}" class="beachFactValue" font-size="${valueSize}">${escapeXml(item.value)}</text></g>`;
   }).join("");
   const labelsSvg = positions.map((position, index) => poster.supportingLabels[index] ? `<g><rect x="${position.left + 8}" y="${position.top + position.height - 40}" width="${Math.max(120, position.width - 16)}" height="32" rx="10" fill="#06324d" fill-opacity=".82"/><text x="${position.left + 19}" y="${position.top + position.height - 18}" class="photoLabel">${escapeXml(poster.supportingLabels[index])}</text></g>` : "").join("");
-  return Buffer.from(`<svg width="1080" height="1350" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
-    <defs><linearGradient id="beachShade" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#06324d" stop-opacity="0"/><stop offset="100%" stop-color="#06324d" stop-opacity=".32"/></linearGradient><linearGradient id="beachFooter" x1="0" x2="1"><stop stop-color="#06324d"/><stop offset="1" stop-color="#00abc1"/></linearGradient></defs>
-    <style>.beachName{fill:#fff;font-family:Arial,Helvetica,sans-serif;font-size:62px;font-weight:800;letter-spacing:-1.2px}.beachLocation{fill:#edffff;font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:700}.beachEyebrow{fill:#fff;font-family:Arial,Helvetica,sans-serif;font-size:15px;font-weight:800;letter-spacing:2px}.beachFactLabel{fill:#bff3f7;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:800;letter-spacing:.7px}.beachFactValue{fill:#fff;font-family:Arial,Helvetica,sans-serif;font-size:18px;font-weight:800}.photoLabel{fill:#fff;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:800}.footerLead{fill:#c9f8fc;font-family:Arial,Helvetica,sans-serif;font-size:23px;font-weight:700}.footerBrand{fill:#fff;font-family:Arial,Helvetica,sans-serif;font-size:37px;font-weight:800;letter-spacing:.3px}.footerSmall{fill:#cbf5f8;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:700}</style>
+  return Buffer.from(`<?xml version="1.0" encoding="UTF-8"?><svg width="1080" height="1350" viewBox="0 0 1080 1350" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="beachShade" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#062b43" stop-opacity="0"/><stop offset="100%" stop-color="#062b43" stop-opacity=".8"/></linearGradient><linearGradient id="beachFooter" x1="0" x2="1"><stop stop-color="#06324d"/><stop offset="1" stop-color="#00abc1"/></linearGradient></defs>
+    <style>.beachName{fill:#fff;stroke:#041d2d;stroke-width:3;paint-order:stroke;stroke-linejoin:round;font-family:Noto Sans,sans-serif;font-size:62px;font-weight:800;letter-spacing:-1.2px}.beachLocation{fill:#edffff;stroke:#041d2d;stroke-width:2;paint-order:stroke;font-family:Noto Sans,sans-serif;font-size:22px;font-weight:700}.beachEyebrow{fill:#fff;stroke:#041d2d;stroke-width:1.5;paint-order:stroke;font-family:Noto Sans,sans-serif;font-size:15px;font-weight:800;letter-spacing:2px}.beachFactLabel{fill:#c9f7fb;font-family:Noto Sans,sans-serif;font-size:11px;font-weight:800;letter-spacing:.7px}.beachFactValue{fill:#fff;font-family:Noto Sans,sans-serif;font-size:18px;font-weight:800}.photoLabel{fill:#fff;font-family:Noto Sans,sans-serif;font-size:14px;font-weight:800}.footerLead{fill:#c9f8fc;font-family:Noto Sans,sans-serif;font-size:23px;font-weight:700}.footerBrand{fill:#fff;font-family:Noto Sans,sans-serif;font-size:37px;font-weight:800;letter-spacing:.3px}.footerSmall{fill:#cbf5f8;font-family:Noto Sans,sans-serif;font-size:16px;font-weight:700}</style>
     <rect y="${layout.heroGradientY}" width="1080" height="${layout.heroHeight - layout.heroGradientY}" fill="url(#beachShade)"/>
     <text x="56" y="62" class="beachEyebrow">HALKIDIKI EXPLORER · BEACH</text>
     ${titleSvg}<text x="59" y="${locationY}" class="beachLocation">${escapeXml([poster.location, "Halkidiki"].filter((value, index, array) => value && array.indexOf(value) === index).join(", "))}</text>
     ${factSvg}${labelsSvg}
     <rect y="${layout.footerY}" width="1080" height="${layout.footerHeight}" fill="url(#beachFooter)"/><text x="54" y="1146" class="footerLead">Discover this beach on</text><text x="54" y="1196" class="footerBrand">HALKIDIKI EXPLORER</text><text x="57" y="1239" class="footerSmall">Beaches · Local tips · Halkidiki guide</text><text x="57" y="1271" class="footerSmall">Explore more of Halkidiki</text>
-  </svg>`);
+  </svg>`, "utf8");
 }
 
 async function composeBeachImage({ hero, supporting = [], facts, language, copy, includeLogo, record }) {
@@ -615,7 +626,7 @@ function safeOpenAIDiagnostic(response, payload, model) {
 }
 
 async function createEnhancedBase({ hero, supporting, facts, language, angle, apiKey, model, quality, userId }) {
-  if (!apiKey) throw imageError("The Studio image environment is not configured.", 503);
+  if (!apiKey) throw imageError("AI enhanced visual is not configured. Choose Safe branded layout or configure OPENAI_API_KEY.", 503);
   const form = new FormData();
   form.append("model", model); form.append("prompt", enhancePrompt({ facts, language, angle })); form.append("size", "1088x1360"); form.append("quality", quality); form.append("output_format", "jpeg"); form.append("output_compression", "90"); form.append("n", "1");
   for (const [index, reference] of [hero, ...supporting.slice(0, 3)].entries()) {

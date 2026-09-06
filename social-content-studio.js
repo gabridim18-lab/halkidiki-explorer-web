@@ -45,6 +45,10 @@ const packImages = document.getElementById("packImages");
 const packKeyFacts = document.getElementById("packKeyFacts");
 const packPracticalFacts = document.getElementById("packPracticalFacts");
 const packDescriptions = document.getElementById("packDescriptions");
+const beachPackSummary = document.getElementById("beachPackSummary");
+const beachPackShortDescription = document.getElementById("beachPackShortDescription");
+const beachPackPracticalFacts = document.getElementById("beachPackPracticalFacts");
+const visualBrief = document.querySelector(".visual-brief");
 const includeShortDescription = document.getElementById("includeShortDescription");
 const includeLongDescription = document.getElementById("includeLongDescription");
 const supportingLabelEditor = document.getElementById("supportingLabelEditor");
@@ -53,13 +57,6 @@ const accommodationPromotion = document.getElementById("accommodationPromotion")
 const promotionalPriceAmount = document.getElementById("promotionalPriceAmount");
 const promotionalPriceCurrency = document.getElementById("promotionalPriceCurrency");
 const promotionalPriceUnit = document.getElementById("promotionalPriceUnit");
-const metaSetupNotice = document.getElementById("metaSetupNotice");
-const facebookAccountName = document.getElementById("facebookAccountName");
-const facebookConnectionStatus = document.getElementById("facebookConnectionStatus");
-const connectFacebookButton = document.getElementById("connectFacebookButton");
-const instagramAccountName = document.getElementById("instagramAccountName");
-const instagramConnectionStatus = document.getElementById("instagramConnectionStatus");
-const connectInstagramButton = document.getElementById("connectInstagramButton");
 
 const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: { storage: window.localStorage, storageKey: ADMIN_AUTH_STORAGE_KEY, persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
@@ -73,6 +70,7 @@ let activeWorkflow = "poster";
 let creativePack = null;
 let selectedFactIds = new Set();
 let supportingImageLabels = new Map();
+let beachAssetsRequest = 0;
 
 function setMessage(message = "", type = "") { formMessage.textContent = message; formMessage.className = type ? `form-message ${type}` : "form-message"; }
 function listingName(item) { return item?.name && typeof item.name === "object" ? item.name.en || item.name.ro || item.name.el || item.id : item?.titleEn || item?.titleRo || item?.titleEl || item?.title || item?.name || item?.id || "Untitled listing"; }
@@ -100,10 +98,18 @@ function isAccommodationPrimaryFact(fact) {
   return categorySelect.value === "accommodation" && ["manual-promotional-price", "price", "guests", "bedrooms", "beach-distance", "pool"].includes(fact.id);
 }
 
-const BEACH_FACT_PRIORITY = ["family-friendly", "water-entry", "water-depth", "beach-type", "sand", "blue-flag", "water-clarity", "sunbeds", "accessible", "parking-available", "activities"];
+const BEACH_FACT_PRIORITY = ["family-friendly", "water-entry", "water-depth", "beach-type", "sand", "blue-flag", "water-clarity", "occupancy", "recommendation-rating"];
+const BEACH_PRACTICAL_PRIORITY = ["sunbeds", "toilets", "parking-available", "accessible", "activities", "ideal-for", "highlights", "parking-difficulty"];
 function selectedBeachPrimaryFacts(facts = allCreativeFacts()) {
   const byId = new Map(facts.map(fact => [fact.id, fact]));
-  return BEACH_FACT_PRIORITY.map(id => byId.get(id)).filter(Boolean).slice(0, 4);
+  return BEACH_FACT_PRIORITY.map(id => byId.get(id)).filter(Boolean).slice(0, 6);
+}
+function selectedBeachPracticalFacts(facts = allCreativeFacts()) {
+  const byId = new Map(facts.map(fact => [fact.id, fact]));
+  return BEACH_PRACTICAL_PRIORITY.map(id => byId.get(id)).filter(Boolean).slice(0, 6);
+}
+function defaultBeachFactIds(facts = allCreativeFacts()) {
+  return new Set([...selectedBeachPrimaryFacts(facts), ...selectedBeachPracticalFacts(facts)].map(fact => fact.id));
 }
 function isBeachPrimaryFact(fact) {
   return categorySelect.value === "beach" && selectedBeachPrimaryFacts().some(primary => primary.id === fact.id);
@@ -164,78 +170,6 @@ async function getAccessToken() {
 async function updateAuthStatus() {
   if (!supabaseClient) { authStatus.textContent = "Authentication unavailable"; return; }
   try { const { data: { session }, error } = await supabaseClient.auth.getSession(); if (error) throw error; authStatus.textContent = session?.access_token ? "🔒 Admin session detected" : "🔒 Sign in through Admin first"; } catch (error) { console.error("Studio session check failed", error); authStatus.textContent = "Authentication unavailable"; }
-}
-
-function platformElements(platform) {
-  return platform === "facebook"
-    ? { account: facebookAccountName, status: facebookConnectionStatus, button: connectFacebookButton, name: "Facebook" }
-    : { account: instagramAccountName, status: instagramConnectionStatus, button: connectInstagramButton, name: "Instagram" };
-}
-
-function setPlatformConnection(platform, details = {}) {
-  const elements = platformElements(platform);
-  const connected = details.connected === true;
-  const state = connected ? "connected" : details.state === "connecting" ? "connecting" : details.state === "error" ? "error" : "not-connected";
-  const statusText = state === "connected" ? "Connected" : state === "connecting" ? "Connecting…" : state === "error" && details.message ? details.message : state === "error" ? "Connection error" : "Not connected";
-  const accountName = platform === "facebook" ? details.name : details.username ? `@${String(details.username).replace(/^@/, "")}` : "";
-  elements.account.textContent = accountName || (platform === "facebook" ? "No Page connected" : "No professional account connected");
-  elements.status.className = `connection-status ${state}`;
-  elements.status.replaceChildren();
-  const icon = document.createElement("span"); icon.setAttribute("aria-hidden", "true"); icon.textContent = state === "connected" ? "●" : state === "error" ? "⚠" : state === "connecting" ? "◌" : "○";
-  elements.status.append(icon, document.createTextNode(` ${statusText}`));
-  elements.button.disabled = state === "connecting";
-  elements.button.querySelector("span:last-child").textContent = state === "connected" ? `${elements.name} connected ✓` : state === "connecting" ? `Connecting ${elements.name}…` : `Connect ${elements.name}`;
-  elements.status.removeAttribute("title");
-}
-
-function metaResultNotice() {
-  const result = new URLSearchParams(window.location.search).get("meta");
-  const messages = {
-    connected: "Meta account setup completed. Account status has been refreshed.",
-    cancelled: "Meta account connection was cancelled.",
-    invalid_state: "Meta connection could not be verified. Start the connection again from the Studio.",
-    error: "Meta account setup could not be completed. Please try again."
-  };
-  if (!messages[result]) return "";
-  window.history.replaceState({}, "", `${window.location.pathname}${window.location.hash}`);
-  return messages[result];
-}
-
-async function loadMetaStatus() {
-  setPlatformConnection("facebook", { state: "connecting" });
-  setPlatformConnection("instagram", { state: "connecting" });
-  const callbackNotice = metaResultNotice();
-  try {
-    const accessToken = await getAccessToken();
-    const response = await fetch("/api/social/meta/status", { headers: { Authorization: `Bearer ${accessToken}` }, credentials: "same-origin" });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(result.error || "Meta account status is unavailable.");
-    setPlatformConnection("facebook", result.facebook || {});
-    setPlatformConnection("instagram", result.instagram || {});
-    const connectionMessage = [result.facebook, result.instagram].find(platform => platform?.message && !["Connected", "Not connected"].includes(platform.message))?.message;
-    metaSetupNotice.textContent = callbackNotice || connectionMessage || (result.configured ? "Account setup is ready. Publishing is not enabled in this phase." : "Meta account setup needs server configuration before an account can be connected.");
-  } catch (error) {
-    setPlatformConnection("facebook", { state: "error", message: "Sign in is required to inspect Meta account status." });
-    setPlatformConnection("instagram", { state: "error", message: "Sign in is required to inspect Meta account status." });
-    metaSetupNotice.textContent = callbackNotice || "Sign in as a Studio administrator to inspect Meta account status.";
-  }
-}
-
-async function connectMeta(platform) {
-  const elements = platformElements(platform);
-  setPlatformConnection(platform, { state: "connecting" });
-  metaSetupNotice.textContent = `Opening ${elements.name} account setup…`;
-  try {
-    const accessToken = await getAccessToken();
-    const response = await fetch("/api/social/meta/connect", { method: "POST", headers: { Authorization: `Bearer ${accessToken}` }, credentials: "same-origin" });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok || typeof result.authorizationUrl !== "string") throw new Error(result.error || "Meta account setup could not be started.");
-    // The URL is server-generated and carries only OAuth state, never a token.
-    window.location.assign(result.authorizationUrl);
-  } catch (error) {
-    setPlatformConnection(platform, { state: "error", message: "Meta account setup could not be started." });
-    metaSetupNotice.textContent = error.message || "Meta account setup could not be started.";
-  }
 }
 
 function renderImagePicker() {
@@ -300,38 +234,58 @@ function renderFactPicker() {
 
 function packFactElement(fact) { const card = document.createElement("div"); card.className = `pack-fact${isAccommodationPrimaryFact(fact) || isBeachPrimaryFact(fact) ? " primary-fact" : ""}`; const label = document.createElement("strong"); label.textContent = fact.label; const value = document.createElement("span"); value.textContent = fact.value; card.append(label, value); return card; }
 function selectedPackImages() { const byId = new Map(canonicalImages.map(image => [image.id, image])); return [heroImageId, ...supportingImageIds].map(id => byId.get(id)).filter(Boolean); }
+function beachCompactFactText(fact) {
+  const available = { sunbeds: "Sunbeds", toilets: "Toilets", "parking-available": "Parking", accessible: "Accessible", "family-friendly": "Kids friendly", "blue-flag": "Blue Flag", sunset: "Sunset view" };
+  return available[fact.id] || fact.value;
+}
+function beachCompactFactElement(fact) { const item = document.createElement("div"); item.className = "beach-compact-fact"; item.textContent = beachCompactFactText(fact); return item; }
 
 function renderCreativePack() {
-  if (!creativePack) { creativePackEmpty.hidden = false; creativePackContent.hidden = true; return; }
+  if (!creativePack) { creativePackEmpty.hidden = false; creativePackContent.hidden = true; visualBrief.classList.remove("beach-visual-brief"); beachPackSummary.hidden = true; packIdentity.replaceChildren(); packImages.replaceChildren(); packKeyFacts.replaceChildren(); packPracticalFacts.replaceChildren(); beachPackShortDescription.textContent = ""; beachPackPracticalFacts.replaceChildren(); packDescriptions.replaceChildren(); return; }
   creativePackEmpty.hidden = true; creativePackContent.hidden = false; creativeProfileBadge.textContent = creativePack.profile.displayName;
+  const beachPack = creativePack.profile.id === "beach";
+  visualBrief.classList.toggle("beach-visual-brief", beachPack);
+  beachPackSummary.hidden = !beachPack;
+  packKeyFacts.classList.toggle("beach-fact-list", beachPack);
+  beachPackPracticalFacts.classList.toggle("beach-fact-list", beachPack);
   packIdentity.replaceChildren(); const title = document.createElement("h3"); title.textContent = creativePack.identity.title; const meta = document.createElement("p"); meta.textContent = [creativePack.identity.category, creativePack.identity.location].filter(Boolean).join(" · "); packIdentity.append(title, meta);
   packImages.replaceChildren(); selectedPackImages().forEach((image, index) => { const card = document.createElement("div"); card.className = "pack-image"; const photo = document.createElement("img"); photo.src = image.url; photo.alt = index === 0 ? "Hero image" : `Supporting image ${index}`; if (!["accommodation", "beach", "restaurant", "beachBar", "localBusiness"].includes(creativePack.profile.id)) { const label = document.createElement("span"); const customLabel = supportingImageLabels.get(image.id) || suggestedSupportingLabel(image.id, index - 1); label.textContent = index === 0 ? "Hero" : `Supporting ${index} · ${customLabel}`; card.appendChild(label); } card.prepend(photo); packImages.appendChild(card); });
   if (!packImages.childElementCount) { const note = document.createElement("p"); note.className = "picker-empty"; note.textContent = "Choose published photos to include them in the visual brief."; packImages.appendChild(note); }
-  const selected = selectedCreativeFacts(); const localBusiness = categorySelect.value === "local-business"; const practicalGroups = new Set(["practical", ...(localBusiness ? [] : ["service"])]); const restaurantFamily = categorySelect.value === "restaurant"; const restaurantSecondaryIds = new Set(["features", "price", "sunbed-price", "hours"]); const beachPrimary = creativePack.profile.id === "beach" ? selectedBeachPrimaryFacts(selected) : []; const beachPrimaryIds = new Set(beachPrimary.map(fact => fact.id)); packKeyFacts.replaceChildren(); packPracticalFacts.replaceChildren(); selected.forEach(fact => ((creativePack.profile.id === "beach" && !beachPrimaryIds.has(fact.id)) || (restaurantFamily && restaurantSecondaryIds.has(fact.id)) || practicalGroups.has(fact.group) ? packPracticalFacts : packKeyFacts).appendChild(packFactElement(fact)));
+  const selected = selectedCreativeFacts(); const localBusiness = categorySelect.value === "local-business"; const practicalGroups = new Set(["practical", ...(localBusiness ? [] : ["service"])]); const restaurantFamily = categorySelect.value === "restaurant"; const restaurantSecondaryIds = new Set(["features", "price", "sunbed-price", "hours"]); const beachPrimary = beachPack ? selectedBeachPrimaryFacts(selected) : []; const beachPractical = beachPack ? selectedBeachPracticalFacts(selected) : []; const beachPrimaryIds = new Set(beachPrimary.map(fact => fact.id)); const beachPracticalIds = new Set(beachPractical.map(fact => fact.id)); packKeyFacts.replaceChildren(); packPracticalFacts.replaceChildren(); beachPackPracticalFacts.replaceChildren();
+  selected.forEach(fact => {
+    if (beachPack && beachPrimaryIds.has(fact.id)) packKeyFacts.appendChild(beachCompactFactElement(fact));
+    else if (beachPack && beachPracticalIds.has(fact.id)) beachPackPracticalFacts.appendChild(beachCompactFactElement(fact));
+    else if ((beachPack && !beachPrimaryIds.has(fact.id)) || (restaurantFamily && restaurantSecondaryIds.has(fact.id)) || practicalGroups.has(fact.group)) packPracticalFacts.appendChild(packFactElement(fact));
+    else packKeyFacts.appendChild(packFactElement(fact));
+  });
   if (!packKeyFacts.childElementCount) packKeyFacts.textContent = "Select verified facts from the left panel."; if (!packPracticalFacts.childElementCount) packPracticalFacts.textContent = "No practical information selected.";
+  if (beachPack) {
+    beachPackShortDescription.textContent = includeShortDescription.checked ? creativePack.descriptions.short : "";
+    if (!beachPackPracticalFacts.childElementCount) beachPackPracticalFacts.textContent = "No practical information selected.";
+  }
   packDescriptions.replaceChildren();
   const addDescription = (heading, value) => { if (!value) return; const block = document.createElement("article"); block.className = "pack-description"; const titleElement = document.createElement("h3"); titleElement.textContent = heading; const copy = document.createElement("div"); copy.textContent = value; block.append(titleElement, copy); packDescriptions.appendChild(block); };
-  if (includeShortDescription.checked) addDescription("Short description", creativePack.descriptions.short); if (includeLongDescription.checked) addDescription("Long description", creativePack.descriptions.long); if (!packDescriptions.childElementCount) packDescriptions.textContent = "No description selected.";
+  if (!beachPack && includeShortDescription.checked) addDescription("Short description", creativePack.descriptions.short); if (includeLongDescription.checked) addDescription("Long description", creativePack.descriptions.long); if (!packDescriptions.childElementCount) packDescriptions.textContent = "No description selected.";
 }
 
 async function loadCanonicalImages() {
-  const listingId = listingSelect.value; const category = categorySelect.value; if (!listingId) return resetImagePicker();
+  const listingId = listingSelect.value; const category = categorySelect.value; const language = languageSelect.value; const beachRequestId = category === "beach" ? ++beachAssetsRequest : 0; if (!listingId) return resetImagePicker();
   resetListingDependentState(); resetImagePicker("Loading published listing photos…"); imagePickerStatus.textContent = "Loading…";
   try {
     const accessToken = await getAccessToken();
-    const response = await fetch("/api/social/listing-assets", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` }, body: JSON.stringify({ category, listingId, language: languageSelect.value }) });
-    const result = await response.json().catch(() => ({})); if (!response.ok) throw new Error(result.error || "The listing photos could not be loaded."); if (listingSelect.value !== listingId || categorySelect.value !== category) return;
+    const response = await fetch("/api/social/listing-assets", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` }, body: JSON.stringify({ category, listingId, language }) });
+    const result = await response.json().catch(() => ({})); if (!response.ok) throw new Error(result.error || "The listing photos could not be loaded."); if ((category === "beach" && (beachRequestId !== beachAssetsRequest || languageSelect.value !== language)) || listingSelect.value !== listingId || categorySelect.value !== category) return;
     canonicalImages = Array.isArray(result.images) ? result.images : []; heroImageId = canonicalImages[0]?.id || "";
     // Beach records normally provide exactly three canonical photos.  Their
     // dedicated layout always uses the hero plus two clean supporting views.
     // This only changes the Studio selection state; it never generates an image.
     supportingImageIds = category === "beach" ? new Set(canonicalImages.slice(1, 3).map(image => image.id)) : new Set();
-    creativePack = result.creativePack || null; selectedFactIds = new Set((creativePack?.profile?.id === "beach" ? selectedBeachPrimaryFacts() : allCreativeFacts().filter(fact => fact.priority >= 70 && !(category === "restaurant" && ["hours", "features", "price", "sunbed-price"].includes(fact.id)))).map(fact => fact.id));
-    includeShortDescription.disabled = !creativePack?.descriptions?.short; includeShortDescription.checked = Boolean(creativePack?.descriptions?.short);
+    creativePack = result.creativePack || null; selectedFactIds = creativePack?.profile?.id === "beach" ? defaultBeachFactIds() : new Set(allCreativeFacts().filter(fact => fact.priority >= 70 && !(category === "restaurant" && ["hours", "features", "price", "sunbed-price"].includes(fact.id))).map(fact => fact.id));
+    includeShortDescription.disabled = creativePack?.profile?.id === "beach" || !creativePack?.descriptions?.short; includeShortDescription.checked = Boolean(creativePack?.descriptions?.short);
     includeLongDescription.disabled = !creativePack?.descriptions?.long; includeLongDescription.checked = false;
     accommodationPromotion.hidden = categorySelect.value !== "accommodation";
     renderImagePicker(); renderSupportingLabelEditor(); renderFactPicker(); renderCreativePack();
-  } catch (error) { console.error("Listing assets error", error); resetImagePicker(error.message || "The listing photos could not be loaded."); setMessage(error.message || "The listing photos could not be loaded.", "error"); }
+  } catch (error) { if (category === "beach" && beachRequestId !== beachAssetsRequest) return; console.error("Listing assets error", error); resetImagePicker(error.message || "The listing photos could not be loaded."); setMessage(error.message || "The listing photos could not be loaded.", "error"); }
 }
 
 function setBusy(busy, label = "Generating social image…") { isGenerating = busy; generateButton.disabled = busy; suggestTextButton.disabled = busy; generateButton.textContent = busy ? label : "✦ Generate social image"; }
@@ -433,6 +387,4 @@ document.getElementById("copyAllFactsButton").addEventListener("click", event =>
 document.getElementById("copyShortDescriptionButton").addEventListener("click", event => copyText(includeShortDescription.checked ? creativePack?.descriptions?.short : "", event.currentTarget));
 document.getElementById("copyLongDescriptionButton").addEventListener("click", event => copyText(includeLongDescription.checked ? creativePack?.descriptions?.long : "", event.currentTarget));
 document.getElementById("copyAiBriefButton").addEventListener("click", event => copyText(creativeBrief(), event.currentTarget, "AI brief copied"));
-connectFacebookButton.addEventListener("click", () => connectMeta("facebook"));
-connectInstagramButton.addEventListener("click", () => connectMeta("instagram"));
-Promise.all([loadListings(categorySelect.value), updateAuthStatus(), loadMetaStatus()]);
+Promise.all([loadListings(categorySelect.value), updateAuthStatus()]);

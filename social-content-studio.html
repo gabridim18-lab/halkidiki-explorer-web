@@ -117,7 +117,7 @@
 
       <section class="studio-card preview-card" aria-labelledby="preview-title">
         <div id="posterPreviewHeading" class="card-heading"><div><p class="eyebrow">Step 3</p><h2 id="preview-title">Final social visual</h2></div><span class="editable-badge">Editable draft</span></div>
-        <div id="emptyPreview" class="empty-preview poster-only"><div class="empty-icon" aria-hidden="true">✦</div><h3>Your final visual will appear here</h3><p>Select published photos, then generate a 1080 × 1350 post.</p></div>
+        <div id="emptyPreview" class="empty-preview poster-only"><p>Generate a visual to preview it here.</p></div>
         <div id="visualPreview" class="visual-preview poster-only" hidden>
           <img id="finalVisual" alt="Generated Halkidiki Explorer social visual">
           <div class="visual-actions">
@@ -138,9 +138,9 @@
 
         <section id="creativePackPreview" class="creative-pack-preview" hidden aria-live="polite">
           <div class="card-heading"><div><p class="eyebrow">Screenshot handoff</p><h2>AI Creative Pack</h2></div><span id="creativeProfileBadge" class="profile-badge">Verified data</span></div>
-          <div id="creativePackEmpty" class="creative-pack-empty"><div class="empty-icon" aria-hidden="true">✦</div><h3>Choose a listing to build a Creative Pack</h3><p>It will use selected canonical facts and photos only.</p></div>
+          <div id="creativePackEmpty" class="creative-pack-empty"><p>Select a listing to build the Creative Pack.</p></div>
           <div id="creativePackContent" hidden>
-            <section class="creative-page visual-brief"><div class="pack-kicker">PAGE 1 · VISUAL BRIEF</div><div id="packIdentity" class="pack-identity"></div><div id="packImages" class="pack-images"></div><div><h3>Key facts</h3><div id="packKeyFacts" class="pack-facts"></div></div></section>
+            <section class="creative-page visual-brief"><div class="pack-kicker">PAGE 1 · VISUAL BRIEF</div><div id="packIdentity" class="pack-identity"></div><div id="packImages" class="pack-images"></div><div><h3>Key facts</h3><div id="packKeyFacts" class="pack-facts"></div></div><div id="beachPackSummary" class="beach-pack-summary" hidden><article class="beach-pack-description"><h3>Short description</h3><div id="beachPackShortDescription"></div></article><div class="beach-pack-practical"><h3>Local &amp; practical information</h3><div id="beachPackPracticalFacts" class="pack-facts"></div></div></div></section>
             <section class="creative-page content-brief"><div class="pack-kicker">PAGE 2 · CONTENT BRIEF</div><div id="packDescriptions" class="pack-descriptions"></div><div><h3>Location & practical information</h3><div id="packPracticalFacts" class="pack-facts"></div></div></section>
             <div class="creative-copy-actions"><button id="copyAllFactsButton" class="copy-button" type="button">Copy all selected facts</button><button id="copyShortDescriptionButton" class="copy-button" type="button">Copy short description</button><button id="copyLongDescriptionButton" class="copy-button" type="button">Copy long description</button><button id="copyAiBriefButton" class="generate-button compact-generate" type="button">Copy AI brief</button></div>
           </div>
@@ -148,35 +148,6 @@
       </section>
     </section>
 
-    <section class="publishing-section" aria-labelledby="publishing-title">
-      <div class="publishing-heading">
-        <div><p class="eyebrow">Account setup</p><h2 id="publishing-title">Social publishing</h2><p>Connect your social accounts and choose where your finished post will be published.</p></div>
-        <span id="metaSetupNotice" class="publishing-notice" role="status" aria-live="polite">Checking account setup…</span>
-      </div>
-
-      <div class="platform-cards">
-        <article class="platform-card facebook-card" aria-labelledby="facebook-title">
-          <div class="platform-card-heading"><span class="platform-icon facebook-icon" aria-hidden="true">f</span><div><h3 id="facebook-title">Facebook</h3><p id="facebookAccountName">No Page connected</p></div></div>
-          <p id="facebookConnectionStatus" class="connection-status not-connected"><span aria-hidden="true">○</span> Not connected</p>
-          <button id="connectFacebookButton" class="platform-connect facebook-connect" type="button"><span class="platform-button-icon" aria-hidden="true">f</span><span>Connect Facebook</span></button>
-        </article>
-
-        <article class="platform-card instagram-card" aria-labelledby="instagram-title">
-          <div class="platform-card-heading"><span class="platform-icon instagram-icon" aria-hidden="true">◎</span><div><h3 id="instagram-title">Instagram</h3><p id="instagramAccountName">No professional account connected</p></div></div>
-          <p id="instagramConnectionStatus" class="connection-status not-connected"><span aria-hidden="true">○</span> Not connected</p>
-          <button id="connectInstagramButton" class="platform-connect instagram-connect" type="button"><span class="platform-button-icon" aria-hidden="true">◎</span><span>Connect Instagram</span></button>
-        </article>
-      </div>
-
-      <div class="future-publishing" aria-labelledby="future-publishing-title">
-        <div><p class="eyebrow">Next phase</p><h3 id="future-publishing-title">Publishing destinations</h3><p>Publishing controls will appear after account setup is verified.</p></div>
-        <div class="future-destinations" aria-label="Future publishing destinations"><button type="button" disabled>Facebook</button><button type="button" disabled>Instagram</button><button type="button" disabled>TikTok</button></div>
-      </div>
-
-      <section class="post-preview-placeholder" aria-labelledby="post-preview-title">
-        <p class="eyebrow">Future post</p><h3 id="post-preview-title">Post preview</h3><p>Generate your finished poster and caption to prepare a social post.</p>
-      </section>
-    </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="social-content-studio.js"></script>
