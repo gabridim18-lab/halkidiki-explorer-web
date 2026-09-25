@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Halkidiki Explorer — Owner Management</title>
+  <meta name="robots" content="noindex,nofollow" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root{
+      --blue:#0b5ed7;
+      --navy:#0b2746;
+      --navy-2:#123b72;
+      --gold:#c99a3d;
+      --green:#20a464;
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --text:#172033;
+      --muted:#68758a;
+      --border:#dfe6ef;
+      --danger:#b42318;
+      --shadow:0 18px 50px rgba(14, 42, 77, .12);
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Arial,Helvetica,sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(11,94,215,.08), transparent 32%),
+        linear-gradient(180deg,#f7faff 0%,#f2f6fb 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    button,input{font:inherit}
+
+    .hidden{display:none !important}
+
+    .topbar{
+      min-height:72px;
+      background:linear-gradient(135deg,var(--navy),var(--navy-2));
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      padding:14px 24px;
+      box-shadow:0 8px 24px rgba(7,31,58,.15);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+
+    .brand-mark{
+      width:42px;
+      height:42px;
+      border:2px solid rgba(255,255,255,.75);
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      font-family:Georgia,serif;
+      font-size:22px;
+      font-weight:700;
+      color:#fff;
+      flex:0 0 auto;
+    }
+
+    .brand-text strong{
+      display:block;
+      font-family:Georgia,serif;
+      font-size:20px;
+      font-weight:normal;
+      letter-spacing:.2px;
+    }
+
+    .brand-text span{
+      display:block;
+      margin-top:2px;
+      font-size:11px;
+      opacity:.78;
+      letter-spacing:1.3px;
+      text-transform:uppercase;
+    }
+
+    .topbar-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .logout-btn{
+      border:1px solid rgba(255,255,255,.28);
+      background:rgba(255,255,255,.1);
+      color:white;
+      border-radius:10px;
+      padding:10px 14px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .page{
+      width:min(1180px,calc(100% - 28px));
+      margin:0 auto;
+      padding:36px 0 56px;
+    }
+
+    .login-wrap{
+      min-height:calc(100vh - 72px);
+      display:grid;
+      place-items:center;
+      padding:28px 14px 50px;
+    }
+
+    .login-card{
+      width:min(440px,100%);
+      background:white;
+      border:1px solid var(--border);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:38px;
+    }
+
+    .login-icon{
+      width:66px;
+      height:66px;
+      margin:0 auto 20px;
+      border:2px solid var(--gold);
+      color:var(--gold);
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      font-family:Georgia,serif;
+      font-size:30px;
+      font-weight:700;
+    }
+
+    .login-card h1{
+      margin:0;
+      text-align:center;
+      color:var(--navy);
+      font-family:Georgia,serif;
+      font-size:30px;
+      font-weight:normal;
+    }
+
+    .login-subtitle{
+      margin:8px 0 28px;
+      text-align:center;
+      color:var(--muted);
+      line-height:1.5;
+      font-size:14px;
+    }
+
+    .field{
+      margin-bottom:15px;
+    }
+
+    .field label{
+      display:block;
+      margin-bottom:7px;
+      color:#52687a;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.6px;
+      text-transform:uppercase;
+    }
+
+    .field input{
+      width:100%;
+      height:50px;
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:0 14px;
+      outline:none;
+      background:white;
+    }
+
+    .field input:focus{
+      border-color:var(--blue);
+      box-shadow:0 0 0 3px rgba(11,94,215,.09);
+    }
+
+    .primary-btn{
+      width:100%;
+      min-height:50px;
+      border:0;
+      border-radius:10px;
+      background:var(--navy);
+      color:white;
+      font-weight:800;
+      cursor:pointer;
+      margin-top:5px;
+    }
+
+    .primary-btn:hover{filter:brightness(1.06)}
+    .primary-btn:disabled{opacity:.6;cursor:not-allowed}
+
+    .message{
+      min-height:20px;
+      margin-top:15px;
+      font-size:13px;
+      text-align:center;
+      color:var(--danger);
+      line-height:1.45;
+    }
+
+    .login-note{
+      margin:20px 0 0;
+      color:var(--muted);
+      text-align:center;
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .dashboard-head{
+      display:flex;
+      justify-content:space-between;
+      gap:22px;
+      align-items:flex-end;
+      margin-bottom:24px;
+    }
+
+    .dashboard-head small{
+      color:var(--blue);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+
+    .dashboard-head h1{
+      margin:6px 0 5px;
+      font-family:Georgia,serif;
+      color:var(--navy);
+      font-weight:normal;
+      font-size:34px;
+    }
+
+    .dashboard-head p{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .owner-chip{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:11px 14px;
+      color:var(--navy);
+      box-shadow:0 8px 24px rgba(14,42,77,.06);
+      font-size:13px;
+      max-width:320px;
+      text-align:right;
+    }
+
+    .owner-chip strong{
+      display:block;
+      margin-bottom:3px;
+      font-size:14px;
+    }
+
+    .section-card{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:18px;
+      box-shadow:0 10px 30px rgba(14,42,77,.07);
+      padding:22px;
+    }
+
+    .section-title{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:center;
+      margin-bottom:18px;
+    }
+
+    .section-title h2{
+      margin:0;
+      color:var(--navy);
+      font-family:Georgia,serif;
+      font-weight:normal;
+      font-size:24px;
+    }
+
+    .count-pill{
+      border-radius:999px;
+      background:#edf4ff;
+      color:var(--blue);
+      padding:6px 10px;
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .properties-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+    }
+
+    .property-card{
+      border:1px solid var(--border);
+      border-radius:16px;
+      overflow:hidden;
+      background:#fff;
+      transition:.2s ease;
+    }
+
+    .property-card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 28px rgba(14,42,77,.1);
+    }
+
+    .property-image{
+      width:100%;
+      height:180px;
+      display:block;
+      object-fit:cover;
+      background:#e9eef5;
+    }
+
+    .property-body{
+      padding:16px;
+    }
+
+    .property-zone{
+      color:var(--blue);
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.7px;
+    }
+
+    .property-body h3{
+      margin:7px 0 8px;
+      color:var(--navy);
+      font-family:Georgia,serif;
+      font-size:21px;
+      font-weight:normal;
+    }
+
+    .property-meta{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+      min-height:40px;
+    }
+
+    .property-actions{
+      display:flex;
+      gap:8px;
+      margin-top:15px;
+    }
+
+    .action-btn{
+      flex:1;
+      border:0;
+      border-radius:9px;
+      padding:10px 11px;
+      cursor:pointer;
+      font-weight:800;
+      font-size:12px;
+    }
+
+    .manage-btn{
+      background:var(--navy);
+      color:white;
+    }
+
+    .view-btn{
+      background:#edf2f7;
+      color:var(--navy);
+    }
+
+    .empty-state{
+      padding:34px 18px;
+      text-align:center;
+      color:var(--muted);
+      border:1px dashed #cbd6e3;
+      border-radius:14px;
+      background:#fafcff;
+    }
+
+    .loading{
+      padding:32px;
+      text-align:center;
+      color:var(--muted);
+    }
+
+    .config-warning{
+      border:1px solid #f1df91;
+      background:#fff8dc;
+      color:#725b0d;
+      padding:13px 14px;
+      border-radius:10px;
+      font-size:13px;
+      line-height:1.5;
+      margin-bottom:16px;
+    }
+
+    @media(max-width:900px){
+      .properties-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    @media(max-width:650px){
+      .topbar{padding:12px 15px}
+      .brand-text strong{font-size:17px}
+      .brand-text span{font-size:10px}
+      .page{width:min(100% - 20px,1180px);padding-top:24px}
+      .dashboard-head{display:block}
+      .owner-chip{margin-top:14px;text-align:left;max-width:none}
+      .properties-grid{grid-template-columns:1fr}
+      .login-card{padding:30px 22px}
+      .property-image{height:210px}
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">H</div>
+      <div class="brand-text">
+        <strong>Halkidiki Explorer</strong>
+        <span>Owner Management</span>
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <button id="logoutBtn" class="logout-btn hidden" type="button">
+        Log out
+      </button>
+    </div>
+  </header>
+
+  <section id="loginScreen" class="login-wrap">
+    <div class="login-card">
+      <div class="login-icon">H</div>
+
+      <h1>Owner Login</h1>
+
+      <p class="login-subtitle">
+        Access your Halkidiki Explorer property management area.
+      </p>
+
+      <div id="configWarning" class="config-warning hidden">
+        Supabase is not configured yet. Add the Project URL and Anon Key
+        in the configuration block inside this file.
+      </div>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            autocomplete="email"
+            placeholder="owner@example.com"
+            required
+          />
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+
+        <button id="loginBtn" class="primary-btn" type="submit">
+          SIGN IN
+        </button>
+      </form>
+
+      <div id="loginMessage" class="message"></div>
+
+      <p class="login-note">
+        Your account gives access only to the accommodations assigned to you.
+      </p>
+    </div>
+  </section>
+
+  <main id="dashboard" class="page hidden">
+    <div class="dashboard-head">
+      <div>
+        <small>Property Management</small>
+        <h1>My properties</h1>
+        <p>Manage the accommodations connected to your owner account.</p>
+      </div>
+
+      <div id="ownerChip" class="owner-chip">
+        <strong>Owner</strong>
+        <span>Loading profile...</span>
+      </div>
+    </div>
+
+    <section class="section-card">
+      <div class="section-title">
+        <h2>Accommodations</h2>
+        <span id="propertyCount" class="count-pill">0 properties</span>
+      </div>
+
+      <div id="propertiesContainer" class="loading">
+        Loading your properties...
+      </div>
+    </section>
+  </main>
+
+  <script>
+    /* =========================================================
+       SUPABASE CONFIGURATION
+       Paste the values from:
+       Supabase → Project Settings → Data API / API
+       ========================================================= */
+
+    const SUPABASE_URL = "https://bjywllpzvckllydflxbd.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_2CYR00gmzcodRcOqbjIBIQ_X450DFQh";
+
+    /* =========================================================
+       PUBLIC ACCOMMODATION DATA
+       ========================================================= */
+
+    const ACCOMMODATION_BASE_URL =
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations";
+
+    /* ========================================================= */
+
+    const loginScreen =
+      document.getElementById("loginScreen");
+
+    const dashboard =
+      document.getElementById("dashboard");
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const loginBtn =
+      document.getElementById("loginBtn");
+
+    const logoutBtn =
+      document.getElementById("logoutBtn");
+
+    const loginMessage =
+      document.getElementById("loginMessage");
+
+    const ownerChip =
+      document.getElementById("ownerChip");
+
+    const propertiesContainer =
+      document.getElementById("propertiesContainer");
+
+    const propertyCount =
+      document.getElementById("propertyCount");
+
+    const configWarning =
+      document.getElementById("configWarning");
+
+    const isConfigured =
+      !SUPABASE_URL.includes("PASTE_") &&
+      !SUPABASE_ANON_KEY.includes("PASTE_");
+
+    let supabaseClient = null;
+
+    if (isConfigured) {
+      supabaseClient =
+        window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_ANON_KEY
+        );
+    } else {
+      configWarning.classList.remove("hidden");
+    }
+
+    function showLogin() {
+      loginScreen.classList.remove("hidden");
+      dashboard.classList.add("hidden");
+      logoutBtn.classList.add("hidden");
+    }
+
+    function showDashboard() {
+      loginScreen.classList.add("hidden");
+      dashboard.classList.remove("hidden");
+      logoutBtn.classList.remove("hidden");
+    }
+
+    function setLoginBusy(isBusy) {
+      loginBtn.disabled = isBusy;
+      loginBtn.textContent =
+        isBusy ? "SIGNING IN..." : "SIGN IN";
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    async function loadOwnerArea(user) {
+      showDashboard();
+
+      ownerChip.innerHTML =
+        "<strong>Owner</strong><span>Loading profile...</span>";
+
+      propertiesContainer.className = "loading";
+      propertiesContainer.textContent =
+        "Loading your properties...";
+
+      propertyCount.textContent =
+        "0 properties";
+
+      const {
+        data: profile,
+        error: profileError
+      } =
+        await supabaseClient
+          .from("owner_profiles")
+          .select(
+            "id, full_name, email, company_name, is_active"
+          )
+          .eq("id", user.id)
+          .single();
+
+      if (profileError) {
+        console.error(profileError);
+
+        ownerChip.innerHTML =
+          "<strong>Account error</strong><span>Owner profile not found.</span>";
+
+        propertiesContainer.className =
+          "empty-state";
+
+        propertiesContainer.textContent =
+          "Your owner profile could not be loaded.";
+
+        return;
+      }
+
+      if (profile.is_active !== true) {
+        await supabaseClient.auth.signOut();
+
+        showLogin();
+
+        loginMessage.textContent =
+          "This owner account is currently inactive.";
+
+        return;
+      }
+
+      ownerChip.innerHTML = `
+        <strong>${escapeHtml(
+          profile.full_name ||
+          profile.company_name ||
+          "Owner"
+        )}</strong>
+        <span>${escapeHtml(
+          profile.email || user.email || ""
+        )}</span>
+      `;
+
+      const {
+        data: links,
+        error: propertyError
+      } =
+        await supabaseClient
+          .from("owner_properties")
+          .select("id, accommodation_id")
+          .order("id", { ascending: true });
+
+      if (propertyError) {
+        console.error(propertyError);
+
+        propertiesContainer.className =
+          "empty-state";
+
+        propertiesContainer.textContent =
+          "Your accommodations could not be loaded.";
+
+        return;
+      }
+
+      if (!links || links.length === 0) {
+        propertiesContainer.className =
+          "empty-state";
+
+        propertiesContainer.textContent =
+          "No accommodation is assigned to this owner account yet.";
+
+        return;
+      }
+
+      const results =
+        await Promise.all(
+          links.map(async link => {
+            try {
+              const response =
+                await fetch(
+                  `${ACCOMMODATION_BASE_URL}/${encodeURIComponent(
+                    link.accommodation_id
+                  )}/index.json`
+                );
+
+              if (!response.ok) {
+                throw new Error(
+                  `HTTP ${response.status}`
+                );
+              }
+
+              const data =
+                await response.json();
+
+              return {
+                link,
+                data,
+                error: null
+              };
+
+            } catch (error) {
+              return {
+                link,
+                data: null,
+                error
+              };
+            }
+          })
+        );
+
+      renderProperties(results);
+    }
+
+    function renderProperties(results) {
+      propertyCount.textContent =
+        `${results.length} ${
+          results.length === 1
+            ? "property"
+            : "properties"
+        }`;
+
+      propertiesContainer.className =
+        "properties-grid";
+
+      propertiesContainer.innerHTML =
+        results.map(item => {
+
+          if (!item.data) {
+            return `
+              <article class="property-card">
+                <div class="property-body">
+                  <div class="property-zone">
+                    Accommodation
+                  </div>
+
+                  <h3>
+                    ${escapeHtml(
+                      item.link.accommodation_id
+                    )}
+                  </h3>
+
+                  <div class="property-meta">
+                    The public JSON for this accommodation
+                    could not be loaded.
+                  </div>
+                </div>
+              </article>
+            `;
+          }
+
+          const data =
+            item.data;
+
+          const image =
+            Array.isArray(data.images) &&
+            data.images.length > 0
+              ? data.images[0]
+              : "";
+
+          const title =
+            data.titleEn ||
+            data.title ||
+            item.link.accommodation_id;
+
+          const zone =
+            data.zone || "Halkidiki";
+
+          const guests =
+            data.guests
+              ? `${data.guests} guests`
+              : "";
+
+          const bedrooms =
+            data.bedrooms
+              ? `${data.bedrooms} bedrooms`
+              : "";
+
+          const meta =
+            [guests, bedrooms]
+              .filter(Boolean)
+              .join(" • ");
+
+          return `
+            <article class="property-card">
+
+              ${
+                image
+                  ? `
+                    <img
+                      class="property-image"
+                      src="${escapeHtml(image)}"
+                      alt="${escapeHtml(title)}"
+                    >
+                  `
+                  : `
+                    <div class="property-image"></div>
+                  `
+              }
+
+              <div class="property-body">
+
+                <div class="property-zone">
+                  ${escapeHtml(zone)}
+                </div>
+
+                <h3>
+                  ${escapeHtml(title)}
+                </h3>
+
+                <div class="property-meta">
+                  ${
+                    escapeHtml(meta) ||
+                    "Accommodation connected to your owner account."
+                  }
+                </div>
+
+                <div class="property-actions">
+
+                  <button
+                    class="action-btn manage-btn"
+                    type="button"
+                    onclick="openPropertyManager(
+                      '${encodeURIComponent(
+                        item.link.accommodation_id
+                      )}'
+                    )"
+                  >
+                    MANAGE
+                  </button>
+
+                  <button
+                    class="action-btn view-btn"
+                    type="button"
+                    onclick="viewPublicProperty(
+                      '${encodeURIComponent(
+                        item.link.accommodation_id
+                      )}'
+                    )"
+                  >
+                    VIEW PAGE
+                  </button>
+
+                </div>
+
+              </div>
+
+            </article>
+          `;
+        }).join("");
+    }
+
+    function openPropertyManager(encodedId) {
+      const accommodationId =
+        decodeURIComponent(encodedId);
+
+      alert(
+        `Booking management for "${accommodationId}" is the next module we will build.`
+      );
+    }
+
+    function viewPublicProperty(encodedId) {
+      const accommodationId =
+        decodeURIComponent(encodedId);
+
+      window.open(
+        `accommodation.html?id=${encodeURIComponent(
+          accommodationId
+        )}`,
+        "_blank",
+        "noopener"
+      );
+    }
+
+    loginForm.addEventListener(
+      "submit",
+      async event => {
+
+        event.preventDefault();
+
+        loginMessage.textContent = "";
+
+        if (!isConfigured) {
+          loginMessage.textContent =
+            "Supabase configuration is missing.";
+          return;
+        }
+
+        const email =
+          document
+            .getElementById("email")
+            .value
+            .trim();
+
+        const password =
+          document
+            .getElementById("password")
+            .value;
+
+        setLoginBusy(true);
+
+        const {
+          data,
+          error
+        } =
+          await supabaseClient.auth
+            .signInWithPassword({
+              email,
+              password
+            });
+
+        setLoginBusy(false);
+
+        if (error) {
+          console.error(error);
+
+          loginMessage.textContent =
+            "Incorrect email or password.";
+
+          return;
+        }
+
+        if (!data.user) {
+          loginMessage.textContent =
+            "Could not open the owner account.";
+          return;
+        }
+
+        await loadOwnerArea(data.user);
+      }
+    );
+
+    logoutBtn.addEventListener(
+      "click",
+      async () => {
+
+        if (supabaseClient) {
+          await supabaseClient.auth.signOut();
+        }
+
+        loginForm.reset();
+        loginMessage.textContent = "";
+        showLogin();
+      }
+    );
+
+    async function initializeOwnerPage() {
+      if (!isConfigured) {
+        showLogin();
+        return;
+      }
+
+      const {
+        data: {
+          session
+        }
+      } =
+        await supabaseClient.auth.getSession();
+
+      if (session?.user) {
+        await loadOwnerArea(
+          session.user
+        );
+      } else {
+        showLogin();
+      }
+    }
+
+    initializeOwnerPage();
+  </script>
+
+</body>
+</html>

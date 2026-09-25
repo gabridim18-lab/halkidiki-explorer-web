@@ -1,0 +1,5899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a6f87" />
+  <title>Take me to Halkidiki — V9</title>
+
+  <style>
+    :root {
+      --white: #ffffff;
+      --soft-white: rgba(255,255,255,.84);
+      --shadow: 0 24px 80px rgba(0,0,0,.28);
+      --safe-top: max(18px, env(safe-area-inset-top));
+      --safe-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: #0a6578;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    body {
+      overflow: hidden;
+      color: var(--white);
+    }
+
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+      font: inherit;
+    }
+
+    .experience {
+      position: relative;
+      min-height: 100dvh;
+      width: 100%;
+      overflow: hidden;
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 72% 26%, rgba(76,194,213,.32), transparent 33%),
+        linear-gradient(155deg, #127c92 0%, #0a5367 42%, #062e3a 100%);
+    }
+
+    .global-bg,
+    .period-bg,
+    .party-bg,
+    .style-bg,
+    .finding-bg {
+      position: absolute;
+      inset: -3%;
+      width: 106%;
+      height: 106%;
+      object-fit: cover;
+      object-position: center;
+      z-index: -5;
+      transform: scale(1.035);
+    }
+
+    .global-bg {
+      animation: cinematicMove 15s ease-in-out infinite alternate;
+    }
+
+    .period-bg,
+    .party-bg,
+    .style-bg,
+    .finding-bg {
+      opacity: 0;
+      transition: opacity .65s ease, transform 1.3s cubic-bezier(.2,.75,.25,1);
+      transform: scale(1.08);
+    }
+
+    .experience.period-active .global-bg { opacity: 0; }
+    .experience.period-active .period-bg {
+      opacity: 1;
+      transform: scale(1.035);
+    }
+
+    .experience.party-active .global-bg,
+    .experience.party-active .period-bg {
+      opacity: 0;
+    }
+
+    .experience.party-active .party-bg {
+      opacity: 1;
+      transform: scale(1.035);
+    }
+
+    .experience.style-active .global-bg,
+    .experience.style-active .period-bg,
+    .experience.style-active .party-bg {
+      opacity: 0;
+    }
+
+    .experience.style-active .style-bg {
+      opacity: 1;
+      transform: scale(1.035);
+    }
+
+    .experience.finding-active .global-bg,
+    .experience.finding-active .period-bg,
+    .experience.finding-active .party-bg,
+    .experience.finding-active .style-bg {
+      opacity: 0;
+    }
+
+    .experience.finding-active .finding-bg {
+      opacity: 1;
+      transform: scale(1.035);
+    }
+
+    .experience::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+      background:
+        linear-gradient(180deg, rgba(3,18,24,.25) 0%, rgba(3,18,24,.04) 29%, rgba(3,18,24,.37) 68%, rgba(3,18,24,.82) 100%),
+        linear-gradient(90deg, rgba(3,18,24,.42) 0%, transparent 58%);
+      transition: background .5s ease;
+    }
+
+    .experience.period-active::before {
+      background:
+        linear-gradient(180deg, rgba(3,18,24,.35) 0%, rgba(3,18,24,.09) 29%, rgba(3,18,24,.42) 68%, rgba(3,18,24,.88) 100%),
+        linear-gradient(90deg, rgba(3,18,24,.27) 0%, transparent 65%);
+    }
+
+    .experience::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 50% 32%, transparent 18%, rgba(0,0,0,.08) 67%, rgba(0,0,0,.30) 100%);
+      pointer-events: none;
+    }
+
+    .topbar {
+      position: absolute;
+      top: var(--safe-top);
+      left: 0;
+      right: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 0 clamp(18px, 4vw, 54px);
+    }
+
+    .brand-link {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+      text-shadow: 0 2px 18px rgba(0,0,0,.3);
+      opacity: .92;
+    }
+
+    .language-switcher {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 999px;
+      background: rgba(5,22,28,.23);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .language-switcher button {
+      min-width: 40px;
+      height: 34px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 999px;
+      color: rgba(255,255,255,.72);
+      background: transparent;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      cursor: pointer;
+      transition: background .25s ease, color .25s ease, transform .25s ease;
+    }
+
+    .language-switcher button.active {
+      background: rgba(255,255,255,.92);
+      color: #103b48;
+    }
+
+    .language-switcher button:active { transform: scale(.96); }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      min-height: 100dvh;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .55s ease, visibility .55s ease;
+    }
+
+    .screen.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    /* ---------------- SCREEN 1 ---------------- */
+
+    .hero-content {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding:
+        clamp(94px, 14vh, 150px)
+        clamp(20px, 6vw, 88px)
+        calc(var(--safe-bottom) + 34px);
+    }
+
+    .content-wrap {
+      width: min(760px, 100%);
+      animation: contentIn .9s cubic-bezier(.2,.75,.25,1) both;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 14px;
+      color: var(--soft-white);
+      font-size: clamp(11px, 1.15vw, 13px);
+      font-weight: 800;
+      letter-spacing: .20em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: rgba(255,255,255,.82);
+    }
+
+    h1, h2 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      text-shadow: 0 10px 34px rgba(0,0,0,.28);
+    }
+
+    h1 {
+      max-width: 750px;
+      font-size: clamp(52px, 9.4vw, 118px);
+      line-height: .88;
+      letter-spacing: -.055em;
+      text-wrap: balance;
+    }
+
+    .lead {
+      width: min(520px, 100%);
+      margin: 22px 0 0;
+      color: rgba(255,255,255,.9);
+      font-size: clamp(16px, 2vw, 21px);
+      line-height: 1.5;
+      font-weight: 500;
+      text-wrap: balance;
+      text-shadow: 0 2px 18px rgba(0,0,0,.28);
+    }
+
+    .start-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .primary-button {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 58px;
+      padding: 0 27px;
+      border: 1px solid rgba(255,255,255,.38);
+      border-radius: 999px;
+      background: rgba(255,255,255,.94);
+      color: #0b4352;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: .095em;
+      text-transform: uppercase;
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+
+    .primary-button::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-110%);
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,.68), transparent);
+      transition: transform .75s ease;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 28px 76px rgba(0,0,0,.32);
+    }
+
+    .primary-button:hover::after { transform: translateX(110%); }
+    .primary-button:active { transform: scale(.985); }
+
+    .hint {
+      max-width: 170px;
+      color: rgba(255,255,255,.70);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    /* ---------------- SCREEN 2 ---------------- */
+
+    .period-screen {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+      padding:
+        clamp(88px, 11vh, 118px)
+        clamp(18px, 5vw, 70px)
+        calc(var(--safe-bottom) + 22px);
+    }
+
+    .period-heading {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .period-kicker {
+      margin: 0 0 8px;
+      color: rgba(255,255,255,.72);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .20em;
+      text-transform: uppercase;
+    }
+
+    .period-heading h2 {
+      font-size: clamp(34px, 5.7vw, 70px);
+      line-height: .98;
+      letter-spacing: -.045em;
+      text-wrap: balance;
+    }
+
+    .period-heading p {
+      width: min(520px, 100%);
+      margin: 12px auto 0;
+      color: rgba(255,255,255,.78);
+      font-size: clamp(13px, 1.5vw, 16px);
+      line-height: 1.45;
+    }
+
+    .period-stage {
+      position: relative;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1100px;
+      touch-action: pan-y;
+      user-select: none;
+      cursor: grab;
+    }
+
+    .period-stage.dragging { cursor: grabbing; }
+
+    .period-deck {
+      position: relative;
+      width: min(860px, 100%);
+      height: clamp(310px, 48vh, 500px);
+      transform-style: preserve-3d;
+    }
+
+    .period-card {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: clamp(220px, 27vw, 330px);
+      height: clamp(300px, 43vh, 430px);
+      margin-left: calc(clamp(220px, 27vw, 330px) / -2);
+      margin-top: calc(clamp(300px, 43vh, 430px) / -2);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.26);
+      border-radius: clamp(26px, 3vw, 38px);
+      box-shadow: 0 28px 70px rgba(0,0,0,.34);
+      background: linear-gradient(160deg, #7ec8c8, #1d7588);
+      transform-style: preserve-3d;
+      transition:
+        transform .58s cubic-bezier(.2,.78,.2,1),
+        opacity .45s ease,
+        filter .45s ease,
+        box-shadow .45s ease;
+      will-change: transform, opacity;
+      cursor: pointer;
+    }
+
+    .period-card[data-theme="spring"] { background: linear-gradient(155deg, #c8d9aa, #58847e); }
+    .period-card[data-theme="may"] { background: linear-gradient(155deg, #95d4b4, #277d75); }
+    .period-card[data-theme="june"] { background: linear-gradient(155deg, #71d1d6, #187893); }
+    .period-card[data-theme="july"] { background: linear-gradient(155deg, #59cbd8, #086d91); }
+    .period-card[data-theme="august"] { background: linear-gradient(155deg, #56b9cf, #185b88); }
+    .period-card[data-theme="september"] { background: linear-gradient(155deg, #84c9c1, #376d79); }
+    .period-card[data-theme="october"] { background: linear-gradient(155deg, #d6ae79, #6e665a); }
+
+    .period-card img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .period-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(180deg, rgba(3,18,24,.02) 15%, rgba(3,18,24,.18) 54%, rgba(3,18,24,.83) 100%);
+    }
+
+    .period-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+      pointer-events: none;
+    }
+
+    .period-copy {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      padding: 26px 23px 24px;
+      text-shadow: 0 4px 24px rgba(0,0,0,.44);
+    }
+
+    .period-number {
+      display: block;
+      margin-bottom: 7px;
+      color: rgba(255,255,255,.64);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .19em;
+      text-transform: uppercase;
+    }
+
+    .period-name {
+      display: block;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 4vw, 47px);
+      line-height: .98;
+      letter-spacing: -.035em;
+    }
+
+    .period-tagline {
+      display: block;
+      max-width: 235px;
+      margin-top: 10px;
+      color: rgba(255,255,255,.86);
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .period-card.is-active {
+      box-shadow: 0 38px 95px rgba(0,0,0,.46);
+    }
+
+    .swipe-cue {
+      position: absolute;
+      left: 50%;
+      bottom: 8px;
+      z-index: 9;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,.62);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .swipe-cue::before,
+    .swipe-cue::after {
+      content: "";
+      width: 19px;
+      height: 1px;
+      background: rgba(255,255,255,.4);
+    }
+
+    .period-footer {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .choose-period {
+      min-width: min(330px, 90vw);
+      min-height: 57px;
+    }
+
+    .period-position {
+      color: rgba(255,255,255,.62);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .back-step {
+      position: absolute;
+      left: clamp(18px, 4vw, 54px);
+      bottom: calc(var(--safe-bottom) + 8px);
+      z-index: 15;
+      border: 0;
+      padding: 9px 0;
+      color: rgba(255,255,255,.76);
+      background: transparent;
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .progress-mark {
+      position: absolute;
+      right: clamp(20px, 4vw, 52px);
+      bottom: calc(var(--safe-bottom) + 8px);
+      z-index: 15;
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      color: rgba(255,255,255,.76);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .10em;
+    }
+
+    .progress-mark strong {
+      color: var(--white);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+
+    .period-card.is-active::after {
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.11),
+        inset 0 -62px 58px rgba(0,0,0,.08);
+    }
+
+    @media (max-width: 700px) {
+      .period-card.is-active .period-copy::after {
+        content: "tap";
+        display: inline-flex;
+        margin-top: 11px;
+        padding: 6px 9px;
+        border: 1px solid rgba(255,255,255,.30);
+        border-radius: 999px;
+        color: rgba(255,255,255,.72);
+        background: rgba(5,24,30,.16);
+        font-size: 8px;
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+        font-weight: 900;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+    }
+
+    /* ---------------- SCREEN 3 ---------------- */
+
+    .party-screen {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: 18px;
+      padding:
+        clamp(88px, 11vh, 118px)
+        clamp(18px, 5vw, 70px)
+        calc(var(--safe-bottom) + 24px);
+    }
+
+    .party-heading {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .party-kicker {
+      margin: 0 0 8px;
+      color: rgba(255,255,255,.72);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .20em;
+      text-transform: uppercase;
+    }
+
+    .party-heading h2 {
+      font-size: clamp(34px, 5.7vw, 70px);
+      line-height: .98;
+      letter-spacing: -.045em;
+      text-wrap: balance;
+    }
+
+    .party-heading p {
+      width: min(520px, 100%);
+      margin: 12px auto 0;
+      color: rgba(255,255,255,.78);
+      font-size: clamp(13px, 1.5vw, 16px);
+      line-height: 1.45;
+    }
+
+    .party-layout {
+      width: min(980px, 100%);
+      min-height: 0;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr);
+      gap: clamp(18px, 3vw, 34px);
+      align-items: center;
+    }
+
+    .party-visual {
+      position: relative;
+      min-height: clamp(320px, 49vh, 520px);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: clamp(28px, 3vw, 42px);
+      background:
+        radial-gradient(circle at 70% 20%, rgba(255,255,255,.22), transparent 26%),
+        linear-gradient(145deg, #4a9ca5, #164d62 72%);
+      box-shadow: 0 34px 90px rgba(0,0,0,.36);
+      isolation: isolate;
+      transition: background .45s ease, transform .45s ease;
+    }
+
+    .party-visual[data-party="couple"] {
+      background: linear-gradient(145deg, #b78374, #665264 50%, #213d4a);
+    }
+
+    .party-visual[data-party="solo"] {
+      background: linear-gradient(145deg, #7cb5b2, #3a7480 55%, #173b4d);
+    }
+
+    .party-visual[data-party="friends"] {
+      background: linear-gradient(145deg, #d7a05e, #8e6554 50%, #275061);
+    }
+
+    .party-visual[data-party="family_one_child"],
+    .party-visual[data-party="family_children"],
+    .party-visual[data-party="family"] {
+      background: linear-gradient(145deg, #77bea8, #3a8a83 48%, #225166);
+    }
+
+    .party-visual[data-party="group"] {
+      background: linear-gradient(145deg, #6baab5, #4c7186 52%, #283a5d);
+    }
+
+    .party-visual[data-party="large_group"] {
+      background: linear-gradient(145deg, #6992ae, #575a82 52%, #32314d);
+    }
+
+    .party-photo {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: opacity .36s ease, transform .7s cubic-bezier(.2,.75,.25,1);
+      transform: scale(1.025);
+    }
+
+    .party-visual.is-changing .party-photo {
+      opacity: .2;
+      transform: scale(1.07);
+    }
+
+    .party-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        linear-gradient(180deg, rgba(6,22,28,.02) 5%, rgba(6,22,28,.12) 42%, rgba(6,22,28,.84) 100%);
+      pointer-events: none;
+    }
+
+    .party-visual::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.07);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    .party-story {
+      position: absolute;
+      left: clamp(22px, 4vw, 42px);
+      right: clamp(22px, 4vw, 42px);
+      bottom: clamp(24px, 4vw, 40px);
+      z-index: 2;
+      text-shadow: 0 5px 24px rgba(0,0,0,.45);
+    }
+
+    .party-type-label {
+      display: inline-block;
+      margin-bottom: 9px;
+      color: rgba(255,255,255,.7);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .party-story strong {
+      display: block;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(37px, 5vw, 66px);
+      line-height: .95;
+      letter-spacing: -.045em;
+    }
+
+    .party-story p {
+      max-width: 500px;
+      margin: 12px 0 0;
+      color: rgba(255,255,255,.86);
+      font-size: clamp(13px, 1.4vw, 16px);
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    .party-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .traveler-counter {
+      position: relative;
+      overflow: hidden;
+      padding: 20px 20px 18px;
+      border: 1px solid rgba(255,255,255,.23);
+      border-radius: 28px;
+      background: rgba(7,28,35,.28);
+      box-shadow: 0 18px 45px rgba(0,0,0,.18);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .counter-label {
+      display: block;
+      margin-bottom: 15px;
+      color: rgba(255,255,255,.70);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+
+    .counter-row {
+      display: grid;
+      grid-template-columns: 54px 1fr 54px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .counter-button {
+      width: 54px;
+      height: 54px;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease, opacity .2s ease;
+    }
+
+    .counter-button:hover {
+      background: rgba(255,255,255,.16);
+      transform: scale(1.04);
+    }
+
+    .counter-button:active {
+      transform: scale(.94);
+    }
+
+    .counter-button:disabled {
+      opacity: .28;
+      cursor: default;
+      transform: none;
+    }
+
+    .counter-value-wrap {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .counter-value {
+      display: block;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(46px, 6vw, 68px);
+      line-height: .85;
+      letter-spacing: -.05em;
+    }
+
+    .counter-word {
+      display: block;
+      margin-top: 8px;
+      color: rgba(255,255,255,.62);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .party-summary {
+      padding: 14px 18px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 22px;
+      background: rgba(7,28,35,.18);
+      color: rgba(255,255,255,.78);
+      font-size: 12px;
+      line-height: 1.45;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .party-footer {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      padding-bottom: 2px;
+    }
+
+    .party-continue {
+      min-width: min(330px, 90vw);
+    }
+
+    .party-screen .back-step {
+      bottom: calc(var(--safe-bottom) + 8px);
+    }
+
+    @media (max-width: 780px) {
+      .party-screen {
+        gap: 10px;
+        padding:
+          78px
+          18px
+          calc(var(--safe-bottom) + 48px);
+      }
+
+      .party-heading h2 {
+        font-size: clamp(34px, 10.5vw, 47px);
+      }
+
+      .party-heading p {
+        margin-top: 8px;
+        font-size: 13px;
+      }
+
+      .party-layout {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        align-content: center;
+      }
+
+      .party-visual {
+        min-height: min(39vh, 365px);
+        border-radius: 30px;
+      }
+
+      .party-story {
+        left: 21px;
+        right: 21px;
+        bottom: 21px;
+      }
+
+      .party-story strong {
+        font-size: clamp(38px, 11vw, 52px);
+      }
+
+      .party-story p {
+        margin-top: 8px;
+        font-size: 12px;
+      }
+
+      .party-controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .traveler-counter {
+        padding: 15px 12px 14px;
+        border-radius: 23px;
+      }
+
+      .counter-label {
+        margin-bottom: 11px;
+        font-size: 9px;
+        text-align: center;
+      }
+
+      .counter-row {
+        grid-template-columns: 42px 1fr 42px;
+        gap: 5px;
+      }
+
+      .counter-button {
+        width: 42px;
+        height: 42px;
+        font-size: 24px;
+      }
+
+      .counter-value {
+        font-size: 43px;
+      }
+
+      .counter-word {
+        margin-top: 5px;
+        font-size: 8px;
+      }
+
+      .party-summary {
+        grid-column: 1 / -1;
+        padding: 10px 14px;
+        font-size: 11px;
+      }
+
+      .party-footer {
+        padding-inline: 2px;
+      }
+
+      .party-continue {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+
+    @media (max-height: 740px) and (max-width: 780px) {
+      .party-screen {
+        padding-top: 69px;
+      }
+
+      .party-heading p {
+        display: none;
+      }
+
+      .party-visual {
+        min-height: min(33vh, 300px);
+      }
+
+      .party-story strong {
+        font-size: 38px;
+      }
+
+      .party-story p {
+        display: none;
+      }
+
+      .traveler-counter {
+        padding-block: 12px;
+      }
+
+      .counter-label {
+        margin-bottom: 8px;
+      }
+    }
+
+
+    /* ---------------- SCREEN 4 ---------------- */
+
+    .style-screen {
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: 16px;
+      padding:
+        clamp(86px, 10.5vh, 112px)
+        clamp(18px, 4.5vw, 66px)
+        calc(var(--safe-bottom) + 24px);
+    }
+
+    .style-heading {
+      width: min(820px, 100%);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .style-kicker {
+      margin: 0 0 8px;
+      color: rgba(255,255,255,.72);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .20em;
+      text-transform: uppercase;
+    }
+
+    .style-heading h2 {
+      font-size: clamp(34px, 5.4vw, 66px);
+      line-height: .98;
+      letter-spacing: -.045em;
+      text-wrap: balance;
+    }
+
+    .style-heading p {
+      width: min(570px, 100%);
+      margin: 11px auto 0;
+      color: rgba(255,255,255,.78);
+      font-size: clamp(13px, 1.45vw, 16px);
+      line-height: 1.45;
+    }
+
+    .style-grid {
+      width: min(1050px, 100%);
+      min-height: 0;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-rows: repeat(2, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .style-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 0;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 28px;
+      background: linear-gradient(145deg, #5da7aa, #214e5d);
+      box-shadow: 0 18px 46px rgba(0,0,0,.24);
+      cursor: pointer;
+      isolation: isolate;
+      transform: translateZ(0);
+      transition:
+        transform .28s ease,
+        border-color .28s ease,
+        box-shadow .28s ease,
+        filter .28s ease;
+    }
+
+    .style-card:nth-child(1) {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    .style-card:nth-child(2),
+    .style-card:nth-child(3),
+    .style-card:nth-child(4),
+    .style-card:nth-child(5) {
+      grid-column: span 1;
+    }
+
+    .style-card:nth-child(6) {
+      grid-column: span 2;
+    }
+
+    .style-card img {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .65s cubic-bezier(.2,.75,.25,1), filter .35s ease;
+    }
+
+    .style-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(180deg, rgba(5,20,26,.03) 8%, rgba(5,20,26,.16) 46%, rgba(5,20,26,.86) 100%);
+    }
+
+    .style-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+      pointer-events: none;
+    }
+
+    .style-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 24px 60px rgba(0,0,0,.32);
+    }
+
+    .style-card:hover img {
+      transform: scale(1.045);
+    }
+
+    .style-card.is-selected {
+      border-color: rgba(255,255,255,.92);
+      box-shadow:
+        0 26px 70px rgba(0,0,0,.36),
+        inset 0 0 0 2px rgba(255,255,255,.72);
+    }
+
+    .style-card.is-selected img {
+      transform: scale(1.035);
+      filter: brightness(.88) saturate(1.06);
+    }
+
+    .style-card.is-muted {
+      filter: saturate(.78) brightness(.82);
+    }
+
+    .style-copy {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      padding: 20px 19px 18px;
+      text-shadow: 0 4px 24px rgba(0,0,0,.45);
+    }
+
+    .style-card:nth-child(1) .style-copy {
+      padding: 28px 27px 25px;
+    }
+
+    .style-name {
+      display: block;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(24px, 2.8vw, 38px);
+      line-height: .98;
+      letter-spacing: -.035em;
+    }
+
+    .style-card:nth-child(1) .style-name {
+      font-size: clamp(38px, 5vw, 62px);
+    }
+
+    .style-tagline {
+      display: block;
+      max-width: 290px;
+      margin-top: 8px;
+      color: rgba(255,255,255,.82);
+      font-size: 12px;
+      line-height: 1.38;
+      font-weight: 600;
+    }
+
+    .style-card:not(:nth-child(1)) .style-tagline {
+      display: none;
+    }
+
+    .style-selected-mark {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 4;
+      padding: 7px 10px;
+      border: 1px solid rgba(255,255,255,.34);
+      border-radius: 999px;
+      background: rgba(4,23,29,.36);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(-5px);
+      transition: opacity .22s ease, transform .22s ease;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .style-card.is-selected .style-selected-mark {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .style-footer {
+      width: min(820px, 100%);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .style-continue {
+      min-width: min(360px, 90vw);
+    }
+
+    .style-note {
+      color: rgba(255,255,255,.62);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    @media (max-width: 780px) {
+      .style-screen {
+        gap: 10px;
+        padding:
+          76px
+          15px
+          calc(var(--safe-bottom) + 48px);
+      }
+
+      .style-heading {
+        padding-inline: 6px;
+      }
+
+      .style-heading h2 {
+        font-size: clamp(33px, 9.8vw, 45px);
+      }
+
+      .style-heading p {
+        margin-top: 7px;
+        font-size: 12px;
+      }
+
+      .style-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: auto;
+        gap: 9px;
+        overflow-y: auto;
+        padding: 2px 2px 7px;
+        scrollbar-width: none;
+      }
+
+      .style-grid::-webkit-scrollbar {
+        display: none;
+      }
+
+      .style-card {
+        min-height: 150px;
+        border-radius: 23px;
+      }
+
+      .style-card:nth-child(1) {
+        grid-column: 1 / -1;
+        grid-row: auto;
+        min-height: min(28vh, 245px);
+      }
+
+      .style-card:nth-child(2),
+      .style-card:nth-child(3),
+      .style-card:nth-child(4),
+      .style-card:nth-child(5) {
+        grid-column: span 1;
+        min-height: 145px;
+      }
+
+      .style-card:nth-child(6) {
+        grid-column: 1 / -1;
+        min-height: 135px;
+      }
+
+      .style-card:nth-child(1) .style-copy {
+        padding: 22px 20px 19px;
+      }
+
+      .style-copy {
+        padding: 16px 14px 14px;
+      }
+
+      .style-card:nth-child(1) .style-name {
+        font-size: clamp(34px, 10vw, 45px);
+      }
+
+      .style-name {
+        font-size: clamp(22px, 6.5vw, 29px);
+      }
+
+      .style-tagline {
+        font-size: 11px;
+      }
+
+      .style-footer {
+        padding-inline: 3px;
+      }
+
+      .style-continue {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+
+    @media (max-height: 760px) and (max-width: 780px) {
+      .style-screen {
+        padding-top: 68px;
+      }
+
+      .style-heading p {
+        display: none;
+      }
+
+      .style-grid {
+        max-height: 58vh;
+      }
+
+      .style-card:nth-child(1) {
+        min-height: 190px;
+      }
+
+      .style-card:nth-child(2),
+      .style-card:nth-child(3),
+      .style-card:nth-child(4),
+      .style-card:nth-child(5) {
+        min-height: 125px;
+      }
+    }
+
+
+    /* ---------------- SCREEN 5 — FINDING ---------------- */
+
+    .finding-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding:
+        clamp(92px, 12vh, 130px)
+        clamp(20px, 6vw, 84px)
+        calc(var(--safe-bottom) + 34px);
+    }
+
+    .finding-shell {
+      position: relative;
+      width: min(860px, 100%);
+      min-height: min(70vh, 680px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+    }
+
+    .finding-top {
+      width: min(720px, 100%);
+      margin-top: clamp(12px, 3vh, 30px);
+    }
+
+    .finding-kicker {
+      margin: 0 0 12px;
+      color: rgba(255,255,255,.68);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .21em;
+      text-transform: uppercase;
+    }
+
+    .finding-title {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(44px, 7vw, 88px);
+      line-height: .94;
+      letter-spacing: -.05em;
+      text-shadow: 0 10px 34px rgba(0,0,0,.32);
+      transition: opacity .35s ease, transform .35s ease;
+      text-wrap: balance;
+    }
+
+    .finding-subtitle {
+      width: min(560px, 100%);
+      margin: 16px auto 0;
+      color: rgba(255,255,255,.8);
+      font-size: clamp(14px, 1.5vw, 17px);
+      line-height: 1.48;
+      transition: opacity .35s ease, transform .35s ease;
+    }
+
+    .finding-visual {
+      position: relative;
+      width: min(760px, 100%);
+      height: clamp(250px, 38vh, 380px);
+      margin: 20px auto 8px;
+      perspective: 1000px;
+    }
+
+    .finding-card {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(74vw, 480px);
+      height: min(31vh, 290px);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 34px;
+      overflow: hidden;
+      background: linear-gradient(145deg, #5497a6, #1d5263);
+      box-shadow: 0 26px 70px rgba(0,0,0,.34);
+      transition:
+        transform .68s cubic-bezier(.2,.78,.2,1),
+        opacity .55s ease,
+        filter .55s ease;
+      transform-style: preserve-3d;
+    }
+
+    .finding-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .finding-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.03), rgba(0,0,0,.22));
+      pointer-events: none;
+    }
+
+    .finding-card.pos-0 {
+      transform: translate(-50%, -50%) translate3d(0, 0, 20px) rotateZ(0deg) scale(1);
+      opacity: 1;
+      z-index: 4;
+      filter: none;
+    }
+
+    .finding-card.pos-1 {
+      transform: translate(-50%, -50%) translate3d(65px, 18px, -70px) rotateZ(5deg) scale(.93);
+      opacity: .72;
+      z-index: 3;
+      filter: brightness(.82) saturate(.88);
+    }
+
+    .finding-card.pos-2 {
+      transform: translate(-50%, -50%) translate3d(-70px, 30px, -140px) rotateZ(-7deg) scale(.86);
+      opacity: .45;
+      z-index: 2;
+      filter: brightness(.72) saturate(.8);
+    }
+
+    .finding-card.pos-3 {
+      transform: translate(-50%, -50%) translate3d(0, 42px, -220px) rotateZ(2deg) scale(.78);
+      opacity: .2;
+      z-index: 1;
+      filter: brightness(.66) saturate(.72);
+    }
+
+    .finding-status {
+      width: min(560px, 100%);
+      margin: 10px auto 0;
+    }
+
+    .finding-progress {
+      position: relative;
+      width: 100%;
+      height: 3px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,.15);
+    }
+
+    .finding-progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: rgba(255,255,255,.88);
+      transition: width .7s cubic-bezier(.2,.75,.25,1);
+    }
+
+    .finding-step-label {
+      margin-top: 11px;
+      color: rgba(255,255,255,.66);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      min-height: 15px;
+      transition: opacity .25s ease;
+    }
+
+    .finding-ready {
+      display: none;
+      width: min(420px, 100%);
+      margin-top: 18px;
+    }
+
+    .finding-ready.show {
+      display: block;
+      animation: contentIn .55s ease both;
+    }
+
+    .finding-ready .primary-button {
+      width: 100%;
+    }
+
+    @media (max-width: 780px) {
+      .finding-screen {
+        padding:
+          82px
+          18px
+          calc(var(--safe-bottom) + 34px);
+      }
+
+      .finding-shell {
+        min-height: 74vh;
+      }
+
+      .finding-title {
+        font-size: clamp(42px, 13vw, 62px);
+      }
+
+      .finding-subtitle {
+        width: 92%;
+        font-size: 13px;
+      }
+
+      .finding-visual {
+        height: min(37vh, 320px);
+      }
+
+      .finding-card {
+        width: min(80vw, 360px);
+        height: min(28vh, 240px);
+        border-radius: 28px;
+      }
+
+      .finding-card.pos-1 {
+        transform: translate(-50%, -50%) translate3d(42px, 18px, -70px) rotateZ(5deg) scale(.92);
+      }
+
+      .finding-card.pos-2 {
+        transform: translate(-50%, -50%) translate3d(-48px, 28px, -140px) rotateZ(-6deg) scale(.84);
+      }
+
+      .finding-status {
+        width: 92%;
+      }
+
+      .finding-ready {
+        width: 92%;
+      }
+    }
+
+    @media (max-height: 700px) and (max-width: 780px) {
+      .finding-screen {
+        padding-top: 72px;
+      }
+
+      .finding-shell {
+        min-height: 78vh;
+      }
+
+      .finding-subtitle {
+        display: none;
+      }
+
+      .finding-visual {
+        height: 34vh;
+        margin-top: 12px;
+      }
+    }
+
+
+    /* ---------------- SCREEN 6 — FIRST EXPERIENCE ---------------- */
+
+    .match-screen {
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: #f5f2ea;
+      color: #17353f;
+      scroll-behavior: smooth;
+      overscroll-behavior-y: contain;
+    }
+
+    .match-screen.active {
+      display: block;
+    }
+
+    .match-screen .match-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding:
+        max(14px, env(safe-area-inset-top))
+        clamp(16px, 4vw, 44px)
+        12px;
+      color: #fff;
+      background: linear-gradient(180deg, rgba(8,27,34,.72), rgba(8,27,34,.12), transparent);
+      pointer-events: none;
+    }
+
+    .match-screen .match-topbar > * {
+      pointer-events: auto;
+    }
+
+    .match-brand {
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      text-shadow: 0 2px 18px rgba(0,0,0,.25);
+    }
+
+    .match-back {
+      border: 1px solid rgba(255,255,255,.30);
+      border-radius: 999px;
+      padding: 9px 13px;
+      color: #fff;
+      background: rgba(5,25,31,.22);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .story-section {
+      position: relative;
+      width: 100%;
+    }
+
+    .story-hero {
+      min-height: 100dvh;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      color: #fff;
+      background: #174d5c;
+      isolation: isolate;
+    }
+
+    .story-hero img,
+    .story-photo img {
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .story-hero::before,
+    .story-photo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(180deg, rgba(5,22,28,.05) 12%, rgba(5,22,28,.16) 48%, rgba(5,22,28,.86) 100%),
+        linear-gradient(90deg, rgba(5,22,28,.42), transparent 60%);
+    }
+
+    .story-hero::after,
+    .story-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: radial-gradient(circle at 60% 20%, transparent 0%, rgba(0,0,0,.12) 65%, rgba(0,0,0,.26) 100%);
+    }
+
+    .story-hero-content {
+      width: min(920px, 100%);
+      padding:
+        clamp(120px, 18vh, 190px)
+        clamp(20px, 7vw, 100px)
+        clamp(70px, 10vh, 105px);
+    }
+
+    .story-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      color: rgba(255,255,255,.76);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .19em;
+      text-transform: uppercase;
+    }
+
+    .story-eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: rgba(255,255,255,.72);
+    }
+
+    .story-hero h2,
+    .story-photo h3,
+    .stay-copy h3,
+    .light-section h3 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      letter-spacing: -.045em;
+    }
+
+    .story-hero h2 {
+      max-width: 760px;
+      font-size: clamp(58px, 10vw, 124px);
+      line-height: .86;
+      text-shadow: 0 12px 38px rgba(0,0,0,.32);
+    }
+
+    .story-hero-description {
+      max-width: 650px;
+      margin: 24px 0 0;
+      color: rgba(255,255,255,.89);
+      font-size: clamp(15px, 1.8vw, 20px);
+      line-height: 1.55;
+      text-shadow: 0 3px 22px rgba(0,0,0,.35);
+    }
+
+    .beach-facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .fact-pill {
+      padding: 9px 12px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      color: rgba(255,255,255,.92);
+      background: rgba(6,27,34,.22);
+      font-size: 11px;
+      font-weight: 750;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .story-scroll-cue {
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,.68);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .light-section {
+      padding: clamp(58px, 8vw, 100px) clamp(20px, 7vw, 100px);
+      background: #f5f2ea;
+    }
+
+    .light-section-inner {
+      width: min(1100px, 100%);
+      margin: 0 auto;
+    }
+
+    .section-kicker {
+      margin-bottom: 10px;
+      color: #6f858b;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+
+    .stay-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+      gap: clamp(28px, 5vw, 66px);
+      align-items: center;
+    }
+
+    .stay-gallery {
+      position: relative;
+      min-height: clamp(420px, 58vh, 650px);
+      overflow: hidden;
+      border-radius: 34px;
+      background: #d9e1df;
+      box-shadow: 0 28px 75px rgba(31,54,60,.18);
+      touch-action: pan-y;
+    }
+
+    .stay-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(1.035);
+      transition: opacity .45s ease, transform .7s cubic-bezier(.2,.75,.25,1);
+      pointer-events: none;
+    }
+
+    .stay-slide.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .stay-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gallery-dots {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      z-index: 5;
+      display: flex;
+      gap: 7px;
+      transform: translateX(-50%);
+    }
+
+    .gallery-dot {
+      width: 7px;
+      height: 7px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,.48);
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .gallery-dot.active {
+      transform: scale(1.45);
+      background: #fff;
+    }
+
+    .stay-copy h3,
+    .light-section h3 {
+      font-size: clamp(42px, 5.8vw, 76px);
+      line-height: .94;
+      color: #17353f;
+    }
+
+    .stay-description {
+      margin: 20px 0 0;
+      color: #52696f;
+      font-size: 15px;
+      line-height: 1.62;
+    }
+
+    .stay-facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 9px;
+      margin-top: 24px;
+    }
+
+    .stay-fact {
+      padding: 13px 14px;
+      border: 1px solid #d9dedb;
+      border-radius: 18px;
+      background: rgba(255,255,255,.62);
+      color: #35525a;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .match-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 28px;
+    }
+
+    .match-action {
+      min-height: 50px;
+      padding: 0 18px;
+      border: 1px solid #c8d3d2;
+      border-radius: 999px;
+      background: transparent;
+      color: #214853;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease, color .2s ease;
+    }
+
+    .match-action.primary {
+      background: #163f4c;
+      border-color: #163f4c;
+      color: #fff;
+    }
+
+    .match-action:hover {
+      transform: translateY(-2px);
+    }
+
+    .match-action:not(.primary):hover {
+      background: #e8eeeb;
+    }
+
+    .story-photo {
+      min-height: 82dvh;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      color: #fff;
+      background: #235f69;
+      isolation: isolate;
+    }
+
+    .story-photo-content {
+      width: min(900px, 100%);
+      padding:
+        clamp(80px, 12vh, 120px)
+        clamp(20px, 7vw, 100px)
+        clamp(58px, 9vh, 95px);
+    }
+
+    .story-photo h3 {
+      max-width: 720px;
+      font-size: clamp(48px, 7vw, 92px);
+      line-height: .9;
+      text-shadow: 0 10px 32px rgba(0,0,0,.3);
+    }
+
+    .story-photo p {
+      max-width: 650px;
+      margin: 18px 0 0;
+      color: rgba(255,255,255,.88);
+      font-size: clamp(14px, 1.6vw, 18px);
+      line-height: 1.55;
+      text-shadow: 0 3px 20px rgba(0,0,0,.3);
+    }
+
+    .inline-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .inline-chip {
+      padding: 8px 11px;
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 999px;
+      background: rgba(7,27,33,.20);
+      color: rgba(255,255,255,.9);
+      font-size: 10px;
+      font-weight: 800;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .light-story-card {
+      display: grid;
+      grid-template-columns: minmax(260px, .85fr) minmax(0, 1.15fr);
+      gap: clamp(28px, 5vw, 62px);
+      align-items: center;
+    }
+
+    .light-story-image {
+      position: relative;
+      min-height: clamp(360px, 48vh, 520px);
+      overflow: hidden;
+      border-radius: 32px;
+      background: #d8e0dd;
+      box-shadow: 0 24px 65px rgba(31,54,60,.15);
+    }
+
+    .light-story-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .light-story-copy p {
+      margin: 20px 0 0;
+      color: #52696f;
+      font-size: 15px;
+      line-height: 1.62;
+    }
+
+    .restaurant-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .restaurant-meta span {
+      padding: 8px 11px;
+      border: 1px solid #d1dbd7;
+      border-radius: 999px;
+      background: #fff;
+      color: #3c5960;
+      font-size: 10px;
+      font-weight: 800;
+    }
+
+    .experience-end {
+      padding:
+        clamp(70px, 10vw, 120px)
+        clamp(20px, 7vw, 100px)
+        calc(clamp(70px, 10vw, 120px) + env(safe-area-inset-bottom));
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(82,144,149,.18), transparent 42%),
+        #163f4c;
+      color: #fff;
+    }
+
+    .experience-end .section-kicker {
+      color: rgba(255,255,255,.62);
+    }
+
+    .experience-end h3 {
+      margin: 0 auto;
+      max-width: 740px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(44px, 6vw, 78px);
+      line-height: .94;
+      letter-spacing: -.045em;
+      color: #fff;
+    }
+
+    .experience-end p {
+      max-width: 560px;
+      margin: 18px auto 0;
+      color: rgba(255,255,255,.75);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .end-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .end-actions .match-action {
+      border-color: rgba(255,255,255,.28);
+      color: #fff;
+    }
+
+    .end-actions .match-action.primary {
+      background: #fff;
+      border-color: #fff;
+      color: #163f4c;
+    }
+
+    @media (max-width: 820px) {
+      .match-screen .match-topbar {
+        padding-inline: 15px;
+      }
+
+      .story-hero-content {
+        padding:
+          130px
+          19px
+          70px;
+      }
+
+      .story-hero h2 {
+        font-size: clamp(58px, 17vw, 84px);
+      }
+
+      .story-hero-description {
+        margin-top: 18px;
+        font-size: 15px;
+      }
+
+      .light-section {
+        padding: 58px 18px;
+      }
+
+      .stay-grid,
+      .light-story-card {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .stay-gallery {
+        min-height: min(58vh, 470px);
+        border-radius: 28px;
+      }
+
+      .stay-copy h3,
+      .light-section h3 {
+        font-size: clamp(42px, 12vw, 60px);
+      }
+
+      .match-actions {
+        flex-direction: column;
+      }
+
+      .match-action {
+        width: 100%;
+      }
+
+      .story-photo {
+        min-height: 74dvh;
+      }
+
+      .story-photo-content {
+        padding:
+          90px
+          19px
+          58px;
+      }
+
+      .story-photo h3 {
+        font-size: clamp(48px, 14vw, 70px);
+      }
+
+      .light-story-image {
+        min-height: min(50vh, 430px);
+        border-radius: 28px;
+      }
+
+      .experience-end {
+        padding:
+          70px
+          18px
+          calc(76px + env(safe-area-inset-bottom));
+      }
+
+      .end-actions {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 780px) {
+      .counter-button,
+      .language-switcher button,
+      .gallery-dot,
+      .match-action,
+      .primary-button,
+      .back-step,
+      .match-back,
+      .style-card,
+      .period-card {
+        touch-action: manipulation;
+      }
+
+      .match-action,
+      .primary-button {
+        min-height: 54px;
+      }
+    }
+
+    @keyframes cinematicMove {
+      0%   { transform: scale(1.035) translate3d(-.5%, -.3%, 0); }
+      100% { transform: scale(1.095) translate3d(.8%, .4%, 0); }
+    }
+
+    @keyframes contentIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 700px) {
+      .global-bg, .period-bg, .party-bg, .style-bg, .finding-bg { object-position: 58% center; }
+
+      .topbar { padding-inline: 17px; }
+
+      .brand-link {
+        max-width: 170px;
+        font-size: 10px;
+        letter-spacing: .135em;
+      }
+
+      .hero-content {
+        justify-content: flex-end;
+        padding: 90px 19px calc(var(--safe-bottom) + 55px);
+      }
+
+      h1 {
+        max-width: 95%;
+        font-size: clamp(54px, 17vw, 82px);
+        line-height: .9;
+      }
+
+      .lead {
+        width: 95%;
+        margin-top: 18px;
+        font-size: 16px;
+      }
+
+      .start-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 25px;
+      }
+
+      .primary-button {
+        width: 100%;
+        min-height: 60px;
+      }
+
+      .hint {
+        max-width: 100%;
+        font-size: 11px;
+      }
+
+      .period-screen {
+        grid-template-rows: auto 1fr auto;
+        gap: 4px;
+        padding: 78px 0 calc(var(--safe-bottom) + 48px);
+      }
+
+      .period-heading {
+        padding-inline: 20px;
+      }
+
+      .period-heading h2 {
+        font-size: clamp(34px, 10.5vw, 47px);
+      }
+
+      .period-heading p {
+        margin-top: 8px;
+        padding-inline: 7px;
+        font-size: 13px;
+      }
+
+      .period-deck {
+        width: 100%;
+        height: min(49vh, 430px);
+      }
+
+      .period-card {
+        width: min(67vw, 285px);
+        height: min(42vh, 375px);
+        margin-left: calc(min(67vw, 285px) / -2);
+        margin-top: calc(min(42vh, 375px) / -2);
+        border-radius: 30px;
+      }
+
+      .period-copy {
+        padding: 21px 20px 20px;
+      }
+
+      .period-name { font-size: clamp(34px, 10vw, 43px); }
+      .period-tagline { font-size: 12px; }
+
+      .swipe-cue { bottom: -1px; }
+
+      .period-footer {
+        padding-inline: 20px;
+        gap: 8px;
+      }
+
+      .choose-period {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .back-step {
+        left: 19px;
+        bottom: calc(var(--safe-bottom) + 8px);
+      }
+
+      .progress-mark {
+        right: 20px;
+        bottom: calc(var(--safe-bottom) + 10px);
+      }
+    }
+
+    @media (max-height: 720px) and (max-width: 700px) {
+      .period-screen {
+        padding-top: 70px;
+      }
+
+      .period-heading p {
+        display: none;
+      }
+
+      .period-deck {
+        height: 45vh;
+      }
+
+      .period-card {
+        height: min(39vh, 340px);
+        margin-top: calc(min(39vh, 340px) / -2);
+      }
+
+      .period-copy {
+        padding-bottom: 17px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .001ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="experience" id="takeMeExperience">
+    <!-- Screen 1 hero -->
+    <img
+      class="global-bg"
+      src="images/take-me-hero.webp"
+      alt=""
+      aria-hidden="true"
+      onerror="this.style.display='none'"
+    />
+
+    <!-- Screen 2 dynamic background -->
+    <img
+      class="period-bg"
+      id="periodBackground"
+      src="images/periods/june.webp"
+      alt=""
+      aria-hidden="true"
+      onerror="this.style.display='none'"
+    />
+
+
+    <!-- Screen 3 dynamic people background -->
+    <img
+      class="party-bg"
+      id="partyBackground"
+      src="images/party/couple.webp"
+      alt=""
+      aria-hidden="true"
+      onerror="this.style.display='none'"
+    />
+
+
+    <!-- Screen 4 dynamic holiday-style background -->
+    <img
+      class="style-bg"
+      id="styleBackground"
+      src="images/styles/peace-quiet.webp"
+      alt=""
+      aria-hidden="true"
+      onerror="this.style.display='none'"
+    />
+
+
+    <!-- Screen 5 dynamic finding background -->
+    <img
+      class="finding-bg"
+      id="findingBackground"
+      src="images/finding/beach.webp"
+      alt=""
+      aria-hidden="true"
+      onerror="this.style.display='none'"
+    />
+
+    <header class="topbar">
+      <a class="brand-link" href="index.html" id="backToSite">Halkidiki Explorer</a>
+      <div class="language-switcher" id="languageSwitcher" aria-label="Language"></div>
+    </header>
+
+    <!-- ======================================================
+         SCREEN 1 — INTRO
+         ====================================================== -->
+    <section class="screen active" id="introScreen">
+      <div class="hero-content">
+        <div class="content-wrap">
+          <p class="eyebrow" data-i18n="eyebrow">Your holiday starts now</p>
+
+          <h1 data-i18n="title">Take me to Halkidiki</h1>
+
+          <p class="lead" data-i18n="lead">
+            Tell us a little about your trip. We’ll turn it into a Halkidiki experience made around you.
+          </p>
+
+          <div class="start-row">
+            <button class="primary-button" id="startJourney" type="button" data-i18n="start">
+              Start the journey
+            </button>
+
+            <div class="hint" data-i18n="hint">
+              A few quick choices. Then we take you somewhere.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-mark" aria-hidden="true">
+        <strong>01</strong><span>/ 04</span>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         SCREEN 2 — PERIOD / 3D COVERFLOW
+         ====================================================== -->
+    <section class="screen period-screen" id="periodScreen" aria-labelledby="periodTitle">
+      <div class="period-heading">
+        <p class="period-kicker" data-i18n="periodKicker">Choose the feeling</p>
+        <h2 id="periodTitle" data-i18n="periodTitle">When do you want to go?</h2>
+        <p data-i18n="periodLead">
+          Swipe through the season and stop where your holiday starts to feel real.
+        </p>
+      </div>
+
+      <div class="period-stage" id="periodStage" aria-label="Choose travel period">
+        <div class="period-deck" id="periodDeck"></div>
+        <div class="swipe-cue" data-i18n="swipeCue">Swipe</div>
+      </div>
+
+      <div class="period-footer">
+        <button class="primary-button choose-period" id="choosePeriod" type="button">
+          <span id="choosePeriodLabel">Choose June</span>
+        </button>
+        <div class="period-position" id="periodPosition">3 / 7</div>
+      </div>
+
+      <button class="back-step" id="backToIntro" type="button" data-i18n="back">
+        Back
+      </button>
+
+      <div class="progress-mark" aria-hidden="true">
+        <strong>02</strong><span>/ 04</span>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         SCREEN 3 — WHO'S COMING WITH YOU?
+         ====================================================== -->
+    <section class="screen party-screen" id="partyScreen" aria-labelledby="partyTitle">
+      <div class="party-heading">
+        <p class="party-kicker" data-i18n="partyKicker">Build your crew</p>
+        <h2 id="partyTitle" data-i18n="partyTitle">Who's coming with you?</h2>
+        <p data-i18n="partyLead">
+          Tell us how many of you are travelling. The trip will adapt as your group changes.
+        </p>
+      </div>
+
+      <div class="party-layout">
+        <article class="party-visual" id="partyVisual" data-party="couple">
+          <img
+            class="party-photo"
+            id="partyPhoto"
+            src="images/party/couple.webp"
+            alt=""
+            aria-hidden="true"
+            onerror="this.style.display='none'"
+          />
+
+          <div class="party-story">
+            <span class="party-type-label" data-i18n="partyPreview">Your trip is taking shape</span>
+            <strong id="partyStoryTitle">Just the two of you</strong>
+            <p id="partyStoryText">
+              A slower escape, long beach days and room to discover Halkidiki together.
+            </p>
+          </div>
+        </article>
+
+        <div class="party-controls">
+          <section class="traveler-counter" aria-labelledby="adultsLabel">
+            <span class="counter-label" id="adultsLabel" data-i18n="adults">Adults</span>
+
+            <div class="counter-row">
+              <button class="counter-button" id="adultsMinus" type="button" aria-label="Remove adult">−</button>
+
+              <div class="counter-value-wrap" aria-live="polite">
+                <span class="counter-value" id="adultsValue">2</span>
+                <span class="counter-word" data-i18n="travellers">travellers</span>
+              </div>
+
+              <button class="counter-button" id="adultsPlus" type="button" aria-label="Add adult">+</button>
+            </div>
+          </section>
+
+          <section class="traveler-counter" aria-labelledby="childrenLabel">
+            <span class="counter-label" id="childrenLabel" data-i18n="children">Children</span>
+
+            <div class="counter-row">
+              <button class="counter-button" id="childrenMinus" type="button" aria-label="Remove child">−</button>
+
+              <div class="counter-value-wrap" aria-live="polite">
+                <span class="counter-value" id="childrenValue">0</span>
+                <span class="counter-word" data-i18n="youngTravellers">young travellers</span>
+              </div>
+
+              <button class="counter-button" id="childrenPlus" type="button" aria-label="Add child">+</button>
+            </div>
+          </section>
+
+          <div class="party-summary" id="partySummary">
+            2 adults
+          </div>
+        </div>
+      </div>
+
+      <div class="party-footer">
+        <button class="primary-button party-continue" id="chooseParty" type="button" data-i18n="continue">
+          Continue
+        </button>
+      </div>
+
+      <button class="back-step" id="backToPeriod" type="button" data-i18n="back">
+        Back
+      </button>
+
+      <div class="progress-mark" aria-hidden="true">
+        <strong>03</strong><span>/ 04</span>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         SCREEN 4 — HOLIDAY STYLE
+         ====================================================== -->
+    <section class="screen style-screen" id="styleScreen" aria-labelledby="styleTitle">
+      <div class="style-heading">
+        <p class="style-kicker" data-i18n="styleKicker">Now make it yours</p>
+        <h2 id="styleTitle" data-i18n="styleTitle">What does your perfect Halkidiki holiday look like?</h2>
+        <p data-i18n="styleLead">
+          Choose one or two. We’ll use them as preferences, not rigid rules.
+        </p>
+      </div>
+
+      <div class="style-grid" id="styleGrid" aria-label="Choose holiday style"></div>
+
+      <div class="style-footer">
+        <button class="primary-button style-continue" id="chooseStyle" type="button" disabled>
+          <span id="chooseStyleLabel" data-i18n="chooseStyle">Choose your holiday</span>
+        </button>
+
+        <div class="style-note" id="styleNote" data-i18n="styleNote">
+          Choose up to two
+        </div>
+      </div>
+
+      <button class="back-step" id="backToParty" type="button" data-i18n="back">
+        Back
+      </button>
+
+      <div class="progress-mark" aria-hidden="true">
+        <strong>04</strong><span>/ 04</span>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         SCREEN 5 — FINDING YOUR HALKIDIKI
+         ====================================================== -->
+    <section class="screen finding-screen" id="findingScreen" aria-labelledby="findingTitle">
+      <div class="finding-shell">
+        <div class="finding-top">
+          <p class="finding-kicker" data-i18n="findingKicker">Putting your trip together</p>
+          <h2 class="finding-title" id="findingTitle">Finding your beach...</h2>
+          <p class="finding-subtitle" id="findingSubtitle">
+            We’re matching your group, travel period and holiday style with places already connected across Halkidiki.
+          </p>
+        </div>
+
+        <div class="finding-visual" id="findingVisual" aria-hidden="true">
+          <div class="finding-card pos-0" data-find-card="0">
+            <img src="images/finding/beach.webp" alt="" onerror="this.style.display='none'">
+          </div>
+
+          <div class="finding-card pos-1" data-find-card="1">
+            <img src="images/finding/stay.webp" alt="" onerror="this.style.display='none'">
+          </div>
+
+          <div class="finding-card pos-2" data-find-card="2">
+            <img src="images/finding/food.webp" alt="" onerror="this.style.display='none'">
+          </div>
+
+          <div class="finding-card pos-3" data-find-card="3">
+            <img src="images/finding/experience.webp" alt="" onerror="this.style.display='none'">
+          </div>
+        </div>
+
+        <div class="finding-status">
+          <div class="finding-progress" aria-hidden="true">
+            <div class="finding-progress-fill" id="findingProgressFill"></div>
+          </div>
+
+          <div class="finding-step-label" id="findingStepLabel">
+            Beach
+          </div>
+
+          <div id="liveDataStatus" style="
+            min-height:14px;
+            margin-top:6px;
+            color:rgba(255,255,255,.48);
+            font-size:9px;
+            font-weight:800;
+            letter-spacing:.11em;
+            text-transform:uppercase;
+          "></div>
+
+          <div class="finding-ready" id="findingReady">
+            <button class="primary-button" id="showFirstMatch" type="button" data-i18n="showFirstMatch">
+              Show me
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================
+         SCREEN 6 — FIRST HALKIDIKI EXPERIENCE
+         ====================================================== -->
+    <section class="screen match-screen" id="matchScreen" aria-label="Your Halkidiki experience">
+      <div class="match-topbar">
+        <div class="match-brand">Halkidiki Explorer</div>
+        <button class="match-back" id="backToFinding" type="button" data-i18n="back">
+          Back
+        </button>
+      </div>
+
+      <!-- BEACH -->
+      <article class="story-section story-hero" id="matchBeachSection">
+        <img id="matchBeachHero" src="images/results/perea-beach.webp" alt="" onerror="this.style.display='none'">
+
+        <div class="story-hero-content">
+          <div class="story-eyebrow" data-i18n="firstExperience">Your first Halkidiki experience</div>
+
+          <h2 id="matchBeachName">Perea Beach</h2>
+
+          <p class="story-hero-description" id="matchBeachDescription">
+            A long sandy shoreline with shallow water and an easy-going seaside promenade, combining relaxed beach time with cafés, tavernas and evening walks by the Thermaic Gulf.
+          </p>
+
+          <div class="beach-facts" id="matchBeachFacts">
+            <span class="fact-pill">Very shallow water</span>
+            <span class="fact-pill">Family friendly</span>
+            <span class="fact-pill">Long promenade</span>
+            <span class="fact-pill">Sunset views</span>
+          </div>
+        </div>
+
+        <div class="story-scroll-cue" data-i18n="scrollExperience">Scroll into your trip</div>
+      </article>
+
+      <!-- STAY -->
+      <article class="story-section light-section" id="matchStaySection">
+        <div class="light-section-inner stay-grid">
+          <div class="stay-gallery" id="stayGallery">
+            <div class="stay-slide active">
+              <img src="images/results/stay-01.webp" alt="" onerror="this.style.display='none'">
+            </div>
+            <div class="stay-slide">
+              <img src="images/results/stay-02.webp" alt="" onerror="this.style.display='none'">
+            </div>
+            <div class="stay-slide">
+              <img src="images/results/stay-03.webp" alt="" onerror="this.style.display='none'">
+            </div>
+            <div class="stay-slide">
+              <img src="images/results/stay-04.webp" alt="" onerror="this.style.display='none'">
+            </div>
+
+            <div class="gallery-dots" id="stayGalleryDots"></div>
+          </div>
+
+          <div class="stay-copy">
+            <div class="section-kicker" data-i18n="stayHere">Stay here</div>
+            <h3 id="matchStayName">Ostria Sea View Maisonette</h3>
+
+            <p class="stay-description" id="matchStayDescription">
+              A spacious three-storey maisonette in Perea with generous balconies, a fully equipped kitchen and room for larger families or groups.
+            </p>
+
+            <div class="stay-facts" id="matchStayFacts">
+              <div class="stay-fact">Up to 12 guests</div>
+              <div class="stay-fact">5 bedrooms</div>
+              <div class="stay-fact">3 bathrooms</div>
+              <div class="stay-fact">Parking</div>
+              <div class="stay-fact">Kitchen</div>
+              <div class="stay-fact">Sea view</div>
+            </div>
+
+            <div class="match-actions">
+              <button class="match-action primary" id="likeThisStay" type="button" data-i18n="likeThis">
+                I like this
+              </button>
+
+              <button class="match-action" id="anotherStay" type="button" data-i18n="anotherStay">
+                Show me another stay
+              </button>
+
+              <button class="match-action" id="somewhereElse" type="button" data-i18n="somewhereElse">
+                Take me somewhere else
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- START OF DAY -->
+      <article class="story-section story-photo" id="matchStartSection">
+        <img id="matchStartImage" src="images/results/coffee-by-sea.webp" alt="" onerror="this.style.display='none'">
+
+        <div class="story-photo-content">
+          <div class="story-eyebrow" data-i18n="startDay">Start your day by the sea</div>
+          <h3 id="matchStartTitle">Coffee at Kohyli</h3>
+          <p id="matchStartText">
+            Begin with coffee right on the beachfront before settling into the day. Kohyli combines sea views, sunbeds and a relaxed morning atmosphere.
+          </p>
+
+          <div class="inline-chips" id="matchStartChips">
+            <span class="inline-chip">Coffee</span>
+            <span class="inline-chip">Breakfast</span>
+            <span class="inline-chip">Beachfront</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- BEACH TIME -->
+      <article class="story-section story-photo" id="matchBeachTimeSection">
+        <img id="matchBeachTimeImage" src="images/results/perea-beach2.webp" alt="" onerror="this.style.display='none'">
+
+        <div class="story-photo-content">
+          <div class="story-eyebrow" data-i18n="beachTime">Your beach time</div>
+          <h3 id="matchBeachTimeTitle">Take it slow at Perea</h3>
+          <p id="matchBeachTimeText">
+            The gentle entry and usually calm water make this an easy place to swim, relax in the sun or walk along the waterfront between swims.
+          </p>
+
+          <div class="inline-chips" id="matchBeachTimeChips">
+            <span class="inline-chip">Swimming</span>
+            <span class="inline-chip">Sunbathing</span>
+            <span class="inline-chip">Pedal boats</span>
+            <span class="inline-chip">Walking</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- LUNCH -->
+      <article class="story-section light-section" id="matchLunchSection">
+        <div class="light-section-inner light-story-card">
+          <div class="light-story-image">
+            <img id="matchLunchImage" src="images/results/aigialos.webp" alt="" onerror="this.style.display='none'">
+          </div>
+
+          <div class="light-story-copy">
+            <div class="section-kicker" data-i18n="lunchSea">Lunch by the sea</div>
+            <h3 id="matchLunchName">Aigialos</h3>
+
+            <p id="matchLunchText">
+              A seaside taverna on the Perea promenade with Greek and Mediterranean dishes, seafood and open views across the Thermaic Gulf.
+            </p>
+
+            <div class="restaurant-meta" id="matchLunchMeta">
+              <span>Greek</span>
+              <span>Seafood</span>
+              <span>Sea view</span>
+              <span>Family friendly</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- SOMETHING DIFFERENT -->
+      <article class="story-section story-photo" id="matchExperienceSection">
+        <img id="matchExperienceImage" src="images/results/waterbus.webp" alt="" onerror="this.style.display='none'">
+
+        <div class="story-photo-content">
+          <div class="story-eyebrow" data-i18n="somethingDifferent">Try something different</div>
+          <h3 id="matchExperienceName">Take the Waterbus</h3>
+          <p id="matchExperienceText">
+            See the Thermaic Gulf from the water with the seasonal Thessaloniki Waterbus, connecting the beach suburbs with the city by sea.
+          </p>
+        </div>
+      </article>
+
+      <!-- END -->
+      <footer class="experience-end">
+        <div class="section-kicker" data-i18n="endKicker">This is only your first match</div>
+        <h3 data-i18n="endTitle">Want to keep this one, or see another side of Halkidiki?</h3>
+        <p data-i18n="endText">
+          You can keep the same beach and change the stay, or move the whole experience somewhere else.
+        </p>
+
+        <div class="end-actions">
+          <button class="match-action primary" id="endLikeThis" type="button" data-i18n="likeThis">
+            I like this
+          </button>
+          <button class="match-action" id="endAnotherStay" type="button" data-i18n="anotherStay">
+            Show me another stay
+          </button>
+          <button class="match-action" id="endSomewhereElse" type="button" data-i18n="somewhereElse">
+            Take me somewhere else
+          </button>
+        </div>
+      </footer>
+    </section>
+
+  </main>
+
+  <script>
+    /*
+      ============================================================
+      TAKE ME TO HALKIDIKI — FLOW STATE
+      ============================================================
+      The same object will later continue into:
+      Screen 3 — Who's coming with you?
+      Screen 4 — Holiday style
+      Matching Engine
+    */
+
+    const tripState = {
+      language: "en",
+      period: null,
+      adults: 2,
+      children: 0,
+      partyType: null,
+      holidayDesires: [],
+      holidayStyle: [],
+      rejectedBeaches: [],
+      rejectedAccommodations: [],
+      selectedBeach: null,
+      selectedAccommodation: null
+    };
+
+    /*
+      ============================================================
+      LANGUAGE ENGINE
+      ============================================================
+      EN / RO are active now.
+      The page is structurally ready for 6 languages: later we only
+      extend LANGUAGE_CONFIG, translations, and period translations.
+    */
+
+    const LANGUAGE_CONFIG = {
+      en: { label: "EN", htmlLang: "en" },
+      ro: { label: "RO", htmlLang: "ro" }
+    };
+
+    const translations = {
+      en: {
+        eyebrow: "Your holiday starts now",
+        title: "Take me to Halkidiki",
+        lead: "Tell us a little about your trip. We’ll turn it into a Halkidiki experience made around you.",
+        start: "Start the journey",
+        hint: "A few quick choices. Then we take you somewhere.",
+        periodKicker: "Choose the feeling",
+        periodTitle: "When do you want to go?",
+        periodLead: "Swipe through the season and stop where your holiday starts to feel real.",
+        swipeCue: "Swipe or tap",
+        choose: "Choose {period}",
+        back: "Back",
+        partyKicker: "Build your crew",
+        partyTitle: "Who's coming with you?",
+        partyLead: "Tell us how many of you are travelling. The trip will adapt as your group changes.",
+        partyPreview: "Your trip is taking shape",
+        adults: "Adults",
+        children: "Children",
+        travellers: "travellers",
+        youngTravellers: "young travellers",
+        continue: "Continue",
+        styleKicker: "What do you need from this holiday?",
+        styleTitle: "How do you want this trip to make you feel?",
+        styleLead: "Choose one or two. Not activities — the feeling you want to come home with.",
+        chooseStyle: "Choose your feeling",
+        styleNote: "Choose up to two",
+        selected: "Selected",
+        ready: "Find my Halkidiki",
+        findingKicker: "Putting your trip together",
+        showFirstMatch: "Show me",
+        firstExperience: "Your first Halkidiki experience",
+        scrollExperience: "Scroll into your trip",
+        stayHere: "Stay here",
+        likeThis: "I like this",
+        anotherStay: "Show me another stay",
+        somewhereElse: "Take me somewhere else",
+        startDay: "Start your day by the sea",
+        beachTime: "Your beach time",
+        lunchSea: "Lunch by the sea",
+        somethingDifferent: "Try something different",
+        endKicker: "This is only your first match",
+        endTitle: "Want to keep this one, or see another side of Halkidiki?",
+        endText: "You can keep the same beach and change the stay, or move the whole experience somewhere else.",
+        loadingLiveData: "Connecting to Halkidiki data",
+        liveDataReady: "Live Halkidiki data ready",
+        fallbackData: "Using local preview"
+      },
+
+      ro: {
+        eyebrow: "Vacanța ta începe acum",
+        title: "Du-mă în Halkidiki",
+        lead: "Spune-ne câteva lucruri despre vacanța ta. Noi le transformăm într-o experiență Halkidiki construită în jurul tău.",
+        start: "Începe călătoria",
+        hint: "Câteva alegeri rapide. Apoi te ducem undeva.",
+        periodKicker: "Alege atmosfera",
+        periodTitle: "Când vrei să mergi?",
+        periodLead: "Plimbă-te prin sezon și oprește-te acolo unde vacanța începe să pară reală.",
+        swipeCue: "Glisează sau apasă",
+        choose: "Alege {period}",
+        back: "Înapoi",
+        partyKicker: "Cine vine cu tine",
+        partyTitle: "Cu cine mergi?",
+        partyLead: "Spune-ne câți sunteți. Experiența se va adapta pe măsură ce grupul tău se schimbă.",
+        partyPreview: "Vacanța începe să prindă formă",
+        adults: "Adulți",
+        children: "Copii",
+        travellers: "călători",
+        youngTravellers: "mici călători",
+        continue: "Continuă",
+        styleKicker: "De ce ai nevoie de la vacanța asta?",
+        styleTitle: "Cum vrei să te facă să te simți vacanța asta?",
+        styleLead: "Alege una sau două. Nu activități — ci starea cu care vrei să te întorci acasă.",
+        chooseStyle: "Alege starea vacanței",
+        styleNote: "Poți alege maximum două",
+        selected: "Ales",
+        ready: "Găsește-mi Halkidiki",
+        findingKicker: "Îți pregătim vacanța",
+        showFirstMatch: "Arată-mi",
+        firstExperience: "Prima ta experiență în Halkidiki",
+        scrollExperience: "Intră în vacanța ta",
+        stayHere: "Cazează-te aici",
+        likeThis: "Îmi place",
+        anotherStay: "Arată-mi altă cazare",
+        somewhereElse: "Du-mă în altă parte",
+        startDay: "Începe ziua lângă mare",
+        beachTime: "Timpul tău la plajă",
+        lunchSea: "Prânz lângă mare",
+        somethingDifferent: "Încearcă ceva diferit",
+        endKicker: "Acesta este doar primul match",
+        endTitle: "Îl păstrăm sau vrei să vezi o altă parte din Halkidiki?",
+        endText: "Poți păstra aceeași plajă și schimba cazarea sau poți muta întreaga experiență în alt loc.",
+        loadingLiveData: "Conectare la baza Halkidiki",
+        liveDataReady: "Datele Halkidiki sunt pregătite",
+        fallbackData: "Folosim previzualizarea locală"
+      }
+    };
+
+    /*
+      ============================================================
+      PERIOD DATA
+      ============================================================
+      Future final photos:
+      images/periods/easter.webp
+      images/periods/may.webp
+      images/periods/june.webp
+      images/periods/july.webp
+      images/periods/august.webp
+      images/periods/september.webp
+      images/periods/october.webp
+    */
+
+    const periods = [
+      {
+        id: "easter",
+        image: "images/periods/easter.webp",
+        theme: "spring",
+        name: { en: "Easter", ro: "Paște" },
+        tagline: {
+          en: "Spring light, quiet shores and a different side of Greece.",
+          ro: "Lumină de primăvară, țărmuri liniștite și o altă Grecie."
+        }
+      },
+      {
+        id: "may",
+        image: "images/periods/may.webp",
+        theme: "may",
+        name: { en: "May", ro: "Mai" },
+        tagline: {
+          en: "The season wakes up. More space, softer days.",
+          ro: "Sezonul se trezește. Mai mult spațiu, zile mai blânde."
+        }
+      },
+      {
+        id: "june",
+        image: "images/periods/june.webp",
+        theme: "june",
+        name: { en: "June", ro: "Iunie" },
+        tagline: {
+          en: "Summer begins with long days and clear blue water.",
+          ro: "Vara începe cu zile lungi și apă limpede, albastră."
+        }
+      },
+      {
+        id: "july",
+        image: "images/periods/july.webp",
+        theme: "july",
+        name: { en: "July", ro: "Iulie" },
+        tagline: {
+          en: "Bright days, warm sea and full summer energy.",
+          ro: "Zile luminoase, mare caldă și energie de vară."
+        }
+      },
+      {
+        id: "august",
+        image: "images/periods/august.webp",
+        theme: "august",
+        name: { en: "August", ro: "August" },
+        tagline: {
+          en: "Halkidiki at full rhythm, from beach days to late evenings.",
+          ro: "Halkidiki în ritm maxim, de la plajă până târziu în noapte."
+        }
+      },
+      {
+        id: "september",
+        image: "images/periods/september.webp",
+        theme: "september",
+        name: { en: "September", ro: "Septembrie" },
+        tagline: {
+          en: "Warm sea, golden light and a slower kind of summer.",
+          ro: "Mare caldă, lumină aurie și o vară mai liniștită."
+        }
+      },
+      {
+        id: "october",
+        image: "images/periods/october.webp",
+        theme: "october",
+        name: { en: "October", ro: "Octombrie" },
+        tagline: {
+          en: "Slow days, open horizons and the coast almost to yourself.",
+          ro: "Zile lente, orizont larg și litoralul aproape numai pentru tine."
+        }
+      }
+    ];
+
+
+
+    /*
+      ============================================================
+      PARTY VISUALS
+      ============================================================
+      Final future photos:
+      images/party/solo.webp
+      images/party/couple.webp
+      images/party/friends.webp
+      images/party/family-one-child.webp
+      images/party/family-children.webp
+      images/party/group.webp
+      images/party/larger-group.webp
+    */
+
+    const partyVisuals = {
+      solo: {
+        image: "images/party/solo.webp",
+        title: {
+          en: "Your own Halkidiki",
+          ro: "Halkidiki doar pentru tine"
+        },
+        text: {
+          en: "Freedom to move at your own pace, follow the coast and change the plan whenever you feel like it.",
+          ro: "Libertatea de a merge în ritmul tău, de a urma coasta și de a schimba planul oricând ai chef."
+        }
+      },
+
+      couple: {
+        image: "images/party/couple.webp",
+        title: {
+          en: "Just the two of you",
+          ro: "Doar voi doi"
+        },
+        text: {
+          en: "A slower escape, long beach days and room to discover Halkidiki together.",
+          ro: "O escapadă în doi, zile lungi la plajă și timp să descoperiți Halkidiki împreună."
+        }
+      },
+
+      friends: {
+        image: "images/party/friends.webp",
+        title: {
+          en: "Friends, sun and no schedule",
+          ro: "Prieteni, soare și fără program"
+        },
+        text: {
+          en: "Beach days, good food and enough freedom for everyone to find their kind of summer.",
+          ro: "Plajă, mâncare bună și suficientă libertate pentru ca fiecare să-și găsească vara lui."
+        }
+      },
+
+      family_one_child: {
+        image: "images/party/family-one-child.webp",
+        title: {
+          en: "A family escape for three",
+          ro: "O vacanță în familie pentru trei"
+        },
+        text: {
+          en: "We’ll keep family-friendly beaches and comfortable stays closer to the front of the journey.",
+          ro: "Vom aduce mai în față plajele potrivite pentru familii și cazările confortabile."
+        }
+      },
+
+      family_children: {
+        image: "images/party/family-children.webp",
+        title: {
+          en: "Family beach days",
+          ro: "Zile de plajă în familie"
+        },
+        text: {
+          en: "More space, easier beach days and places where the whole family can settle in comfortably.",
+          ro: "Mai mult spațiu, zile mai ușoare la plajă și locuri în care toată familia se poate simți bine."
+        }
+      },
+
+      family: {
+        image: "images/party/family-children.webp",
+        title: {
+          en: "Your family, your summer",
+          ro: "Familia ta, vara voastră"
+        },
+        text: {
+          en: "We’ll balance beach comfort, space and experiences that work well for travelling together.",
+          ro: "Vom echilibra confortul pe plajă, spațiul și experiențele potrivite pentru o vacanță împreună."
+        }
+      },
+
+      group: {
+        image: "images/party/group.webp",
+        title: {
+          en: "Bring the whole crew",
+          ro: "Vine toată gașca"
+        },
+        text: {
+          en: "We’ll focus on stays with enough room and destinations where a group can spend the day together.",
+          ro: "Vom pune accent pe cazări cu suficient spațiu și locuri unde grupul poate petrece ziua împreună."
+        }
+      },
+
+      large_group: {
+        image: "images/party/larger-group.webp",
+        title: {
+          en: "This needs a bigger place",
+          ro: "Aici avem nevoie de mai mult spațiu"
+        },
+        text: {
+          en: "Large-capacity stays come first, while the rest of the experience stays built around the same beach.",
+          ro: "Cazările cu capacitate mare vin primele, iar restul experienței rămâne construit în jurul aceleiași plaje."
+        }
+      }
+    };
+
+
+
+    /*
+      ============================================================
+      HOLIDAY STYLE DATA
+      ============================================================
+      Future final photos:
+      images/styles/peace-quiet.webp
+      images/styles/family-beach-days.webp
+      images/styles/beach-bars.webp
+      images/styles/explore-adventure.webp
+      images/styles/food-local-life.webp
+      images/styles/balanced.webp
+    */
+
+    const holidayStyles = {
+      relax_reset: {
+        image: "images/styles/switch-off.webp",
+        engineStyles: ["peace_quiet"],
+        name: {
+          en: "Switch off completely",
+          ro: "Să mă deconectez complet"
+        },
+        tagline: {
+          en: "Less noise. Fewer plans. More sea, shade and time that finally feels like yours.",
+          ro: "Mai puțin zgomot. Mai puține planuri. Mai multă mare, umbră și timp care chiar pare al tău."
+        }
+      },
+
+      family_together: {
+        image: "images/styles/family-time.webp",
+        engineStyles: ["family_beach_days"],
+        name: {
+          en: "Easy time together",
+          ro: "Timp ușor împreună"
+        },
+        tagline: {
+          en: "A holiday where everyone is comfortable and the day does not feel like logistics.",
+          ro: "O vacanță în care tuturor le este bine, iar ziua nu se transformă într-o operațiune logistică."
+        }
+      },
+
+      romance_slow: {
+        image: "images/styles/romance.webp",
+        engineStyles: ["peace_quiet", "food_local_life"],
+        name: {
+          en: "Reconnect & slow down",
+          ro: "Să ne regăsim și să încetinim"
+        },
+        tagline: {
+          en: "Quiet mornings, beautiful places, long dinners and time for just the two of you.",
+          ro: "Dimineți liniștite, locuri frumoase, cine lungi și timp doar pentru voi doi."
+        }
+      },
+
+      summer_energy: {
+        image: "images/styles/summer-energy.webp",
+        engineStyles: ["beach_bars"],
+        name: {
+          en: "Feel the summer energy",
+          ro: "Să simt energia verii"
+        },
+        tagline: {
+          en: "Music, beach bars, people around you and days that naturally turn into evenings.",
+          ro: "Muzică, beach baruri, oameni în jur și zile care se transformă firesc în seri."
+        }
+      },
+
+      explore_more: {
+        image: "images/styles/explore-more.webp",
+        engineStyles: ["explore_adventure"],
+        name: {
+          en: "See & do more",
+          ro: "Să văd și să fac mai multe"
+        },
+        tagline: {
+          en: "Move, discover, get on a boat, find another bay and come back with stories.",
+          ro: "Să mă mișc, să descopăr, să urc într-o barcă, să găsesc alt golf și să mă întorc cu povești."
+        }
+      },
+
+      food_local: {
+        image: "images/styles/taste-local.webp",
+        engineStyles: ["food_local_life"],
+        name: {
+          en: "Taste the real place",
+          ro: "Să simt gustul locului"
+        },
+        tagline: {
+          en: "Tavernas, local flavours, coffee by the water and places that feel genuinely Greek.",
+          ro: "Taverne, gusturi locale, cafea lângă apă și locuri care chiar se simt grecești."
+        }
+      },
+
+      nature_beauty: {
+        image: "images/styles/nature-beauty.webp",
+        engineStyles: ["peace_quiet", "explore_adventure"],
+        name: {
+          en: "Be somewhere beautiful",
+          ro: "Să fiu într-un loc frumos"
+        },
+        tagline: {
+          en: "Clear water, dramatic coastlines, pine trees, sunsets and places you keep looking at.",
+          ro: "Apă limpede, coastă spectaculoasă, pini, apusuri și locuri la care continui să te uiți."
+        }
+      },
+
+      balanced: {
+        image: "images/styles/a-little-of-everything.webp",
+        engineStyles: ["balanced"],
+        name: {
+          en: "A little of everything",
+          ro: "Câte puțin din toate"
+        },
+        tagline: {
+          en: "Beach, food, exploring, relaxing — without making the whole holiday about one thing.",
+          ro: "Plajă, mâncare, explorare și relaxare — fără ca toată vacanța să fie despre un singur lucru."
+        }
+      }
+    };
+
+    const styleOrders = {
+      solo: [
+        "explore_more", "relax_reset", "nature_beauty", "food_local",
+        "balanced", "summer_energy", "romance_slow", "family_together"
+      ],
+
+      couple: [
+        "romance_slow", "relax_reset", "nature_beauty", "food_local",
+        "explore_more", "balanced", "summer_energy", "family_together"
+      ],
+
+      friends: [
+        "summer_energy", "explore_more", "food_local", "nature_beauty",
+        "balanced", "relax_reset", "romance_slow", "family_together"
+      ],
+
+      family_one_child: [
+        "family_together", "relax_reset", "nature_beauty", "explore_more",
+        "food_local", "balanced", "summer_energy", "romance_slow"
+      ],
+
+      family_children: [
+        "family_together", "relax_reset", "nature_beauty", "explore_more",
+        "balanced", "food_local", "summer_energy", "romance_slow"
+      ],
+
+      family: [
+        "family_together", "relax_reset", "nature_beauty", "explore_more",
+        "food_local", "balanced", "summer_energy", "romance_slow"
+      ],
+
+      group: [
+        "summer_energy", "explore_more", "food_local", "balanced",
+        "nature_beauty", "relax_reset", "family_together", "romance_slow"
+      ],
+
+      large_group: [
+        "balanced", "summer_energy", "explore_more", "food_local",
+        "nature_beauty", "relax_reset", "family_together", "romance_slow"
+      ]
+    };
+
+    const findingSteps = {
+      en: [
+        {
+          title: "Finding your beach...",
+          subtitle: "Starting with the coastline that best fits the trip you just described.",
+          label: "Beach"
+        },
+        {
+          title: "Finding somewhere you'll love to stay...",
+          subtitle: "Checking capacity, location and the kind of stay that works for your group.",
+          label: "Stay"
+        },
+        {
+          title: "Finding something good nearby...",
+          subtitle: "Beach bars, restaurants and places that make the day feel complete.",
+          label: "Nearby"
+        },
+        {
+          title: "Adding something different...",
+          subtitle: "A boat, an activity, a local place — something worth doing beyond the beach.",
+          label: "Experience"
+        },
+        {
+          title: "We found something for you.",
+          subtitle: "Your first Halkidiki experience is ready.",
+          label: "Ready"
+        }
+      ],
+
+      ro: [
+        {
+          title: "Îți găsim plaja...",
+          subtitle: "Pornim de la litoralul care se potrivește cel mai bine vacanței pe care tocmai ai descris-o.",
+          label: "Plajă"
+        },
+        {
+          title: "Îți găsim locul potrivit pentru cazare...",
+          subtitle: "Verificăm capacitatea, zona și tipul de cazare potrivit pentru grupul tău.",
+          label: "Cazare"
+        },
+        {
+          title: "Căutăm ceva bun în apropiere...",
+          subtitle: "Beach baruri, restaurante și locuri care pot completa ziua.",
+          label: "În apropiere"
+        },
+        {
+          title: "Adăugăm și ceva diferit...",
+          subtitle: "O barcă, o activitate, un loc local — ceva care să merite făcut și dincolo de plajă.",
+          label: "Experiență"
+        },
+        {
+          title: "Am găsit ceva pentru tine.",
+          subtitle: "Prima ta experiență în Halkidiki este gata.",
+          label: "Gata"
+        }
+      ]
+    };
+
+
+
+    /*
+      ============================================================
+      MATCH EXPERIENCE DATA
+      ============================================================
+      This is a real-structure demo using the Perea relationships
+      already supplied by the project data. The matching engine will
+      later replace this object dynamically.
+    */
+
+    const demoMatch = {
+      beach: {
+        id: "perea-beach",
+        name: {
+          en: "Perea Beach",
+          ro: "Plaja Perea"
+        },
+        description: {
+          en: "A long sandy shoreline with shallow water and an easy-going seaside promenade, combining relaxed beach time with cafés, tavernas and evening walks by the Thermaic Gulf.",
+          ro: "O plajă lungă cu nisip, apă puțin adâncă și o promenadă relaxată, unde zilele la mare se combină cu cafenele, taverne și plimbări de seară pe malul Golfului Thermaic."
+        },
+        heroImage: "images/results/perea-beach.webp",
+        beachTimeImage: "images/results/perea-beach2.webp",
+        facts: {
+          en: ["Very shallow water", "Family friendly", "Long promenade", "Sunset views"],
+          ro: ["Apă foarte puțin adâncă", "Potrivită pentru familii", "Promenadă lungă", "Priveliști la apus"]
+        },
+        activities: {
+          en: ["Swimming", "Sunbathing", "Pedal boats", "Walking"],
+          ro: ["Înot", "Plajă", "Bărci cu pedale", "Plimbări"]
+        }
+      },
+
+      accommodation: {
+        id: "ostria_sea_view_maisonette_in_perea",
+        name: {
+          en: "Ostria Sea View Maisonette",
+          ro: "Ostria Sea View Maisonette"
+        },
+        description: {
+          en: "A spacious three-storey maisonette in Perea with generous balconies, a fully equipped kitchen and room for larger families or groups.",
+          ro: "O maisonette spațioasă pe trei niveluri în Perea, cu balcoane generoase, bucătărie complet echipată și suficient loc pentru familii numeroase sau grupuri."
+        },
+        images: [
+          "images/results/stay-01.webp",
+          "images/results/stay-02.webp",
+          "images/results/stay-03.webp",
+          "images/results/stay-04.webp"
+        ],
+        facts: {
+          en: ["Up to 12 guests", "5 bedrooms", "3 bathrooms", "Parking", "Kitchen", "Sea view"],
+          ro: ["Până la 12 oaspeți", "5 dormitoare", "3 băi", "Parcare", "Bucătărie", "Vedere la mare"]
+        }
+      },
+
+      startOfDay: {
+        id: "kohyli-beach-bar",
+        image: "images/results/coffee-by-sea.webp",
+        name: {
+          en: "Coffee at Kohyli",
+          ro: "Cafea la Kohyli"
+        },
+        text: {
+          en: "Begin with coffee right on the beachfront before settling into the day. Kohyli combines sea views, sunbeds and a relaxed morning atmosphere.",
+          ro: "Începe cu o cafea chiar pe malul mării, înainte să intri în ritmul zilei. Kohyli combină priveliștea spre mare, șezlongurile și o atmosferă relaxată de dimineață."
+        },
+        chips: {
+          en: ["Coffee", "Breakfast", "Beachfront"],
+          ro: ["Cafea", "Mic dejun", "Pe plajă"]
+        }
+      },
+
+      beachTime: {
+        title: {
+          en: "Take it slow at Perea",
+          ro: "Ia-o încet la Perea"
+        },
+        text: {
+          en: "The gentle entry and usually calm water make this an easy place to swim, relax in the sun or walk along the waterfront between swims.",
+          ro: "Intrarea lină în apă și marea de obicei calmă fac din Perea un loc ușor pentru înot, relaxare la soare și plimbări pe faleză între două băi."
+        }
+      },
+
+      lunch: {
+        id: "aigialos",
+        image: "images/results/aigialos.webp",
+        name: {
+          en: "Aigialos",
+          ro: "Aigialos"
+        },
+        text: {
+          en: "A seaside taverna on the Perea promenade with Greek and Mediterranean dishes, seafood and open views across the Thermaic Gulf.",
+          ro: "O tavernă pe promenada din Perea, cu preparate grecești și mediteraneene, fructe de mare și priveliști deschise spre Golful Thermaic."
+        },
+        meta: {
+          en: ["Greek", "Seafood", "Sea view", "Family friendly"],
+          ro: ["Grecesc", "Fructe de mare", "Vedere la mare", "Potrivit pentru familii"]
+        }
+      },
+
+      experience: {
+        id: "waterbus_karavakia",
+        image: "images/results/waterbus.webp",
+        name: {
+          en: "Take the Waterbus",
+          ro: "Ia Waterbus-ul"
+        },
+        text: {
+          en: "See the Thermaic Gulf from the water with the seasonal Thessaloniki Waterbus, connecting the beach suburbs with the city by sea.",
+          ro: "Descoperă Golful Thermaic de pe apă cu Thessaloniki Waterbus, o legătură sezonieră pe mare între stațiunile de plajă și oraș."
+        }
+      }
+    };
+
+    const experience = document.getElementById("takeMeExperience");
+    const introScreen = document.getElementById("introScreen");
+    const periodScreen = document.getElementById("periodScreen");
+    const startButton = document.getElementById("startJourney");
+    const backToIntro = document.getElementById("backToIntro");
+    const languageSwitcher = document.getElementById("languageSwitcher");
+    const backToSite = document.getElementById("backToSite");
+    const periodDeck = document.getElementById("periodDeck");
+    const periodStage = document.getElementById("periodStage");
+    const periodBackground = document.getElementById("periodBackground");
+    const choosePeriodButton = document.getElementById("choosePeriod");
+    const choosePeriodLabel = document.getElementById("choosePeriodLabel");
+    const periodPosition = document.getElementById("periodPosition");
+
+    const partyScreen = document.getElementById("partyScreen");
+    const partyBackground = document.getElementById("partyBackground");
+    const partyVisual = document.getElementById("partyVisual");
+    const partyPhoto = document.getElementById("partyPhoto");
+    const partyStoryTitle = document.getElementById("partyStoryTitle");
+    const partyStoryText = document.getElementById("partyStoryText");
+    const partySummary = document.getElementById("partySummary");
+    const adultsValue = document.getElementById("adultsValue");
+    const childrenValue = document.getElementById("childrenValue");
+    const adultsMinus = document.getElementById("adultsMinus");
+    const adultsPlus = document.getElementById("adultsPlus");
+    const childrenMinus = document.getElementById("childrenMinus");
+    const childrenPlus = document.getElementById("childrenPlus");
+    const choosePartyButton = document.getElementById("chooseParty");
+    const backToPeriod = document.getElementById("backToPeriod");
+
+    const styleScreen = document.getElementById("styleScreen");
+    const styleGrid = document.getElementById("styleGrid");
+    const styleBackground = document.getElementById("styleBackground");
+    const chooseStyleButton = document.getElementById("chooseStyle");
+    const chooseStyleLabel = document.getElementById("chooseStyleLabel");
+    const styleNote = document.getElementById("styleNote");
+    const backToParty = document.getElementById("backToParty");
+
+    const findingScreen = document.getElementById("findingScreen");
+    const findingBackground = document.getElementById("findingBackground");
+    const findingTitle = document.getElementById("findingTitle");
+    const findingSubtitle = document.getElementById("findingSubtitle");
+    const findingStepLabel = document.getElementById("findingStepLabel");
+    const findingProgressFill = document.getElementById("findingProgressFill");
+    const findingReady = document.getElementById("findingReady");
+    const showFirstMatch = document.getElementById("showFirstMatch");
+    const liveDataStatus = document.getElementById("liveDataStatus");
+
+    const matchScreen = document.getElementById("matchScreen");
+    const backToFinding = document.getElementById("backToFinding");
+
+    const matchBeachHero = document.getElementById("matchBeachHero");
+    const matchBeachName = document.getElementById("matchBeachName");
+    const matchBeachDescription = document.getElementById("matchBeachDescription");
+    const matchBeachFacts = document.getElementById("matchBeachFacts");
+
+    const matchStayName = document.getElementById("matchStayName");
+    const matchStayDescription = document.getElementById("matchStayDescription");
+    const matchStayFacts = document.getElementById("matchStayFacts");
+    const stayGallery = document.getElementById("stayGallery");
+    const stayGalleryDots = document.getElementById("stayGalleryDots");
+
+    const matchStartImage = document.getElementById("matchStartImage");
+    const matchStartTitle = document.getElementById("matchStartTitle");
+    const matchStartText = document.getElementById("matchStartText");
+    const matchStartChips = document.getElementById("matchStartChips");
+
+    const matchBeachTimeImage = document.getElementById("matchBeachTimeImage");
+    const matchBeachTimeTitle = document.getElementById("matchBeachTimeTitle");
+    const matchBeachTimeText = document.getElementById("matchBeachTimeText");
+    const matchBeachTimeChips = document.getElementById("matchBeachTimeChips");
+
+    const matchLunchImage = document.getElementById("matchLunchImage");
+    const matchLunchName = document.getElementById("matchLunchName");
+    const matchLunchText = document.getElementById("matchLunchText");
+    const matchLunchMeta = document.getElementById("matchLunchMeta");
+
+    const matchExperienceImage = document.getElementById("matchExperienceImage");
+    const matchExperienceName = document.getElementById("matchExperienceName");
+    const matchExperienceText = document.getElementById("matchExperienceText");
+
+    const likeThisStay = document.getElementById("likeThisStay");
+    const anotherStay = document.getElementById("anotherStay");
+    const somewhereElse = document.getElementById("somewhereElse");
+    const endLikeThis = document.getElementById("endLikeThis");
+    const endAnotherStay = document.getElementById("endAnotherStay");
+    const endSomewhereElse = document.getElementById("endSomewhereElse");
+
+    let activePeriodIndex = 2; // June starts in front.
+    let dragStartX = 0;
+    let dragDeltaX = 0;
+    let isDragging = false;
+
+    function getInitialLanguage() {
+      const params = new URLSearchParams(window.location.search);
+      const fromUrl = params.get("lang");
+      const fromStorage = localStorage.getItem("halkidiki_language");
+      const fromHtml = document.documentElement.lang;
+
+      if (fromUrl && translations[fromUrl]) return fromUrl;
+      if (fromStorage && translations[fromStorage]) return fromStorage;
+      if (fromHtml && translations[fromHtml]) return fromHtml;
+      return "en";
+    }
+
+    let currentLanguage = getInitialLanguage();
+    tripState.language = currentLanguage;
+
+    function t(key) {
+      return translations[currentLanguage]?.[key]
+        ?? translations.en?.[key]
+        ?? key;
+    }
+
+    function periodText(period, field) {
+      return period?.[field]?.[currentLanguage]
+        ?? period?.[field]?.en
+        ?? "";
+    }
+
+    function setLanguage(lang) {
+      if (!translations[lang]) return;
+
+      currentLanguage = lang;
+      tripState.language = lang;
+
+      document.documentElement.lang = LANGUAGE_CONFIG[lang]?.htmlLang || lang;
+      localStorage.setItem("halkidiki_language", lang);
+
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.dataset.i18n;
+        element.textContent = t(key);
+      });
+
+      document.querySelectorAll("[data-lang]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.lang === lang);
+        button.setAttribute("aria-pressed", button.dataset.lang === lang ? "true" : "false");
+      });
+
+      backToSite.href = `index.html?lang=${encodeURIComponent(lang)}`;
+
+      const url = new URL(window.location.href);
+      url.searchParams.set("lang", lang);
+      history.replaceState({}, "", url);
+
+      renderPeriodDeck();
+      updatePartyVisual(false);
+      renderStyleGrid();
+
+      if (currentMatch && matchScreen) {
+        renderMatch(currentMatch);
+      }
+    }
+
+    function buildLanguageSwitcher() {
+      languageSwitcher.innerHTML = "";
+
+      Object.entries(LANGUAGE_CONFIG).forEach(([code, config]) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.lang = code;
+        button.textContent = config.label;
+        button.setAttribute("aria-label", `Language ${config.label}`);
+        button.addEventListener("click", () => setLanguage(code));
+        languageSwitcher.appendChild(button);
+      });
+    }
+
+    function showScreen(screenName) {
+      const screens = {
+        intro: introScreen,
+        period: periodScreen,
+        party: partyScreen,
+        style: styleScreen,
+        finding: findingScreen,
+        match: matchScreen
+      };
+
+      Object.entries(screens).forEach(([name, element]) => {
+        element.classList.toggle("active", name === screenName);
+      });
+
+      experience.classList.toggle("period-active", screenName === "period");
+      experience.classList.toggle("party-active", screenName === "party");
+      experience.classList.toggle("style-active", screenName === "style");
+      experience.classList.toggle("finding-active", screenName === "finding");
+
+      const mainTopbar = document.querySelector(".topbar");
+      if (mainTopbar) {
+        mainTopbar.style.display = screenName === "match" ? "none" : "";
+      }
+
+      document.body.style.overflow = screenName === "match" ? "hidden" : "hidden";
+
+      if (screenName === "period") {
+        updatePeriodBackground();
+        updateDeckTransforms();
+      }
+
+      if (screenName === "party") {
+        updatePartyVisual(false);
+      }
+
+      if (screenName === "style") {
+        renderStyleGrid();
+        updateStyleBackground();
+      }
+
+      if (screenName === "finding") {
+        startFindingSequence();
+      }
+
+      if (screenName === "match") {
+        renderMatch(dataRuntime.liveMatch ?? demoMatch);
+        matchScreen.scrollTop = 0;
+      }
+    }
+
+    /*
+      Circular distance:
+      With 7 cards, index 0 and index 6 are neighbors.
+    */
+    function circularOffset(index, active, total) {
+      let diff = index - active;
+      const half = Math.floor(total / 2);
+
+      if (diff > half) diff -= total;
+      if (diff < -half) diff += total;
+
+      return diff;
+    }
+
+    function cardTransform(offset) {
+      const mobile = window.matchMedia("(max-width: 700px)").matches;
+
+      const configs = mobile
+        ? {
+            "-3": { x: -128, scale: .69, rotate: 29, z: -220, opacity: 0 },
+            "-2": { x: -94,  scale: .77, rotate: 23, z: -155, opacity: .42 },
+            "-1": { x: -60,  scale: .88, rotate: 16, z: -80,  opacity: .80 },
+             "0": { x: 0,    scale: 1,   rotate: 0,  z: 20,   opacity: 1 },
+             "1": { x: 60,   scale: .88, rotate: -16,z: -80, opacity: .80 },
+             "2": { x: 94,   scale: .77, rotate: -23,z: -155,opacity: .42 },
+             "3": { x: 128,  scale: .69, rotate: -29,z: -220,opacity: 0 }
+          }
+        : {
+            "-3": { x: -440, scale: .68, rotate: 26, z: -250, opacity: .12 },
+            "-2": { x: -295, scale: .77, rotate: 21, z: -170, opacity: .38 },
+            "-1": { x: -155, scale: .89, rotate: 14, z: -80,  opacity: .82 },
+             "0": { x: 0,    scale: 1,   rotate: 0,  z: 30,   opacity: 1 },
+             "1": { x: 155,  scale: .89, rotate: -14,z: -80,  opacity: .82 },
+             "2": { x: 295,  scale: .77, rotate: -21,z: -170, opacity: .38 },
+             "3": { x: 440,  scale: .68, rotate: -26,z: -250, opacity: .12 }
+          };
+
+      const key = String(Math.max(-3, Math.min(3, offset)));
+      return configs[key];
+    }
+
+    function renderPeriodDeck() {
+      periodDeck.innerHTML = "";
+
+      periods.forEach((period, index) => {
+        const card = document.createElement("article");
+        card.className = "period-card";
+        card.dataset.index = index;
+        card.dataset.period = period.id;
+        card.dataset.theme = period.theme;
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", index === activePeriodIndex ? "0" : "-1");
+
+        const img = document.createElement("img");
+        img.src = period.image;
+        img.alt = "";
+        img.setAttribute("aria-hidden", "true");
+        img.onerror = () => { img.style.display = "none"; };
+
+        const copy = document.createElement("div");
+        copy.className = "period-copy";
+
+        const number = document.createElement("span");
+        number.className = "period-number";
+        number.textContent = String(index + 1).padStart(2, "0");
+
+        const name = document.createElement("strong");
+        name.className = "period-name";
+        name.textContent = periodText(period, "name");
+
+        const tagline = document.createElement("span");
+        tagline.className = "period-tagline";
+        tagline.textContent = periodText(period, "tagline");
+
+        copy.append(number, name, tagline);
+        card.append(img, copy);
+
+        card.addEventListener("click", () => {
+          if (index === activePeriodIndex) {
+            selectCurrentPeriodAndContinue();
+            return;
+          }
+
+          activePeriodIndex = index;
+          updateDeckTransforms();
+          updatePeriodBackground();
+        });
+
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            activePeriodIndex = index;
+            updateDeckTransforms();
+            updatePeriodBackground();
+          }
+        });
+
+        periodDeck.appendChild(card);
+      });
+
+      updateDeckTransforms();
+      updatePeriodBackground();
+    }
+
+    function updateDeckTransforms() {
+      const cards = [...periodDeck.querySelectorAll(".period-card")];
+
+      cards.forEach((card, index) => {
+        const offset = circularOffset(index, activePeriodIndex, periods.length);
+        const config = cardTransform(offset);
+
+        card.style.transform =
+          `translate3d(${config.x}px, 0, ${config.z}px) rotateY(${config.rotate}deg) scale(${config.scale})`;
+        card.style.opacity = config.opacity;
+        card.style.zIndex = String(20 - Math.abs(offset));
+        card.style.filter = offset === 0 ? "none" : `brightness(${.78 - Math.min(Math.abs(offset), 2) * .07}) saturate(.84)`;
+        card.style.pointerEvents = Math.abs(offset) <= 2 ? "auto" : "none";
+
+        const active = offset === 0;
+        card.classList.toggle("is-active", active);
+        card.setAttribute("tabindex", active ? "0" : "-1");
+        card.setAttribute("aria-current", active ? "true" : "false");
+      });
+
+      const period = periods[activePeriodIndex];
+      periodPosition.textContent = `${activePeriodIndex + 1} / ${periods.length}`;
+      choosePeriodLabel.textContent = t("choose").replace("{period}", periodText(period, "name"));
+    }
+
+    function updatePeriodBackground() {
+      const period = periods[activePeriodIndex];
+
+      periodBackground.style.opacity = "0";
+
+      window.setTimeout(() => {
+        periodBackground.style.display = "";
+        periodBackground.src = period.image;
+        periodBackground.onerror = () => {
+          periodBackground.style.display = "none";
+        };
+
+        if (periodBackground.complete && periodBackground.naturalWidth > 0) {
+          periodBackground.style.opacity = "1";
+        } else {
+          periodBackground.onload = () => {
+            periodBackground.style.display = "";
+            periodBackground.style.opacity = "1";
+          };
+        }
+      }, 160);
+    }
+
+    function movePeriod(direction) {
+      activePeriodIndex =
+        (activePeriodIndex + direction + periods.length) % periods.length;
+
+      updateDeckTransforms();
+      updatePeriodBackground();
+    }
+
+
+
+    /*
+      ============================================================
+      PARTY TYPE ENGINE
+      ============================================================
+      Party type changes the presentation and later becomes a soft
+      matching signal. Accommodation capacity remains the hard filter.
+    */
+
+    function getPartyType(adults, children) {
+      const total = adults + children;
+
+      if (children === 0) {
+        if (adults === 1) return "solo";
+        if (adults === 2) return "couple";
+        if (adults <= 4) return "friends";
+        if (adults >= 9) return "large_group";
+        return "group";
+      }
+
+      if (total >= 9) return "large_group";
+      if (adults >= 4) return "group";
+      if (children === 1 && adults <= 3) return "family_one_child";
+      if (children >= 2 && adults <= 3) return "family_children";
+
+      return "family";
+    }
+
+    function localizedPartyText(value) {
+      return value?.[currentLanguage] ?? value?.en ?? "";
+    }
+
+    function partySummaryText() {
+      const a = tripState.adults;
+      const c = tripState.children;
+
+      if (currentLanguage === "ro") {
+        const adultWord = a === 1 ? "adult" : "adulți";
+        const childWord = c === 1 ? "copil" : "copii";
+        return c > 0
+          ? `${a} ${adultWord} · ${c} ${childWord}`
+          : `${a} ${adultWord}`;
+      }
+
+      const adultWord = a === 1 ? "adult" : "adults";
+      const childWord = c === 1 ? "child" : "children";
+      return c > 0
+        ? `${a} ${adultWord} · ${c} ${childWord}`
+        : `${a} ${adultWord}`;
+    }
+
+    function updatePartyVisual(animate = true) {
+      const type = getPartyType(tripState.adults, tripState.children);
+      tripState.partyType = type;
+
+      const visual = partyVisuals[type] ?? partyVisuals.family;
+
+      adultsValue.textContent = tripState.adults;
+      childrenValue.textContent = tripState.children;
+      partySummary.textContent = partySummaryText();
+
+      adultsMinus.disabled = tripState.adults <= 1;
+      adultsPlus.disabled = tripState.adults >= 20;
+      childrenMinus.disabled = tripState.children <= 0;
+      childrenPlus.disabled = tripState.children >= 10;
+
+      partyVisual.dataset.party = type;
+      partyStoryTitle.textContent = localizedPartyText(visual.title);
+      partyStoryText.textContent = localizedPartyText(visual.text);
+
+      if (animate) {
+        partyVisual.classList.add("is-changing");
+      }
+
+      const applyImage = () => {
+        partyPhoto.style.display = "";
+        partyPhoto.src = visual.image;
+        partyPhoto.onerror = () => {
+          partyPhoto.style.display = "none";
+        };
+
+        partyBackground.style.display = "";
+        partyBackground.src = visual.image;
+        partyBackground.onerror = () => {
+          partyBackground.style.display = "none";
+        };
+
+        window.setTimeout(() => {
+          partyVisual.classList.remove("is-changing");
+        }, 80);
+      };
+
+      if (animate) {
+        window.setTimeout(applyImage, 150);
+      } else {
+        applyImage();
+      }
+    }
+
+    function changeAdults(delta) {
+      const next = Math.max(1, Math.min(20, tripState.adults + delta));
+      if (next === tripState.adults) return;
+      tripState.adults = next;
+      updatePartyVisual(true);
+    }
+
+    function changeChildren(delta) {
+      const next = Math.max(0, Math.min(10, tripState.children + delta));
+      if (next === tripState.children) return;
+      tripState.children = next;
+      updatePartyVisual(true);
+    }
+
+
+
+    /*
+      ============================================================
+      HOLIDAY STYLE ENGINE
+      ============================================================
+      The first card is reordered according to partyType, so the
+      experience feels responsive without removing valid options.
+      Users may choose one or two styles.
+    */
+
+    function styleText(style, field) {
+      return style?.[field]?.[currentLanguage]
+        ?? style?.[field]?.en
+        ?? "";
+    }
+
+    function getStyleOrder() {
+      return styleOrders[tripState.partyType]
+        ?? styleOrders.family;
+    }
+
+    function updateStyleBackground(styleId = null) {
+      const fallback = getStyleOrder()[0];
+      const activeId = styleId
+        ?? tripState.holidayDesires[tripState.holidayDesires.length - 1]
+        ?? fallback;
+
+      const style = holidayStyles[activeId];
+      if (!style) return;
+
+      styleBackground.style.opacity = "0";
+
+      window.setTimeout(() => {
+        styleBackground.style.display = "";
+        styleBackground.src = style.image;
+
+        styleBackground.onerror = () => {
+          styleBackground.style.display = "none";
+        };
+
+        if (styleBackground.complete && styleBackground.naturalWidth > 0) {
+          styleBackground.style.opacity = "1";
+        } else {
+          styleBackground.onload = () => {
+            styleBackground.style.display = "";
+            styleBackground.style.opacity = "1";
+          };
+        }
+      }, 100);
+    }
+
+    function updateStyleSelectionUI() {
+      const cards = [...styleGrid.querySelectorAll(".style-card")];
+      const selected = tripState.holidayDesires;
+
+      cards.forEach((card) => {
+        const styleId = card.dataset.style;
+        const isSelected = selected.includes(styleId);
+
+        card.classList.toggle("is-selected", isSelected);
+        card.classList.toggle("is-muted", selected.length >= 2 && !isSelected);
+        card.setAttribute("aria-pressed", isSelected ? "true" : "false");
+      });
+
+      chooseStyleButton.disabled = selected.length === 0;
+      chooseStyleLabel.textContent = selected.length > 0 ? t("ready") : t("chooseStyle");
+
+      if (currentLanguage === "ro") {
+        styleNote.textContent =
+          selected.length === 0 ? "Poți alege maximum două"
+          : selected.length === 1 ? "Ai ales 1 · mai poți alege încă una"
+          : "Ai ales 2 · suntem gata";
+      } else {
+        styleNote.textContent =
+          selected.length === 0 ? "Choose up to two"
+          : selected.length === 1 ? "1 selected · you can choose one more"
+          : "2 selected · you're ready";
+      }
+    }
+
+    function syncEngineStylesFromDesires() {
+      const mapped = tripState.holidayDesires
+        .flatMap((desireId) => holidayStyles[desireId]?.engineStyles ?? []);
+
+      tripState.holidayStyle = [...new Set(mapped)];
+    }
+
+    function toggleHolidayStyle(styleId) {
+      const selected = tripState.holidayDesires;
+      const existingIndex = selected.indexOf(styleId);
+
+      if (existingIndex >= 0) {
+        selected.splice(existingIndex, 1);
+      } else {
+        if (selected.length >= 2) {
+          // Keep the interaction fluid: replace the oldest choice.
+          selected.shift();
+        }
+        selected.push(styleId);
+      }
+
+      syncEngineStylesFromDesires();
+      updateStyleSelectionUI();
+      updateStyleBackground(styleId);
+    }
+
+    function renderStyleGrid() {
+      if (!styleGrid) return;
+
+      const order = getStyleOrder();
+      styleGrid.innerHTML = "";
+
+      order.forEach((styleId, index) => {
+        const style = holidayStyles[styleId];
+        if (!style) return;
+
+        const card = document.createElement("article");
+        card.className = "style-card";
+        card.dataset.style = styleId;
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("aria-pressed", tripState.holidayDesires.includes(styleId) ? "true" : "false");
+
+        const img = document.createElement("img");
+        img.src = style.image;
+        img.alt = "";
+        img.setAttribute("aria-hidden", "true");
+        img.onerror = () => { img.style.display = "none"; };
+
+        const selectedMark = document.createElement("span");
+        selectedMark.className = "style-selected-mark";
+        selectedMark.textContent = t("selected");
+
+        const copy = document.createElement("div");
+        copy.className = "style-copy";
+
+        const name = document.createElement("strong");
+        name.className = "style-name";
+        name.textContent = styleText(style, "name");
+
+        const tagline = document.createElement("span");
+        tagline.className = "style-tagline";
+        tagline.textContent = styleText(style, "tagline");
+
+        copy.append(name, tagline);
+        card.append(img, selectedMark, copy);
+
+        card.addEventListener("click", () => toggleHolidayStyle(styleId));
+
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            toggleHolidayStyle(styleId);
+          }
+        });
+
+        styleGrid.appendChild(card);
+      });
+
+      updateStyleSelectionUI();
+      updateStyleBackground();
+    }
+
+
+
+    /*
+      ============================================================
+      CINEMATIC FINDING SEQUENCE
+      ============================================================
+      No spinner. Each step changes the message and rotates the photo
+      deck. Later the matching engine can feed real matched photos.
+    */
+
+    let findingTimer = null;
+    let findingStepIndex = 0;
+
+    function getFindingSteps() {
+      return findingSteps[currentLanguage] ?? findingSteps.en;
+    }
+
+    function rotateFindingCards(stepIndex) {
+      const cards = [...document.querySelectorAll("[data-find-card]")];
+      const total = cards.length;
+
+      cards.forEach((card, index) => {
+        const position = (index - stepIndex + total) % total;
+        card.classList.remove("pos-0", "pos-1", "pos-2", "pos-3");
+        card.classList.add(`pos-${position}`);
+      });
+
+      const frontCard = cards[stepIndex % total];
+      const frontImg = frontCard?.querySelector("img");
+
+      if (frontImg?.src) {
+        findingBackground.style.display = "";
+        findingBackground.src = frontImg.src;
+      }
+    }
+
+    function applyFindingStep(index) {
+      const steps = getFindingSteps();
+      const step = steps[Math.min(index, steps.length - 1)];
+      if (!step) return;
+
+      findingTitle.style.opacity = "0";
+      findingTitle.style.transform = "translateY(8px)";
+      findingSubtitle.style.opacity = "0";
+      findingSubtitle.style.transform = "translateY(8px)";
+
+      window.setTimeout(() => {
+        findingTitle.textContent = step.title;
+        findingSubtitle.textContent = step.subtitle;
+        findingStepLabel.textContent = step.label;
+
+        findingTitle.style.opacity = "1";
+        findingTitle.style.transform = "translateY(0)";
+        findingSubtitle.style.opacity = "1";
+        findingSubtitle.style.transform = "translateY(0)";
+      }, 180);
+
+      const progress = ((index + 1) / steps.length) * 100;
+      findingProgressFill.style.width = `${progress}%`;
+
+      if (index < 4) {
+        rotateFindingCards(index);
+      }
+    }
+
+    function stopFindingSequence() {
+      if (findingTimer) {
+        window.clearInterval(findingTimer);
+        findingTimer = null;
+      }
+    }
+
+    function startFindingSequence() {
+      stopFindingSequence();
+
+      prepareLiveMatch();
+
+      findingStepIndex = 0;
+      findingReady.classList.remove("show");
+      findingProgressFill.style.width = "0%";
+
+      applyFindingStep(0);
+
+      findingTimer = window.setInterval(() => {
+        findingStepIndex += 1;
+        applyFindingStep(findingStepIndex);
+
+        if (findingStepIndex >= getFindingSteps().length - 1) {
+          stopFindingSequence();
+
+          window.setTimeout(async () => {
+            try {
+              await prepareLiveMatch();
+            } finally {
+              findingReady.classList.add("show");
+            }
+          }, 450);
+        }
+      }, 1150);
+    }
+
+
+
+
+
+    /*
+      ============================================================
+      LIVE GITHUB DATA ADAPTER + MATCHING ENGINE V1
+      ============================================================
+      Data source:
+      https://github.com/gabridim18-lab/halkidiki-data
+
+      The UI does not depend on GitHub-specific field shapes directly.
+      This adapter normalizes IDs, loads details only when needed,
+      scores candidates, and returns the same match object used by
+      renderMatch().
+    */
+
+    const DATA_REPO = {
+      rawRoot: "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data",
+      beachesIndex: "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/beaches-index.json",
+      accommodationsIndex: "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/accommodations-index-v2.json",
+      restaurantsIndex: "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/restaurants/restaurants-index.json",
+      localBusinessesIndex: "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/local-businesses/local-businesses-index.json",
+      whatToDoIndex: "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/what-to-do/what-to-do-index.json"
+    };
+
+    const dataRuntime = {
+      indexes: null,
+      beachResolver: null,
+      detailCache: new Map(),
+      rankedCandidates: [],
+      currentCandidate: null,
+      liveMatch: null,
+      liveMatchPromise: null,
+      liveError: null
+    };
+
+    function normalizeKey(value) {
+      return String(value ?? "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, " and ")
+        .replace(/[_\s]+/g, "-")
+        .replace(/[^a-z0-9-]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+    }
+
+    async function fetchJson(url) {
+      const response = await fetch(url, {
+        method: "GET",
+        mode: "cors",
+        cache: "no-store",
+        headers: {
+          "Accept": "application/json"
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${url}`);
+      }
+
+      return response.json();
+    }
+
+    async function loadIndexes() {
+      if (dataRuntime.indexes) return dataRuntime.indexes;
+
+      const [
+        beaches,
+        accommodations,
+        restaurants,
+        localBusinesses,
+        whatToDo
+      ] = await Promise.all([
+        fetchJson(DATA_REPO.beachesIndex),
+        fetchJson(DATA_REPO.accommodationsIndex),
+        fetchJson(DATA_REPO.restaurantsIndex),
+        fetchJson(DATA_REPO.localBusinessesIndex),
+        fetchJson(DATA_REPO.whatToDoIndex)
+      ]);
+
+      dataRuntime.indexes = {
+        beaches: Array.isArray(beaches) ? beaches : [],
+        accommodations: Array.isArray(accommodations) ? accommodations : [],
+        restaurants: Array.isArray(restaurants) ? restaurants : [],
+        localBusinesses: Array.isArray(localBusinesses) ? localBusinesses : [],
+        whatToDo: Array.isArray(whatToDo) ? whatToDo : []
+      };
+
+      dataRuntime.beachResolver = buildBeachResolver(dataRuntime.indexes.beaches);
+      return dataRuntime.indexes;
+    }
+
+    function buildBeachResolver(beaches) {
+      const aliases = new Map();
+      const byId = new Map();
+
+      const register = (key, canonical) => {
+        const normalized = normalizeKey(key);
+        if (normalized && !aliases.has(normalized)) {
+          aliases.set(normalized, canonical);
+        }
+      };
+
+      beaches.forEach((beach) => {
+        const canonical = beach.id || beach.slug;
+        if (!canonical) return;
+
+        byId.set(canonical, beach);
+
+        register(beach.id, canonical);
+        register(beach.slug, canonical);
+        register(beach.name?.en, canonical);
+        register(beach.name?.ro, canonical);
+
+        // Common display variants such as "Plaja Perea".
+        if (beach.name?.ro) {
+          register(
+            beach.name.ro.replace(/^plaja\s+/i, ""),
+            canonical
+          );
+        }
+      });
+
+      // Only explicit aliases that are known to be semantic equivalents.
+      const explicitAliases = {
+        "sani-beach": "paralia-sani"
+      };
+
+      Object.entries(explicitAliases).forEach(([from, to]) => {
+        if (byId.has(to)) aliases.set(normalizeKey(from), to);
+      });
+
+      return {
+        byId,
+        aliases,
+
+        resolve(value) {
+          if (!value) return null;
+
+          const key = normalizeKey(value);
+          if (aliases.has(key)) return aliases.get(key);
+
+          // A very common case: a display name normalizes exactly to an ID.
+          if (byId.has(key)) return key;
+
+          return null;
+        }
+      };
+    }
+
+    function resolveBeach(value) {
+      return dataRuntime.beachResolver?.resolve(value) ?? null;
+    }
+
+    function getBeachIndex(beachId) {
+      return dataRuntime.beachResolver?.byId.get(beachId) ?? null;
+    }
+
+    function detailUrl(kind, id) {
+      return `${DATA_REPO.rawRoot}/${kind}/${encodeURIComponent(id)}/index.json`;
+    }
+
+    async function loadDetail(kind, id) {
+      if (!id) return null;
+
+      const key = `${kind}:${id}`;
+      if (dataRuntime.detailCache.has(key)) {
+        return dataRuntime.detailCache.get(key);
+      }
+
+      try {
+        const detail = await fetchJson(detailUrl(kind, id));
+        dataRuntime.detailCache.set(key, detail);
+        return detail;
+      } catch (error) {
+        console.warn("Detail unavailable:", kind, id, error);
+        dataRuntime.detailCache.set(key, null);
+        return null;
+      }
+    }
+
+    function mediaUrl(kind, id, value) {
+      if (!value) return "";
+
+      if (/^https?:\/\//i.test(value)) {
+        return value;
+      }
+
+      const clean = String(value).replace(/^\/+/, "");
+      return encodeURI(
+        `${DATA_REPO.rawRoot}/${kind}/${id}/images/${clean}`
+      );
+    }
+
+    function cleanText(value, maxLength = 300) {
+      const plain = String(value ?? "")
+        .replace(/#{1,6}\s*/g, "")
+        .replace(/[✔•⭐🌊🐟🍷☀️⛴️🚤🏙️]/g, "")
+        .replace(/\*\*/g, "")
+        .replace(/\n+/g, " ")
+        .replace(/\s{2,}/g, " ")
+        .trim();
+
+      if (plain.length <= maxLength) return plain;
+
+      const cut = plain.slice(0, maxLength);
+      const lastSpace = cut.lastIndexOf(" ");
+      return `${cut.slice(0, lastSpace > 80 ? lastSpace : maxLength).trim()}…`;
+    }
+
+    function localizedField(obj, base) {
+      if (!obj) return "";
+
+      if (obj[base] && typeof obj[base] === "object" && !Array.isArray(obj[base])) {
+        return obj[base][currentLanguage] ?? obj[base].en ?? "";
+      }
+
+      const suffix = currentLanguage === "ro" ? "Ro" : "En";
+      return obj[`${base}${suffix}`]
+        ?? obj[`${base}En`]
+        ?? obj[base]
+        ?? "";
+    }
+
+    function numericRating(item) {
+      const rating = Number(item?.rating ?? item?.recommendationRating ?? 0);
+      const scale = Number(item?.ratingScale ?? 10);
+      if (!Number.isFinite(rating)) return 0;
+
+      // Normalize accommodation 10-point ratings and Google-style 5-point ratings.
+      if (scale === 10 || rating > 5) return rating / 2;
+      return rating;
+    }
+
+    function categoryToken(value) {
+      return normalizeKey(value).replace(/-/g, "_");
+    }
+
+    function linkedRestaurants(beachId) {
+      return dataRuntime.indexes.restaurants.filter((item) =>
+        resolveBeach(item.beachSlug) === beachId
+      );
+    }
+
+    function linkedLocalBusinesses(beachId) {
+      return dataRuntime.indexes.localBusinesses.filter((item) =>
+        Array.isArray(item.beaches)
+        && item.beaches.some((value) => resolveBeach(value) === beachId)
+      );
+    }
+
+    function linkedWhatToDo(beachId) {
+      return dataRuntime.indexes.whatToDo.filter((item) =>
+        Array.isArray(item.beaches)
+        && item.beaches.some((value) => resolveBeach(value) === beachId)
+      );
+    }
+
+    function ecosystemForBeach(beachId) {
+      const restaurants = linkedRestaurants(beachId);
+      const beachBars = restaurants.filter((item) => item.type === "beach_bar");
+      const dining = restaurants.filter((item) => item.type === "restaurant");
+      const businesses = linkedLocalBusinesses(beachId);
+      const activities = linkedWhatToDo(beachId);
+
+      return {
+        restaurants,
+        beachBars,
+        dining,
+        businesses,
+        activities
+      };
+    }
+
+    function accommodationPreferenceScore(acc, state) {
+      const category = categoryToken(acc.category);
+      const styles = state.holidayStyle ?? [];
+      const party = state.partyType;
+
+      let score = 0;
+
+      const categoryMatches = {
+        family_friendly: ["family_friendly"],
+        perfect_for_groups: ["perfect_for_groups"],
+        couples_retreat: ["couples_retreat"],
+        escape_relax: ["escape_relax", "escape_and_relax"],
+        explorers_choice: ["explorers_choice"]
+      };
+
+      if (
+        ["family_one_child", "family_children", "family"].includes(party)
+        && categoryMatches.family_friendly.includes(category)
+      ) score += 17;
+
+      if (
+        ["group", "large_group", "friends"].includes(party)
+        && categoryMatches.perfect_for_groups.includes(category)
+      ) score += 16;
+
+      if (party === "couple" && categoryMatches.couples_retreat.includes(category)) {
+        score += 16;
+      }
+
+      if (party === "solo" && categoryMatches.explorers_choice.includes(category)) {
+        score += 10;
+      }
+
+      styles.forEach((style) => {
+        if (style === "family_beach_days" && category === "family_friendly") score += 13;
+        if (style === "peace_quiet" && ["escape_relax", "escape_and_relax", "couples_retreat"].includes(category)) score += 13;
+        if (style === "explore_adventure" && category === "explorers_choice") score += 13;
+        if (style === "balanced" && ["family_friendly", "explorers_choice"].includes(category)) score += 5;
+      });
+
+      return score;
+    }
+
+    function capacityScore(acc, totalGuests) {
+      const capacity = Number(acc.guests ?? 0);
+      if (!capacity || capacity < totalGuests) return -999;
+
+      const spare = capacity - totalGuests;
+
+      if (spare <= 1) return 24;
+      if (spare <= 3) return 20;
+      if (spare <= 5) return 14;
+      if (spare <= 8) return 8;
+
+      return Math.max(0, 8 - Math.floor((spare - 8) / 3));
+    }
+
+    function beachIndexScore(beach, state) {
+      if (!beach) return 0;
+
+      let score = numericRating(beach) * 2.4;
+
+      if (state.children > 0) {
+        if (beach.suitableForChildren === true) score += 17;
+        if (beach.suitableForChildren === false) score -= 14;
+      }
+
+      return score;
+    }
+
+    function ecosystemScore(beachId, state) {
+      const eco = ecosystemForBeach(beachId);
+      const styles = state.holidayStyle ?? [];
+      let score = 0;
+
+      // Basic richness without allowing large cities to overwhelm the match.
+      score += Math.min(eco.dining.length, 4) * 1.5;
+      score += Math.min(eco.beachBars.length, 3) * 1.5;
+      score += Math.min(eco.businesses.length + eco.activities.length, 4) * 1.5;
+
+      styles.forEach((style) => {
+        if (style === "beach_bars") {
+          score += Math.min(eco.beachBars.length, 4) * 4;
+        }
+
+        if (style === "food_local_life") {
+          score += Math.min(eco.dining.length, 5) * 3;
+        }
+
+        if (style === "explore_adventure") {
+          const activeBusinesses = eco.businesses.filter((item) =>
+            /boat|water|sport|dive|cruise|horse|park|flight|scuba/i.test(
+              `${item.category ?? ""} ${item.titleEn ?? ""}`
+            )
+          ).length;
+
+          score += Math.min(activeBusinesses + eco.activities.length, 5) * 3.5;
+        }
+
+        if (style === "balanced") {
+          const diversity = [
+            eco.dining.length > 0,
+            eco.beachBars.length > 0,
+            eco.businesses.length > 0 || eco.activities.length > 0
+          ].filter(Boolean).length;
+
+          score += diversity * 4;
+        }
+      });
+
+      return score;
+    }
+
+    function baseCandidateScore(acc, state) {
+      const totalGuests = state.adults + state.children;
+      const beachId = resolveBeach(acc.beachSlug);
+      if (!beachId) return null;
+
+      if (state.rejectedBeaches.includes(beachId)) return null;
+      if (state.rejectedAccommodations.includes(acc.id)) return null;
+
+      const cap = capacityScore(acc, totalGuests);
+      if (cap < 0) return null;
+
+      const beach = getBeachIndex(beachId);
+
+      let score = cap;
+      score += accommodationPreferenceScore(acc, state);
+      score += beachIndexScore(beach, state);
+      score += ecosystemScore(beachId, state);
+      score += numericRating(acc) * 1.2;
+      if (acc.featured === true) score += 2.5;
+
+      return {
+        accommodation: acc,
+        beachId,
+        beach,
+        score
+      };
+    }
+
+    const monthIndex = {
+      january: 1, february: 2, march: 3, april: 4,
+      may: 5, june: 6, july: 7, august: 8,
+      september: 9, october: 10, november: 11, december: 12,
+      ianuarie: 1, februarie: 2, martie: 3, aprilie: 4,
+      mai: 5, iunie: 6, iulie: 7, august: 8,
+      septembrie: 9, octombrie: 10, noiembrie: 11, decembrie: 12
+    };
+
+    function selectedMonthNumber(period) {
+      if (period === "easter") return 4;
+      return monthIndex[period] ?? 0;
+    }
+
+    function periodDetailScore(beachDetail, period) {
+      if (!beachDetail || !period) return 0;
+
+      const target = selectedMonthNumber(period);
+      if (!target) return 0;
+
+      const raw = `${localizedField(beachDetail, "bestTimeToVisit")} ${beachDetail.bestTimeToVisit?.en ?? ""} ${beachDetail.bestTimeToVisit?.ro ?? ""}`
+        .toLowerCase();
+
+      if (!raw.trim()) return 0;
+
+      const found = Object.entries(monthIndex)
+        .filter(([name]) => raw.includes(name))
+        .map(([, number]) => number);
+
+      const unique = [...new Set(found)];
+      if (!unique.length) return 0;
+
+      if (unique.includes(target)) return 7;
+
+      if (unique.length >= 2) {
+        const start = unique[0];
+        const end = unique[unique.length - 1];
+
+        if (start <= end && target >= start && target <= end) return 7;
+      }
+
+      return -3;
+    }
+
+    function occupancyAverage(value) {
+      const numbers = String(value ?? "")
+        .match(/\d+/g)
+        ?.map(Number)
+        .filter(Number.isFinite)
+        ?? [];
+
+      if (!numbers.length) return null;
+
+      return numbers.reduce((sum, number) => sum + number, 0) / numbers.length;
+    }
+
+    function beachPreferenceDetailScore(detail, state) {
+      if (!detail) return 0;
+
+      const noise = String(detail.quickFacts?.noiseLevel?.en ?? "").toLowerCase();
+      const vibe = String(detail.beachInfo?.vibe?.en ?? "").toLowerCase();
+      const beachType = String(detail.beachType?.en ?? "").toLowerCase();
+      const waterEntry = String(detail.beachInfo?.waterEntry?.en ?? "").toLowerCase();
+      const waveLevel = String(detail.beachInfo?.waveLevel?.en ?? "").toLowerCase();
+      const sand = String(detail.sand?.en ?? "").toLowerCase();
+      const walking = String(detail.quickFacts?.walkingDistance?.en ?? "").toLowerCase();
+
+      const idealFor = (detail.idealFor?.en ?? [])
+        .join(" ")
+        .toLowerCase();
+
+      const highlights = (detail.highlights?.en ?? [])
+        .join(" ")
+        .toLowerCase();
+
+      const activities = (detail.activities?.en ?? [])
+        .join(" ")
+        .toLowerCase();
+
+      const occupancy = occupancyAverage(detail.occupancy);
+
+      let score = 0;
+
+      // Party composition is a soft signal, never a hard exclusion.
+      if (state.partyType === "couple" && /couple|romantic/.test(idealFor)) {
+        score += 5;
+      }
+
+      if (
+        ["friends", "group", "large_group"].includes(state.partyType)
+        && /group/.test(idealFor)
+      ) {
+        score += 4;
+      }
+
+      for (const style of state.holidayStyle ?? []) {
+
+        /*
+          PEACE & QUIET
+          This is deliberately based on the BEACH itself, not the
+          accommodation category. A quiet stay beside a lively urban
+          beach should not automatically become a "peace" match.
+        */
+        if (style === "peace_quiet") {
+          if (/quiet|calm|peaceful|tranquil/.test(noise)) {
+            score += 12;
+          }
+
+          if (
+            /peaceful|relax|natural|secluded|hidden|wellness/.test(
+              `${vibe} ${beachType} ${idealFor} ${highlights}`
+            )
+          ) {
+            score += 8;
+          }
+
+          if (/lively|active|vibrant|social/.test(`${noise} ${vibe} ${beachType}`)) {
+            score -= 12;
+          }
+
+          if (/urban|city/.test(`${beachType} ${vibe} ${highlights}`)) {
+            score -= 7;
+          }
+
+          if (occupancy != null) {
+            if (occupancy <= 50) score += 8;
+            else if (occupancy <= 65) score += 3;
+            else if (occupancy >= 75) score -= 8;
+          }
+        }
+
+        /*
+          FAMILY BEACH DAYS
+          Safe/gentle water matters more than the accommodation label.
+        */
+        if (style === "family_beach_days") {
+          if (detail.suitableForChildren === true) {
+            score += 8;
+          }
+
+          if (/shallow|gentle|gradual|safe/.test(waterEntry)) {
+            score += 7;
+          }
+
+          if (/calm/.test(waveLevel)) {
+            score += 4;
+          }
+
+          if (/sand|sandy|soft/.test(sand)) {
+            score += 3;
+          }
+
+          if (occupancy != null && occupancy <= 70) {
+            score += 2;
+          }
+        }
+
+        /*
+          BEACH BARS & SUMMER VIBES
+          The linked beach-bar count is already scored elsewhere.
+          Here we only add the actual beach atmosphere.
+        */
+        if (style === "beach_bars") {
+          if (/lively|social|active|vibrant/.test(`${noise} ${vibe} ${beachType}`)) {
+            score += 5;
+          }
+        }
+
+        /*
+          EXPLORE & ADVENTURE
+          Real beach activities reinforce the linked business /
+          what-to-do ecosystem.
+        */
+        if (style === "explore_adventure") {
+          const activityMatches =
+            activities.match(
+              /jet|sport|snorkel|kayak|paddle|surf|div|sail|boat|sandboard|fishing|cycling|volley/g
+            ) ?? [];
+
+          score += Math.min(activityMatches.length, 5) * 2.5;
+        }
+
+        /*
+          FOOD & LOCAL LIFE
+          Promenades, cafés, village/city access and seaside dining
+          can legitimately make a more social location a good match.
+        */
+        if (style === "food_local_life") {
+          if (
+            /promenade|cafe|dining|village|urban|city|food/.test(
+              `${walking} ${highlights} ${activities} ${beachType}`
+            )
+          ) {
+            score += 6;
+          }
+        }
+
+        /*
+          A BIT OF EVERYTHING
+          Prefer versatile beaches, but do not over-reward the busiest.
+        */
+        if (style === "balanced") {
+          if (occupancy != null && occupancy >= 35 && occupancy <= 70) {
+            score += 4;
+          }
+
+          if (/relax/.test(vibe)) {
+            score += 2;
+          }
+        }
+      }
+
+      return score;
+    }
+
+    async function rankCandidates(state) {
+      const indexes = await loadIndexes();
+
+      const allCandidates = indexes.accommodations
+        .map((acc) => baseCandidateScore(acc, state))
+        .filter(Boolean)
+        .sort((a, b) => b.score - a.score);
+
+      /*
+        First keep the strongest stay per beach so that a location
+        with many accommodations cannot flood the shortlist.
+      */
+      const byBeach = new Map();
+
+      allCandidates.forEach((candidate) => {
+        if (!byBeach.has(candidate.beachId)) {
+          byBeach.set(candidate.beachId, candidate);
+        }
+      });
+
+      /*
+        V8 uses a wider pre-shortlist.
+        We then read the real beach detail JSON and let atmosphere,
+        water, occupancy and activities materially change the order.
+      */
+      const shortlist = [...byBeach.values()]
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 14);
+
+      await Promise.all(
+        shortlist.map(async (candidate) => {
+          const detail = await loadDetail("beaches", candidate.beachId);
+          candidate.beachDetail = detail;
+
+          candidate.score += periodDetailScore(detail, state.period);
+          candidate.score += beachPreferenceDetailScore(detail, state);
+        })
+      );
+
+      shortlist.sort((a, b) => b.score - a.score);
+
+      dataRuntime.rankedCandidates = shortlist;
+      return shortlist;
+    }
+
+    function pickBestLinkedRestaurant(beachId, type, state) {
+      const items = linkedRestaurants(beachId)
+        .filter((item) => item.type === type);
+
+      const styles = state.holidayStyle ?? [];
+
+      return items
+        .map((item) => {
+          let score = numericRating(item) * 3;
+          if (item.featured) score += 2;
+
+          const features = (item.features ?? []).join(" ").toLowerCase();
+          const cuisines = (item.cuisineTypes ?? []).join(" ").toLowerCase();
+
+          if (state.children > 0 && features.includes("family_friendly")) score += 6;
+          if (styles.includes("food_local_life") && cuisines) score += 5;
+          if (styles.includes("beach_bars") && type === "beach_bar") score += 7;
+          if (styles.includes("peace_quiet") && !features.includes("party")) score += 2;
+
+          return { item, score };
+        })
+        .sort((a, b) => b.score - a.score)[0]?.item ?? null;
+    }
+
+    function pickBestExperienceIndex(beachId, state) {
+      const businesses = linkedLocalBusinesses(beachId).map((item) => ({
+        source: "local-businesses",
+        item
+      }));
+
+      const activities = linkedWhatToDo(beachId).map((item) => ({
+        source: "what-to-do",
+        item
+      }));
+
+      const pool = [...businesses, ...activities];
+      const styles = state.holidayStyle ?? [];
+
+      return pool
+        .map((entry) => {
+          const item = entry.item;
+          const haystack = normalizeKey(
+            `${item.category ?? ""} ${item.categoryEn ?? ""} ${item.titleEn ?? ""} ${item.id ?? ""}`
+          );
+
+          let score = item.booking ? 2 : 0;
+
+          if (/boat|cruise|water|sport|dive|scuba|horse|flight|park/.test(haystack)) score += 5;
+          if (styles.includes("explore_adventure") && /boat|cruise|water|sport|dive|scuba|horse|flight|park/.test(haystack)) score += 9;
+          if (styles.includes("food_local_life") && /winery|village|museum|church|archaeological/.test(haystack)) score += 7;
+          if (state.children > 0 && /waterpark|park|museum|boat|cruise/.test(haystack)) score += 4;
+
+          return { ...entry, score };
+        })
+        .sort((a, b) => b.score - a.score)[0] ?? null;
+    }
+
+    function beachFactsFromDetail(detail, beachIndex, lang = currentLanguage) {
+      const previousLanguage = currentLanguage;
+      const facts = [];
+
+      const readLangField = (obj, base) => {
+        if (!obj) return "";
+        if (obj[base] && typeof obj[base] === "object" && !Array.isArray(obj[base])) {
+          return obj[base][lang] ?? obj[base].en ?? "";
+        }
+        const suffix = lang === "ro" ? "Ro" : "En";
+        return obj[`${base}${suffix}`] ?? obj[`${base}En`] ?? obj[base] ?? "";
+      };
+
+      const waterEntry = readLangField(detail?.beachInfo, "waterEntry");
+      if (waterEntry) facts.push(cleanText(waterEntry, 60));
+
+      const sand = readLangField(detail, "sand");
+      if (sand) facts.push(cleanText(sand, 60));
+
+      if (detail?.suitableForChildren === true || beachIndex?.suitableForChildren === true) {
+        facts.push(lang === "ro" ? "Potrivită pentru familii" : "Family friendly");
+      }
+
+      if (detail?.sunsetView === true) {
+        facts.push(lang === "ro" ? "Priveliști la apus" : "Sunset views");
+      }
+
+      const highlightList =
+        detail?.highlights?.[lang]
+        ?? detail?.highlights?.en
+        ?? [];
+
+      for (const highlight of highlightList) {
+        if (facts.length >= 4) break;
+        if (!facts.some((fact) => normalizeKey(fact) === normalizeKey(highlight))) {
+          facts.push(highlight);
+        }
+      }
+
+      return facts.slice(0, 4);
+    }
+
+    function beachActivitiesFromDetail(detail) {
+      return (
+        detail?.activities?.[currentLanguage]
+        ?? detail?.activities?.en
+        ?? []
+      ).slice(0, 5);
+    }
+
+    function detailImageList(kind, id, detail, fallback = []) {
+      const rawImages = Array.isArray(detail?.images)
+        ? detail.images
+        : fallback;
+
+      return rawImages
+        .filter(Boolean)
+        .map((value) => mediaUrl(kind, id, value));
+    }
+
+    async function buildStartOfDay(beachId, state) {
+      const beachBarIndex = pickBestLinkedRestaurant(beachId, "beach_bar", state);
+      if (!beachBarIndex) return null;
+
+      const detail = await loadDetail("restaurants", beachBarIndex.id);
+      const source = detail ?? beachBarIndex;
+
+      const offerings = [
+        ...(source.offerings ?? []),
+        ...(source.diningOptions ?? []),
+        ...(source.popularFor ?? [])
+      ];
+
+      const hasCoffee = offerings.some((value) => /coffee/i.test(value));
+      const hasBreakfast = offerings.some((value) => /breakfast|brunch/i.test(value));
+
+      if (!hasCoffee && !hasBreakfast) {
+        // A beach bar can still be the start of day, but only when it has
+        // enough real context to support that scene.
+        if (!(source.features ?? []).includes("beachfront") && !(source.features ?? []).includes("sunbeds")) {
+          return null;
+        }
+      }
+
+      const title = localizedField(source, "title") || source.titleEn || beachBarIndex.titleEn || "";
+      const description = localizedField(source, "description") || beachBarIndex.shortEn || "";
+
+      const chips = [];
+      if (hasCoffee) chips.push(currentLanguage === "ro" ? "Cafea" : "Coffee");
+      if (hasBreakfast) chips.push(currentLanguage === "ro" ? "Mic dejun / brunch" : "Breakfast / brunch");
+      if ((source.features ?? []).includes("beachfront") || (source.atmosphere ?? []).includes("Beachfront")) {
+        chips.push(currentLanguage === "ro" ? "Pe plajă" : "Beachfront");
+      }
+      if ((source.features ?? []).includes("sea_view")) {
+        chips.push(currentLanguage === "ro" ? "Vedere la mare" : "Sea view");
+      }
+
+      const image =
+        source.heroImage
+        || source.images?.[0]
+        || beachBarIndex.image
+        || "";
+
+      return {
+        id: source.id ?? beachBarIndex.id,
+        image: mediaUrl("restaurants", beachBarIndex.id, image),
+        name: {
+          en: `Coffee at ${source.titleEn ?? beachBarIndex.titleEn ?? title}`,
+          ro: `Cafea la ${source.titleRo ?? beachBarIndex.titleRo ?? title}`
+        },
+        text: {
+          en: cleanText(source.descriptionEn ?? beachBarIndex.shortEn ?? description, 260),
+          ro: cleanText(source.descriptionRo ?? beachBarIndex.shortRo ?? description, 260)
+        },
+        chips: {
+          en: chips.map((chip) => chip),
+          ro: chips.map((chip) => chip)
+        }
+      };
+    }
+
+    async function buildLunch(beachId, state) {
+      const indexItem = pickBestLinkedRestaurant(beachId, "restaurant", state);
+      if (!indexItem) return null;
+
+      const detail = await loadDetail("restaurants", indexItem.id);
+      const source = detail ?? indexItem;
+
+      const image =
+        source.heroImage
+        || source.images?.[0]
+        || indexItem.image
+        || "";
+
+      const meta = [
+        ...(source.cuisineTypes ?? indexItem.cuisineTypes ?? []).slice(0, 2)
+      ];
+
+      if ((source.features ?? indexItem.features ?? []).includes("sea_view")) {
+        meta.push("sea_view");
+      }
+
+      if ((source.features ?? indexItem.features ?? []).includes("family_friendly")) {
+        meta.push("family_friendly");
+      }
+
+      const translateMeta = (value, lang) => {
+        const map = {
+          seafood: { en: "Seafood", ro: "Fructe de mare" },
+          greek: { en: "Greek", ro: "Grecesc" },
+          mediterranean: { en: "Mediterranean", ro: "Mediteranean" },
+          international: { en: "International", ro: "Internațional" },
+          sea_view: { en: "Sea view", ro: "Vedere la mare" },
+          family_friendly: { en: "Family friendly", ro: "Potrivit pentru familii" }
+        };
+        return map[value]?.[lang] ?? value.replace(/_/g, " ");
+      };
+
+      return {
+        id: source.id ?? indexItem.id,
+        image: mediaUrl("restaurants", indexItem.id, image),
+        name: {
+          en: source.titleEn ?? indexItem.titleEn ?? "",
+          ro: source.titleRo ?? indexItem.titleRo ?? source.titleEn ?? ""
+        },
+        text: {
+          en: cleanText(source.descriptionEn ?? indexItem.shortEn ?? "", 290),
+          ro: cleanText(source.descriptionRo ?? indexItem.shortRo ?? source.descriptionEn ?? "", 290)
+        },
+        meta: {
+          en: meta.map((value) => translateMeta(value, "en")),
+          ro: meta.map((value) => translateMeta(value, "ro"))
+        }
+      };
+    }
+
+    async function buildExperience(beachId, state) {
+      const picked = pickBestExperienceIndex(beachId, state);
+      if (!picked) return null;
+
+      const { source, item } = picked;
+      const detail = await loadDetail(source, item.id);
+      const data = detail ?? item;
+
+      const titleEn = data.titleEn ?? item.titleEn ?? data.id ?? "";
+      const titleRo = data.titleRo ?? item.titleRo ?? titleEn;
+
+      let image =
+        data.heroImage
+        || data.thumbnail
+        || data.images?.[0]
+        || "";
+
+      image = mediaUrl(source, item.id, image);
+
+      return {
+        id: item.id,
+        image,
+        name: {
+          en: titleEn,
+          ro: titleRo
+        },
+        text: {
+          en: cleanText(data.descriptionEn ?? "", 300),
+          ro: cleanText(data.descriptionRo ?? data.descriptionEn ?? "", 300)
+        }
+      };
+    }
+
+    async function buildFullMatch(candidate) {
+      if (!candidate) return null;
+
+      const beachId = candidate.beachId;
+      const accIndex = candidate.accommodation;
+      const beachIndex = candidate.beach ?? getBeachIndex(beachId);
+
+      const [beachDetail, accommodationDetail] = await Promise.all([
+        candidate.beachDetail ?? loadDetail("beaches", beachId),
+        loadDetail("accommodations", accIndex.id)
+      ]);
+
+      const beachData = beachDetail ?? beachIndex ?? {};
+      const accData = accommodationDetail ?? accIndex ?? {};
+
+      const [startOfDay, lunch, experience] = await Promise.all([
+        buildStartOfDay(beachId, tripState),
+        buildLunch(beachId, tripState),
+        buildExperience(beachId, tripState)
+      ]);
+
+      const beachImages = detailImageList(
+        "beaches",
+        beachId,
+        beachData,
+        beachIndex?.previewImage ? [beachIndex.previewImage] : []
+      );
+
+      const accImages = detailImageList(
+        "accommodations",
+        accIndex.id,
+        accData,
+        accIndex.image ? [accIndex.image] : []
+      );
+
+      const beachNameEn =
+        beachData.name?.en
+        ?? beachIndex?.name?.en
+        ?? beachId;
+
+      const beachNameRo =
+        beachData.name?.ro
+        ?? beachIndex?.name?.ro
+        ?? beachNameEn;
+
+      const descriptionEn = cleanText(
+        beachData.description?.en
+        ?? "",
+        430
+      );
+
+      const descriptionRo = cleanText(
+        beachData.description?.ro
+        ?? descriptionEn,
+        430
+      );
+
+      const accDescriptionEn = cleanText(
+        accData.descriptionEn
+        ?? "",
+        330
+      );
+
+      const accDescriptionRo = cleanText(
+        accData.descriptionRo
+        ?? accDescriptionEn,
+        330
+      );
+
+      const accFactsEn = [];
+      const accFactsRo = [];
+
+      const guests = accData.guests ?? accIndex.guests;
+      const bedrooms = accData.bedrooms ?? accIndex.bedrooms;
+      const bathrooms = accData.bathrooms ?? accIndex.bathrooms;
+
+      if (guests) {
+        accFactsEn.push(`Up to ${guests} guests`);
+        accFactsRo.push(`Până la ${guests} oaspeți`);
+      }
+
+      if (bedrooms != null) {
+        accFactsEn.push(`${bedrooms} bedroom${Number(bedrooms) === 1 ? "" : "s"}`);
+        accFactsRo.push(`${bedrooms} dormitor${Number(bedrooms) === 1 ? "" : "e"}`);
+      }
+
+      if (bathrooms != null) {
+        accFactsEn.push(`${bathrooms} bathroom${Number(bathrooms) === 1 ? "" : "s"}`);
+        accFactsRo.push(`${bathrooms} băi`);
+      }
+
+      const booleanFacts = [
+        ["parking", "Parking", "Parcare"],
+        ["kitchen", "Kitchen", "Bucătărie"],
+        ["wifi", "Wi-Fi", "Wi-Fi"],
+        ["pool", "Pool", "Piscină"],
+        ["airConditioning", "Air conditioning", "Aer condiționat"],
+        ["balcony", "Balcony", "Balcon"]
+      ];
+
+      booleanFacts.forEach(([key, en, ro]) => {
+        if (accData[key] === true && accFactsEn.length < 6) {
+          accFactsEn.push(en);
+          accFactsRo.push(ro);
+        }
+      });
+
+      const beachActivities = beachActivitiesFromDetail(beachData);
+
+      return {
+        beach: {
+          id: beachId,
+          name: {
+            en: beachNameEn,
+            ro: beachNameRo
+          },
+          description: {
+            en: descriptionEn || cleanText(beachIndex?.name?.en ?? "", 300),
+            ro: descriptionRo || descriptionEn
+          },
+          heroImage: beachImages[0] ?? mediaUrl("beaches", beachId, beachIndex?.previewImage ?? ""),
+          beachTimeImage: beachImages[1] ?? beachImages[0] ?? "",
+          facts: {
+            en: beachFactsFromDetail(beachData, beachIndex, "en"),
+            ro: beachFactsFromDetail(beachData, beachIndex, "ro")
+          },
+          activities: {
+            en: beachData.activities?.en ?? beachActivities,
+            ro: beachData.activities?.ro ?? beachData.activities?.en ?? beachActivities
+          }
+        },
+
+        accommodation: {
+          id: accIndex.id,
+          name: {
+            en: accData.titleEn ?? accIndex.titleEn ?? accIndex.id,
+            ro: accData.titleRo ?? accIndex.titleRo ?? accData.titleEn ?? accIndex.titleEn ?? accIndex.id
+          },
+          description: {
+            en: accDescriptionEn,
+            ro: accDescriptionRo
+          },
+          images: accImages,
+          facts: {
+            en: accFactsEn,
+            ro: accFactsRo
+          }
+        },
+
+        startOfDay,
+
+        beachTime: {
+          title: {
+            en: `Your time at ${beachNameEn}`,
+            ro: `Timpul tău la ${beachNameRo}`
+          },
+          text: {
+            en: cleanText(
+              beachData.description?.en
+              ?? descriptionEn,
+              260
+            ),
+            ro: cleanText(
+              beachData.description?.ro
+              ?? descriptionRo
+              ?? descriptionEn,
+              260
+            )
+          }
+        },
+
+        lunch,
+        experience,
+
+        score: candidate.score
+      };
+    }
+
+    async function prepareLiveMatch() {
+      if (dataRuntime.liveMatchPromise) {
+        return dataRuntime.liveMatchPromise;
+      }
+
+      dataRuntime.liveError = null;
+
+      if (liveDataStatus) {
+        liveDataStatus.textContent = t("loadingLiveData");
+      }
+
+      dataRuntime.liveMatchPromise = (async () => {
+        try {
+          const ranked = await rankCandidates(tripState);
+          const candidate = ranked[0];
+
+          if (!candidate) {
+            throw new Error("No compatible accommodation candidate found.");
+          }
+
+          dataRuntime.currentCandidate = candidate;
+          const match = await buildFullMatch(candidate);
+
+          if (!match) {
+            throw new Error("Could not build the selected experience.");
+          }
+
+          dataRuntime.liveMatch = match;
+
+          if (liveDataStatus) {
+            liveDataStatus.textContent = t("liveDataReady");
+          }
+
+          return match;
+        } catch (error) {
+          console.error("Live matching failed:", error);
+          dataRuntime.liveError = error;
+          dataRuntime.liveMatch = demoMatch;
+
+          if (liveDataStatus) {
+            liveDataStatus.textContent = t("fallbackData");
+          }
+
+          return demoMatch;
+        }
+      })();
+
+      return dataRuntime.liveMatchPromise;
+    }
+
+    async function nextAccommodationSameBeach() {
+      const currentBeachId = currentMatch?.beach?.id;
+      if (!currentBeachId) return null;
+
+      await loadIndexes();
+
+      const candidates = dataRuntime.indexes.accommodations
+        .map((acc) => baseCandidateScore(acc, tripState))
+        .filter((candidate) => candidate && candidate.beachId === currentBeachId)
+        .sort((a, b) => b.score - a.score);
+
+      const next = candidates[0];
+      if (!next) return null;
+
+      next.beachDetail = await loadDetail("beaches", next.beachId);
+      dataRuntime.currentCandidate = next;
+
+      return buildFullMatch(next);
+    }
+
+    async function nextBeachExperience() {
+      // Re-rank after rejectedBeaches changed.
+      dataRuntime.liveMatchPromise = null;
+      dataRuntime.liveMatch = null;
+
+      const ranked = await rankCandidates(tripState);
+      const next = ranked[0];
+      if (!next) return null;
+
+      dataRuntime.currentCandidate = next;
+      return buildFullMatch(next);
+    }
+
+    /*
+      ============================================================
+      EXPERIENCE RENDERER
+      ============================================================
+      The matching engine will eventually pass a generated object
+      into renderMatch(match). The screen itself does not need to
+      know where the data came from.
+    */
+
+    let currentMatch = demoMatch;
+    let staySlideIndex = 0;
+    let stayDragStartX = 0;
+    let stayDragDeltaX = 0;
+    let stayDragging = false;
+
+    function localizedValue(value) {
+      if (value == null) return "";
+      if (typeof value === "string") return value;
+      return value[currentLanguage] ?? value.en ?? "";
+    }
+
+    function localizedArray(value) {
+      if (!value) return [];
+      if (Array.isArray(value)) return value;
+      return value[currentLanguage] ?? value.en ?? [];
+    }
+
+    function renderPills(container, values, className) {
+      container.innerHTML = "";
+      values.forEach((value) => {
+        const el = document.createElement("span");
+        el.className = className;
+        el.textContent = value;
+        container.appendChild(el);
+      });
+    }
+
+    function renderStayFacts(values) {
+      matchStayFacts.innerHTML = "";
+      values.forEach((value) => {
+        const el = document.createElement("div");
+        el.className = "stay-fact";
+        el.textContent = value;
+        matchStayFacts.appendChild(el);
+      });
+    }
+
+    function renderStayGallery(images) {
+      stayGallery.innerHTML = "";
+      stayGalleryDots.innerHTML = "";
+      staySlideIndex = 0;
+
+      images.forEach((src, index) => {
+        const slide = document.createElement("div");
+        slide.className = "stay-slide" + (index === 0 ? " active" : "");
+
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = "";
+        img.onerror = () => { img.style.display = "none"; };
+
+        slide.appendChild(img);
+        stayGallery.appendChild(slide);
+
+        const dot = document.createElement("button");
+        dot.className = "gallery-dot" + (index === 0 ? " active" : "");
+        dot.type = "button";
+        dot.setAttribute("aria-label", `Image ${index + 1}`);
+        dot.addEventListener("click", () => showStaySlide(index));
+        stayGalleryDots.appendChild(dot);
+      });
+
+      stayGallery.appendChild(stayGalleryDots);
+    }
+
+    function showStaySlide(index) {
+      const slides = [...stayGallery.querySelectorAll(".stay-slide")];
+      const dots = [...stayGalleryDots.querySelectorAll(".gallery-dot")];
+      if (!slides.length) return;
+
+      staySlideIndex = (index + slides.length) % slides.length;
+
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("active", i === staySlideIndex);
+      });
+
+      dots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === staySlideIndex);
+      });
+    }
+
+    function renderMatch(match) {
+      currentMatch = match;
+
+      matchBeachHero.src = match.beach.heroImage;
+      matchBeachName.textContent = localizedValue(match.beach.name);
+      matchBeachDescription.textContent = localizedValue(match.beach.description);
+      renderPills(matchBeachFacts, localizedArray(match.beach.facts), "fact-pill");
+
+      matchStayName.textContent = localizedValue(match.accommodation.name);
+      matchStayDescription.textContent = localizedValue(match.accommodation.description);
+      renderStayFacts(localizedArray(match.accommodation.facts));
+      renderStayGallery(match.accommodation.images ?? []);
+
+      const startSection = document.getElementById("matchStartSection");
+      if (match.startOfDay) {
+        startSection.style.display = "";
+        matchStartImage.src = match.startOfDay.image;
+        matchStartTitle.textContent = localizedValue(match.startOfDay.name);
+        matchStartText.textContent = localizedValue(match.startOfDay.text);
+        renderPills(matchStartChips, localizedArray(match.startOfDay.chips), "inline-chip");
+      } else {
+        startSection.style.display = "none";
+      }
+
+      matchBeachTimeImage.src = match.beach.beachTimeImage;
+      matchBeachTimeTitle.textContent = localizedValue(match.beachTime.title);
+      matchBeachTimeText.textContent = localizedValue(match.beachTime.text);
+      renderPills(matchBeachTimeChips, localizedArray(match.beach.activities), "inline-chip");
+
+      const lunchSection = document.getElementById("matchLunchSection");
+      if (match.lunch) {
+        lunchSection.style.display = "";
+        matchLunchImage.src = match.lunch.image;
+        matchLunchName.textContent = localizedValue(match.lunch.name);
+        matchLunchText.textContent = localizedValue(match.lunch.text);
+        renderPills(matchLunchMeta, localizedArray(match.lunch.meta), "");
+      } else {
+        lunchSection.style.display = "none";
+      }
+
+      const experienceSection = document.getElementById("matchExperienceSection");
+      if (match.experience) {
+        experienceSection.style.display = "";
+        matchExperienceImage.src = match.experience.image;
+        matchExperienceName.textContent = localizedValue(match.experience.name);
+        matchExperienceText.textContent = localizedValue(match.experience.text);
+      } else {
+        experienceSection.style.display = "none";
+      }
+    }
+
+    function emitMatchAction(action) {
+      window.dispatchEvent(new CustomEvent("takeMe:matchAction", {
+        detail: {
+          action,
+          beachId: currentMatch?.beach?.id ?? null,
+          accommodationId: currentMatch?.accommodation?.id ?? null,
+          tripState: { ...tripState }
+        }
+      }));
+
+      if (action === "another_stay" && currentMatch?.accommodation?.id) {
+        if (!tripState.rejectedAccommodations.includes(currentMatch.accommodation.id)) {
+          tripState.rejectedAccommodations.push(currentMatch.accommodation.id);
+        }
+      }
+
+      if (action === "somewhere_else" && currentMatch?.beach?.id) {
+        if (!tripState.rejectedBeaches.includes(currentMatch.beach.id)) {
+          tripState.rejectedBeaches.push(currentMatch.beach.id);
+        }
+      }
+
+      /*
+        When the real matching engine is connected:
+
+        another_stay:
+          currentMatch = engine.nextAccommodationSameBeach(tripState)
+
+        somewhere_else:
+          currentMatch = engine.nextBeachExperience(tripState)
+
+        like:
+          tripState.selectedBeach = currentMatch.beach.id
+          tripState.selectedAccommodation = currentMatch.accommodation.id
+      */
+
+      if (action === "like") {
+        tripState.selectedBeach = currentMatch?.beach?.id ?? null;
+        tripState.selectedAccommodation = currentMatch?.accommodation?.id ?? null;
+      }
+    }
+
+    /*
+      Pointer drag / mobile swipe.
+      Swipe left -> next period.
+      Swipe right -> previous period.
+    */
+    periodStage.addEventListener("pointerdown", (event) => {
+      isDragging = true;
+      dragStartX = event.clientX;
+      dragDeltaX = 0;
+      periodStage.classList.add("dragging");
+      periodStage.setPointerCapture?.(event.pointerId);
+    });
+
+    periodStage.addEventListener("pointermove", (event) => {
+      if (!isDragging) return;
+      dragDeltaX = event.clientX - dragStartX;
+    });
+
+    function finishDrag(event) {
+      if (!isDragging) return;
+
+      isDragging = false;
+      periodStage.classList.remove("dragging");
+
+      const threshold = 44;
+
+      if (dragDeltaX <= -threshold) movePeriod(1);
+      if (dragDeltaX >= threshold) movePeriod(-1);
+
+      dragDeltaX = 0;
+
+      try {
+        periodStage.releasePointerCapture?.(event.pointerId);
+      } catch (_) {}
+    }
+
+    periodStage.addEventListener("pointerup", finishDrag);
+    periodStage.addEventListener("pointercancel", finishDrag);
+
+    periodStage.addEventListener("wheel", (event) => {
+      if (Math.abs(event.deltaX) < 8 && Math.abs(event.deltaY) < 8) return;
+      event.preventDefault();
+
+      const direction =
+        Math.abs(event.deltaX) > Math.abs(event.deltaY)
+          ? Math.sign(event.deltaX)
+          : Math.sign(event.deltaY);
+
+      movePeriod(direction > 0 ? 1 : -1);
+    }, { passive: false });
+
+    document.addEventListener("keydown", (event) => {
+      if (!periodScreen.classList.contains("active")) return;
+
+      if (event.key === "ArrowLeft") movePeriod(-1);
+      if (event.key === "ArrowRight") movePeriod(1);
+    });
+
+    startButton.addEventListener("click", () => {
+      showScreen("period");
+      window.dispatchEvent(new CustomEvent("takeMe:start", {
+        detail: { language: currentLanguage, step: "period" }
+      }));
+    });
+
+    backToIntro.addEventListener("click", () => {
+      showScreen("intro");
+    });
+
+    function selectCurrentPeriodAndContinue() {
+      const selected = periods[activePeriodIndex];
+      tripState.period = selected.id;
+      dataRuntime.liveMatchPromise = null;
+      dataRuntime.liveMatch = null;
+
+      window.dispatchEvent(new CustomEvent("takeMe:periodSelected", {
+        detail: {
+          language: currentLanguage,
+          period: selected.id,
+          tripState: { ...tripState }
+        }
+      }));
+
+      choosePeriodButton.animate(
+        [
+          { transform: "scale(1)" },
+          { transform: "scale(.975)" },
+          { transform: "scale(1)" }
+        ],
+        { duration: 260, easing: "ease-out" }
+      );
+
+      window.setTimeout(() => {
+        showScreen("party");
+      }, 180);
+    }
+
+    choosePeriodButton.addEventListener("click", selectCurrentPeriodAndContinue);
+
+
+    backToPeriod.addEventListener("click", () => {
+      showScreen("period");
+    });
+
+    adultsMinus.addEventListener("click", () => changeAdults(-1));
+    adultsPlus.addEventListener("click", () => changeAdults(1));
+    childrenMinus.addEventListener("click", () => changeChildren(-1));
+    childrenPlus.addEventListener("click", () => changeChildren(1));
+
+    choosePartyButton.addEventListener("click", () => {
+      tripState.partyType = getPartyType(tripState.adults, tripState.children);
+      dataRuntime.liveMatchPromise = null;
+      dataRuntime.liveMatch = null;
+
+      window.dispatchEvent(new CustomEvent("takeMe:partySelected", {
+        detail: {
+          language: currentLanguage,
+          adults: tripState.adults,
+          children: tripState.children,
+          partyType: tripState.partyType,
+          tripState: { ...tripState }
+        }
+      }));
+
+      choosePartyButton.animate(
+        [
+          { transform: "scale(1)" },
+          { transform: "scale(.975)" },
+          { transform: "scale(1)" }
+        ],
+        { duration: 260, easing: "ease-out" }
+      );
+
+      window.setTimeout(() => {
+        showScreen("style");
+      }, 180);
+    });
+
+
+    backToParty.addEventListener("click", () => {
+      showScreen("party");
+    });
+
+    chooseStyleButton.addEventListener("click", () => {
+      if (tripState.holidayDesires.length === 0) return;
+      syncEngineStylesFromDesires();
+
+      dataRuntime.liveMatchPromise = null;
+      dataRuntime.liveMatch = null;
+
+      window.dispatchEvent(new CustomEvent("takeMe:styleSelected", {
+        detail: {
+          language: currentLanguage,
+          holidayDesires: [...tripState.holidayDesires],
+          holidayStyle: [...tripState.holidayStyle],
+          tripState: { ...tripState }
+        }
+      }));
+
+      chooseStyleButton.animate(
+        [
+          { transform: "scale(1)" },
+          { transform: "scale(.975)" },
+          { transform: "scale(1)" }
+        ],
+        { duration: 260, easing: "ease-out" }
+      );
+
+      window.setTimeout(() => {
+        showScreen("finding");
+      }, 180);
+    });
+
+
+    showFirstMatch.addEventListener("click", () => {
+      window.dispatchEvent(new CustomEvent("takeMe:showFirstMatch", {
+        detail: {
+          language: currentLanguage,
+          tripState: { ...tripState }
+        }
+      }));
+
+      showFirstMatch.animate(
+        [
+          { transform: "scale(1)" },
+          { transform: "scale(.975)" },
+          { transform: "scale(1)" }
+        ],
+        { duration: 260, easing: "ease-out" }
+      );
+
+      window.setTimeout(() => {
+        showScreen("match");
+      }, 180);
+    });
+
+
+    backToFinding.addEventListener("click", () => {
+      showScreen("finding");
+    });
+
+    likeThisStay.addEventListener("click", async () => emitMatchAction("like"));
+    endLikeThis.addEventListener("click", async () => emitMatchAction("like"));
+
+    anotherStay.addEventListener("click", async () => emitMatchAction("another_stay"));
+    endAnotherStay.addEventListener("click", async () => emitMatchAction("another_stay"));
+
+    somewhereElse.addEventListener("click", async () => emitMatchAction("somewhere_else"));
+    endSomewhereElse.addEventListener("click", async () => emitMatchAction("somewhere_else"));
+
+    stayGallery.addEventListener("pointerdown", (event) => {
+      stayDragging = true;
+      stayDragStartX = event.clientX;
+      stayDragDeltaX = 0;
+      stayGallery.setPointerCapture?.(event.pointerId);
+    });
+
+    stayGallery.addEventListener("pointermove", (event) => {
+      if (!stayDragging) return;
+      stayDragDeltaX = event.clientX - stayDragStartX;
+    });
+
+    function finishStayDrag(event) {
+      if (!stayDragging) return;
+      stayDragging = false;
+
+      if (stayDragDeltaX <= -45) showStaySlide(staySlideIndex + 1);
+      if (stayDragDeltaX >= 45) showStaySlide(staySlideIndex - 1);
+
+      stayDragDeltaX = 0;
+      try {
+        stayGallery.releasePointerCapture?.(event.pointerId);
+      } catch (_) {}
+    }
+
+    stayGallery.addEventListener("pointerup", finishStayDrag);
+    stayGallery.addEventListener("pointercancel", finishStayDrag);
+
+    window.addEventListener("resize", updateDeckTransforms);
+
+    buildLanguageSwitcher();
+    renderPeriodDeck();
+    updatePartyVisual(false);
+    renderStyleGrid();
+    setLanguage(currentLanguage);
+    showScreen("intro");
+  </script>
+</body>
+</html>

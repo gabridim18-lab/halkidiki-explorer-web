@@ -1,4 +1,11 @@
-const accommodations = [    
+const accommodations = [
+
+        {
+            id: "almira_blue",
+            beachSlug: "sahara-beach",
+            flyer: "almira-blue.webp"
+        },
+            
 
    {
     id: "on_the_rock_sky_view_suite",

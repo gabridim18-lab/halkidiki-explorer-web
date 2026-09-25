@@ -602,9 +602,19 @@
 
      <button
   class="primary-btn"
-  onclick="scrollToStays()"
-  data-i18n="findAccommodation">
+  id="takeMeHomeButton"
+  type="button"
+  onclick="openTakeMeToHalkidiki()">
+  <span id="takeMeHomeText">Take me to Halkidiki</span>
 </button>
+
+    <a
+  href="#popularStays"
+  class="secondary-btn"
+  id="findAccommodationHomeButton"
+  onclick="event.preventDefault(); scrollToStays();">
+  <span id="findAccommodationHomeText">Find Accommodation</span>
+</a>
 
     <a
   href="zones.html"
@@ -1677,6 +1687,40 @@ if (poolOnly) {
 if (petOnly) {
   document.getElementById("petFilter").classList.add("active");
 }
+function openTakeMeToHalkidiki() {
+  const lang =
+    currentLanguage === "ro"
+      ? "ro"
+      : "en";
+
+  window.location.href =
+    `take-me-to-halkidiki-v9.html?lang=${encodeURIComponent(lang)}`;
+}
+
+function updateTakeMeHomeLabels() {
+  const takeMeText =
+    document.getElementById("takeMeHomeText");
+
+  const accommodationText =
+    document.getElementById("findAccommodationHomeText");
+
+  if (takeMeText) {
+    takeMeText.textContent =
+      currentLanguage === "ro"
+        ? "Du-mă în Halkidiki"
+        : "Take me to Halkidiki";
+  }
+
+  if (accommodationText) {
+    accommodationText.textContent =
+      currentLanguage === "ro"
+        ? "Găsește cazare"
+        : "Find Accommodation";
+  }
+}
+
+updateTakeMeHomeLabels();
+
 function scrollToStays() {
   document
     .getElementById("popularStays")
