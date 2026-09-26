@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0a6f87" />
-  <title>Take me to Halkidiki — V10</title>
+  <title>Take me to Halkidiki — V11</title>
 
   <style>
     :root {
@@ -2289,6 +2289,65 @@
       }
     }
 
+
+    .match-screen.is-updating .story-section,
+    .match-screen.is-updating .experience-end {
+      opacity: .42;
+      transition: opacity .24s ease;
+    }
+
+    .match-action.is-loading {
+      cursor: wait;
+      opacity: .72;
+    }
+
+    .match-action.is-loading::after {
+      content: "";
+      width: 12px;
+      height: 12px;
+      margin-left: 8px;
+      display: inline-block;
+      border: 2px solid currentColor;
+      border-right-color: transparent;
+      border-radius: 50%;
+      vertical-align: -2px;
+      animation: tmhSpin .7s linear infinite;
+    }
+
+    .match-toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(24px + env(safe-area-inset-bottom));
+      z-index: 120;
+      width: min(440px, calc(100vw - 30px));
+      padding: 14px 18px;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 18px;
+      color: #fff;
+      background: rgba(10,43,52,.94);
+      box-shadow: 0 18px 50px rgba(0,0,0,.28);
+      font-size: 13px;
+      font-weight: 750;
+      line-height: 1.4;
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, 12px);
+      transition: opacity .25s ease, transform .25s ease, visibility .25s ease;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .match-toast.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+    }
+
+    @keyframes tmhSpin {
+      to { transform: rotate(360deg); }
+    }
+
     @keyframes cinematicMove {
       0%   { transform: scale(1.035) translate3d(-.5%, -.3%, 0); }
       100% { transform: scale(1.095) translate3d(.8%, .4%, 0); }
@@ -2908,6 +2967,8 @@
           </p>
         </div>
       </article>
+
+      <div class="match-toast" id="matchToast" role="status" aria-live="polite"></div>
 
       <!-- END -->
       <footer class="experience-end">
@@ -3694,6 +3755,7 @@
     const endLikeThis = document.getElementById("endLikeThis");
     const endAnotherStay = document.getElementById("endAnotherStay");
     const endSomewhereElse = document.getElementById("endSomewhereElse");
+    const matchToast = document.getElementById("matchToast");
 
     let activePeriodIndex = 2; // June starts in front.
     let dragStartX = 0;
@@ -5925,7 +5987,57 @@
       }
     }
 
-    function emitMatchAction(action) {
+    let matchToastTimer = null;
+    let matchActionBusy = false;
+
+    function showMatchToast(message) {
+      if (!matchToast || !message) return;
+
+      if (matchToastTimer) {
+        window.clearTimeout(matchToastTimer);
+      }
+
+      matchToast.textContent = message;
+      matchToast.classList.add("show");
+
+      matchToastTimer = window.setTimeout(() => {
+        matchToast.classList.remove("show");
+      }, 3200);
+    }
+
+    function setMatchActionBusy(isBusy, activeAction = null) {
+      matchActionBusy = isBusy;
+      matchScreen.classList.toggle("is-updating", isBusy);
+
+      const actionButtons = [
+        likeThisStay,
+        anotherStay,
+        somewhereElse,
+        endLikeThis,
+        endAnotherStay,
+        endSomewhereElse
+      ].filter(Boolean);
+
+      actionButtons.forEach((button) => {
+        button.disabled = isBusy;
+
+        const buttonAction =
+          button === anotherStay || button === endAnotherStay
+            ? "another_stay"
+            : button === somewhereElse || button === endSomewhereElse
+              ? "somewhere_else"
+              : "like";
+
+        button.classList.toggle(
+          "is-loading",
+          isBusy && buttonAction === activeAction
+        );
+      });
+    }
+
+    async function emitMatchAction(action) {
+      if (matchActionBusy) return;
+
       window.dispatchEvent(new CustomEvent("takeMe:matchAction", {
         detail: {
           action,
@@ -5935,35 +6047,113 @@
         }
       }));
 
-      if (action === "another_stay" && currentMatch?.accommodation?.id) {
-        if (!tripState.rejectedAccommodations.includes(currentMatch.accommodation.id)) {
-          tripState.rejectedAccommodations.push(currentMatch.accommodation.id);
-        }
-      }
-
-      if (action === "somewhere_else" && currentMatch?.beach?.id) {
-        if (!tripState.rejectedBeaches.includes(currentMatch.beach.id)) {
-          tripState.rejectedBeaches.push(currentMatch.beach.id);
-        }
-      }
-
-      /*
-        When the real matching engine is connected:
-
-        another_stay:
-          currentMatch = engine.nextAccommodationSameBeach(tripState)
-
-        somewhere_else:
-          currentMatch = engine.nextBeachExperience(tripState)
-
-        like:
-          tripState.selectedBeach = currentMatch.beach.id
-          tripState.selectedAccommodation = currentMatch.accommodation.id
-      */
-
       if (action === "like") {
         tripState.selectedBeach = currentMatch?.beach?.id ?? null;
         tripState.selectedAccommodation = currentMatch?.accommodation?.id ?? null;
+
+        showMatchToast(
+          currentLanguage === "ro"
+            ? "Am păstrat această variantă."
+            : "We kept this option."
+        );
+        return;
+      }
+
+      setMatchActionBusy(true, action);
+
+      try {
+        if (action === "another_stay") {
+          const currentAccommodationId =
+            currentMatch?.accommodation?.id ?? null;
+
+          if (
+            currentAccommodationId &&
+            !tripState.rejectedAccommodations.includes(currentAccommodationId)
+          ) {
+            tripState.rejectedAccommodations.push(currentAccommodationId);
+          }
+
+          const next = await nextAccommodationSameBeach();
+
+          if (!next) {
+            showMatchToast(
+              currentLanguage === "ro"
+                ? "Nu mai avem momentan o altă cazare compatibilă la această plajă. Poți încerca „Du-mă în altă parte”."
+                : "There isn't another compatible stay at this beach right now. Try “Take me somewhere else”."
+            );
+            return;
+          }
+
+          currentMatch = next;
+          dataRuntime.liveMatch = next;
+          renderMatch(next);
+
+          window.requestAnimationFrame(() => {
+            document
+              .getElementById("matchStaySection")
+              ?.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+              });
+          });
+
+          showMatchToast(
+            currentLanguage === "ro"
+              ? "Am găsit o altă cazare la aceeași plajă."
+              : "We found another stay at the same beach."
+          );
+
+          return;
+        }
+
+        if (action === "somewhere_else") {
+          const currentBeachId = currentMatch?.beach?.id ?? null;
+
+          if (
+            currentBeachId &&
+            !tripState.rejectedBeaches.includes(currentBeachId)
+          ) {
+            tripState.rejectedBeaches.push(currentBeachId);
+          }
+
+          const next = await nextBeachExperience();
+
+          if (!next) {
+            showMatchToast(
+              currentLanguage === "ro"
+                ? "Nu mai avem momentan un alt rezultat compatibil pentru aceste alegeri."
+                : "There isn't another compatible result for these choices right now."
+            );
+            return;
+          }
+
+          currentMatch = next;
+          dataRuntime.liveMatch = next;
+          renderMatch(next);
+
+          window.requestAnimationFrame(() => {
+            matchScreen.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          });
+
+          showMatchToast(
+            currentLanguage === "ro"
+              ? "Te-am mutat într-o altă experiență Halkidiki."
+              : "We moved you to a different Halkidiki experience."
+          );
+        }
+      } catch (error) {
+        console.error("Could not load next match:", error);
+
+        showMatchToast(
+          currentLanguage === "ro"
+            ? "Nu am putut încărca următorul rezultat. Încearcă din nou."
+            : "We couldn't load the next result. Please try again."
+        );
+      } finally {
+        setMatchActionBusy(false);
       }
     }
 
@@ -6168,14 +6358,14 @@
       showScreen("finding");
     });
 
-    likeThisStay.addEventListener("click", async () => emitMatchAction("like"));
-    endLikeThis.addEventListener("click", async () => emitMatchAction("like"));
+    likeThisStay.addEventListener("click", async () => await emitMatchAction("like"));
+    endLikeThis.addEventListener("click", async () => await emitMatchAction("like"));
 
-    anotherStay.addEventListener("click", async () => emitMatchAction("another_stay"));
-    endAnotherStay.addEventListener("click", async () => emitMatchAction("another_stay"));
+    anotherStay.addEventListener("click", async () => await emitMatchAction("another_stay"));
+    endAnotherStay.addEventListener("click", async () => await emitMatchAction("another_stay"));
 
-    somewhereElse.addEventListener("click", async () => emitMatchAction("somewhere_else"));
-    endSomewhereElse.addEventListener("click", async () => emitMatchAction("somewhere_else"));
+    somewhereElse.addEventListener("click", async () => await emitMatchAction("somewhere_else"));
+    endSomewhereElse.addEventListener("click", async () => await emitMatchAction("somewhere_else"));
 
     stayGallery.addEventListener("pointerdown", (event) => {
       stayDragging = true;
