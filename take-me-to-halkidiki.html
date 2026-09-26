@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0a6f87" />
-  <title>Take me to Halkidiki — V11</title>
+  <title>Take me to Halkidiki — V12</title>
 
   <style>
     :root {
@@ -6048,14 +6048,53 @@
       }));
 
       if (action === "like") {
-        tripState.selectedBeach = currentMatch?.beach?.id ?? null;
-        tripState.selectedAccommodation = currentMatch?.accommodation?.id ?? null;
+        const accommodationId =
+          currentMatch?.accommodation?.id ?? null;
 
-        showMatchToast(
-          currentLanguage === "ro"
-            ? "Am păstrat această variantă."
-            : "We kept this option."
+        tripState.selectedBeach =
+          currentMatch?.beach?.id ?? null;
+
+        tripState.selectedAccommodation =
+          accommodationId;
+
+        if (!accommodationId) {
+          showMatchToast(
+            currentLanguage === "ro"
+              ? "Nu am putut deschide cazarea selectată."
+              : "We couldn't open the selected accommodation."
+          );
+          return;
+        }
+
+        /*
+          Keep the language consistent with the rest of Halkidiki Explorer.
+          The main website already uses localStorage for the selected language.
+        */
+        localStorage.setItem(
+          "language",
+          currentLanguage === "ro" ? "ro" : "en"
         );
+
+        /*
+          Save the matching context for future use.
+          This does not change the accommodation page today, but later it can
+          be used for a "Back to your Halkidiki match" experience.
+        */
+        try {
+          sessionStorage.setItem(
+            "takeMeToHalkidikiSelection",
+            JSON.stringify({
+              tripState,
+              beachId: tripState.selectedBeach,
+              accommodationId: tripState.selectedAccommodation
+            })
+          );
+        } catch (_) {}
+
+        const destination =
+          `accommodation.html?id=${encodeURIComponent(accommodationId)}`;
+
+        window.location.href = destination;
         return;
       }
 
