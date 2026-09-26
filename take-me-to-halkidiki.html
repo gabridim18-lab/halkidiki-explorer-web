@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0a6f87" />
-  <title>Take me to Halkidiki — V9</title>
+  <title>Take me to Halkidiki — V10</title>
 
   <style>
     :root {
@@ -1674,7 +1674,7 @@
     .story-photo img {
       position: absolute;
       inset: 0;
-      z-index: -3;
+      z-index: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -1685,7 +1685,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      z-index: -2;
+      z-index: 1;
       background:
         linear-gradient(180deg, rgba(5,22,28,.05) 12%, rgba(5,22,28,.16) 48%, rgba(5,22,28,.86) 100%),
         linear-gradient(90deg, rgba(5,22,28,.42), transparent 60%);
@@ -1696,11 +1696,13 @@
       content: "";
       position: absolute;
       inset: 0;
-      z-index: -1;
+      z-index: 2;
       background: radial-gradient(circle at 60% 20%, transparent 0%, rgba(0,0,0,.12) 65%, rgba(0,0,0,.26) 100%);
     }
 
     .story-hero-content {
+      position: relative;
+      z-index: 3;
       width: min(920px, 100%);
       padding:
         clamp(120px, 18vh, 190px)
@@ -1773,6 +1775,7 @@
 
     .story-scroll-cue {
       position: absolute;
+      z-index: 4;
       left: 50%;
       bottom: 22px;
       transform: translateX(-50%);
@@ -1839,6 +1842,97 @@
       object-fit: cover;
     }
 
+
+    .gallery-arrow {
+      position: absolute;
+      top: 50%;
+      z-index: 8;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.66);
+      border-radius: 50%;
+      background: rgba(7,31,38,.52);
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(0,0,0,.24);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .gallery-arrow:hover {
+      background: rgba(7,31,38,.72);
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .gallery-arrow.prev { left: 14px; }
+    .gallery-arrow.next { right: 14px; }
+
+    .gallery-count {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 8;
+      min-width: 54px;
+      padding: 8px 11px;
+      border: 1px solid rgba(255,255,255,.52);
+      border-radius: 999px;
+      background: rgba(7,31,38,.48);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .gallery-swipe-hint {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      z-index: 8;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,.42);
+      border-radius: 999px;
+      background: rgba(7,31,38,.42);
+      color: rgba(255,255,255,.92);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    @media (max-width: 820px) {
+      .gallery-arrow {
+        width: 44px;
+        height: 44px;
+        font-size: 28px;
+      }
+
+      .gallery-arrow.prev { left: 10px; }
+      .gallery-arrow.next { right: 10px; }
+
+      .gallery-swipe-hint {
+        left: 12px;
+        top: 12px;
+      }
+
+      .gallery-count {
+        top: 12px;
+        right: 12px;
+      }
+    }
+
     .gallery-dots {
       position: absolute;
       left: 50%;
@@ -1883,6 +1977,16 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 9px;
       margin-top: 24px;
+    }
+
+    .stay-facts.is-rich {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    @media (max-width: 820px) {
+      .stay-facts.is-rich {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     .stay-fact {
@@ -1942,6 +2046,8 @@
     }
 
     .story-photo-content {
+      position: relative;
+      z-index: 3;
       width: min(900px, 100%);
       padding:
         clamp(80px, 12vh, 120px)
@@ -2650,7 +2756,7 @@
 
       <!-- BEACH -->
       <article class="story-section story-hero" id="matchBeachSection">
-        <img id="matchBeachHero" src="images/results/perea-beach.webp" alt="" onerror="this.style.display='none'">
+        <img id="matchBeachHero" src="images/results/perea-beach.webp" alt="">
 
         <div class="story-hero-content">
           <div class="story-eyebrow" data-i18n="firstExperience">Your first Halkidiki experience</div>
@@ -2728,7 +2834,7 @@
 
       <!-- START OF DAY -->
       <article class="story-section story-photo" id="matchStartSection">
-        <img id="matchStartImage" src="images/results/coffee-by-sea.webp" alt="" onerror="this.style.display='none'">
+        <img id="matchStartImage" src="images/results/coffee-by-sea.webp" alt="">
 
         <div class="story-photo-content">
           <div class="story-eyebrow" data-i18n="startDay">Start your day by the sea</div>
@@ -2747,7 +2853,7 @@
 
       <!-- BEACH TIME -->
       <article class="story-section story-photo" id="matchBeachTimeSection">
-        <img id="matchBeachTimeImage" src="images/results/perea-beach2.webp" alt="" onerror="this.style.display='none'">
+        <img id="matchBeachTimeImage" src="images/results/perea-beach2.webp" alt="">
 
         <div class="story-photo-content">
           <div class="story-eyebrow" data-i18n="beachTime">Your beach time</div>
@@ -2769,7 +2875,7 @@
       <article class="story-section light-section" id="matchLunchSection">
         <div class="light-section-inner light-story-card">
           <div class="light-story-image">
-            <img id="matchLunchImage" src="images/results/aigialos.webp" alt="" onerror="this.style.display='none'">
+            <img id="matchLunchImage" src="images/results/aigialos.webp" alt="">
           </div>
 
           <div class="light-story-copy">
@@ -2792,7 +2898,7 @@
 
       <!-- SOMETHING DIFFERENT -->
       <article class="story-section story-photo" id="matchExperienceSection">
-        <img id="matchExperienceImage" src="images/results/waterbus.webp" alt="" onerror="this.style.display='none'">
+        <img id="matchExperienceImage" src="images/results/waterbus.webp" alt="">
 
         <div class="story-photo-content">
           <div class="story-eyebrow" data-i18n="somethingDifferent">Try something different</div>
@@ -4446,14 +4552,70 @@
     function mediaUrl(kind, id, value) {
       if (!value) return "";
 
-      if (/^https?:\/\//i.test(value)) {
-        return value;
+      let clean = String(value)
+        .trim()
+        .replace(/\\/g, "/");
+
+      if (!clean) return "";
+
+      if (/^https?:\/\//i.test(clean)) {
+        return clean;
       }
 
-      const clean = String(value).replace(/^\/+/, "");
+      clean = clean.replace(/^\/+/, "");
+
+      // Full repository-relative path.
+      if (clean.startsWith("data/")) {
+        return encodeURI(
+          `https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/${clean}`
+        );
+      }
+
+      // Some JSONs may store "images/file.webp".
+      clean = clean.replace(/^images\//i, "");
+
       return encodeURI(
-        `${DATA_REPO.rawRoot}/${kind}/${id}/images/${clean}`
+        `${DATA_REPO.rawRoot}/${kind}/${encodeURIComponent(id)}/images/${clean}`
       );
+    }
+
+
+    function setResultImage(imageElement, primaryUrl, fallbackUrls = []) {
+      if (!imageElement) return;
+
+      const candidates = [primaryUrl, ...fallbackUrls]
+        .filter(Boolean)
+        .filter((value, index, array) => array.indexOf(value) === index);
+
+      imageElement.style.display = "";
+      imageElement.style.opacity = "1";
+
+      if (!candidates.length) {
+        imageElement.removeAttribute("src");
+        imageElement.style.display = "none";
+        return;
+      }
+
+      let index = 0;
+
+      imageElement.onerror = () => {
+        index += 1;
+
+        if (index < candidates.length) {
+          imageElement.style.display = "";
+          imageElement.src = candidates[index];
+          return;
+        }
+
+        imageElement.style.display = "none";
+      };
+
+      imageElement.onload = () => {
+        imageElement.style.display = "";
+        imageElement.style.opacity = "1";
+      };
+
+      imageElement.src = candidates[0];
     }
 
     function cleanText(value, maxLength = 300) {
@@ -5045,13 +5207,19 @@
     }
 
     function detailImageList(kind, id, detail, fallback = []) {
-      const rawImages = Array.isArray(detail?.images)
-        ? detail.images
-        : fallback;
+      const candidates = [
+        ...(Array.isArray(detail?.images) ? detail.images : []),
+        ...(Array.isArray(detail?.galleryImages) ? detail.galleryImages : []),
+        detail?.heroImage,
+        detail?.thumbnail,
+        detail?.image,
+        ...fallback
+      ]
+        .filter(Boolean);
 
-      return rawImages
-        .filter(Boolean)
-        .map((value) => mediaUrl(kind, id, value));
+      return [...new Set(
+        candidates.map((value) => mediaUrl(kind, id, value)).filter(Boolean)
+      )];
     }
 
     async function buildStartOfDay(beachId, state) {
@@ -5275,38 +5443,80 @@
       const accFactsEn = [];
       const accFactsRo = [];
 
+      const addAccFact = (en, ro) => {
+        if (!en || !ro) return;
+        if (accFactsEn.length >= 12) return;
+        accFactsEn.push(en);
+        accFactsRo.push(ro);
+      };
+
       const guests = accData.guests ?? accIndex.guests;
       const bedrooms = accData.bedrooms ?? accIndex.bedrooms;
       const bathrooms = accData.bathrooms ?? accIndex.bathrooms;
+      const sizeSqm = accData.sizeSqm ?? accIndex.sizeSqm;
+      const view = accData.view ?? accIndex.view;
+      const distanceMeters =
+        accData.distanceMetersOverride
+        ?? accData.distanceToSeaMeters
+        ?? accData.distanceMeters
+        ?? accData.beachDistanceMeters
+        ?? null;
 
       if (guests) {
-        accFactsEn.push(`Up to ${guests} guests`);
-        accFactsRo.push(`Până la ${guests} oaspeți`);
+        addAccFact(`Up to ${guests} guests`, `Până la ${guests} oaspeți`);
       }
 
       if (bedrooms != null) {
-        accFactsEn.push(`${bedrooms} bedroom${Number(bedrooms) === 1 ? "" : "s"}`);
-        accFactsRo.push(`${bedrooms} dormitor${Number(bedrooms) === 1 ? "" : "e"}`);
+        addAccFact(
+          `${bedrooms} bedroom${Number(bedrooms) === 1 ? "" : "s"}`,
+          `${bedrooms} dormitor${Number(bedrooms) === 1 ? "" : "e"}`
+        );
       }
 
       if (bathrooms != null) {
-        accFactsEn.push(`${bathrooms} bathroom${Number(bathrooms) === 1 ? "" : "s"}`);
-        accFactsRo.push(`${bathrooms} băi`);
+        addAccFact(
+          `${bathrooms} bathroom${Number(bathrooms) === 1 ? "" : "s"}`,
+          `${bathrooms} ${Number(bathrooms) === 1 ? "baie" : "băi"}`
+        );
+      }
+
+      if (sizeSqm) {
+        addAccFact(`${sizeSqm} m²`, `${sizeSqm} m²`);
+      }
+
+      if (view) {
+        const viewText = cleanText(view, 44);
+        addAccFact(viewText, viewText);
+      }
+
+      if (Number.isFinite(Number(distanceMeters))) {
+        const meters = Number(distanceMeters);
+        const enDistance = meters < 1000
+          ? `${Math.round(meters)} m to beach`
+          : `${(meters / 1000).toFixed(1)} km to beach`;
+
+        const roDistance = meters < 1000
+          ? `${Math.round(meters)} m până la plajă`
+          : `${(meters / 1000).toFixed(1)} km până la plajă`;
+
+        addAccFact(enDistance, roDistance);
       }
 
       const booleanFacts = [
-        ["parking", "Parking", "Parcare"],
-        ["kitchen", "Kitchen", "Bucătărie"],
         ["wifi", "Wi-Fi", "Wi-Fi"],
-        ["pool", "Pool", "Piscină"],
+        ["parking", "Parking", "Parcare"],
         ["airConditioning", "Air conditioning", "Aer condiționat"],
-        ["balcony", "Balcony", "Balcon"]
+        ["kitchen", "Kitchen", "Bucătărie"],
+        ["washer", "Washing machine", "Mașină de spălat"],
+        ["balcony", "Balcony", "Balcon"],
+        ["pool", "Pool", "Piscină"],
+        ["bbq", "BBQ", "Grătar"],
+        ["petFriendly", "Pet friendly", "Acceptă animale"]
       ];
 
       booleanFacts.forEach(([key, en, ro]) => {
-        if (accData[key] === true && accFactsEn.length < 6) {
-          accFactsEn.push(en);
-          accFactsRo.push(ro);
+        if (accData[key] === true) {
+          addAccFact(en, ro);
         }
       });
 
@@ -5512,18 +5722,47 @@
     }
 
     function renderStayGallery(images) {
+      const cleanImages = (images ?? [])
+        .filter(Boolean)
+        .filter((value, index, array) => array.indexOf(value) === index)
+        .slice(0, 8);
+
       stayGallery.innerHTML = "";
       stayGalleryDots.innerHTML = "";
       staySlideIndex = 0;
 
-      images.forEach((src, index) => {
+      if (!cleanImages.length) {
+        const empty = document.createElement("div");
+        empty.style.cssText = `
+          position:absolute;
+          inset:0;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          padding:30px;
+          text-align:center;
+          color:#567078;
+          background:linear-gradient(145deg,#e4ece9,#cedbd8);
+          font-weight:800;
+        `;
+        empty.textContent = currentLanguage === "ro"
+          ? "Imaginile cazării nu sunt disponibile momentan."
+          : "Accommodation images are not available right now.";
+        stayGallery.appendChild(empty);
+        return;
+      }
+
+      cleanImages.forEach((src, index) => {
         const slide = document.createElement("div");
         slide.className = "stay-slide" + (index === 0 ? " active" : "");
 
         const img = document.createElement("img");
-        img.src = src;
         img.alt = "";
-        img.onerror = () => { img.style.display = "none"; };
+        img.loading = index === 0 ? "eager" : "lazy";
+        img.src = src;
+        img.onerror = () => {
+          slide.style.display = "none";
+        };
 
         slide.appendChild(img);
         stayGallery.appendChild(slide);
@@ -5535,6 +5774,41 @@
         dot.addEventListener("click", () => showStaySlide(index));
         stayGalleryDots.appendChild(dot);
       });
+
+      const hint = document.createElement("div");
+      hint.className = "gallery-swipe-hint";
+      hint.textContent = currentLanguage === "ro" ? "Glisează imaginile" : "Swipe photos";
+      stayGallery.appendChild(hint);
+
+      const counter = document.createElement("div");
+      counter.className = "gallery-count";
+      counter.id = "stayGalleryCount";
+      counter.textContent = `1 / ${cleanImages.length}`;
+      stayGallery.appendChild(counter);
+
+      if (cleanImages.length > 1) {
+        const prev = document.createElement("button");
+        prev.className = "gallery-arrow prev";
+        prev.type = "button";
+        prev.setAttribute("aria-label", "Previous image");
+        prev.textContent = "‹";
+        prev.addEventListener("click", (event) => {
+          event.stopPropagation();
+          showStaySlide(staySlideIndex - 1);
+        });
+
+        const next = document.createElement("button");
+        next.className = "gallery-arrow next";
+        next.type = "button";
+        next.setAttribute("aria-label", "Next image");
+        next.textContent = "›";
+        next.addEventListener("click", (event) => {
+          event.stopPropagation();
+          showStaySlide(staySlideIndex + 1);
+        });
+
+        stayGallery.append(prev, next);
+      }
 
       stayGallery.appendChild(stayGalleryDots);
     }
@@ -5553,12 +5827,24 @@
       dots.forEach((dot, i) => {
         dot.classList.toggle("active", i === staySlideIndex);
       });
+
+      const counter = document.getElementById("stayGalleryCount");
+      if (counter) {
+        counter.textContent = `${staySlideIndex + 1} / ${slides.length}`;
+      }
     }
 
     function renderMatch(match) {
       currentMatch = match;
 
-      matchBeachHero.src = match.beach.heroImage;
+      setResultImage(
+        matchBeachHero,
+        match.beach.heroImage,
+        [
+          match.beach.beachTimeImage,
+          "images/beach_background.webp"
+        ]
+      );
       matchBeachName.textContent = localizedValue(match.beach.name);
       matchBeachDescription.textContent = localizedValue(match.beach.description);
       renderPills(matchBeachFacts, localizedArray(match.beach.facts), "fact-pill");
@@ -5566,12 +5852,23 @@
       matchStayName.textContent = localizedValue(match.accommodation.name);
       matchStayDescription.textContent = localizedValue(match.accommodation.description);
       renderStayFacts(localizedArray(match.accommodation.facts));
+      matchStayFacts.classList.toggle(
+        "is-rich",
+        localizedArray(match.accommodation.facts).length >= 6
+      );
       renderStayGallery(match.accommodation.images ?? []);
 
       const startSection = document.getElementById("matchStartSection");
       if (match.startOfDay) {
         startSection.style.display = "";
-        matchStartImage.src = match.startOfDay.image;
+        setResultImage(
+          matchStartImage,
+          match.startOfDay.image,
+          [
+            match.beach.heroImage,
+            "images/beach_background.webp"
+          ]
+        );
         matchStartTitle.textContent = localizedValue(match.startOfDay.name);
         matchStartText.textContent = localizedValue(match.startOfDay.text);
         renderPills(matchStartChips, localizedArray(match.startOfDay.chips), "inline-chip");
@@ -5579,7 +5876,14 @@
         startSection.style.display = "none";
       }
 
-      matchBeachTimeImage.src = match.beach.beachTimeImage;
+      setResultImage(
+        matchBeachTimeImage,
+        match.beach.beachTimeImage,
+        [
+          match.beach.heroImage,
+          "images/beach_background.webp"
+        ]
+      );
       matchBeachTimeTitle.textContent = localizedValue(match.beachTime.title);
       matchBeachTimeText.textContent = localizedValue(match.beachTime.text);
       renderPills(matchBeachTimeChips, localizedArray(match.beach.activities), "inline-chip");
@@ -5587,7 +5891,14 @@
       const lunchSection = document.getElementById("matchLunchSection");
       if (match.lunch) {
         lunchSection.style.display = "";
-        matchLunchImage.src = match.lunch.image;
+        setResultImage(
+          matchLunchImage,
+          match.lunch.image,
+          [
+            match.beach.heroImage,
+            "images/beach_background.webp"
+          ]
+        );
         matchLunchName.textContent = localizedValue(match.lunch.name);
         matchLunchText.textContent = localizedValue(match.lunch.text);
         renderPills(matchLunchMeta, localizedArray(match.lunch.meta), "");
@@ -5598,7 +5909,15 @@
       const experienceSection = document.getElementById("matchExperienceSection");
       if (match.experience) {
         experienceSection.style.display = "";
-        matchExperienceImage.src = match.experience.image;
+        setResultImage(
+          matchExperienceImage,
+          match.experience.image,
+          [
+            match.beach.beachTimeImage,
+            match.beach.heroImage,
+            "images/beach_background.webp"
+          ]
+        );
         matchExperienceName.textContent = localizedValue(match.experience.name);
         matchExperienceText.textContent = localizedValue(match.experience.text);
       } else {
