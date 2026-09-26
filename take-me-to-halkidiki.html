@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0a6f87" />
-  <title>Take me to Halkidiki — V12</title>
+  <title>Take me to Halkidiki — V13</title>
 
   <style>
     :root {
@@ -125,6 +125,34 @@
       transition: background .5s ease;
     }
 
+
+    .experience.intro-active::before {
+      background:
+        linear-gradient(
+          90deg,
+          rgba(3,18,24,.72) 0%,
+          rgba(3,18,24,.48) 34%,
+          rgba(3,18,24,.13) 67%,
+          rgba(3,18,24,.06) 100%
+        ),
+        linear-gradient(
+          180deg,
+          rgba(3,18,24,.08) 0%,
+          rgba(3,18,24,.05) 48%,
+          rgba(3,18,24,.56) 100%
+        );
+    }
+
+    .experience.intro-active::after {
+      background:
+        radial-gradient(
+          circle at 68% 32%,
+          transparent 16%,
+          rgba(0,0,0,.02) 48%,
+          rgba(0,0,0,.18) 100%
+        );
+    }
+
     .experience.period-active::before {
       background:
         linear-gradient(180deg, rgba(3,18,24,.35) 0%, rgba(3,18,24,.09) 29%, rgba(3,18,24,.42) 68%, rgba(3,18,24,.88) 100%),
@@ -217,64 +245,56 @@
 
     /* ---------------- SCREEN 1 ---------------- */
 
+    /* ---------------- SCREEN 1 — FINAL HERO ---------------- */
+
     .hero-content {
       min-height: 100dvh;
       display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
+      align-items: flex-end;
       padding:
-        clamp(94px, 14vh, 150px)
-        clamp(20px, 6vw, 88px)
-        calc(var(--safe-bottom) + 34px);
+        clamp(110px, 15vh, 160px)
+        clamp(28px, 7vw, 104px)
+        clamp(58px, 9vh, 96px);
     }
 
     .content-wrap {
-      width: min(760px, 100%);
+      width: min(830px, 100%);
       animation: contentIn .9s cubic-bezier(.2,.75,.25,1) both;
     }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 14px;
-      color: var(--soft-white);
-      font-size: clamp(11px, 1.15vw, 13px);
-      font-weight: 800;
-      letter-spacing: .20em;
-      text-transform: uppercase;
-    }
-
-    .eyebrow::before {
-      content: "";
-      width: 28px;
-      height: 1px;
-      background: rgba(255,255,255,.82);
-    }
-
-    h1, h2 {
+    .intro-title {
+      max-width: 760px;
       margin: 0;
+      color: #fff;
       font-family: Georgia, "Times New Roman", serif;
-      text-shadow: 0 10px 34px rgba(0,0,0,.28);
-    }
-
-    h1 {
-      max-width: 750px;
-      font-size: clamp(52px, 9.4vw, 118px);
-      line-height: .88;
+      font-size: clamp(64px, 8.8vw, 126px);
+      line-height: .84;
       letter-spacing: -.055em;
       text-wrap: balance;
+      text-shadow: 0 10px 38px rgba(0,0,0,.38);
     }
 
-    .lead {
-      width: min(520px, 100%);
-      margin: 22px 0 0;
-      color: rgba(255,255,255,.9);
-      font-size: clamp(16px, 2vw, 21px);
-      line-height: 1.5;
-      font-weight: 500;
+    .intro-promise {
+      width: min(720px, 100%);
+      margin: 25px 0 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(28px, 3.5vw, 50px);
+      line-height: 1.02;
+      letter-spacing: -.035em;
       text-wrap: balance;
-      text-shadow: 0 2px 18px rgba(0,0,0,.28);
+      text-shadow: 0 6px 28px rgba(0,0,0,.38);
+    }
+
+    .intro-lead {
+      width: min(630px, 100%);
+      margin: 18px 0 0;
+      color: rgba(255,255,255,.90);
+      font-size: clamp(15px, 1.55vw, 19px);
+      line-height: 1.55;
+      font-weight: 560;
+      text-wrap: balance;
+      text-shadow: 0 3px 20px rgba(0,0,0,.40);
     }
 
     .start-row {
@@ -284,50 +304,36 @@
       margin-top: 30px;
     }
 
-    .primary-button {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 58px;
-      padding: 0 27px;
-      border: 1px solid rgba(255,255,255,.38);
+    .intro-start-button {
+      min-width: min(330px, 88vw);
+      min-height: 62px;
+      padding-inline: 28px;
+      border: 1px solid rgba(255,255,255,.65);
       border-radius: 999px;
-      background: rgba(255,255,255,.94);
+      background: rgba(255,255,255,.96);
       color: #0b4352;
-      box-shadow: var(--shadow);
+      box-shadow: 0 20px 58px rgba(0,0,0,.28);
       font-size: 13px;
-      font-weight: 900;
-      letter-spacing: .095em;
+      font-weight: 950;
+      letter-spacing: .09em;
       text-transform: uppercase;
       cursor: pointer;
-      overflow: hidden;
-      transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+      transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease;
     }
 
-    .primary-button::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      transform: translateX(-110%);
-      background: linear-gradient(100deg, transparent, rgba(255,255,255,.68), transparent);
-      transition: transform .75s ease;
-    }
-
-    .primary-button:hover {
+    .intro-start-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 28px 76px rgba(0,0,0,.32);
+      box-shadow: 0 26px 68px rgba(0,0,0,.34);
+      background: #fff;
     }
 
-    .primary-button:hover::after { transform: translateX(110%); }
-    .primary-button:active { transform: scale(.985); }
-
-    .hint {
-      max-width: 170px;
-      color: rgba(255,255,255,.70);
-      font-size: 12px;
-      line-height: 1.45;
+    .intro-start-button:active {
+      transform: scale(.985);
     }
+
 
     /* ---------------- SCREEN 2 ---------------- */
 
@@ -2370,37 +2376,46 @@
       }
 
       .hero-content {
-        justify-content: flex-end;
-        padding: 90px 19px calc(var(--safe-bottom) + 55px);
+        min-height: 100dvh;
+        align-items: flex-end;
+        padding:
+          100px
+          20px
+          calc(var(--safe-bottom) + 36px);
       }
 
-      h1 {
-        max-width: 95%;
-        font-size: clamp(54px, 17vw, 82px);
-        line-height: .9;
+      .content-wrap {
+        width: 100%;
       }
 
-      .lead {
-        width: 95%;
-        margin-top: 18px;
-        font-size: 16px;
+      .intro-title {
+        max-width: 96%;
+        font-size: clamp(54px, 17vw, 78px);
+        line-height: .88;
+      }
+
+      .intro-promise {
+        width: 100%;
+        margin-top: 20px;
+        font-size: clamp(27px, 8vw, 38px);
+        line-height: 1.02;
+      }
+
+      .intro-lead {
+        width: 94%;
+        margin-top: 14px;
+        font-size: 14px;
+        line-height: 1.48;
       }
 
       .start-row {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 12px;
-        margin-top: 25px;
+        margin-top: 24px;
       }
 
-      .primary-button {
+      .intro-start-button {
         width: 100%;
+        min-width: 0;
         min-height: 60px;
-      }
-
-      .hint {
-        max-width: 100%;
-        font-size: 11px;
       }
 
       .period-screen {
@@ -2463,6 +2478,36 @@
       .progress-mark {
         right: 20px;
         bottom: calc(var(--safe-bottom) + 10px);
+      }
+    }
+
+
+    @media (max-height: 720px) and (max-width: 700px) {
+      .hero-content {
+        padding-top: 82px;
+        padding-bottom: calc(var(--safe-bottom) + 24px);
+      }
+
+      .intro-title {
+        font-size: clamp(48px, 15vw, 67px);
+      }
+
+      .intro-promise {
+        margin-top: 14px;
+        font-size: clamp(24px, 7vw, 32px);
+      }
+
+      .intro-lead {
+        margin-top: 10px;
+        font-size: 13px;
+      }
+
+      .start-row {
+        margin-top: 18px;
+      }
+
+      .intro-start-button {
+        min-height: 56px;
       }
     }
 
@@ -2565,28 +2610,29 @@
     <section class="screen active" id="introScreen">
       <div class="hero-content">
         <div class="content-wrap">
-          <p class="eyebrow" data-i18n="eyebrow">Your holiday starts now</p>
+          <h1 class="intro-title" data-i18n="title">
+            Take me to Halkidiki
+          </h1>
 
-          <h1 data-i18n="title">Take me to Halkidiki</h1>
+          <p class="intro-promise" data-i18n="introPromise">
+            Your whole Halkidiki holiday. Built around you.
+          </p>
 
-          <p class="lead" data-i18n="lead">
-            Tell us a little about your trip. We’ll turn it into a Halkidiki experience made around you.
+          <p class="intro-lead" data-i18n="introLead">
+            Beach. Stay. Food. Experiences. One journey, made for you.
           </p>
 
           <div class="start-row">
-            <button class="primary-button" id="startJourney" type="button" data-i18n="start">
-              Start the journey
+            <button
+              class="intro-start-button"
+              id="startJourney"
+              type="button"
+              data-i18n="start"
+            >
+              Build my holiday →
             </button>
-
-            <div class="hint" data-i18n="hint">
-              A few quick choices. Then we take you somewhere.
-            </div>
           </div>
         </div>
-      </div>
-
-      <div class="progress-mark" aria-hidden="true">
-        <strong>01</strong><span>/ 04</span>
       </div>
     </section>
 
@@ -3037,9 +3083,9 @@
       en: {
         eyebrow: "Your holiday starts now",
         title: "Take me to Halkidiki",
-        lead: "Tell us a little about your trip. We’ll turn it into a Halkidiki experience made around you.",
-        start: "Start the journey",
-        hint: "A few quick choices. Then we take you somewhere.",
+        introPromise: "Your whole Halkidiki holiday. Built around you.",
+        introLead: "Beach. Stay. Food. Experiences. One journey, made for you.",
+        start: "Build my holiday →",
         periodKicker: "Choose the feeling",
         periodTitle: "When do you want to go?",
         periodLead: "Swipe through the season and stop where your holiday starts to feel real.",
@@ -3085,9 +3131,9 @@
       ro: {
         eyebrow: "Vacanța ta începe acum",
         title: "Du-mă în Halkidiki",
-        lead: "Spune-ne câteva lucruri despre vacanța ta. Noi le transformăm într-o experiență Halkidiki construită în jurul tău.",
-        start: "Începe călătoria",
-        hint: "Câteva alegeri rapide. Apoi te ducem undeva.",
+        introPromise: "Întreaga ta vacanță în Halkidiki. Creată în jurul tău.",
+        introLead: "Plajă. Cazare. Mâncare. Experiențe. Totul într-o singură călătorie.",
+        start: "Construiește-mi vacanța →",
         periodKicker: "Alege atmosfera",
         periodTitle: "Când vrei să mergi?",
         periodLead: "Plimbă-te prin sezon și oprește-te acolo unde vacanța începe să pară reală.",
@@ -3851,6 +3897,7 @@
         element.classList.toggle("active", name === screenName);
       });
 
+      experience.classList.toggle("intro-active", screenName === "intro");
       experience.classList.toggle("period-active", screenName === "period");
       experience.classList.toggle("party-active", screenName === "party");
       experience.classList.toggle("style-active", screenName === "style");
@@ -3858,7 +3905,10 @@
 
       const mainTopbar = document.querySelector(".topbar");
       if (mainTopbar) {
-        mainTopbar.style.display = screenName === "match" ? "none" : "";
+        mainTopbar.style.display =
+          screenName === "intro" || screenName === "match"
+            ? "none"
+            : "";
       }
 
       document.body.style.overflow = screenName === "match" ? "hidden" : "hidden";
