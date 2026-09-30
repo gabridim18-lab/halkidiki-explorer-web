@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0a6f87" />
-  <title>Take me to Halkidiki — V13</title>
+  <title>Take me to Halkidiki — V14</title>
 
   <style>
     :root {
@@ -2556,44 +2556,44 @@
       onerror="this.style.display='none'"
     />
 
-    <!-- Screen 2 dynamic background -->
+    <!-- Screen 2 static background -->
     <img
       class="period-bg"
       id="periodBackground"
-      src="images/periods/june.webp"
+      src="images/periods/periods-background.webp"
       alt=""
       aria-hidden="true"
       onerror="this.style.display='none'"
     />
 
 
-    <!-- Screen 3 dynamic people background -->
+    <!-- Screen 3 static background -->
     <img
       class="party-bg"
       id="partyBackground"
-      src="images/party/couple.webp"
+      src="images/party/party-background.webp"
       alt=""
       aria-hidden="true"
       onerror="this.style.display='none'"
     />
 
 
-    <!-- Screen 4 dynamic holiday-style background -->
+    <!-- Screen 4 static background -->
     <img
       class="style-bg"
       id="styleBackground"
-      src="images/styles/peace-quiet.webp"
+      src="images/styles/styles-background.webp"
       alt=""
       aria-hidden="true"
       onerror="this.style.display='none'"
     />
 
 
-    <!-- Screen 5 dynamic finding background -->
+    <!-- Screen 5 static background -->
     <img
       class="finding-bg"
       id="findingBackground"
-      src="images/finding/beach.webp"
+      src="images/finding/finding-background.webp"
       alt=""
       aria-hidden="true"
       onerror="this.style.display='none'"
@@ -2686,7 +2686,7 @@
           <img
             class="party-photo"
             id="partyPhoto"
-            src="images/party/couple.webp"
+            src="images/party/party-background.webp"
             alt=""
             aria-hidden="true"
             onerror="this.style.display='none'"
@@ -2803,7 +2803,7 @@
 
         <div class="finding-visual" id="findingVisual" aria-hidden="true">
           <div class="finding-card pos-0" data-find-card="0">
-            <img src="images/finding/beach.webp" alt="" onerror="this.style.display='none'">
+            <img src="images/finding/finding-background.webp" alt="" onerror="this.style.display='none'">
           </div>
 
           <div class="finding-card pos-1" data-find-card="1">
@@ -4067,13 +4067,13 @@
     }
 
     function updatePeriodBackground() {
-      const period = periods[activePeriodIndex];
+      const staticSource = "images/periods/periods-background.webp";
 
       periodBackground.style.opacity = "0";
 
       window.setTimeout(() => {
         periodBackground.style.display = "";
-        periodBackground.src = period.image;
+        periodBackground.src = staticSource;
         periodBackground.onerror = () => {
           periodBackground.style.display = "none";
         };
@@ -4180,7 +4180,7 @@
         };
 
         partyBackground.style.display = "";
-        partyBackground.src = visual.image;
+        partyBackground.src = "images/party/party-background.webp";
         partyBackground.onerror = () => {
           partyBackground.style.display = "none";
         };
@@ -4234,19 +4234,13 @@
     }
 
     function updateStyleBackground(styleId = null) {
-      const fallback = getStyleOrder()[0];
-      const activeId = styleId
-        ?? tripState.holidayDesires[tripState.holidayDesires.length - 1]
-        ?? fallback;
-
-      const style = holidayStyles[activeId];
-      if (!style) return;
+      const staticSource = "images/styles/styles-background.webp";
 
       styleBackground.style.opacity = "0";
 
       window.setTimeout(() => {
         styleBackground.style.display = "";
-        styleBackground.src = style.image;
+        styleBackground.src = staticSource;
 
         styleBackground.onerror = () => {
           styleBackground.style.display = "none";
@@ -4406,8 +4400,9 @@
       const frontImg = frontCard?.querySelector("img");
 
       if (frontImg?.src) {
+        // Keep the rotating cards dynamic, but preserve a separate static background.
         findingBackground.style.display = "";
-        findingBackground.src = frontImg.src;
+        findingBackground.src = "images/finding/finding-background.webp";
       }
     }
 
