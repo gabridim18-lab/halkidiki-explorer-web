@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0a6f87" />
-  <title>Take me to Halkidiki — V14</title>
+  <title>Take me to Halkidiki — V15</title>
 
   <style>
     :root {
@@ -2542,6 +2542,542 @@
         transition-duration: .001ms !important;
       }
     }
+  
+
+    /* ==========================================================
+       V15 — MOBILE POLISH + RESULT PRESENTATION
+       ========================================================== */
+
+    .language-switcher { display: none !important; }
+
+    .period-bg,
+    .style-bg {
+      filter: saturate(.76) brightness(.72);
+    }
+
+    .experience.period-active::before {
+      background:
+        linear-gradient(180deg, rgba(3,18,24,.50) 0%, rgba(3,18,24,.25) 32%, rgba(3,18,24,.52) 72%, rgba(3,18,24,.91) 100%),
+        linear-gradient(90deg, rgba(3,18,24,.34), rgba(3,18,24,.10));
+    }
+
+    .experience.style-active::before {
+      background:
+        linear-gradient(180deg, rgba(3,18,24,.55) 0%, rgba(3,18,24,.32) 35%, rgba(3,18,24,.58) 73%, rgba(3,18,24,.92) 100%),
+        linear-gradient(90deg, rgba(3,18,24,.35), rgba(3,18,24,.12));
+    }
+
+    .match-screen .match-topbar {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding-top: max(10px, env(safe-area-inset-top));
+      background: linear-gradient(180deg, rgba(4,18,24,.78), rgba(4,18,24,.20), transparent);
+    }
+
+    .story-hero::before,
+    .story-photo::before {
+      background:
+        linear-gradient(180deg, rgba(5,22,28,.24) 0%, rgba(5,22,28,.08) 34%, rgba(5,22,28,.46) 66%, rgba(5,22,28,.92) 100%),
+        linear-gradient(90deg, rgba(5,22,28,.48), rgba(5,22,28,.05) 68%);
+    }
+
+    .story-hero-content {
+      width: min(900px, calc(100% - 40px));
+      margin: 0 0 34px clamp(20px, 7vw, 100px);
+      padding: clamp(28px, 4vw, 42px);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 30px;
+      background: linear-gradient(145deg, rgba(5,25,32,.58), rgba(5,25,32,.31));
+      box-shadow: 0 22px 60px rgba(0,0,0,.20);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .stay-description { display: none !important; }
+
+    .stay-facts {
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .stay-fact {
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 12px 13px;
+      border: 1px solid #dbe4e1;
+      border-radius: 17px;
+      background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(237,244,241,.82));
+      box-shadow: 0 8px 20px rgba(31,54,60,.06);
+    }
+
+    .stay-fact-icon {
+      flex: 0 0 34px;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background: #e3efec;
+      color: #214853;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .stay-fact-text {
+      line-height: 1.25;
+    }
+
+    .stay-slide img,
+    .result-gallery-slide img,
+    .beach-bar-media img {
+      cursor: zoom-in;
+    }
+
+    .beach-time-note { display: none !important; }
+
+    .beach-ideal-block {
+      margin-top: 22px;
+    }
+
+    .beach-detail-label {
+      display: block;
+      margin-bottom: 10px;
+      color: rgba(255,255,255,.72);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .beach-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 8px;
+      margin-top: 18px;
+      max-width: 760px;
+    }
+
+    .beach-detail-card {
+      min-height: 74px;
+      padding: 12px 13px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 16px;
+      background: rgba(5,25,32,.36);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .beach-detail-card span {
+      display: block;
+      margin-bottom: 5px;
+      color: rgba(255,255,255,.60);
+      font-size: 8px;
+      font-weight: 900;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+    }
+
+    .beach-detail-card strong {
+      display: block;
+      color: #fff;
+      font-size: 12px;
+      line-height: 1.28;
+    }
+
+    .section-display-title {
+      margin: 0 0 24px;
+      color: #17353f;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 5.8vw, 70px);
+      line-height: .94;
+      letter-spacing: -.045em;
+    }
+
+    .beach-bars-section {
+      background: linear-gradient(180deg, #eef5f2, #f7f4ec);
+    }
+
+    .beach-bar-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .beach-bar-card {
+      overflow: hidden;
+      border: 1px solid #dbe4e1;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 14px 36px rgba(31,54,60,.09);
+    }
+
+    .beach-bar-media {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #d7e3df;
+    }
+
+    .beach-bar-media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .beach-bar-body { padding: 17px; }
+    .beach-bar-body h4 {
+      margin: 0;
+      color: #17353f;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .light-story-image.result-gallery {
+      position: relative;
+      min-height: clamp(380px, 52vh, 560px);
+      aspect-ratio: 4 / 3;
+      touch-action: pan-y;
+    }
+
+    .result-gallery-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(1.025);
+      transition: opacity .35s ease, transform .5s ease;
+      pointer-events: none;
+    }
+
+    .result-gallery-slide.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    .result-gallery-slide img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .result-media-viewer {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: max(54px, env(safe-area-inset-top)) 62px max(54px, env(safe-area-inset-bottom));
+      background: rgba(2,12,16,.96);
+      touch-action: none;
+    }
+
+    .result-media-viewer.open { display: flex; }
+
+    .result-media-viewer img {
+      max-width: 94vw;
+      max-height: 88vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 14px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.46);
+    }
+
+    .viewer-close,
+    .viewer-arrow {
+      position: absolute;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.28);
+      background: rgba(255,255,255,.10);
+      color: #fff;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      cursor: pointer;
+    }
+
+    .viewer-close {
+      top: max(14px, env(safe-area-inset-top));
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 26px;
+    }
+
+    .viewer-arrow {
+      top: 50%;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      font-size: 30px;
+    }
+
+    .viewer-prev { left: 14px; }
+    .viewer-next { right: 14px; }
+
+    .viewer-count {
+      position: absolute;
+      left: 50%;
+      bottom: max(16px, env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    @media (max-width: 780px) {
+      .topbar {
+        top: max(7px, env(safe-area-inset-top));
+        padding-inline: 15px;
+      }
+
+      .brand-link {
+        font-size: 9px;
+        letter-spacing: .12em;
+      }
+
+      .party-summary { display: none !important; }
+
+      .period-screen {
+        gap: 2px;
+        padding: 62px 0 calc(var(--safe-bottom) + 46px);
+      }
+
+      .period-heading p { display: none; }
+
+      .period-heading h2 {
+        font-size: clamp(32px, 9.6vw, 43px);
+      }
+
+      .period-stage {
+        transform: translateY(-10px);
+      }
+
+      .period-deck {
+        height: min(53vh, 455px);
+      }
+
+      .period-card {
+        width: min(64vw, 280px);
+        height: min(46vh, 410px);
+        margin-left: calc(min(64vw, 280px) / -2);
+        margin-top: calc(min(46vh, 410px) / -2);
+        border-radius: 28px;
+        transition: transform .42s cubic-bezier(.2,.78,.2,1), opacity .32s ease, filter .32s ease, box-shadow .32s ease;
+      }
+
+      .period-card.is-active .period-copy::after { display: none !important; }
+      .swipe-cue { bottom: 2px; }
+      .period-footer { gap: 5px; }
+      .choose-period { min-height: 52px; }
+
+      .style-screen {
+        gap: 6px;
+        padding: 50px 12px calc(var(--safe-bottom) + 43px);
+      }
+
+      .style-heading { padding-inline: 4px; }
+      .style-kicker {
+        margin-bottom: 4px;
+        font-size: 8px;
+      }
+      .style-heading h2 {
+        font-size: clamp(29px, 8.4vw, 38px);
+        line-height: .96;
+      }
+      .style-heading p { display: none; }
+
+      .style-grid {
+        height: min(61vh, 500px);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: minmax(150px, 1.25fr) minmax(105px, 1fr) minmax(105px, 1fr);
+        gap: 7px;
+        overflow: hidden;
+        padding: 0;
+      }
+
+      .style-card {
+        min-height: 0 !important;
+        border-radius: 18px;
+      }
+      .style-card:nth-child(1) {
+        grid-column: 1 / -1;
+        grid-row: 1;
+      }
+      .style-card:nth-child(2),
+      .style-card:nth-child(3),
+      .style-card:nth-child(4),
+      .style-card:nth-child(5) {
+        grid-column: span 1;
+        grid-row: auto;
+      }
+      .style-copy,
+      .style-card:nth-child(1) .style-copy {
+        padding: 13px 12px 12px;
+      }
+      .style-card:nth-child(1) .style-name {
+        font-size: clamp(29px, 8.5vw, 38px);
+      }
+      .style-name {
+        font-size: clamp(18px, 5vw, 24px);
+      }
+      .style-tagline { display: none !important; }
+      .style-selected-mark {
+        top: 8px;
+        right: 8px;
+        padding: 5px 7px;
+        font-size: 7px;
+      }
+      .style-footer {
+        gap: 3px;
+        padding-inline: 2px;
+      }
+      .style-continue {
+        width: 100%;
+        min-width: 0;
+        min-height: 50px;
+      }
+      .style-note { font-size: 8px; }
+      .style-screen .back-step,
+      .style-screen .progress-mark {
+        bottom: calc(var(--safe-bottom) + 3px);
+      }
+
+      .story-hero-content {
+        width: calc(100% - 28px);
+        margin: 0 14px 34px;
+        padding: 21px 18px 23px;
+        border-radius: 24px;
+      }
+
+      .story-hero h2 {
+        font-size: clamp(52px, 15vw, 74px);
+      }
+
+      .story-hero-description {
+        margin-top: 13px;
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      #matchBeachTimeSection {
+        min-height: 84dvh;
+      }
+
+      .beach-detail-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 7px;
+        margin-top: 14px;
+      }
+
+      .beach-detail-card {
+        min-height: 64px;
+        padding: 10px 11px;
+        border-radius: 14px;
+      }
+
+      .beach-detail-card strong { font-size: 11px; }
+
+      .beach-bar-list {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        margin-right: -18px;
+        padding-right: 18px;
+      }
+      .beach-bar-list::-webkit-scrollbar { display: none; }
+      .beach-bar-card {
+        flex: 0 0 78vw;
+        scroll-snap-align: center;
+        border-radius: 21px;
+      }
+      .section-display-title {
+        margin-bottom: 17px;
+        font-size: clamp(38px, 11vw, 54px);
+      }
+
+      .stay-facts,
+      .stay-facts.is-rich {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+      .stay-fact {
+        min-height: 60px;
+        padding: 10px;
+        gap: 8px;
+        font-size: 10px;
+      }
+      .stay-fact-icon {
+        flex-basis: 30px;
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        font-size: 11px;
+      }
+
+      .light-story-image.result-gallery {
+        min-height: 0;
+        height: min(56vh, 440px);
+        aspect-ratio: auto;
+        border-radius: 24px;
+      }
+
+      .result-media-viewer {
+        padding: 54px 10px 58px;
+      }
+      .result-media-viewer img {
+        max-width: 100%;
+        max-height: 82vh;
+        border-radius: 10px;
+      }
+      .viewer-arrow {
+        top: auto;
+        bottom: max(11px, env(safe-area-inset-bottom));
+        width: 42px;
+        height: 42px;
+        transform: none;
+      }
+      .viewer-prev { left: calc(50% - 58px); }
+      .viewer-next { right: calc(50% - 58px); }
+      .viewer-count { bottom: max(20px, env(safe-area-inset-bottom)); }
+    }
+
+    @media (max-height: 720px) and (max-width: 780px) {
+      .period-screen { padding-top: 54px; }
+      .period-deck { height: 49vh; }
+      .period-card {
+        height: min(43vh, 365px);
+        margin-top: calc(min(43vh, 365px) / -2);
+      }
+
+      .style-screen { padding-top: 46px; }
+      .style-grid {
+        height: 58vh;
+        grid-template-rows: minmax(125px, 1.15fr) minmax(92px, 1fr) minmax(92px, 1fr);
+      }
+      .style-heading h2 { font-size: 29px; }
+      .style-note { display: none; }
+    }
+
   </style>
 </head>
 
@@ -2601,7 +3137,6 @@
 
     <header class="topbar">
       <a class="brand-link" href="index.html" id="backToSite">Halkidiki Explorer</a>
-      <div class="language-switcher" id="languageSwitcher" aria-label="Language"></div>
     </header>
 
     <!-- ======================================================
@@ -2732,9 +3267,6 @@
             </div>
           </section>
 
-          <div class="party-summary" id="partySummary">
-            2 adults
-          </div>
         </div>
       </div>
 
@@ -2803,7 +3335,7 @@
 
         <div class="finding-visual" id="findingVisual" aria-hidden="true">
           <div class="finding-card pos-0" data-find-card="0">
-            <img src="images/finding/finding-background.webp" alt="" onerror="this.style.display='none'">
+            <img src="images/finding/beach.webp" alt="" onerror="this.style.display='none'">
           </div>
 
           <div class="finding-card pos-1" data-find-card="1">
@@ -2963,33 +3495,35 @@
         <div class="story-photo-content">
           <div class="story-eyebrow" data-i18n="beachTime">Your beach time</div>
           <h3 id="matchBeachTimeTitle">Take it slow at Perea</h3>
-          <p id="matchBeachTimeText">
-            The gentle entry and usually calm water make this an easy place to swim, relax in the sun or walk along the waterfront between swims.
-          </p>
+          <p id="matchBeachTimeText" class="beach-time-note" hidden></p>
 
-          <div class="inline-chips" id="matchBeachTimeChips">
-            <span class="inline-chip">Swimming</span>
-            <span class="inline-chip">Sunbathing</span>
-            <span class="inline-chip">Pedal boats</span>
-            <span class="inline-chip">Walking</span>
+          <div class="beach-ideal-block">
+            <span class="beach-detail-label" data-i18n="idealForLabel">Ideal for</span>
+            <div class="inline-chips" id="matchBeachIdeal"></div>
           </div>
+
+          <div class="beach-detail-grid" id="matchBeachInfoGrid"></div>
+        </div>
+      </article>
+
+      <!-- BEACH BARS -->
+      <article class="story-section light-section beach-bars-section" id="matchBeachBarsSection">
+        <div class="light-section-inner">
+          <div class="section-kicker" data-i18n="beachBarsKicker">On this beach</div>
+          <h3 class="section-display-title" data-i18n="beachBarsTitle">Beach bars nearby</h3>
+          <div class="beach-bar-list" id="matchBeachBarsList"></div>
         </div>
       </article>
 
       <!-- LUNCH -->
       <article class="story-section light-section" id="matchLunchSection">
         <div class="light-section-inner light-story-card">
-          <div class="light-story-image">
-            <img id="matchLunchImage" src="images/results/aigialos.webp" alt="">
-          </div>
+          <div class="light-story-image result-gallery" id="matchLunchGallery"></div>
 
           <div class="light-story-copy">
             <div class="section-kicker" data-i18n="lunchSea">Lunch by the sea</div>
             <h3 id="matchLunchName">Aigialos</h3>
 
-            <p id="matchLunchText">
-              A seaside taverna on the Perea promenade with Greek and Mediterranean dishes, seafood and open views across the Thermaic Gulf.
-            </p>
 
             <div class="restaurant-meta" id="matchLunchMeta">
               <span>Greek</span>
@@ -3013,6 +3547,14 @@
           </p>
         </div>
       </article>
+
+      <div class="result-media-viewer" id="resultMediaViewer" aria-hidden="true">
+        <button class="viewer-close" id="viewerClose" type="button" aria-label="Close">×</button>
+        <button class="viewer-arrow viewer-prev" id="viewerPrev" type="button" aria-label="Previous image">‹</button>
+        <img id="viewerImage" alt="">
+        <button class="viewer-arrow viewer-next" id="viewerNext" type="button" aria-label="Next image">›</button>
+        <div class="viewer-count" id="viewerCount"></div>
+      </div>
 
       <div class="match-toast" id="matchToast" role="status" aria-live="polite"></div>
 
@@ -3118,6 +3660,9 @@
         somewhereElse: "Take me somewhere else",
         startDay: "Start your day by the sea",
         beachTime: "Your beach time",
+        idealForLabel: "Ideal for",
+        beachBarsKicker: "On this beach",
+        beachBarsTitle: "Beach bars nearby",
         lunchSea: "Lunch by the sea",
         somethingDifferent: "Try something different",
         endKicker: "This is only your first match",
@@ -3166,6 +3711,9 @@
         somewhereElse: "Du-mă în altă parte",
         startDay: "Începe ziua lângă mare",
         beachTime: "Timpul tău la plajă",
+        idealForLabel: "Ideală pentru",
+        beachBarsKicker: "Pe această plajă",
+        beachBarsTitle: "Beach baruri în apropiere",
         lunchSea: "Prânz lângă mare",
         somethingDifferent: "Încearcă ceva diferit",
         endKicker: "Acesta este doar primul match",
@@ -3784,11 +4332,14 @@
     const matchBeachTimeImage = document.getElementById("matchBeachTimeImage");
     const matchBeachTimeTitle = document.getElementById("matchBeachTimeTitle");
     const matchBeachTimeText = document.getElementById("matchBeachTimeText");
-    const matchBeachTimeChips = document.getElementById("matchBeachTimeChips");
+    const matchBeachIdeal = document.getElementById("matchBeachIdeal");
+    const matchBeachInfoGrid = document.getElementById("matchBeachInfoGrid");
 
-    const matchLunchImage = document.getElementById("matchLunchImage");
+    const matchBeachBarsSection = document.getElementById("matchBeachBarsSection");
+    const matchBeachBarsList = document.getElementById("matchBeachBarsList");
+
+    const matchLunchGallery = document.getElementById("matchLunchGallery");
     const matchLunchName = document.getElementById("matchLunchName");
-    const matchLunchText = document.getElementById("matchLunchText");
     const matchLunchMeta = document.getElementById("matchLunchMeta");
 
     const matchExperienceImage = document.getElementById("matchExperienceImage");
@@ -3802,20 +4353,29 @@
     const endAnotherStay = document.getElementById("endAnotherStay");
     const endSomewhereElse = document.getElementById("endSomewhereElse");
     const matchToast = document.getElementById("matchToast");
+    const resultMediaViewer = document.getElementById("resultMediaViewer");
+    const viewerImage = document.getElementById("viewerImage");
+    const viewerClose = document.getElementById("viewerClose");
+    const viewerPrev = document.getElementById("viewerPrev");
+    const viewerNext = document.getElementById("viewerNext");
+    const viewerCount = document.getElementById("viewerCount");
 
     let activePeriodIndex = 2; // June starts in front.
     let dragStartX = 0;
     let dragDeltaX = 0;
     let isDragging = false;
+    let suppressPeriodClick = false;
 
     function getInitialLanguage() {
       const params = new URLSearchParams(window.location.search);
       const fromUrl = params.get("lang");
       const fromStorage = localStorage.getItem("halkidiki_language");
+      const fromMainSite = localStorage.getItem("language");
       const fromHtml = document.documentElement.lang;
 
       if (fromUrl && translations[fromUrl]) return fromUrl;
       if (fromStorage && translations[fromStorage]) return fromStorage;
+      if (fromMainSite && translations[fromMainSite]) return fromMainSite;
       if (fromHtml && translations[fromHtml]) return fromHtml;
       return "en";
     }
@@ -3843,6 +4403,7 @@
 
       document.documentElement.lang = LANGUAGE_CONFIG[lang]?.htmlLang || lang;
       localStorage.setItem("halkidiki_language", lang);
+      localStorage.setItem("language", lang);
 
       document.querySelectorAll("[data-i18n]").forEach((element) => {
         const key = element.dataset.i18n;
@@ -3870,6 +4431,7 @@
     }
 
     function buildLanguageSwitcher() {
+      if (!languageSwitcher) return;
       languageSwitcher.innerHTML = "";
 
       Object.entries(LANGUAGE_CONFIG).forEach(([code, config]) => {
@@ -3956,13 +4518,13 @@
 
       const configs = mobile
         ? {
-            "-3": { x: -128, scale: .69, rotate: 29, z: -220, opacity: 0 },
-            "-2": { x: -94,  scale: .77, rotate: 23, z: -155, opacity: .42 },
-            "-1": { x: -60,  scale: .88, rotate: 16, z: -80,  opacity: .80 },
-             "0": { x: 0,    scale: 1,   rotate: 0,  z: 20,   opacity: 1 },
-             "1": { x: 60,   scale: .88, rotate: -16,z: -80, opacity: .80 },
-             "2": { x: 94,   scale: .77, rotate: -23,z: -155,opacity: .42 },
-             "3": { x: 128,  scale: .69, rotate: -29,z: -220,opacity: 0 }
+            "-3": { x: -190, scale: .66, rotate: 22, z: -220, opacity: 0 },
+            "-2": { x: -148, scale: .73, rotate: 17, z: -155, opacity: .16 },
+            "-1": { x: -108, scale: .84, rotate: 10, z: -80,  opacity: .52 },
+             "0": { x: 0,    scale: 1,   rotate: 0,  z: 30,   opacity: 1 },
+             "1": { x: 108,  scale: .84, rotate: -10,z: -80, opacity: .52 },
+             "2": { x: 148,  scale: .73, rotate: -17,z: -155,opacity: .16 },
+             "3": { x: 190,  scale: .66, rotate: -22,z: -220,opacity: 0 }
           }
         : {
             "-3": { x: -440, scale: .68, rotate: 26, z: -250, opacity: .12 },
@@ -4015,6 +4577,11 @@
         card.append(img, copy);
 
         card.addEventListener("click", () => {
+          if (suppressPeriodClick) {
+            suppressPeriodClick = false;
+            return;
+          }
+
           if (index === activePeriodIndex) {
             selectCurrentPeriodAndContinue();
             return;
@@ -4068,25 +4635,12 @@
 
     function updatePeriodBackground() {
       const staticSource = "images/periods/periods-background.webp";
-
-      periodBackground.style.opacity = "0";
-
-      window.setTimeout(() => {
-        periodBackground.style.display = "";
-        periodBackground.src = staticSource;
-        periodBackground.onerror = () => {
-          periodBackground.style.display = "none";
-        };
-
-        if (periodBackground.complete && periodBackground.naturalWidth > 0) {
-          periodBackground.style.opacity = "1";
-        } else {
-          periodBackground.onload = () => {
-            periodBackground.style.display = "";
-            periodBackground.style.opacity = "1";
-          };
-        }
-      }, 160);
+      periodBackground.style.display = "";
+      periodBackground.src = staticSource;
+      periodBackground.style.opacity = "1";
+      periodBackground.onerror = () => {
+        periodBackground.style.display = "none";
+      };
     }
 
     function movePeriod(direction) {
@@ -4157,7 +4711,7 @@
 
       adultsValue.textContent = tripState.adults;
       childrenValue.textContent = tripState.children;
-      partySummary.textContent = partySummaryText();
+      if (partySummary) partySummary.textContent = partySummaryText();
 
       adultsMinus.disabled = tripState.adults <= 1;
       adultsPlus.disabled = tripState.adults >= 20;
@@ -4235,26 +4789,12 @@
 
     function updateStyleBackground(styleId = null) {
       const staticSource = "images/styles/styles-background.webp";
-
-      styleBackground.style.opacity = "0";
-
-      window.setTimeout(() => {
-        styleBackground.style.display = "";
-        styleBackground.src = staticSource;
-
-        styleBackground.onerror = () => {
-          styleBackground.style.display = "none";
-        };
-
-        if (styleBackground.complete && styleBackground.naturalWidth > 0) {
-          styleBackground.style.opacity = "1";
-        } else {
-          styleBackground.onload = () => {
-            styleBackground.style.display = "";
-            styleBackground.style.opacity = "1";
-          };
-        }
-      }, 100);
+      styleBackground.style.display = "";
+      styleBackground.src = staticSource;
+      styleBackground.style.opacity = "1";
+      styleBackground.onerror = () => {
+        styleBackground.style.display = "none";
+      };
     }
 
     function updateStyleSelectionUI() {
@@ -4315,7 +4855,7 @@
     function renderStyleGrid() {
       if (!styleGrid) return;
 
-      const order = getStyleOrder();
+      const order = getStyleOrder().slice(0, 5);
       styleGrid.innerHTML = "";
 
       order.forEach((styleId, index) => {
@@ -4789,10 +5329,21 @@
       );
     }
 
+    function isBeachBarItem(item) {
+      const type = categoryToken(item?.type);
+      return type === "beach_bar" || type === "beachbar" || /beach.*bar/.test(type);
+    }
+
+    function isDiningItem(item) {
+      if (isBeachBarItem(item)) return false;
+      const type = categoryToken(item?.type);
+      return /restaurant|taverna|tavern|fish|grill|meze/.test(type);
+    }
+
     function ecosystemForBeach(beachId) {
       const restaurants = linkedRestaurants(beachId);
-      const beachBars = restaurants.filter((item) => item.type === "beach_bar");
-      const dining = restaurants.filter((item) => item.type === "restaurant");
+      const beachBars = restaurants.filter(isBeachBarItem);
+      const dining = restaurants.filter(isDiningItem);
       const businesses = linkedLocalBusinesses(beachId);
       const activities = linkedWhatToDo(beachId);
 
@@ -5207,8 +5758,14 @@
     }
 
     function pickBestLinkedRestaurant(beachId, type, state) {
-      const items = linkedRestaurants(beachId)
-        .filter((item) => item.type === type);
+      const requested = Array.isArray(type) ? type : [type];
+      const requestedTokens = requested.map(categoryToken);
+
+      const items = linkedRestaurants(beachId).filter((item) => {
+        if (requestedTokens.includes("beach_bar")) return isBeachBarItem(item);
+        if (requestedTokens.includes("restaurant")) return isDiningItem(item);
+        return requestedTokens.includes(categoryToken(item.type));
+      });
 
       const styles = state.holidayStyle ?? [];
 
@@ -5222,7 +5779,7 @@
 
           if (state.children > 0 && features.includes("family_friendly")) score += 6;
           if (styles.includes("food_local_life") && cuisines) score += 5;
-          if (styles.includes("beach_bars") && type === "beach_bar") score += 7;
+          if (styles.includes("beach_bars") && isBeachBarItem(item)) score += 7;
           if (styles.includes("peace_quiet") && !features.includes("party")) score += 2;
 
           return { item, score };
@@ -5313,6 +5870,54 @@
       ).slice(0, 5);
     }
 
+    function beachInfoFromDetail(detail, lang = currentLanguage) {
+      const getLocal = (value) => {
+        if (value == null) return "";
+        if (typeof value === "object" && !Array.isArray(value)) {
+          return value[lang] ?? value.en ?? "";
+        }
+        return String(value);
+      };
+
+      const items = [];
+      const push = (labelEn, labelRo, value) => {
+        if (value === "" || value == null || value === false) return;
+        items.push({
+          label: lang === "ro" ? labelRo : labelEn,
+          value: String(value)
+        });
+      };
+
+      if (Number.isFinite(Number(detail?.length))) {
+        push("Beach length", "Lungime plajă", `${Number(detail.length)} m`);
+      }
+
+      push("Water entry", "Intrare în apă", getLocal(detail?.beachInfo?.waterEntry));
+      push("Wave level", "Nivelul valurilor", getLocal(detail?.beachInfo?.waveLevel));
+
+      const sunbedPrice = detail?.facilities?.sunbedPrice;
+      if (sunbedPrice) {
+        push("Sunbeds", "Șezlonguri", sunbedPrice);
+      } else if (detail?.facilities?.sunbeds === true) {
+        push("Sunbeds", "Șezlonguri", lang === "ro" ? "Disponibile" : "Available");
+      }
+
+      if (detail?.facilities?.parkingAvailable === true) {
+        const parkingDetail = getLocal(detail?.quickFacts?.parkingDifficulty);
+        push("Parking", "Parcare", parkingDetail || (lang === "ro" ? "Disponibilă" : "Available"));
+      } else if (detail?.facilities?.parkingAvailable === false) {
+        push("Parking", "Parcare", lang === "ro" ? "Limitată / indisponibilă" : "Limited / unavailable");
+      }
+
+      push("Walking / access", "Acces pe jos", getLocal(detail?.quickFacts?.walkingDistance));
+
+      return items.slice(0, 6);
+    }
+
+    function idealForFromDetail(detail, lang = currentLanguage) {
+      return (detail?.idealFor?.[lang] ?? detail?.idealFor?.en ?? []).slice(0, 5);
+    }
+
     function detailImageList(kind, id, detail, fallback = []) {
       const candidates = [
         ...(Array.isArray(detail?.images) ? detail.images : []),
@@ -5390,57 +5995,97 @@
       };
     }
 
+    function translateRestaurantMeta(value, lang) {
+      const token = categoryToken(value);
+      const map = {
+        beach_bar: { en: "Beach bar", ro: "Beach bar" },
+        restaurant: { en: "Restaurant", ro: "Restaurant" },
+        taverna: { en: "Taverna", ro: "Tavernă" },
+        tavern: { en: "Taverna", ro: "Tavernă" },
+        seafood: { en: "Seafood", ro: "Fructe de mare" },
+        greek: { en: "Greek", ro: "Grecesc" },
+        mediterranean: { en: "Mediterranean", ro: "Mediteranean" },
+        international: { en: "International", ro: "Internațional" },
+        sea_view: { en: "Sea view", ro: "Vedere la mare" },
+        family_friendly: { en: "Family friendly", ro: "Potrivit pentru familii" },
+        parking: { en: "Parking", ro: "Parcare" },
+        sunbeds: { en: "Sunbeds", ro: "Șezlonguri" },
+        beachfront: { en: "Beachfront", ro: "Pe plajă" },
+        cosy: { en: "Cosy", ro: "Primitor" },
+        casual: { en: "Casual", ro: "Relaxat" },
+        quiet: { en: "Quiet", ro: "Liniștit" }
+      };
+      return map[token]?.[lang] ?? String(value).replace(/_/g, " ");
+    }
+
+    async function buildBeachBars(beachId, state) {
+      const candidates = linkedRestaurants(beachId)
+        .filter(isBeachBarItem)
+        .map((item) => ({ item, score: numericRating(item) * 3 + (item.featured ? 2 : 0) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 4);
+
+      return Promise.all(candidates.map(async ({ item }) => {
+        const detail = await loadDetail("restaurants", item.id);
+        const source = detail ?? item;
+        const images = detailImageList("restaurants", item.id, source, item.image ? [item.image] : []);
+        const rawMeta = [
+          source.type ?? item.type ?? "beach_bar",
+          ...(source.features ?? item.features ?? []).filter((v) => /sunbed|sea_view|family|parking|beachfront/i.test(String(v))).slice(0, 3)
+        ];
+
+        return {
+          id: item.id,
+          name: {
+            en: source.titleEn ?? item.titleEn ?? item.id,
+            ro: source.titleRo ?? item.titleRo ?? source.titleEn ?? item.titleEn ?? item.id
+          },
+          images,
+          meta: {
+            en: rawMeta.map((v) => translateRestaurantMeta(v, "en")),
+            ro: rawMeta.map((v) => translateRestaurantMeta(v, "ro"))
+          },
+          rating: numericRating(source) || numericRating(item) || 0
+        };
+      }));
+    }
+
     async function buildLunch(beachId, state) {
       const indexItem = pickBestLinkedRestaurant(beachId, "restaurant", state);
       if (!indexItem) return null;
 
       const detail = await loadDetail("restaurants", indexItem.id);
       const source = detail ?? indexItem;
+      const images = detailImageList(
+        "restaurants",
+        indexItem.id,
+        source,
+        indexItem.image ? [indexItem.image] : []
+      );
 
-      const image =
-        source.heroImage
-        || source.images?.[0]
-        || indexItem.image
-        || "";
-
-      const meta = [
-        ...(source.cuisineTypes ?? indexItem.cuisineTypes ?? []).slice(0, 2)
+      const metaRaw = [
+        source.type ?? indexItem.type ?? "restaurant",
+        ...(source.cuisineTypes ?? indexItem.cuisineTypes ?? []).slice(0, 3)
       ];
 
-      if ((source.features ?? indexItem.features ?? []).includes("sea_view")) {
-        meta.push("sea_view");
-      }
+      const features = source.features ?? indexItem.features ?? [];
+      if (features.includes("sea_view")) metaRaw.push("sea_view");
+      if (features.includes("family_friendly")) metaRaw.push("family_friendly");
 
-      if ((source.features ?? indexItem.features ?? []).includes("family_friendly")) {
-        meta.push("family_friendly");
-      }
-
-      const translateMeta = (value, lang) => {
-        const map = {
-          seafood: { en: "Seafood", ro: "Fructe de mare" },
-          greek: { en: "Greek", ro: "Grecesc" },
-          mediterranean: { en: "Mediterranean", ro: "Mediteranean" },
-          international: { en: "International", ro: "Internațional" },
-          sea_view: { en: "Sea view", ro: "Vedere la mare" },
-          family_friendly: { en: "Family friendly", ro: "Potrivit pentru familii" }
-        };
-        return map[value]?.[lang] ?? value.replace(/_/g, " ");
-      };
+      const atmosphere = (source.atmosphere ?? []).slice(0, 1);
+      metaRaw.push(...atmosphere);
 
       return {
         id: source.id ?? indexItem.id,
-        image: mediaUrl("restaurants", indexItem.id, image),
+        images,
+        image: images[0] ?? "",
         name: {
           en: source.titleEn ?? indexItem.titleEn ?? "",
           ro: source.titleRo ?? indexItem.titleRo ?? source.titleEn ?? ""
         },
-        text: {
-          en: cleanText(source.descriptionEn ?? indexItem.shortEn ?? "", 290),
-          ro: cleanText(source.descriptionRo ?? indexItem.shortRo ?? source.descriptionEn ?? "", 290)
-        },
         meta: {
-          en: meta.map((value) => translateMeta(value, "en")),
-          ro: meta.map((value) => translateMeta(value, "ro"))
+          en: [...new Set(metaRaw)].slice(0, 6).map((value) => translateRestaurantMeta(value, "en")),
+          ro: [...new Set(metaRaw)].slice(0, 6).map((value) => translateRestaurantMeta(value, "ro"))
         }
       };
     }
@@ -5493,8 +6138,9 @@
       const beachData = beachDetail ?? beachIndex ?? {};
       const accData = accommodationDetail ?? accIndex ?? {};
 
-      const [startOfDay, lunch, experience] = await Promise.all([
+      const [startOfDay, beachBars, lunch, experience] = await Promise.all([
         buildStartOfDay(beachId, tripState),
+        buildBeachBars(beachId, tripState),
         buildLunch(beachId, tripState),
         buildExperience(beachId, tripState)
       ]);
@@ -5523,17 +6169,15 @@
         ?? beachIndex?.name?.ro
         ?? beachNameEn;
 
-      const descriptionEn = cleanText(
-        beachData.description?.en
-        ?? "",
-        430
-      );
+      const beachTypeEn = cleanText(beachData.beachType?.en ?? "", 90);
+      const beachTypeRo = cleanText(beachData.beachType?.ro ?? beachTypeEn, 90);
+      const vibeEn = cleanText(beachData.beachInfo?.vibe?.en ?? "", 90);
+      const vibeRo = cleanText(beachData.beachInfo?.vibe?.ro ?? vibeEn, 90);
 
-      const descriptionRo = cleanText(
-        beachData.description?.ro
-        ?? descriptionEn,
-        430
-      );
+      const descriptionEn = [beachTypeEn, vibeEn].filter(Boolean).join(" · ")
+        || cleanText(beachData.description?.en ?? "", 180);
+      const descriptionRo = [beachTypeRo, vibeRo].filter(Boolean).join(" · ")
+        || cleanText(beachData.description?.ro ?? descriptionEn, 180);
 
       const accDescriptionEn = cleanText(
         accData.descriptionEn
@@ -5649,6 +6293,14 @@
           activities: {
             en: beachData.activities?.en ?? beachActivities,
             ro: beachData.activities?.ro ?? beachData.activities?.en ?? beachActivities
+          },
+          idealFor: {
+            en: idealForFromDetail(beachData, "en"),
+            ro: idealForFromDetail(beachData, "ro")
+          },
+          info: {
+            en: beachInfoFromDetail(beachData, "en"),
+            ro: beachInfoFromDetail(beachData, "ro")
           }
         },
 
@@ -5670,6 +6322,7 @@
         },
 
         startOfDay,
+        beachBars,
 
         beachTime: {
           title: {
@@ -5818,12 +6471,38 @@
       });
     }
 
+    function stayFactIcon(value) {
+      const text = normalizeKey(value);
+      if (/guest|oaspet|oaspe/.test(text)) return "👥";
+      if (/bedroom|dormitor/.test(text)) return "🛏️";
+      if (/bathroom|baie|bai/.test(text)) return "🚿";
+      if (/m2|m²|sqm/.test(String(value).toLowerCase())) return "↔";
+      if (/beach|plaja/.test(text)) return "🏖️";
+      if (/parking|parcare/.test(text)) return "P";
+      if (/wifi|wi-fi/.test(text)) return "Wi";
+      if (/air-conditioning|air-conditioning|aer-conditionat/.test(text)) return "❄";
+      if (/kitchen|bucatarie/.test(text)) return "◉";
+      if (/balcony|balcon/.test(text)) return "☀";
+      if (/pool|piscina/.test(text)) return "≈";
+      if (/view|vedere/.test(text)) return "◒";
+      return "•";
+    }
+
     function renderStayFacts(values) {
       matchStayFacts.innerHTML = "";
-      values.forEach((value) => {
+      values.slice(0, 10).forEach((value) => {
         const el = document.createElement("div");
         el.className = "stay-fact";
-        el.textContent = value;
+
+        const icon = document.createElement("span");
+        icon.className = "stay-fact-icon";
+        icon.textContent = stayFactIcon(value);
+
+        const label = document.createElement("span");
+        label.className = "stay-fact-text";
+        label.textContent = value;
+
+        el.append(icon, label);
         matchStayFacts.appendChild(el);
       });
     }
@@ -5870,6 +6549,7 @@
         img.onerror = () => {
           slide.style.display = "none";
         };
+        img.addEventListener("click", () => openMediaViewer(cleanImages, index));
 
         slide.appendChild(img);
         stayGallery.appendChild(slide);
@@ -5941,6 +6621,179 @@
       }
     }
 
+    let viewerImages = [];
+    let viewerIndex = 0;
+    let viewerDragStartX = 0;
+    let viewerDragDeltaX = 0;
+
+    function updateMediaViewer() {
+      if (!viewerImages.length) return;
+      viewerIndex = (viewerIndex + viewerImages.length) % viewerImages.length;
+      viewerImage.src = viewerImages[viewerIndex];
+      viewerCount.textContent = `${viewerIndex + 1} / ${viewerImages.length}`;
+      const multiple = viewerImages.length > 1;
+      viewerPrev.style.display = multiple ? "grid" : "none";
+      viewerNext.style.display = multiple ? "grid" : "none";
+    }
+
+    function openMediaViewer(images, index = 0) {
+      viewerImages = [...new Set((images ?? []).filter(Boolean))];
+      if (!viewerImages.length) return;
+      viewerIndex = Math.max(0, Math.min(index, viewerImages.length - 1));
+      updateMediaViewer();
+      resultMediaViewer.classList.add("open");
+      resultMediaViewer.setAttribute("aria-hidden", "false");
+    }
+
+    function closeMediaViewer() {
+      resultMediaViewer.classList.remove("open");
+      resultMediaViewer.setAttribute("aria-hidden", "true");
+    }
+
+    function renderCompactGallery(container, images, label = "Gallery") {
+      if (!container) return;
+      const cleanImages = [...new Set((images ?? []).filter(Boolean))].slice(0, 8);
+      container.innerHTML = "";
+
+      if (!cleanImages.length) {
+        container.style.display = "none";
+        return;
+      }
+
+      container.style.display = "";
+      let active = 0;
+      const slides = [];
+      const dots = [];
+
+      const show = (index) => {
+        active = (index + cleanImages.length) % cleanImages.length;
+        slides.forEach((slide, i) => slide.classList.toggle("active", i === active));
+        dots.forEach((dot, i) => dot.classList.toggle("active", i === active));
+        const count = container.querySelector(".gallery-count");
+        if (count) count.textContent = `${active + 1} / ${cleanImages.length}`;
+      };
+
+      cleanImages.forEach((src, index) => {
+        const slide = document.createElement("div");
+        slide.className = "result-gallery-slide" + (index === 0 ? " active" : "");
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = "";
+        img.loading = index === 0 ? "eager" : "lazy";
+        img.addEventListener("click", () => openMediaViewer(cleanImages, index));
+        slide.appendChild(img);
+        container.appendChild(slide);
+        slides.push(slide);
+      });
+
+      if (cleanImages.length > 1) {
+        const prev = document.createElement("button");
+        prev.type = "button";
+        prev.className = "gallery-arrow prev";
+        prev.textContent = "‹";
+        prev.setAttribute("aria-label", `Previous ${label} photo`);
+        prev.addEventListener("click", (event) => { event.stopPropagation(); show(active - 1); });
+
+        const next = document.createElement("button");
+        next.type = "button";
+        next.className = "gallery-arrow next";
+        next.textContent = "›";
+        next.setAttribute("aria-label", `Next ${label} photo`);
+        next.addEventListener("click", (event) => { event.stopPropagation(); show(active + 1); });
+
+        const dotWrap = document.createElement("div");
+        dotWrap.className = "gallery-dots";
+        cleanImages.forEach((_, index) => {
+          const dot = document.createElement("button");
+          dot.type = "button";
+          dot.className = "gallery-dot" + (index === 0 ? " active" : "");
+          dot.addEventListener("click", () => show(index));
+          dotWrap.appendChild(dot);
+          dots.push(dot);
+        });
+
+        container.append(prev, next, dotWrap);
+      }
+
+      const count = document.createElement("div");
+      count.className = "gallery-count";
+      count.textContent = `1 / ${cleanImages.length}`;
+      container.appendChild(count);
+
+      let dragStart = 0;
+      let dragDelta = 0;
+      container.onpointerdown = (event) => {
+        dragStart = event.clientX;
+        dragDelta = 0;
+        container.setPointerCapture?.(event.pointerId);
+      };
+      container.onpointermove = (event) => {
+        if (!dragStart) return;
+        dragDelta = event.clientX - dragStart;
+      };
+      container.onpointerup = (event) => {
+        if (dragDelta <= -38) show(active + 1);
+        if (dragDelta >= 38) show(active - 1);
+        dragStart = 0;
+        dragDelta = 0;
+        try { container.releasePointerCapture?.(event.pointerId); } catch (_) {}
+      };
+    }
+
+    function renderBeachInfo(items) {
+      matchBeachInfoGrid.innerHTML = "";
+      (items ?? []).forEach((item) => {
+        const card = document.createElement("div");
+        card.className = "beach-detail-card";
+        const label = document.createElement("span");
+        label.textContent = item.label;
+        const value = document.createElement("strong");
+        value.textContent = item.value;
+        card.append(label, value);
+        matchBeachInfoGrid.appendChild(card);
+      });
+    }
+
+    function renderBeachBars(items) {
+      if (!matchBeachBarsSection || !matchBeachBarsList) return;
+      const bars = items ?? [];
+      if (!bars.length) {
+        matchBeachBarsSection.style.display = "none";
+        return;
+      }
+
+      matchBeachBarsSection.style.display = "";
+      matchBeachBarsList.innerHTML = "";
+
+      bars.forEach((bar) => {
+        const card = document.createElement("article");
+        card.className = "beach-bar-card";
+
+        const media = document.createElement("div");
+        media.className = "beach-bar-media";
+        const image = document.createElement("img");
+        image.src = bar.images?.[0] ?? "";
+        image.alt = "";
+        image.loading = "lazy";
+        if ((bar.images ?? []).length) {
+          image.addEventListener("click", () => openMediaViewer(bar.images, 0));
+        }
+        media.appendChild(image);
+
+        const body = document.createElement("div");
+        body.className = "beach-bar-body";
+        const title = document.createElement("h4");
+        title.textContent = localizedValue(bar.name);
+        const meta = document.createElement("div");
+        meta.className = "restaurant-meta";
+        renderPills(meta, localizedArray(bar.meta), "");
+        body.append(title, meta);
+
+        card.append(media, body);
+        matchBeachBarsList.appendChild(card);
+      });
+    }
+
     function renderMatch(match) {
       currentMatch = match;
 
@@ -5957,7 +6810,7 @@
       renderPills(matchBeachFacts, localizedArray(match.beach.facts), "fact-pill");
 
       matchStayName.textContent = localizedValue(match.accommodation.name);
-      matchStayDescription.textContent = localizedValue(match.accommodation.description);
+      if (matchStayDescription) matchStayDescription.style.display = "none";
       renderStayFacts(localizedArray(match.accommodation.facts));
       matchStayFacts.classList.toggle(
         "is-rich",
@@ -5992,22 +6845,20 @@
         ]
       );
       matchBeachTimeTitle.textContent = localizedValue(match.beachTime.title);
-      matchBeachTimeText.textContent = localizedValue(match.beachTime.text);
-      renderPills(matchBeachTimeChips, localizedArray(match.beach.activities), "inline-chip");
+      if (matchBeachTimeText) matchBeachTimeText.textContent = "";
+      renderPills(matchBeachIdeal, localizedArray(match.beach.idealFor), "inline-chip");
+      renderBeachInfo(localizedArray(match.beach.info));
+      renderBeachBars(match.beachBars);
 
       const lunchSection = document.getElementById("matchLunchSection");
       if (match.lunch) {
         lunchSection.style.display = "";
-        setResultImage(
-          matchLunchImage,
-          match.lunch.image,
-          [
-            match.beach.heroImage,
-            "images/beach_background.webp"
-          ]
+        renderCompactGallery(
+          matchLunchGallery,
+          match.lunch.images?.length ? match.lunch.images : [match.lunch.image],
+          "restaurant"
         );
         matchLunchName.textContent = localizedValue(match.lunch.name);
-        matchLunchText.textContent = localizedValue(match.lunch.text);
         renderPills(matchLunchMeta, localizedArray(match.lunch.meta), "");
       } else {
         lunchSection.style.display = "none";
@@ -6265,10 +7116,16 @@
       isDragging = false;
       periodStage.classList.remove("dragging");
 
-      const threshold = 44;
+      const threshold = window.matchMedia("(max-width: 700px)").matches ? 28 : 44;
+      const moved = Math.abs(dragDeltaX) >= threshold;
 
       if (dragDeltaX <= -threshold) movePeriod(1);
       if (dragDeltaX >= threshold) movePeriod(-1);
+
+      if (moved) {
+        suppressPeriodClick = true;
+        window.setTimeout(() => { suppressPeriodClick = false; }, 260);
+      }
 
       dragDeltaX = 0;
 
@@ -6479,9 +7336,35 @@
     stayGallery.addEventListener("pointerup", finishStayDrag);
     stayGallery.addEventListener("pointercancel", finishStayDrag);
 
+    viewerClose.addEventListener("click", closeMediaViewer);
+    viewerPrev.addEventListener("click", () => { viewerIndex -= 1; updateMediaViewer(); });
+    viewerNext.addEventListener("click", () => { viewerIndex += 1; updateMediaViewer(); });
+    resultMediaViewer.addEventListener("click", (event) => {
+      if (event.target === resultMediaViewer) closeMediaViewer();
+    });
+    resultMediaViewer.addEventListener("pointerdown", (event) => {
+      viewerDragStartX = event.clientX;
+      viewerDragDeltaX = 0;
+    });
+    resultMediaViewer.addEventListener("pointermove", (event) => {
+      if (!viewerDragStartX) return;
+      viewerDragDeltaX = event.clientX - viewerDragStartX;
+    });
+    resultMediaViewer.addEventListener("pointerup", () => {
+      if (viewerDragDeltaX <= -45) { viewerIndex += 1; updateMediaViewer(); }
+      if (viewerDragDeltaX >= 45) { viewerIndex -= 1; updateMediaViewer(); }
+      viewerDragStartX = 0;
+      viewerDragDeltaX = 0;
+    });
+    document.addEventListener("keydown", (event) => {
+      if (!resultMediaViewer.classList.contains("open")) return;
+      if (event.key === "Escape") closeMediaViewer();
+      if (event.key === "ArrowLeft") { viewerIndex -= 1; updateMediaViewer(); }
+      if (event.key === "ArrowRight") { viewerIndex += 1; updateMediaViewer(); }
+    });
+
     window.addEventListener("resize", updateDeckTransforms);
 
-    buildLanguageSwitcher();
     renderPeriodDeck();
     updatePartyVisual(false);
     renderStyleGrid();
