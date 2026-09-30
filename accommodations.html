@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b4f78">
+  <title>Find Accommodation — Halkidiki Explorer</title>
+  <link rel="icon" type="image/png" href="favicon-32x32.png">
+
+  <style>
+    :root {
+      --ink: #071a33;
+      --muted: #66758d;
+      --blue: #087df1;
+      --blue-dark: #005ec7;
+      --paper: #f4f8fb;
+      --line: #dce7f1;
+      --safe-top: max(16px, env(safe-area-inset-top));
+      --safe-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(8,125,241,.10), transparent 34%),
+        linear-gradient(180deg, #eef7fd 0%, #f8fbfd 38%, #f3f6f8 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button,
+    input,
+    select,
+    a {
+      font: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .page-topbar {
+      position: sticky;
+      top: 0;
+      z-index: 70;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 68px;
+      padding:
+        var(--safe-top)
+        clamp(16px, 4vw, 48px)
+        12px;
+      background: rgba(245,250,253,.86);
+      border-bottom: 1px solid rgba(7,26,51,.07);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .back-link,
+    .brand-link {
+      text-decoration: none;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #31516d;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .brand-link {
+      color: #0a5f98;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .accommodation-hero {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: clamp(42px, 7vw, 84px) 0 30px;
+      text-align: center;
+    }
+
+    .accommodation-hero .eyebrow {
+      margin: 0 0 10px;
+      color: #1872a6;
+      font-size: 10px;
+      font-weight: 950;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .accommodation-hero h1 {
+      margin: 0;
+      color: #0c3654;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(45px, 7vw, 82px);
+      line-height: .94;
+      letter-spacing: -.045em;
+    }
+
+    .accommodation-hero p {
+      width: min(640px, 100%);
+      margin: 17px auto 0;
+      color: #5c7183;
+      font-size: clamp(14px, 1.6vw, 17px);
+      line-height: 1.55;
+    }
+
+    .filters-shell {
+      position: sticky;
+      top: 68px;
+      z-index: 55;
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto 22px;
+      padding: 13px;
+      border: 1px solid rgba(11,64,98,.09);
+      border-radius: 24px;
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 14px 42px rgba(23,68,98,.10);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .filters-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .search-input,
+    .zone-dropdown,
+    .filter-pill {
+      min-height: 48px;
+      border: 1px solid #d8e4ec;
+      border-radius: 15px;
+      background: #fff;
+      color: #123b58;
+      font-size: 13px;
+      font-weight: 800;
+      outline: none;
+    }
+
+    .search-input {
+      flex: 1 1 230px;
+      min-width: 190px;
+      padding: 0 15px;
+    }
+
+    .zone-dropdown {
+      flex: 0 1 auto;
+      padding: 0 35px 0 13px;
+      cursor: pointer;
+    }
+
+    .filter-pill {
+      padding: 0 14px;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+    }
+
+    .filter-pill:hover {
+      transform: translateY(-1px);
+    }
+
+    .filter-pill.active {
+      color: #fff;
+      border-color: #086ecf;
+      background: linear-gradient(135deg, #087df1, #005ec7);
+      box-shadow: 0 8px 22px rgba(8,125,241,.20);
+    }
+
+    .results-meta {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: #62768a;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .cards-wrapper {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      padding-bottom: 14px;
+    }
+
+    #cards.cards-container {
+      display: flex;
+      gap: 22px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: max(52px, calc((100vw - 1180px) / 2));
+      padding: 12px max(52px, calc((100vw - 1180px) / 2)) 30px;
+      scrollbar-width: none;
+    }
+
+    #cards.cards-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .home-stay-loading,
+    .home-stay-empty {
+      flex: 0 0 min(620px, calc(100vw - 32px));
+      margin: 12px auto;
+      padding: 30px 22px;
+      border-radius: 26px;
+      background: #ffffff;
+      color: #10213a;
+      box-shadow: 0 16px 42px rgba(16, 45, 80, 0.12);
+      text-align: center;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .home-stay-card {
+      flex: 0 0 min(520px, calc(100vw - 92px));
+      scroll-snap-align: center;
+      overflow: hidden;
+      border: 1px solid rgba(12, 55, 105, 0.10);
+      border-radius: 30px;
+      background: #ffffff;
+      color: #10213a;
+      box-shadow: 0 20px 56px rgba(16, 45, 80, 0.16);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .home-stay-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 26px 68px rgba(16, 45, 80, 0.21);
+    }
+
+    .home-stay-main {
+      position: relative;
+      height: 330px;
+      overflow: hidden;
+      background: #dce8f3;
+    }
+
+    .home-stay-main::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        to top,
+        rgba(7, 26, 51, 0.88) 0%,
+        rgba(7, 26, 51, 0.18) 48%,
+        transparent 72%
+      );
+    }
+
+    .home-stay-main > img:first-child,
+    .home-stay-thumb img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transition: transform 0.45s ease;
+    }
+
+    .home-stay-card:hover .home-stay-main > img:first-child,
+    .home-stay-card:hover .home-stay-thumb img {
+      transform: scale(1.025);
+    }
+
+    .home-stay-logo {
+      position: absolute;
+      z-index: 4;
+      top: 14px;
+      left: 14px;
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      padding: 5px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 9px 26px rgba(0, 0, 0, 0.24);
+    }
+
+    .home-stay-rating {
+      position: absolute;
+      z-index: 4;
+      top: 16px;
+      right: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 38px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      color: #071a33;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 8px 24px rgba(7, 26, 51, 0.22);
+      font-size: 14px;
+      font-weight: 950;
+    }
+
+    .home-stay-rating span:first-child,
+    .home-stay-beach-rating span:first-child {
+      color: #f0a500;
+    }
+
+    .home-stay-title {
+      position: absolute;
+      z-index: 4;
+      left: 20px;
+      right: 20px;
+      bottom: 18px;
+      margin: 0;
+      color: #ffffff;
+      font-size: 27px;
+      line-height: 1.08;
+      text-shadow: 0 3px 15px rgba(0, 0, 0, 0.72);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+
+    .home-stay-thumbs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 4px;
+      height: 145px;
+      background: #dce8f3;
+    }
+
+    .home-stay-thumb {
+      position: relative;
+      min-width: 0;
+      overflow: hidden;
+      background: #dce8f3;
+    }
+
+    .home-stay-thumb::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        to top,
+        rgba(7, 26, 51, 0.80),
+        transparent 58%
+      );
+    }
+
+    .home-stay-beach-link {
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .home-stay-beach-name {
+      position: absolute;
+      z-index: 3;
+      left: 10px;
+      right: 10px;
+      bottom: 9px;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.15;
+      text-shadow: 0 2px 9px rgba(0, 0, 0, 0.72);
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+
+    .home-stay-beach-rating {
+      position: absolute;
+      z-index: 3;
+      top: 8px;
+      right: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      color: #071a33;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 6px 18px rgba(7, 26, 51, 0.20);
+      font-size: 11px;
+      font-weight: 950;
+    }
+
+    .home-stay-content {
+      padding: 18px 20px 22px;
+    }
+
+    .home-stay-place-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #dce7f1;
+    }
+
+    .home-stay-place {
+      min-width: 0;
+    }
+
+    .home-stay-place strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #071a33;
+      font-size: 16px;
+      font-weight: 950;
+    }
+
+    .home-stay-place span {
+      display: block;
+      color: #66758d;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .home-stay-category {
+      flex: 0 0 auto;
+      max-width: 45%;
+      padding: 8px 11px;
+      border-radius: 999px;
+      color: #005ec7;
+      background: #eaf5ff;
+      font-size: 11px;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .home-stay-facts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 14px;
+      overflow: hidden;
+      border: 1px solid #dce7f1;
+      border-radius: 16px;
+      background: #f8fbfe;
+    }
+
+    .home-stay-fact {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      min-width: 0;
+      padding: 13px 7px;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .home-stay-fact + .home-stay-fact {
+      border-left: 1px solid #dce7f1;
+    }
+
+    .home-stay-fact span,
+    .home-stay-fact strong {
+      font-size: 14px;
+      line-height: 1.1;
+    }
+
+    .home-stay-fact span {
+      overflow: hidden;
+      color: #66758d;
+      font-weight: 800;
+      text-overflow: ellipsis;
+    }
+
+    .home-stay-fact strong {
+      flex-shrink: 0;
+      color: #071a33;
+      font-weight: 950;
+    }
+
+    .home-stay-distance {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      color: #063b86;
+      background: #eef6ff;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .home-stay-action {
+      width: 100%;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      margin-top: 15px;
+      padding: 13px 16px;
+      border-radius: 16px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #087df1, #005ec7);
+      box-shadow: 0 12px 28px rgba(8, 125, 241, 0.24);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 950;
+      transition: transform 0.2s ease;
+    }
+
+    .home-stay-action:hover {
+      transform: translateY(-2px);
+    }
+
+    .nav-arrow {
+      position: absolute;
+      top: 50%;
+      z-index: 40;
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid rgba(255,255,255,.72);
+      border-radius: 50%;
+      color: #fff;
+      background: rgba(7,26,51,.72);
+      box-shadow: 0 8px 24px rgba(7,26,51,.26);
+      transform: translateY(-50%);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .left-arrow {
+      left: 12px;
+    }
+
+    .right-arrow {
+      right: 12px;
+    }
+
+    .nav-arrow:disabled {
+      opacity: .18;
+      cursor: default;
+    }
+
+    .site-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding:
+        34px
+        clamp(18px, 5vw, 70px)
+        calc(34px + var(--safe-bottom));
+      color: #7890a2;
+      background: #0a2f49;
+      font-size: 12px;
+    }
+
+    .site-footer a {
+      color: #dce9f2;
+      text-decoration: none;
+    }
+
+    .site-footer .footer-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .page-topbar {
+        min-height: 60px;
+        padding-inline: 14px;
+      }
+
+      .brand-link {
+        font-size: 9px;
+      }
+
+      .back-link {
+        font-size: 10px;
+      }
+
+      .accommodation-hero {
+        width: calc(100% - 28px);
+        padding-top: 34px;
+      }
+
+      .filters-shell {
+        top: 60px;
+        width: calc(100% - 20px);
+        margin-bottom: 14px;
+        padding: 10px;
+        border-radius: 20px;
+      }
+
+      .filters-bar {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+      }
+
+      .search-input {
+        grid-column: 1 / -1;
+        width: 100%;
+      }
+
+      .zone-dropdown,
+      .filter-pill {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .results-meta {
+        width: calc(100% - 28px);
+        margin-bottom: 4px;
+      }
+
+      #cards.cards-container {
+        gap: 14px;
+        padding: 10px 14px 24px;
+        scroll-padding-inline: 14px;
+      }
+
+      .home-stay-card {
+        flex-basis: calc(100vw - 28px);
+        border-radius: 25px;
+      }
+
+      .home-stay-main {
+        height: 270px;
+      }
+
+      .home-stay-logo {
+        top: 11px;
+        left: 11px;
+        width: 58px;
+        height: 58px;
+      }
+
+      .home-stay-rating {
+        top: 12px;
+        right: 12px;
+        min-height: 34px;
+        padding: 7px 10px;
+        font-size: 12px;
+      }
+
+      .home-stay-title {
+        left: 15px;
+        right: 15px;
+        bottom: 14px;
+        font-size: 22px;
+      }
+
+      .home-stay-thumbs {
+        height: 118px;
+      }
+
+      .home-stay-content {
+        padding: 15px 13px 18px;
+      }
+
+      .home-stay-place strong {
+        font-size: 15px;
+      }
+
+      .home-stay-place span {
+        font-size: 12px;
+      }
+
+      .home-stay-category {
+        max-width: 43%;
+        padding: 7px 9px;
+        font-size: 10px;
+      }
+
+      .home-stay-fact {
+        gap: 4px;
+        padding: 12px 4px;
+      }
+
+      .home-stay-fact span,
+      .home-stay-fact strong {
+        font-size: 13px;
+      }
+
+      .home-stay-distance {
+        padding: 11px 12px;
+        font-size: 13px;
+      }
+
+      .home-stay-action {
+        min-height: 49px;
+        margin-top: 13px;
+        border-radius: 14px;
+        font-size: 14px;
+      }
+
+      .nav-arrow {
+        width: 42px;
+        height: 42px;
+        font-size: 28px;
+      }
+
+      .left-arrow {
+        left: 7px;
+      }
+
+      .right-arrow {
+        right: 7px;
+      }
+
+      .site-footer {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="page-topbar">
+    <a class="back-link" href="index.html">← <span id="backLabel">Home</span></a>
+    <a class="brand-link" href="index.html">Halkidiki Explorer</a>
+  </header>
+
+  <main>
+    <section class="accommodation-hero">
+      <p class="eyebrow" id="eyebrow">Stay your way</p>
+      <h1 id="pageTitle">Find Accommodation</h1>
+      <p id="pageLead">
+        Browse stays around Halkidiki and filter them by your group, zone and beach distance.
+      </p>
+    </section>
+
+    <section class="filters-shell" aria-label="Accommodation filters">
+      <div class="filters-bar">
+        <select id="guestsSelect" class="zone-dropdown" aria-label="Guests">
+          <option value="0" id="guestsAll">Guests</option>
+          <option value="2">2+</option>
+          <option value="3">3+</option>
+          <option value="4">4+</option>
+          <option value="5">5+</option>
+          <option value="6">6+</option>
+          <option value="7">7+</option>
+          <option value="8">8+</option>
+          <option value="9">9+</option>
+          <option value="10">10+</option>
+        </select>
+
+        <input
+          type="search"
+          id="nameSearch"
+          class="search-input"
+          placeholder="Search accommodation"
+          autocomplete="off"
+        >
+
+        <button class="filter-pill" id="poolFilter" type="button">🏊 Pool</button>
+        <button class="filter-pill" id="petFilter" type="button">🐶 Pet Friendly</button>
+
+        <select id="zoneSelect" class="zone-dropdown" aria-label="Zone">
+          <option value="" id="allZonesOption">All zones</option>
+          <option value="Kassandra">🟣 Kassandra</option>
+          <option value="Sithonia">🔵 Sithonia</option>
+          <option value="Thessaloniki">🟢 Thessaloniki</option>
+          <option value="Olympiada">🟡 Olympiada</option>
+        </select>
+
+        <select id="distanceSelect" class="zone-dropdown" aria-label="Beach distance">
+          <option value="" id="anyDistanceOption">Any beach distance</option>
+          <option value="50" id="beachfrontOption">Beachfront / up to 50 m</option>
+          <option value="300" id="upTo300Option">Up to 300 m</option>
+        </select>
+      </div>
+    </section>
+
+    <div class="results-meta">
+      <span id="resultsCount">Loading...</span>
+      <span id="swipeHint">Swipe to explore →</span>
+    </div>
+
+    <section class="cards-wrapper">
+      <button
+        id="homeCardsPrevious"
+        class="nav-arrow left-arrow"
+        type="button"
+        aria-label="Previous accommodation"
+      >‹</button>
+
+      <div class="cards-container" id="cards"></div>
+
+      <button
+        id="homeCardsNext"
+        class="nav-arrow right-arrow"
+        type="button"
+        aria-label="Next accommodation"
+      >›</button>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div>© 2026 Halkidiki Explorer. All rights reserved.</div>
+    <div class="footer-right">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+      <a href="promote.html">For Businesses</a>
+    </div>
+  </footer>
+
+  <script>
+    const ACCOMMODATIONS_INDEX_URL =
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations/accommodations-index-v2.json";
+
+    const ACCOMMODATIONS_BASE_URL =
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/accommodations";
+
+    const BEACHES_INDEX_URL =
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches/beaches-index.json";
+
+    const BEACHES_BASE_URL =
+      "https://raw.githubusercontent.com/gabridim18-lab/halkidiki-data/main/data/beaches";
+
+    const currentLanguage =
+      localStorage.getItem("language") === "ro"
+        ? "ro"
+        : "en";
+
+    document.documentElement.lang = currentLanguage;
+
+    const cardsContainer =
+      document.getElementById("cards");
+
+    const previousButton =
+      document.getElementById("homeCardsPrevious");
+
+    const nextButton =
+      document.getElementById("homeCardsNext");
+
+    const resultsCount =
+      document.getElementById("resultsCount");
+
+    const accommodationCache = new Map();
+    const beachDetailsCache = new Map();
+
+    let accommodations = [];
+    let beachesIndexMap = new Map();
+
+    let selectedGuests = 0;
+    let poolOnly = false;
+    let petOnly = false;
+    let selectedZone = "";
+    let selectedDistance = 0;
+    let searchName = "";
+    let loadVersion = 0;
+
+    const savedFilters =
+      JSON.parse(
+        localStorage.getItem("homeFilters") || "{}"
+      );
+
+    selectedGuests = savedFilters.selectedGuests || 0;
+    poolOnly = savedFilters.poolOnly || false;
+    petOnly = savedFilters.petOnly || false;
+    selectedZone = savedFilters.selectedZone || "";
+    selectedDistance = savedFilters.selectedDistance || 0;
+    searchName = savedFilters.searchName || "";
+
+    const ui = {
+      en: {
+        back: "Home",
+        eyebrow: "Stay your way",
+        title: "Find Accommodation",
+        lead: "Browse stays around Halkidiki and filter them by your group, zone and beach distance.",
+        guests: "Guests",
+        search: "Search accommodation",
+        pool: "🏊 Pool",
+        pet: "🐶 Pet Friendly",
+        allZones: "All zones",
+        anyDistance: "Any beach distance",
+        beachfront: "Beachfront / up to 50 m",
+        upTo300: "Up to 300 m",
+        loading: "Loading accommodations...",
+        noResults: "No accommodations match the selected filters.",
+        results: "accommodations",
+        swipe: "Swipe to explore →",
+        bedrooms: "Bedrooms",
+        bathrooms: "Bathrooms",
+        beach: "Beach",
+        fromBeach: "from the beach",
+        viewFull: "View full accommodation",
+        detailsUnavailable: "Beach details",
+        notSpecified: "Not specified"
+      },
+      ro: {
+        back: "Acasă",
+        eyebrow: "Alege cazarea potrivită",
+        title: "Găsește cazare",
+        lead: "Explorează cazările din Halkidiki și filtrează-le după grup, zonă și distanța până la plajă.",
+        guests: "Persoane",
+        search: "Caută cazare",
+        pool: "🏊 Piscină",
+        pet: "🐶 Pet Friendly",
+        allZones: "Toate zonele",
+        anyDistance: "Orice distanță până la plajă",
+        beachfront: "Pe plajă / până la 50 m",
+        upTo300: "Până la 300 m",
+        loading: "Se încarcă unitățile de cazare...",
+        noResults: "Nicio cazare nu corespunde filtrelor selectate.",
+        results: "cazări",
+        swipe: "Glisează pentru a explora →",
+        bedrooms: "Dormitoare",
+        bathrooms: "Băi",
+        beach: "Plajă",
+        fromBeach: "până la plajă",
+        viewFull: "Vezi cazarea completă",
+        detailsUnavailable: "Detalii despre plajă",
+        notSpecified: "Nespecificat"
+      }
+    };
+
+    function text(key) {
+      return ui[currentLanguage][key] || ui.en[key] || key;
+    }
+
+    function applyPageLanguage() {
+      document.getElementById("backLabel").textContent = text("back");
+      document.getElementById("eyebrow").textContent = text("eyebrow");
+      document.getElementById("pageTitle").textContent = text("title");
+      document.getElementById("pageLead").textContent = text("lead");
+      document.getElementById("guestsAll").textContent = text("guests");
+      document.getElementById("nameSearch").placeholder = text("search");
+      document.getElementById("poolFilter").textContent = text("pool");
+      document.getElementById("petFilter").textContent = text("pet");
+      document.getElementById("allZonesOption").textContent = text("allZones");
+      document.getElementById("anyDistanceOption").textContent = text("anyDistance");
+      document.getElementById("beachfrontOption").textContent = text("beachfront");
+      document.getElementById("upTo300Option").textContent = text("upTo300");
+      document.getElementById("swipeHint").textContent = text("swipe");
+    }
+
+    function saveFilters() {
+      localStorage.setItem(
+        "homeFilters",
+        JSON.stringify({
+          selectedGuests,
+          poolOnly,
+          petOnly,
+          selectedZone,
+          selectedDistance,
+          searchName
+        })
+      );
+    }
+
+    async function fetchJson(url) {
+      const response =
+        await fetch(url, { cache: "no-store" });
+
+      if (!response.ok) {
+        throw new Error(
+          `Request failed: ${response.status} ${url}`
+        );
+      }
+
+      return response.json();
+    }
+
+    async function getAccommodation(item) {
+      if (!item?.id) return null;
+
+      if (!accommodationCache.has(item.id)) {
+        const request =
+          fetchJson(
+            `${ACCOMMODATIONS_BASE_URL}/${encodeURIComponent(item.id)}/index.json`
+          )
+            .then(details => ({
+              ...item,
+              ...(details || {}),
+              id: item.id,
+              beachSlug:
+                details?.beachSlug ||
+                item.beachSlug ||
+                ""
+            }))
+            .catch(error => {
+              console.warn(error);
+              return {
+                ...item,
+                id: item.id
+              };
+            });
+
+        accommodationCache.set(item.id, request);
+      }
+
+      return accommodationCache.get(item.id);
+    }
+
+    async function getBeachDetails(beachSlug) {
+      const normalized =
+        normalizeId(beachSlug);
+
+      if (!normalized) return null;
+
+      if (!beachDetailsCache.has(normalized)) {
+        const request =
+          fetchJson(
+            `${BEACHES_BASE_URL}/${encodeURIComponent(normalized)}/index.json`
+          )
+            .catch(() => null);
+
+        beachDetailsCache.set(
+          normalized,
+          request
+        );
+      }
+
+      return beachDetailsCache.get(normalized);
+    }
+
+    async function initializeData() {
+      cardsContainer.innerHTML = `
+        <div class="home-stay-loading">
+          ${escapeHtml(text("loading"))}
+        </div>
+      `;
+
+      const [
+        accommodationIndex,
+        beachIndex
+      ] = await Promise.all([
+        fetchJson(ACCOMMODATIONS_INDEX_URL),
+        fetchJson(BEACHES_INDEX_URL)
+      ]);
+
+      accommodations =
+        Array.isArray(accommodationIndex)
+          ? accommodationIndex
+          : [];
+
+      beachesIndexMap = new Map();
+
+      if (Array.isArray(beachIndex)) {
+        beachIndex.forEach(item => {
+          if (item?.id) {
+            beachesIndexMap.set(
+              normalizeId(item.id),
+              item
+            );
+          }
+        });
+      }
+
+      await loadCards();
+    }
+
+    async function loadCards() {
+      const currentVersion = ++loadVersion;
+
+      cardsContainer.innerHTML = `
+        <div class="home-stay-loading">
+          ${escapeHtml(text("loading"))}
+        </div>
+      `;
+
+      try {
+        const loaded =
+          await Promise.all(
+            accommodations.map(getAccommodation)
+          );
+
+        if (currentVersion !== loadVersion) return;
+
+        const filtered =
+          loaded
+            .filter(Boolean)
+            .filter(data => {
+              const titleEn =
+                String(data.titleEn || "").toLowerCase();
+
+              const titleRo =
+                String(data.titleRo || "").toLowerCase();
+
+              const distance =
+                getDistanceValue(data);
+
+              return (
+                (
+                  selectedGuests === 0 ||
+                  Number(data.guests) >= selectedGuests
+                ) &&
+                (
+                  !poolOnly ||
+                  data.pool === true
+                ) &&
+                (
+                  !petOnly ||
+                  data.petFriendly === true
+                ) &&
+                (
+                  selectedZone === "" ||
+                  data.zone === selectedZone
+                ) &&
+                (
+                  selectedDistance === 0 ||
+                  (
+                    distance !== null &&
+                    distance <= selectedDistance
+                  )
+                ) &&
+                (
+                  searchName === "" ||
+                  titleEn.includes(searchName) ||
+                  titleRo.includes(searchName)
+                )
+              );
+            });
+
+        updateResultCount(filtered.length);
+
+        if (!filtered.length) {
+          cardsContainer.innerHTML = `
+            <div class="home-stay-empty">
+              ${escapeHtml(text("noResults"))}
+            </div>
+          `;
+
+          updateArrowState();
+          return;
+        }
+
+        const cardData =
+          await Promise.all(
+            filtered.map(async accommodation => {
+              const normalizedBeachSlug =
+                normalizeId(
+                  accommodation.beachSlug || ""
+                );
+
+              const beachIndex =
+                beachesIndexMap.get(
+                  normalizedBeachSlug
+                ) || null;
+
+              const officialBeachId =
+                beachIndex?.id ||
+                normalizedBeachSlug;
+
+              const beachDetails =
+                await getBeachDetails(
+                  officialBeachId
+                );
+
+              return {
+                accommodation,
+                beachIndex,
+                beachDetails,
+                officialBeachId
+              };
+            })
+          );
+
+        if (currentVersion !== loadVersion) return;
+
+        cardsContainer.innerHTML =
+          cardData
+            .map(renderStayCard)
+            .join("");
+
+        requestAnimationFrame(() => {
+          cardsContainer.scrollTo({
+            left: 0,
+            behavior: "auto"
+          });
+
+          updateArrowState();
+        });
+      } catch (error) {
+        console.error(error);
+
+        updateResultCount(0);
+
+        cardsContainer.innerHTML = `
+          <div class="home-stay-empty">
+            ${escapeHtml(text("noResults"))}
+          </div>
+        `;
+
+        updateArrowState();
+      }
+    }
+
+    function renderStayCard({
+      accommodation,
+      beachIndex,
+      beachDetails,
+      officialBeachId
+    }) {
+      const title =
+        currentLanguage === "ro"
+          ? accommodation.titleRo ||
+            accommodation.titleEn ||
+            accommodation.id
+          : accommodation.titleEn ||
+            accommodation.titleRo ||
+            accommodation.id;
+
+      const images =
+        Array.isArray(accommodation.images)
+          ? accommodation.images.filter(Boolean)
+          : [];
+
+      const fallbackImage =
+        accommodation.image ||
+        "images/beach_background.webp";
+
+      const mainImage =
+        images[0] || fallbackImage;
+
+      const secondImage =
+        images[1] || mainImage;
+
+      const thirdImage =
+        images[2] || secondImage;
+
+      const beachName =
+        getTranslatedValue(
+          beachDetails?.name ||
+          beachIndex?.name
+        ) ||
+        humanizeText(
+          accommodation.beachSlug
+        ) ||
+        text("beach");
+
+      const beachType =
+        getTranslatedValue(
+          beachDetails?.beachType
+        ) ||
+        text("detailsUnavailable");
+
+      const beachImage =
+        getBeachIndexImageUrl(beachIndex) ||
+        getBeachDetailsImageUrl(
+          beachDetails,
+          officialBeachId
+        ) ||
+        thirdImage;
+
+      const zone =
+        humanizeText(
+          accommodation.zone ||
+          beachIndex?.zone
+        ) ||
+        "Halkidiki";
+
+      const category =
+        translateCategory(
+          accommodation.category
+        );
+
+      const guests =
+        positiveNumber(
+          accommodation.guests
+        ) || "—";
+
+      const bedrooms =
+        positiveNumber(
+          accommodation.bedrooms
+        ) || "—";
+
+      const bathrooms =
+        positiveNumber(
+          accommodation.bathrooms
+        ) || "—";
+
+      const accommodationRating =
+        formatAccommodationRating(
+          accommodation.rating,
+          accommodation.ratingScale
+        );
+
+      const beachRating =
+        formatNumber(
+          beachIndex?.rating ??
+          beachDetails?.recommendationRating
+        );
+
+      const distance =
+        formatDistance(accommodation);
+
+      const beachHref =
+        officialBeachId
+          ? `beach.html?id=${encodeURIComponent(officialBeachId)}`
+          : "#";
+
+      return `
+        <article class="home-stay-card">
+          <div class="home-stay-main">
+            <img
+              src="${escapeAttribute(mainImage)}"
+              alt="${escapeAttribute(title)}"
+              loading="lazy"
+              onerror="this.onerror=null;this.src='images/beach_background.webp'"
+            >
+
+            <img
+              class="home-stay-logo"
+              src="images/logo.png"
+              alt="Halkidiki Explorer"
+            >
+
+            ${
+              accommodationRating
+                ? `
+                  <div class="home-stay-rating">
+                    <span>★</span>
+                    <span>${escapeHtml(accommodationRating)}</span>
+                  </div>
+                `
+                : ""
+            }
+
+            <h2 class="home-stay-title">
+              ${escapeHtml(title)}
+            </h2>
+          </div>
+
+          <div class="home-stay-thumbs">
+            <div class="home-stay-thumb">
+              <img
+                src="${escapeAttribute(secondImage)}"
+                alt="${escapeAttribute(title)}"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='${escapeAttribute(mainImage)}'"
+              >
+            </div>
+
+            <div class="home-stay-thumb">
+              <img
+                src="${escapeAttribute(thirdImage)}"
+                alt="${escapeAttribute(title)}"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='${escapeAttribute(secondImage)}'"
+              >
+            </div>
+
+            <a
+              class="home-stay-thumb home-stay-beach-link"
+              href="${escapeAttribute(beachHref)}"
+              aria-label="${escapeAttribute(beachName)}"
+            >
+              <img
+                src="${escapeAttribute(beachImage)}"
+                alt="${escapeAttribute(beachName)}"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='${escapeAttribute(thirdImage)}'"
+              >
+
+              ${
+                beachRating
+                  ? `
+                    <div class="home-stay-beach-rating">
+                      <span>★</span>
+                      <span>${escapeHtml(beachRating)}</span>
+                    </div>
+                  `
+                  : ""
+              }
+
+              <div class="home-stay-beach-name">
+                ${escapeHtml(beachName)}
+              </div>
+            </a>
+          </div>
+
+          <div class="home-stay-content">
+            <div class="home-stay-place-row">
+              <div class="home-stay-place">
+                <strong>${escapeHtml(beachName)}</strong>
+                <span>
+                  ${escapeHtml(zone)} ·
+                  ${escapeHtml(beachType)}
+                </span>
+              </div>
+
+              ${
+                category
+                  ? `
+                    <div class="home-stay-category">
+                      ${escapeHtml(category)}
+                    </div>
+                  `
+                  : ""
+              }
+            </div>
+
+            <div class="home-stay-facts">
+              ${renderFact(text("guests"), guests)}
+              ${renderFact(text("bedrooms"), bedrooms)}
+              ${renderFact(text("bathrooms"), bathrooms)}
+            </div>
+
+            <div class="home-stay-distance">
+              <span>${escapeHtml(text("beach"))}</span>
+              <strong>
+                ${escapeHtml(distance)}
+                ${escapeHtml(text("fromBeach"))}
+              </strong>
+            </div>
+
+            <a
+              class="home-stay-action"
+              href="accommodation.html?id=${encodeURIComponent(accommodation.id)}"
+            >
+              <span>🏡</span>
+              <span>${escapeHtml(text("viewFull"))}</span>
+            </a>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderFact(label, value) {
+      return `
+        <div class="home-stay-fact">
+          <span>${escapeHtml(label)}</span>
+          <strong>${escapeHtml(value)}</strong>
+        </div>
+      `;
+    }
+
+    function updateResultCount(count) {
+      resultsCount.textContent =
+        `${count} ${text("results")}`;
+    }
+
+    function scrollCards(direction) {
+      const firstCard =
+        cardsContainer.querySelector(
+          ".home-stay-card"
+        );
+
+      const cardWidth =
+        firstCard
+          ? firstCard.getBoundingClientRect().width
+          : 380;
+
+      cardsContainer.scrollBy({
+        left: direction * (cardWidth + 22),
+        behavior: "smooth"
+      });
+    }
+
+    function updateArrowState() {
+      const maximumScroll =
+        Math.max(
+          0,
+          cardsContainer.scrollWidth -
+          cardsContainer.clientWidth
+        );
+
+      previousButton.disabled =
+        cardsContainer.scrollLeft <= 4;
+
+      nextButton.disabled =
+        cardsContainer.scrollLeft >=
+        maximumScroll - 4;
+    }
+
+    function normalizeId(value) {
+      return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase()
+        .replace(/&/g, " and ")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
+    function getTranslatedValue(value) {
+      if (!value) return "";
+
+      if (typeof value === "string") {
+        return value;
+      }
+
+      return (
+        value[currentLanguage] ||
+        value.en ||
+        value.ro ||
+        ""
+      );
+    }
+
+    function getBeachIndexImageUrl(beachIndex) {
+      if (
+        !beachIndex?.id ||
+        !beachIndex?.previewImage
+      ) {
+        return "";
+      }
+
+      return (
+        `${BEACHES_BASE_URL}/` +
+        `${encodeURIComponent(beachIndex.id)}/images/` +
+        `${encodeURIComponent(beachIndex.previewImage)}`
+      );
+    }
+
+    function getBeachDetailsImageUrl(
+      beachDetails,
+      officialBeachId
+    ) {
+      const firstBeachImage =
+        Array.isArray(beachDetails?.images)
+          ? beachDetails.images.find(Boolean)
+          : "";
+
+      if (
+        !firstBeachImage ||
+        !officialBeachId
+      ) {
+        return "";
+      }
+
+      if (
+        /^https?:\/\//i.test(firstBeachImage)
+      ) {
+        return firstBeachImage;
+      }
+
+      return (
+        `${BEACHES_BASE_URL}/` +
+        `${encodeURIComponent(officialBeachId)}/images/` +
+        `${encodeURIComponent(firstBeachImage)}`
+      );
+    }
+
+    function positiveNumber(value) {
+      const number = Number(value);
+
+      return (
+        Number.isFinite(number) &&
+        number > 0
+      )
+        ? number
+        : null;
+    }
+
+    function formatNumber(value) {
+      const number = Number(value);
+
+      if (!Number.isFinite(number)) {
+        return "";
+      }
+
+      return new Intl.NumberFormat(
+        currentLanguage === "ro"
+          ? "ro-RO"
+          : "en-GB",
+        { maximumFractionDigits: 1 }
+      ).format(number);
+    }
+
+    function formatAccommodationRating(
+      rating,
+      ratingScale
+    ) {
+      const value = Number(rating);
+
+      if (
+        !Number.isFinite(value) ||
+        value <= 0
+      ) {
+        return "";
+      }
+
+      const formatted =
+        formatNumber(value);
+
+      const scale =
+        Number(ratingScale);
+
+      return (
+        Number.isFinite(scale) &&
+        scale > 0
+      )
+        ? `${formatted}/${formatNumber(scale)}`
+        : formatted;
+    }
+
+    function getDistanceValue(accommodation) {
+      const possibleValues = [
+        accommodation.distanceMetersOverride,
+        accommodation.distanceToSeaMeters,
+        accommodation.distanceMeters,
+        accommodation.beachDistanceMeters,
+        accommodation.distanceToBeachMeters,
+        accommodation.distanceToSea
+      ];
+
+      for (const value of possibleValues) {
+        if (
+          typeof value === "number" &&
+          Number.isFinite(value) &&
+          value >= 0
+        ) {
+          return value;
+        }
+
+        if (
+          typeof value === "string" &&
+          value.trim()
+        ) {
+          const numericValue =
+            Number(
+              value
+                .replace(",", ".")
+                .replace(/[^\d.]/g, "")
+            );
+
+          if (
+            Number.isFinite(numericValue) &&
+            numericValue >= 0
+          ) {
+            return numericValue;
+          }
+        }
+      }
+
+      return null;
+    }
+
+    function formatDistance(accommodation) {
+      const meters =
+        getDistanceValue(accommodation);
+
+      if (meters === null) {
+        return text("notSpecified");
+      }
+
+      if (meters < 1000) {
+        return `${Math.round(meters)} m`;
+      }
+
+      const kilometers =
+        new Intl.NumberFormat(
+          currentLanguage === "ro"
+            ? "ro-RO"
+            : "en-GB",
+          { maximumFractionDigits: 1 }
+        ).format(meters / 1000);
+
+      return `${kilometers} km`;
+    }
+
+    function translateCategory(category) {
+      const normalized =
+        String(category || "")
+          .trim()
+          .toLowerCase();
+
+      const categoryMap = {
+        family_friendly: {
+          en: "Family Friendly",
+          ro: "Pentru familii"
+        },
+        perfect_for_groups: {
+          en: "Perfect for Groups",
+          ro: "Perfectă pentru grupuri"
+        },
+        couples_retreat: {
+          en: "Couples Retreat",
+          ro: "Escapadă în cuplu"
+        },
+        escape_and_relax: {
+          en: "Escape & Relax",
+          ro: "Relaxare și liniște"
+        },
+        explorers_choice: {
+          en: "Explorer’s Choice",
+          ro: "Alegerea Explorerului"
+        }
+      };
+
+      const translated =
+        categoryMap[normalized];
+
+      if (translated) {
+        return translated[currentLanguage];
+      }
+
+      return humanizeText(normalized);
+    }
+
+    function humanizeText(value) {
+      if (!value) return "";
+
+      return String(value)
+        .replaceAll("-", " ")
+        .replaceAll("_", " ")
+        .replace(/\s+/g, " ")
+        .trim()
+        .split(" ")
+        .map(word =>
+          word
+            ? word.charAt(0).toUpperCase() +
+              word.slice(1)
+            : word
+        )
+        .join(" ");
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function escapeAttribute(value) {
+      return escapeHtml(value);
+    }
+
+    previousButton.addEventListener(
+      "click",
+      () => scrollCards(-1)
+    );
+
+    nextButton.addEventListener(
+      "click",
+      () => scrollCards(1)
+    );
+
+    cardsContainer.addEventListener(
+      "scroll",
+      updateArrowState,
+      { passive: true }
+    );
+
+    window.addEventListener(
+      "resize",
+      updateArrowState
+    );
+
+    document
+      .getElementById("poolFilter")
+      .addEventListener("click", async () => {
+        poolOnly = !poolOnly;
+
+        document
+          .getElementById("poolFilter")
+          .classList.toggle(
+            "active",
+            poolOnly
+          );
+
+        saveFilters();
+        await loadCards();
+      });
+
+    document
+      .getElementById("petFilter")
+      .addEventListener("click", async () => {
+        petOnly = !petOnly;
+
+        document
+          .getElementById("petFilter")
+          .classList.toggle(
+            "active",
+            petOnly
+          );
+
+        saveFilters();
+        await loadCards();
+      });
+
+    document
+      .getElementById("zoneSelect")
+      .addEventListener("change", async event => {
+        selectedZone = event.target.value;
+        saveFilters();
+        await loadCards();
+      });
+
+    document
+      .getElementById("distanceSelect")
+      .addEventListener("change", async event => {
+        selectedDistance =
+          Number.parseInt(
+            event.target.value,
+            10
+          ) || 0;
+
+        saveFilters();
+        await loadCards();
+      });
+
+    document
+      .getElementById("guestsSelect")
+      .addEventListener("change", async event => {
+        selectedGuests =
+          Number.parseInt(
+            event.target.value,
+            10
+          ) || 0;
+
+        saveFilters();
+        await loadCards();
+      });
+
+    document
+      .getElementById("nameSearch")
+      .addEventListener("input", async event => {
+        searchName =
+          event.target.value
+            .trim()
+            .toLowerCase();
+
+        saveFilters();
+        await loadCards();
+      });
+
+    document.getElementById("guestsSelect").value =
+      String(selectedGuests);
+
+    document.getElementById("zoneSelect").value =
+      selectedZone;
+
+    document.getElementById("distanceSelect").value =
+      selectedDistance
+        ? String(selectedDistance)
+        : "";
+
+    document.getElementById("nameSearch").value =
+      searchName;
+
+    if (poolOnly) {
+      document
+        .getElementById("poolFilter")
+        .classList.add("active");
+    }
+
+    if (petOnly) {
+      document
+        .getElementById("petFilter")
+        .classList.add("active");
+    }
+
+    applyPageLanguage();
+    initializeData();
+  </script>
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0a6f87" />
-  <title>Take me to Halkidiki — V15</title>
+  <title>Take me to Halkidiki — V16</title>
 
   <style>
     :root {
@@ -7369,7 +7369,25 @@
     updatePartyVisual(false);
     renderStyleGrid();
     setLanguage(currentLanguage);
-    showScreen("intro");
+
+    const requestedStart =
+      new URLSearchParams(window.location.search).get("start");
+
+    if (requestedStart === "period") {
+      showScreen("period");
+
+      window.dispatchEvent(
+        new CustomEvent("takeMe:start", {
+          detail: {
+            language: currentLanguage,
+            step: "period",
+            source: "homepage"
+          }
+        })
+      );
+    } else {
+      showScreen("intro");
+    }
   </script>
 </body>
 </html>
