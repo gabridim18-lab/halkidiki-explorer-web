@@ -17,7 +17,7 @@
     content="width=device-width, initial-scale=1.0"
   />
 
-  <title>Halkidiki Explorer — Home V2</title>
+  <title>Halkidiki Explorer — Home V3</title>
 
 <meta property="og:title" content="Halkidiki Explorer">
 <meta property="og:description" content="Your complete Halkidiki Travel Companion">
@@ -638,6 +638,28 @@
       .tmh-home-preview { min-height: 66dvh; }
     }
 
+  
+    /* =====================================================
+       HOMEPAGE V3 — IMMERSIVE EDITORIAL / APP-LIKE MOBILE
+       ===================================================== */
+    .hero{min-height:100dvh;overflow:hidden;isolation:isolate}
+    .hero .overlay{background:linear-gradient(90deg,rgba(3,18,30,.72) 0%,rgba(3,18,30,.40) 34%,rgba(3,18,30,.08) 64%,rgba(3,18,30,.24) 100%),linear-gradient(180deg,rgba(3,18,30,.06) 0%,rgba(3,18,30,.08) 44%,rgba(3,18,30,.78) 100%)}
+    .home-v3-shell{position:relative;z-index:8;width:min(1240px,calc(100% - 56px));min-height:100dvh;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(360px,.72fr);gap:clamp(42px,7vw,100px);align-items:end;padding:clamp(120px,18vh,180px) 0 clamp(46px,6vh,68px)}
+    .home-v3-intro{padding-bottom:7px}.home-v3-logo{width:clamp(180px,22vw,290px);height:auto;display:block;filter:drop-shadow(0 14px 36px rgba(0,0,0,.30))}
+    .home-v3-kicker{margin:26px 0 0;color:rgba(255,255,255,.67);font-size:10px;font-weight:950;letter-spacing:.22em;text-transform:uppercase;text-shadow:0 3px 18px rgba(0,0,0,.30)}
+    .home-v3-title{width:min(700px,100%);margin:10px 0 0;color:#fff;font-family:Georgia,"Times New Roman",serif;font-size:clamp(48px,6.2vw,86px);line-height:.92;letter-spacing:-.05em;text-wrap:balance;text-shadow:0 10px 34px rgba(0,0,0,.35)}
+    .home-v3-subtitle{width:min(560px,100%);margin:17px 0 0;color:rgba(255,255,255,.82);font-size:clamp(14px,1.35vw,17px);line-height:1.5;font-weight:620;text-shadow:0 3px 20px rgba(0,0,0,.35)}
+    .home-v3-menu{width:min(470px,100%);justify-self:end;padding:8px 0 0;color:#fff}.home-v3-menu-label{display:flex;align-items:center;gap:10px;margin:0 0 11px;color:rgba(255,255,255,.58);font-size:9px;font-weight:900;letter-spacing:.18em;text-transform:uppercase}.home-v3-menu-label::before{content:"";width:28px;height:1px;background:rgba(255,255,255,.42)}
+    .home-v3-link{position:relative;display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:12px;min-height:70px;padding:0 4px;border-top:1px solid rgba(255,255,255,.18);color:#fff;text-decoration:none;background:transparent;cursor:pointer;transition:padding .24s ease,background .24s ease,border-color .24s ease}.home-v3-link:last-child{border-bottom:1px solid rgba(255,255,255,.18)}button.home-v3-link{width:100%;border-left:0;border-right:0;border-bottom:0;font:inherit;text-align:left}.home-v3-link__number{color:rgba(255,255,255,.42);font-size:10px;font-weight:900;letter-spacing:.10em}.home-v3-link__copy{min-width:0}.home-v3-link__title{display:block;color:#fff;font-family:Georgia,"Times New Roman",serif;font-size:clamp(19px,2vw,26px);line-height:1;letter-spacing:-.025em}.home-v3-link__meta{display:block;margin-top:5px;color:rgba(255,255,255,.58);font-size:10px;font-weight:700;line-height:1.25}.home-v3-link__arrow{color:rgba(255,255,255,.66);font-size:22px;line-height:1;transition:transform .24s ease,color .24s ease}
+    .home-v3-link.is-primary{min-height:86px;margin-bottom:2px;padding:0 15px;border:1px solid rgba(255,255,255,.26);border-radius:22px;background:linear-gradient(135deg,rgba(255,255,255,.15),rgba(255,255,255,.06));box-shadow:0 18px 50px rgba(0,0,0,.18);backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px)}.home-v3-link.is-primary .home-v3-link__number{color:rgba(255,255,255,.66)}.home-v3-link.is-primary .home-v3-link__title{font-size:clamp(24px,2.4vw,32px)}
+    .home-v3-link:hover{padding-left:12px;padding-right:12px;background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.28)}.home-v3-link.is-primary:hover{padding-left:20px;padding-right:20px;background:linear-gradient(135deg,rgba(255,255,255,.19),rgba(255,255,255,.08))}.home-v3-link:hover .home-v3-link__arrow{transform:translateX(4px);color:#fff}
+    .home-v3-secondary-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px;margin-top:3px}.home-v3-secondary-grid .home-v3-link{min-height:56px;grid-template-columns:28px minmax(0,1fr) auto}.home-v3-secondary-grid .home-v3-link__title{font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-size:11px;font-weight:850;letter-spacing:.015em}.home-v3-secondary-grid .home-v3-link__meta{display:none}.home-v3-secondary-grid .home-v3-link__arrow{font-size:17px}
+    .home-v3-scroll-cue{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:9px;color:rgba(255,255,255,.48);font-size:8px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;pointer-events:none}.home-v3-scroll-cue::before,.home-v3-scroll-cue::after{content:"";width:18px;height:1px;background:rgba(255,255,255,.28)}
+    .hero .last-minute-home-btn{z-index:30;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}.hero .language-selector{z-index:31}
+    .tmh-home-preview{min-height:58dvh;align-items:center}.tmh-home-preview::before{background:linear-gradient(90deg,rgba(3,18,24,.70) 0%,rgba(3,18,24,.43) 44%,rgba(3,18,24,.14) 78%,rgba(3,18,24,.08) 100%),linear-gradient(180deg,rgba(3,18,24,.08) 0%,rgba(3,18,24,.12) 48%,rgba(3,18,24,.52) 100%)}.tmh-home-preview__content{width:min(1180px,calc(100% - 48px));margin:0 auto;padding:clamp(54px,8vh,82px) 0}.tmh-home-preview__inner{width:min(650px,100%);padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}.tmh-home-preview__eyebrow{margin-bottom:10px}.tmh-home-preview__title{max-width:620px;font-size:clamp(42px,5.5vw,70px);line-height:.94}.tmh-home-preview__promise{margin-top:16px;max-width:590px;font-size:clamp(20px,2.4vw,31px)}.tmh-home-preview__lead{max-width:560px}.tmh-home-preview__chips{margin-top:17px}.tmh-home-preview__button{min-width:300px;min-height:56px;margin-top:21px;border-radius:999px;box-shadow:0 16px 42px rgba(0,0,0,.22)}
+    @media(max-width:760px){.hero{min-height:100dvh}.hero .overlay{background:linear-gradient(180deg,rgba(3,18,30,.15) 0%,rgba(3,18,30,.07) 33%,rgba(3,18,30,.34) 58%,rgba(3,18,30,.90) 100%)}.home-v3-shell{width:100%;min-height:100dvh;display:flex;flex-direction:column;justify-content:space-between;gap:0;padding:calc(max(80px,env(safe-area-inset-top) + 64px)) 14px calc(max(14px,env(safe-area-inset-bottom) + 8px))}.home-v3-intro{width:100%;padding:0 7px;text-align:center}.home-v3-logo{width:min(45vw,188px);margin:0 auto}.home-v3-kicker{margin-top:12px;font-size:8px;letter-spacing:.18em}.home-v3-title{width:94%;margin:7px auto 0;font-size:clamp(32px,9.5vw,43px);line-height:.96}.home-v3-subtitle{width:92%;margin:9px auto 0;font-size:11px;line-height:1.42}.home-v3-menu{width:100%;margin-top:auto;padding:10px 12px 8px;border:1px solid rgba(255,255,255,.16);border-radius:28px;background:rgba(4,21,31,.54);box-shadow:0 22px 60px rgba(0,0,0,.30);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.home-v3-menu-label{display:none}.home-v3-link{min-height:52px;grid-template-columns:30px minmax(0,1fr) auto;gap:8px;padding:0 5px}.home-v3-link.is-primary{min-height:68px;margin-bottom:3px;padding:0 11px;border-radius:18px;background:rgba(255,255,255,.11)}.home-v3-link__number{font-size:8px}.home-v3-link__title{font-size:18px}.home-v3-link.is-primary .home-v3-link__title{font-size:22px}.home-v3-link__meta{margin-top:3px;font-size:8px}.home-v3-secondary-grid{gap:0 12px;margin-top:3px}.home-v3-secondary-grid .home-v3-link{min-height:43px;grid-template-columns:20px minmax(0,1fr) auto}.home-v3-secondary-grid .home-v3-link__title{font-size:9px;line-height:1.2}.home-v3-secondary-grid .home-v3-link__number{font-size:7px}.home-v3-scroll-cue{display:none}.tmh-home-preview{min-height:56dvh;align-items:flex-end}.tmh-home-preview__content{width:100%;padding:44px 18px calc(max(20px,env(safe-area-inset-bottom)) + 26px)}.tmh-home-preview__inner{width:100%;padding:0}.tmh-home-preview__title{font-size:clamp(36px,10.5vw,48px)}.tmh-home-preview__promise{margin-top:12px;font-size:clamp(19px,5.4vw,25px)}.tmh-home-preview__lead{margin-top:9px;font-size:12px}.tmh-home-preview__button{width:100%;min-width:0;min-height:54px}}
+    @media(max-height:720px) and (max-width:760px){.home-v3-shell{padding-top:calc(max(72px,env(safe-area-inset-top) + 55px))}.home-v3-logo{width:min(36vw,145px)}.home-v3-kicker{display:none}.home-v3-title{margin-top:6px;font-size:clamp(28px,8.5vw,36px)}.home-v3-subtitle{display:none}.home-v3-menu{padding-top:8px}.home-v3-link.is-primary{min-height:60px}.home-v3-link{min-height:47px}.home-v3-secondary-grid .home-v3-link{min-height:38px}}
+
   </style>
 
 </head>
@@ -710,34 +732,45 @@
   </div>
 
   
-  <div class="home-v2-shell">
-    <div class="home-v2-brand">
-      <img src="images/logo.png" class="home-v2-logo" alt="Halkidiki Explorer logo">
-      <p class="home-v2-tagline" id="homeV2Tagline">Your Halkidiki holiday starts here.</p>
-      <p class="home-v2-subline" id="homeV2Subline">Beaches, stays, food and local experiences — all in one place.</p>
+  
+  <div class="home-v3-shell">
+    <div class="home-v3-intro">
+      <img src="images/logo.png" class="home-v3-logo" alt="Halkidiki Explorer logo">
+      <p class="home-v3-kicker" id="homeV3Kicker">Your personal Halkidiki companion</p>
+      <h1 class="home-v3-title" id="homeV3Title">One place for the holiday you actually want.</h1>
+      <p class="home-v3-subtitle" id="homeV3Subtitle">Discover the beach, the stay, the food and the experiences that fit the way you want to travel.</p>
     </div>
 
-    <div class="home-v2-actions">
-      <div class="home-v2-main-actions">
-        <button class="home-v2-primary" id="takeMeHomeButton" type="button" onclick="scrollToTakeMePreview()">
-          <span id="takeMeHomeText">Take me to Halkidiki</span>
-          <span aria-hidden="true">→</span>
-        </button>
+    <nav class="home-v3-menu" aria-label="Halkidiki Explorer">
+      <p class="home-v3-menu-label" id="homeV3MenuLabel">Start here</p>
 
-        <a href="accommodations.html" class="home-v2-secondary" id="findAccommodationHomeButton">
-          <span id="findAccommodationHomeText">Find Accommodation</span>
-        </a>
+      <button class="home-v3-link is-primary" id="takeMeHomeButton" type="button" onclick="scrollToTakeMePreview()">
+        <span class="home-v3-link__number">01</span>
+        <span class="home-v3-link__copy">
+          <span class="home-v3-link__title" id="takeMeHomeText">Build my Halkidiki holiday</span>
+          <span class="home-v3-link__meta" id="takeMeHomeMeta">Beach, stay, food and experiences — matched around you</span>
+        </span>
+        <span class="home-v3-link__arrow" aria-hidden="true">→</span>
+      </button>
+
+      <a href="accommodations.html" class="home-v3-link" id="findAccommodationHomeButton">
+        <span class="home-v3-link__number">02</span>
+        <span class="home-v3-link__copy">
+          <span class="home-v3-link__title" id="findAccommodationHomeText">Find accommodation</span>
+          <span class="home-v3-link__meta" id="findAccommodationHomeMeta">Browse stays and filter them your way</span>
+        </span>
+        <span class="home-v3-link__arrow" aria-hidden="true">→</span>
+      </a>
+
+      <div class="home-v3-secondary-grid">
+        <a href="zones.html" class="home-v3-link"><span class="home-v3-link__number">03</span><span class="home-v3-link__copy"><span class="home-v3-link__title" data-i18n="exploreHalkidiki"></span></span><span class="home-v3-link__arrow" aria-hidden="true">↗</span></a>
+        <a href="find-my-beach.html" class="home-v3-link"><span class="home-v3-link__number">04</span><span class="home-v3-link__copy"><span class="home-v3-link__title" data-i18n="findMyBeach"></span></span><span class="home-v3-link__arrow" aria-hidden="true">↗</span></a>
+        <a href="important-for-tourists.html" class="home-v3-link"><span class="home-v3-link__number">05</span><span class="home-v3-link__copy"><span class="home-v3-link__title" data-i18n="importantForTourists"></span></span><span class="home-v3-link__arrow" aria-hidden="true">↗</span></a>
+        <a href="favorites.html" class="home-v3-link"><span class="home-v3-link__number">06</span><span class="home-v3-link__copy"><span class="home-v3-link__title" data-i18n="saved"></span></span><span class="home-v3-link__arrow" aria-hidden="true">↗</span></a>
       </div>
+    </nav>
 
-      <div class="home-v2-quick-grid">
-        <a href="zones.html" class="home-v2-quick" data-i18n="exploreHalkidiki"></a>
-        <a href="find-my-beach.html" class="home-v2-quick" data-i18n="findMyBeach"></a>
-        <a href="important-for-tourists.html" class="home-v2-quick" data-i18n="importantForTourists"></a>
-        <a href="favorites.html" class="home-v2-quick" data-i18n="saved"></a>
-      </div>
-    </div>
-
-    <div class="home-v2-scroll">Explore ↓</div>
+    <div class="home-v3-scroll-cue">Scroll to discover</div>
   </div>
 
 </section>
@@ -797,62 +830,32 @@ function updateTakeMeHomeLabels() {
   const isRo = lang === "ro";
 
   const takeMeText = document.getElementById("takeMeHomeText");
+  const takeMeMeta = document.getElementById("takeMeHomeMeta");
   const accommodationText = document.getElementById("findAccommodationHomeText");
-  const homeTagline = document.getElementById("homeV2Tagline");
-  const homeSubline = document.getElementById("homeV2Subline");
+  const accommodationMeta = document.getElementById("findAccommodationHomeMeta");
+  const homeKicker = document.getElementById("homeV3Kicker");
+  const homeTitle = document.getElementById("homeV3Title");
+  const homeSubtitle = document.getElementById("homeV3Subtitle");
+  const menuLabel = document.getElementById("homeV3MenuLabel");
   const previewEyebrow = document.getElementById("takeMePreviewEyebrow");
   const previewTitle = document.getElementById("takeMePreviewTitle");
   const previewPromise = document.getElementById("takeMePreviewPromise");
   const previewLead = document.getElementById("takeMePreviewLead");
   const previewButton = document.getElementById("takeMePreviewButton");
 
-  if (takeMeText) {
-    takeMeText.textContent = isRo ? "Du-mă în Halkidiki" : "Take me to Halkidiki";
-  }
-
-  if (accommodationText) {
-    accommodationText.textContent = isRo ? "Găsește cazare" : "Find Accommodation";
-  }
-
-  if (homeTagline) {
-    homeTagline.textContent = isRo
-      ? "Vacanța ta în Halkidiki începe aici."
-      : "Your Halkidiki holiday starts here.";
-  }
-
-  if (homeSubline) {
-    homeSubline.textContent = isRo
-      ? "Plaje, cazări, mâncare și experiențe locale — toate într-un singur loc."
-      : "Beaches, stays, food and local experiences — all in one place.";
-  }
-
-  if (previewEyebrow) {
-    previewEyebrow.textContent = isRo
-      ? "Vezi-ți vacanța înainte să pleci"
-      : "See your holiday before you go";
-  }
-
-  if (previewTitle) {
-    previewTitle.textContent = isRo
-      ? "Vacanța ta în Halkidiki, construită în jurul tău."
-      : "Your Halkidiki trip, built around you.";
-  }
-
-  if (previewPromise) {
-    previewPromise.textContent = isRo
-      ? "Spune-ne când vii, cu cine călătorești și cum vrei să te simți în vacanță."
-      : "Tell us when you're coming, who's travelling and how you want your holiday to feel.";
-  }
-
-  if (previewLead) {
-    previewLead.textContent = isRo
-      ? "Noi conectăm plaja, cazarea, mâncarea și experiențele într-o singură călătorie."
-      : "We'll connect the beach, stay, food and experiences into one trip.";
-  }
-
-  if (previewButton) {
-    previewButton.textContent = isRo ? "Construiește-mi vacanța →" : "Build my holiday →";
-  }
+  if (homeKicker) homeKicker.textContent = isRo ? "Companionul tău personal pentru Halkidiki" : "Your personal Halkidiki companion";
+  if (homeTitle) homeTitle.textContent = isRo ? "Un singur loc pentru vacanța pe care chiar ți-o dorești." : "One place for the holiday you actually want.";
+  if (homeSubtitle) homeSubtitle.textContent = isRo ? "Descoperă plaja, cazarea, mâncarea și experiențele potrivite felului în care vrei să călătorești." : "Discover the beach, the stay, the food and the experiences that fit the way you want to travel.";
+  if (menuLabel) menuLabel.textContent = isRo ? "Începe de aici" : "Start here";
+  if (takeMeText) takeMeText.textContent = isRo ? "Construiește-mi vacanța în Halkidiki" : "Build my Halkidiki holiday";
+  if (takeMeMeta) takeMeMeta.textContent = isRo ? "Plajă, cazare, mâncare și experiențe — alese în jurul tău" : "Beach, stay, food and experiences — matched around you";
+  if (accommodationText) accommodationText.textContent = isRo ? "Găsește cazare" : "Find accommodation";
+  if (accommodationMeta) accommodationMeta.textContent = isRo ? "Explorează cazările și filtrează-le cum vrei" : "Browse stays and filter them your way";
+  if (previewEyebrow) previewEyebrow.textContent = isRo ? "Vezi-ți vacanța înainte să pleci" : "See your holiday before you go";
+  if (previewTitle) previewTitle.textContent = isRo ? "Vacanța ta în Halkidiki, construită în jurul tău." : "Your Halkidiki trip, built around you.";
+  if (previewPromise) previewPromise.textContent = isRo ? "Spune-ne când vii, cu cine călătorești și cum vrei să te simți în vacanță." : "Tell us when you're coming, who's travelling and how you want your holiday to feel.";
+  if (previewLead) previewLead.textContent = isRo ? "Noi conectăm plaja, cazarea, mâncarea și experiențele într-o singură călătorie." : "We'll connect the beach, stay, food and experiences into one trip.";
+  if (previewButton) previewButton.textContent = isRo ? "Construiește-mi vacanța →" : "Build my holiday →";
 }
 
 const languageButton =
