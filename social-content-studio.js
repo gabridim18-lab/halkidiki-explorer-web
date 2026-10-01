@@ -61,7 +61,7 @@ let supportingImageIds = new Set();
 let creativePack = null;
 let selectedFactIds = new Set();
 let isGenerating = false;
-let beachAssetsRequest = 0;
+let listingAssetsRequest = 0;
 
 function setMessage(message = "", type = "") {
   formMessage.textContent = message;
@@ -145,6 +145,8 @@ function resetCreativePack() {
 }
 
 function resetListingDependentState() {
+  listingAssetsRequest += 1;
+  window.HalkidikiCapCut?.setListing(null);
   canonicalImages = [];
   heroImageId = "";
   supportingImageIds = new Set();
@@ -155,7 +157,7 @@ function resetListingDependentState() {
   visualPreview.hidden = true;
   draftPreview.hidden = true;
   emptyPreview.hidden = true;
-  accommodationPromotion.hidden = categorySelect.value !== "accommodation";
+  accommodationPromotion.hidden = categorySelect.value !== "accommodation" || Boolean(window.HalkidikiCapCut?.isActive());
   resetCreativePack();
 }
 
@@ -191,9 +193,11 @@ async function loadListings(category) {
       listings.sort((left, right) => listingName(left).localeCompare(listingName(right), undefined, { sensitivity: "base" }));
       listingCache.set(category, listings);
     }
+    if (categorySelect.value !== category) return;
     populateListings(listings);
     if (!listings.length) setMessage("No listings are available in this category yet.", "error");
   } catch (error) {
+    if (categorySelect.value !== category) return;
     console.error("Listing index error", error);
     listingSelect.replaceChildren();
     const option = document.createElement("option");
@@ -224,6 +228,10 @@ async function updateAuthStatus() {
 }
 
 function renderImagePicker() {
+  if (window.HalkidikiCapCut?.isActive()) {
+    window.HalkidikiCapCut.renderPhotos(imagePicker, imagePickerStatus);
+    return;
+  }
   imagePicker.replaceChildren();
   if (!canonicalImages.length) return resetImagePicker("No published listing photos are available.");
   canonicalImages.forEach((image, index) => {
@@ -419,9 +427,9 @@ async function loadCanonicalImages() {
   const listingId = listingSelect.value;
   const category = categorySelect.value;
   const language = languageSelect.value;
-  const beachRequestId = category === "beach" ? ++beachAssetsRequest : 0;
-  if (!listingId) return resetImagePicker();
   resetListingDependentState();
+  const assetsRequestId = ++listingAssetsRequest;
+  if (!listingId) return resetImagePicker();
   resetImagePicker("Loading published listing photos…");
   imagePickerStatus.textContent = "Loading…";
   try {
@@ -429,7 +437,7 @@ async function loadCanonicalImages() {
     const response = await fetch("/api/social/listing-assets", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` }, body: JSON.stringify({ category, listingId, language }) });
     const result = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(result.error || "The listing photos could not be loaded.");
-    if ((category === "beach" && (beachRequestId !== beachAssetsRequest || languageSelect.value !== language)) || listingSelect.value !== listingId || categorySelect.value !== category) return;
+    if (assetsRequestId !== listingAssetsRequest || languageSelect.value !== language || listingSelect.value !== listingId || categorySelect.value !== category) return;
     canonicalImages = Array.isArray(result.images) ? result.images : [];
     heroImageId = canonicalImages[0]?.id || "";
     supportingImageIds = category === "beach" ? new Set(canonicalImages.slice(1, 3).map(image => image.id)) : new Set();
@@ -437,12 +445,13 @@ async function loadCanonicalImages() {
     selectedFactIds = creativePack?.profile?.id === "beach"
       ? defaultBeachFactIds()
       : new Set(allCreativeFacts().filter(fact => !(category === "restaurant" && ["hours", "features", "price", "sunbed-price"].includes(fact.id))).map(fact => fact.id));
-    accommodationPromotion.hidden = category !== "accommodation";
+    accommodationPromotion.hidden = category !== "accommodation" || Boolean(window.HalkidikiCapCut?.isActive());
+    window.HalkidikiCapCut?.setListing({ listingId, category, language, images: canonicalImages, creativePack });
     renderImagePicker();
     renderCreativePack();
     refreshCanonicalCaption();
   } catch (error) {
-    if (category === "beach" && beachRequestId !== beachAssetsRequest) return;
+    if (assetsRequestId !== listingAssetsRequest) return;
     console.error("Listing assets error", error);
     resetImagePicker(error.message || "The listing photos could not be loaded.");
     setMessage(error.message || "The listing photos could not be loaded.", "error");
@@ -536,6 +545,11 @@ function creativeBrief() {
 }
 
 categorySelect.addEventListener("change", () => { resetListingDependentState(); loadListings(categorySelect.value); });
+document.addEventListener("capcut:selectionchange", () => { if (window.HalkidikiCapCut?.isActive()) renderImagePicker(); });
+document.addEventListener("capcut:modechange", () => {
+  accommodationPromotion.hidden = categorySelect.value !== "accommodation" || Boolean(window.HalkidikiCapCut?.isActive());
+  renderImagePicker();
+});
 listingSelect.addEventListener("change", loadCanonicalImages);
 languageSelect.addEventListener("change", () => { if (listingSelect.value) loadCanonicalImages(); });
 studioForm.addEventListener("submit", event => { event.preventDefault(); generateImage(); });

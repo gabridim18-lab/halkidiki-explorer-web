@@ -7,6 +7,7 @@
   <title>Social Content Studio | Halkidiki Explorer</title>
   <link rel="icon" type="image/png" href="favicon-32x32.png">
   <link rel="stylesheet" href="social-content-studio.css">
+  <link rel="stylesheet" href="capcut-export.css">
 </head>
 <body>
   <main class="studio-shell">
@@ -17,8 +18,12 @@
     <section class="studio-hero" aria-labelledby="page-title">
       <p class="eyebrow">Content creation, grounded in your listings</p>
       <h1 id="page-title">Build a concise social brief from verified listing data.</h1>
-      <p>Select published photos, capture the useful facts, then optionally create a branded social visual.</p>
+      <p>Select published photos and useful facts. Build a visual brief or prepare editable text and ordered photos for CapCut Desktop.</p>
     </section>
+    <nav class="capcut-workflow-nav" aria-label="Studio workflow">
+      <button id="briefModeButton" type="button" aria-pressed="true">Visual brief &amp; poster</button>
+      <button id="capcutModeButton" type="button" aria-pressed="false">CapCut export <span>Photos + timed text</span></button>
+    </nav>
     <section class="studio-grid">
       <form id="studioForm" class="studio-card controls-card">
         <div class="card-heading"><div><p class="eyebrow">Step 1</p><h2>Post brief</h2></div><span id="authStatus" class="secure-note">Checking admin session…</span></div>
@@ -31,7 +36,7 @@
         <fieldset class="angle-fieldset"><legend>Content angle</legend><div class="angle-options"><label><input type="radio" name="angle" value="general" checked><span>General spotlight</span></label><label><input type="radio" name="angle" value="family"><span>Family</span></label><label><input type="radio" name="angle" value="relaxation"><span>Relaxation</span></label><label><input type="radio" name="angle" value="location"><span>Location</span></label><label><input type="radio" name="angle" value="facilities"><span>Facilities / features</span></label></div></fieldset>
         <section id="imagePickerSection" class="image-picker-section" aria-labelledby="image-picker-title">
           <div class="section-label-row"><div><p class="eyebrow">Step 2</p><h3 id="image-picker-title">Published listing photos</h3></div><span id="imagePickerStatus">Select a listing</span></div>
-          <p class="helper-text">Choose one hero image and up to three supporting images. Only canonical listing images can be selected.</p>
+          <p id="imagePickerHelp" class="helper-text">Choose one hero image and up to three supporting images. Only canonical listing images can be selected.</p>
           <div id="imagePicker" class="image-picker" aria-live="polite"></div>
         </section>
         <section id="accommodationPromotion" class="accommodation-promotion" hidden aria-labelledby="promotion-title">
@@ -41,6 +46,39 @@
         </section>
       </form>
       <section class="studio-card preview-card" aria-labelledby="preview-title">
+        <section id="capcutPanel" class="capcut-panel" hidden aria-labelledby="capcut-title">
+          <div class="card-heading"><div><p class="eyebrow">CapCut Desktop</p><h2 id="capcut-title">Build your scene pack</h2></div><span class="editable-badge">Editable text</span></div>
+          <p class="helper-text">Choose photos on the left, arrange the scenes and select the facts for each one. Import the exported photos and SRT into CapCut.</p>
+          <div id="capcutEmpty" class="creative-pack-empty">Select a listing to prepare your scenes.</div>
+          <div id="capcutContent" hidden>
+            <div class="capcut-scene-heading"><h3>Scene order</h3><span id="capcutSummary"></span></div>
+            <div id="capcutScenes" class="capcut-scenes" aria-label="Selected scenes"></div>
+            <div class="capcut-editor-grid">
+              <div class="capcut-preview-column">
+                <div id="capcutFrame" class="capcut-frame" aria-label="Scene preview">
+                  <img id="capcutPreviewImage" alt="Selected published photo">
+                  <span id="capcutPreviewNumber" class="capcut-frame-number"></span>
+                  <div id="capcutPreviewText" class="capcut-frame-text"></div>
+                </div>
+                <div class="capcut-playback"><button id="capcutPlayButton" type="button" class="subtle-button">Play sequence</button><span id="capcutTime"></span></div>
+                <p class="helper-text capcut-preview-note">Set the photo framing and text style in CapCut. The exported photos keep their original resolution.</p>
+              </div>
+              <fieldset id="capcutInspector" class="capcut-inspector">
+                <legend id="capcutSceneTitle">Scene settings</legend>
+                <label class="field"><span>Duration in seconds</span><input id="capcutDuration" type="number" min="1" max="15" step="0.1" value="4"></label>
+                <label class="field"><span>Opening / extra text</span><textarea id="capcutExtraText" rows="3" maxlength="180" placeholder="Write a short line, or choose facts below"></textarea></label>
+                <p class="helper-text">Extra text is your own copy. Facts below come from the listing.</p>
+                <div class="capcut-facts-heading"><strong>Facts for this scene</strong><small>Choose up to 3</small></div>
+                <div id="capcutFacts" class="capcut-facts"></div>
+              </fieldset>
+            </div>
+            <label class="field capcut-caption-field"><span>Post description &amp; hashtags</span><textarea id="capcutCaption" rows="4" maxlength="6000"></textarea></label>
+            <label class="capcut-logo-option"><input id="capcutIncludeLogo" type="checkbox" checked> Include the original Halkidiki Explorer logo</label>
+            <div class="capcut-export-actions"><button id="capcutExportButton" type="button" class="generate-button">Export CapCut ZIP</button><button id="capcutSrtButton" type="button" class="subtle-button">Download SRT only</button><button id="capcutCancelButton" type="button" class="subtle-button" hidden>Cancel</button></div>
+            <p id="capcutStatus" class="form-message" role="status" aria-live="polite"></p>
+            <p class="helper-text">SRT imports text and timing. Match the photo durations to the included scene plan; choose music, transitions and styling in CapCut.</p>
+          </div>
+        </section>
         <section id="creativePackPreview" class="creative-pack-preview" aria-live="polite">
           <div class="card-heading"><div><p class="eyebrow">Step 3 · Screenshot handoff</p><h2>Creative Pack / Visual Brief</h2></div><span id="creativeProfileBadge" class="profile-badge">Verified data</span></div>
           <div id="creativePackEmpty" class="creative-pack-empty"><p>Select a listing to build the Creative Pack.</p></div>
@@ -63,6 +101,9 @@
     </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="vendor/jszip-3.10.1.min.js"></script>
+  <script src="capcut-export-core.js"></script>
+  <script src="capcut-export.js"></script>
   <script src="social-content-studio.js"></script>
 </body>
 </html>
