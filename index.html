@@ -17,7 +17,7 @@
     content="width=device-width, initial-scale=1.0"
   />
 
-  <title>Halkidiki Explorer — Home V5</title>
+  <title>Halkidiki Explorer — Home V6</title>
 
 <meta property="og:title" content="Halkidiki Explorer">
 <meta property="og:description" content="Your complete Halkidiki Travel Companion">
@@ -1745,7 +1745,60 @@
       }
     }
 
-  </style>
+  
+    /* HOMEPAGE V6 — TOP NAV + MOBILE APP POLISH */
+    .home-v5{padding:max(4px,env(safe-area-inset-top)) 18px 24px}
+    .home-v5-topbar{min-height:66px;grid-template-columns:auto minmax(0,1fr) auto;gap:clamp(18px,3vw,42px);align-items:start}
+    .home-v5-topbar>a[aria-label="Halkidiki Explorer"]{margin-left:-8px;align-self:start}
+    .home-v5-logo{width:clamp(150px,13vw,192px);margin-top:0}
+    .home-v5-nav{align-self:start;padding-top:11px;gap:clamp(20px,2.7vw,40px)}
+    .home-v5-nav a{font-size:12px;font-weight:900;letter-spacing:.025em}
+    .home-v5-language{align-self:start;justify-self:end;margin-right:-10px}
+    .home-v5-language .language-selector,.home-v5-language .language-button{background:transparent!important;border-color:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+    .home-v5-language .language-button{padding:4px 2px!important}
+    .home-v5-language .language-menu{right:0!important;left:auto!important}
+    .home-v5-copy{width:min(760px,100%);margin-top:clamp(10px,2.3vh,24px);padding-left:0}
+    .home-v5-kicker{margin-top:0;font-size:10px}
+    .home-v5-title{margin-top:8px;font-size:clamp(46px,5.9vw,82px)}
+    .home-v5-subtitle{margin-top:12px;font-size:clamp(14px,1.25vw,16px)}
+    .home-v5-actions{margin-top:clamp(20px,4.5vh,42px);margin-bottom:0;align-self:end}
+    .home-v5-card{min-height:108px}.home-v5-card--build{min-height:130px}
+    @media(max-width:760px){
+      .home-v5{min-height:100dvh;padding:max(2px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))}
+      .home-v5-topbar{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:6px;row-gap:4px;min-height:0;align-items:start}
+      .home-v5-topbar>a[aria-label="Halkidiki Explorer"]{grid-column:1/-1;grid-row:2;width:100%;margin:0;padding:0 4px;display:flex;align-items:center;justify-content:flex-start;gap:11px;text-decoration:none}
+      .home-v5-logo{width:108px;flex:0 0 auto;margin:0}
+      .home-v5-topbar>a[aria-label="Halkidiki Explorer"]::after{content:"Your Complete\A Halkidiki Companion";white-space:pre-line;color:rgba(255,255,255,.94);font-family:Georgia,"Times New Roman",serif;font-size:17px;font-weight:700;line-height:1.04;letter-spacing:-.02em;text-shadow:0 4px 20px rgba(0,0,0,.36)}
+      .home-v5-nav{grid-column:1;grid-row:1;display:flex;justify-content:flex-start;align-items:center;gap:2px;min-width:0;padding:0;overflow-x:auto;scrollbar-width:none}
+      .home-v5-nav::-webkit-scrollbar{display:none}
+      .home-v5-nav a{flex:0 0 auto;margin:0;padding:9px 8px;border:0;border-radius:0;background:transparent;color:rgba(255,255,255,.92);font-size:9px;font-weight:900;letter-spacing:0;white-space:nowrap;backdrop-filter:none;-webkit-backdrop-filter:none}
+      .home-v5-nav a::after{display:none}
+      .home-v5-language{grid-column:2;grid-row:1;align-self:start;justify-self:end;margin:0;padding:0}
+      .home-v5-language .language-selector{margin:0!important}
+      .home-v5-language .language-button{min-width:38px!important;min-height:34px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+      .home-v5-language .language-button img{width:27px!important;height:19px!important;object-fit:cover;border-radius:3px}
+      .home-v5-language .language-arrow{font-size:8px!important;margin-left:3px!important}
+      .home-v5-copy{margin-top:5px;padding:0 6px;text-align:left}
+      .home-v5-kicker,.home-v5-title{display:none}
+      .home-v5-subtitle{width:95%;margin:7px 0 0;color:rgba(255,255,255,.92);font-size:13px;line-height:1.42;font-weight:700}
+      .home-v5-actions{margin-top:18px;margin-bottom:auto;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+      .home-v5-card{min-height:78px;padding:10px 11px 9px;border-radius:18px}
+      .home-v5-card--build{grid-column:1/-1;min-height:96px;padding:12px 14px 11px}
+      .home-v5-card-title{margin-top:6px;font-size:18px}.home-v5-card--build .home-v5-card-title{font-size:25px}
+      .home-v5-card-meta{margin-top:4px;font-size:7.5px}.home-v5-card--build .home-v5-card-meta{font-size:8.5px}
+      .home-v5-card-tag{font-size:6.5px}.home-v5-live{font-size:6px}.home-v5-card-arrow{right:10px;bottom:8px;font-size:20px}
+      .tmh-home-preview{min-height:48dvh}
+    }
+    @media(max-height:740px) and (max-width:760px){
+      .home-v5-logo{width:96px}
+      .home-v5-topbar>a[aria-label="Halkidiki Explorer"]::after{font-size:15px}
+      .home-v5-nav a{padding:7px 7px;font-size:8px}
+      .home-v5-subtitle{font-size:12px}
+      .home-v5-actions{margin-top:13px}
+      .home-v5-card--build{min-height:88px}.home-v5-card{min-height:70px}
+    }
+
+</style>
 
 </head>
 
