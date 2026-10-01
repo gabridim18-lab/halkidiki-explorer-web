@@ -1,0 +1,58 @@
+HALKIDIKI EXPLORER — MODUL CAPCUT
+
+INSTALARE IN PROIECTUL EXISTENT
+
+1. Extrage acest pachet in directorul proiectului halkidiki-explorer-web.
+2. Inlocuieste social-content-studio.html si social-content-studio.js.
+3. Pastreaza in acelasi director cele trei fisiere noi:
+   capcut-export.css
+   capcut-export-core.js
+   capcut-export.js
+4. Pastreaza directorul vendor din pachet. Contine JSZip si licentele aferente.
+5. Porneste proiectul cu serverul local folosit deja pentru studio.
+   Daca folosesti Vercel local: npx vercel dev --listen 3000
+6. Autentifica-te ca administrator, ca pana acum.
+7. Deschide http://localhost:3000/social-content-studio.html si apasa Ctrl+F5.
+8. Alege fila „CapCut export”.
+
+Nu este suficient sa deschizi HTML-ul direct prin dublu clic.
+Studio-ul foloseste ruta existenta /api/social/listing-assets pentru fotografii
+si informatii. Pastreaza fisierele API, configurarile si imaginile din proiect.
+Acest pachet este o actualizare a interfetei, nu copia completa a website-ului.
+
+PRIMUL TEST
+
+1. Alege o cazare. Se pregatesc initial trei scene de cate 4 secunde.
+2. Adauga/elimina fotografii prin clic in galeria din stanga (maximum 24).
+3. Reordoneaza scenele cu sagetile sau prin drag-and-drop.
+4. Apasa pe o scena pentru a-i modifica durata si textul.
+5. Bifeaza pana la trei informatii pentru fiecare scena.
+6. Completeaza, optional, textul de deschidere sau o fraza pentru scena.
+7. Verifica descrierea postarii si bifeaza includerea logo-ului daca il doresti.
+8. Apasa „Export CapCut ZIP”. Extrage ZIP-ul si urmeaza START-CapCut.txt din el.
+
+IMPORT IN CAPCUT DESKTOP
+
+Importa fotografiile din images, sorteaza-le dupa nume (A-Z) si pune-le
+consecutiv pe timeline de la secunda 0. Seteaza duratele din START-CapCut.txt.
+Importa texte.srt din sectiunea Captions / import subtitrari.
+Textele devin editabile in CapCut. Acolo alegi fontul, pozitia, animatiile,
+incadrarea fotografiilor, muzica si tranzitiile.
+Daca modifici duratele sau suprapui scenele, ajusteaza timpii textelor.
+
+ZIP-ul generat contine:
+- images/ : fotografii originale, numerotate in ordinea scenelor
+- texte.srt : texte UTF-8 cu timpii scenelor (daca ai selectat text)
+- descriere.txt : descrierea si hashtagurile editate in studio
+- START-CapCut.txt : ordinea fotografiilor, duratele si instructiunile
+- scene-plan.json : plan de montaj; nu este un proiect nativ CapCut
+- logo.png : logo original, daca ai bifat includerea lui
+
+Modul CapCut foloseste datele si fotografiile existente. Nu apeleaza servicii
+de generare AI sau de randare video. Modul vechi este disponibil din fila
+„Visual brief & poster”.
+
+VERIFICAREA CODULUI
+
+node --test tests/capcut-export.test.cjs
+
