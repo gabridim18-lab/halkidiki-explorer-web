@@ -17,7 +17,7 @@
     content="width=device-width, initial-scale=1.0"
   />
 
-  <title>Halkidiki Explorer — Home V6</title>
+  <title>Halkidiki Explorer — Home V7</title>
 
 <meta property="og:title" content="Halkidiki Explorer">
 <meta property="og:description" content="Your complete Halkidiki Travel Companion">
@@ -1798,7 +1798,320 @@
       .home-v5-card--build{min-height:88px}.home-v5-card{min-height:70px}
     }
 
-</style>
+
+    /* ============================================================
+       HOMEPAGE V7 — MOBILE FINAL LAYOUT PASS
+       Desktop V6 layout intentionally preserved.
+       ============================================================ */
+
+    @media (max-width: 760px) {
+      .hero {
+        min-height: auto !important;
+        height: auto !important;
+      }
+
+      .home-v5 {
+        min-height: auto !important;
+        height: auto !important;
+        padding:
+          max(2px, env(safe-area-inset-top))
+          9px
+          7px;
+      }
+
+      .home-v5-topbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-rows: auto auto;
+        column-gap: 8px;
+        row-gap: 7px;
+        min-height: 0;
+        align-items: start;
+      }
+
+      .home-v5-topbar > a[aria-label="Halkidiki Explorer"] {
+        grid-column: 1;
+        grid-row: 1;
+        width: auto;
+        margin: 0;
+        padding: 0;
+        display: block;
+        align-self: start;
+        justify-self: start;
+      }
+
+      .home-v5-topbar > a[aria-label="Halkidiki Explorer"]::after {
+        content: none !important;
+        display: none !important;
+      }
+
+      .home-v5-logo {
+        width: 122px;
+        margin: 0;
+      }
+
+      .home-v5-language {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: start;
+        justify-self: end;
+        margin: 0;
+        padding: 0;
+      }
+
+      .home-v5-language .language-selector,
+      .home-v5-language .language-button {
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      .home-v5-language .language-button {
+        min-width: 42px !important;
+        min-height: 36px !important;
+        padding: 0 !important;
+      }
+
+      .home-v5-language .language-button img {
+        width: 30px !important;
+        height: 21px !important;
+        object-fit: cover;
+        border-radius: 3px;
+      }
+
+      .home-v5-language .language-arrow {
+        margin-left: 3px !important;
+        font-size: 8px !important;
+      }
+
+      .home-v5-language .language-menu {
+        right: 0 !important;
+        left: auto !important;
+      }
+
+      .home-v5-nav {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        width: 100%;
+        min-width: 0;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 5px;
+        overflow: visible;
+        padding: 0;
+        margin: 0;
+      }
+
+      .home-v5-nav a {
+        min-width: 0;
+        min-height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 5px;
+        margin: 0;
+        border: 1px solid rgba(255,255,255,.17);
+        border-radius: 12px;
+        color: rgba(255,255,255,.96);
+        background: rgba(4,24,36,.28);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        font-size: 9px;
+        font-weight: 900;
+        line-height: 1.12;
+        text-align: center;
+        white-space: normal;
+      }
+
+      .home-v5-nav a::after {
+        display: none !important;
+      }
+
+      .home-v5-copy {
+        width: 100%;
+        margin-top: 13px;
+        padding: 0 5px;
+        text-align: left;
+      }
+
+      .home-v5-title {
+        display: none !important;
+      }
+
+      .home-v5-kicker {
+        display: block !important;
+        margin: 0;
+        color: rgba(255,255,255,.98);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.05;
+        letter-spacing: -.02em;
+        text-transform: none;
+        text-shadow: 0 4px 20px rgba(0,0,0,.38);
+      }
+
+      .home-v5-subtitle {
+        display: block !important;
+        width: 96%;
+        margin: 8px 0 0;
+        color: rgba(255,255,255,.93);
+        font-size: 13px;
+        line-height: 1.42;
+        font-weight: 700;
+        text-shadow: 0 3px 18px rgba(0,0,0,.36);
+      }
+
+      .home-v5-actions {
+        width: 100%;
+        margin-top: 16px;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .home-v5-card {
+        width: 100%;
+        min-height: 90px;
+        padding: 12px 13px 11px;
+        border-radius: 19px;
+      }
+
+      .home-v5-card--build {
+        min-height: 104px;
+        padding: 14px 15px 12px;
+        order: 1;
+      }
+
+      #findAccommodationHomeButton {
+        order: 2;
+      }
+
+      #lastMinuteHomeButton {
+        order: 3;
+      }
+
+      .home-v5-card-title {
+        margin-top: 7px;
+        font-size: 21px;
+      }
+
+      .home-v5-card--build .home-v5-card-title {
+        font-size: 27px;
+      }
+
+      .home-v5-card-meta {
+        margin-top: 5px;
+        padding-right: 20px;
+        font-size: 8.5px;
+        line-height: 1.3;
+      }
+
+      .home-v5-card--build .home-v5-card-meta {
+        font-size: 9px;
+      }
+
+      .home-v5-card-tag {
+        font-size: 7px;
+      }
+
+      .home-v5-live {
+        font-size: 6.5px;
+      }
+
+      .home-v5-card-arrow {
+        right: 11px;
+        bottom: 9px;
+        font-size: 21px;
+      }
+
+      .tmh-home-preview {
+        min-height: 49dvh;
+        margin-top: 0 !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .home-v5-logo {
+        width: 112px;
+      }
+
+      .home-v5-nav {
+        gap: 4px;
+      }
+
+      .home-v5-nav a {
+        min-height: 40px;
+        padding: 5px 4px;
+        font-size: 8px;
+      }
+
+      .home-v5-kicker {
+        font-size: 18px;
+      }
+
+      .home-v5-subtitle {
+        font-size: 12px;
+      }
+
+      .home-v5-card--build .home-v5-card-title {
+        font-size: 25px;
+      }
+
+      .home-v5-card-title {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-height: 720px) and (max-width: 760px) {
+      .home-v5-logo {
+        width: 104px;
+      }
+
+      .home-v5-nav a {
+        min-height: 37px;
+        font-size: 8px;
+      }
+
+      .home-v5-copy {
+        margin-top: 9px;
+      }
+
+      .home-v5-kicker {
+        font-size: 17px;
+      }
+
+      .home-v5-subtitle {
+        margin-top: 5px;
+        font-size: 11px;
+      }
+
+      .home-v5-actions {
+        margin-top: 11px;
+        gap: 6px;
+      }
+
+      .home-v5-card {
+        min-height: 76px;
+      }
+
+      .home-v5-card--build {
+        min-height: 88px;
+      }
+
+      .home-v5-card--build .home-v5-card-title {
+        font-size: 23px;
+      }
+
+      .home-v5-card-title {
+        font-size: 18px;
+      }
+    }
+
+  </style>
 
 </head>
 
