@@ -17,7 +17,7 @@
     content="width=device-width, initial-scale=1.0"
   />
 
-  <title>Halkidiki Explorer — Home V7</title>
+  <title>Halkidiki Explorer — Home V8</title>
 
 <meta property="og:title" content="Halkidiki Explorer">
 <meta property="og:description" content="Your complete Halkidiki Travel Companion">
@@ -2104,6 +2104,337 @@
 
       .home-v5-card--build .home-v5-card-title {
         font-size: 23px;
+      }
+
+      .home-v5-card-title {
+        font-size: 18px;
+      }
+    }
+
+  
+    /* ============================================================
+       HOMEPAGE V8 — MOBILE REWORK
+       Only the mobile hero is redesigned here.
+       Desktop keeps the current V7 look.
+       ============================================================ */
+
+    @media (max-width: 760px) {
+      .hero {
+        min-height: auto !important;
+        height: auto !important;
+      }
+
+      .home-v5 {
+        min-height: auto !important;
+        height: auto !important;
+        padding:
+          max(2px, env(safe-area-inset-top))
+          10px
+          8px;
+      }
+
+      /* Top band: logo left, favorite heart + language right, nav below */
+      .home-v5-topbar {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        grid-template-rows: auto auto;
+        column-gap: 7px;
+        row-gap: 8px;
+        align-items: start;
+        min-height: 0;
+      }
+
+      .home-v5-topbar > a[aria-label="Halkidiki Explorer"] {
+        grid-column: 1;
+        grid-row: 1;
+        margin: 0;
+        padding: 0;
+        display: block;
+        align-self: start;
+        justify-self: start;
+      }
+
+      .home-v5-logo {
+        width: 84px !important;
+        margin: 0;
+        filter: drop-shadow(0 8px 20px rgba(0,0,0,.22));
+      }
+
+      /* Heart / favorites icon near language */
+      #favoritesTopLink {
+        grid-column: 2;
+        grid-row: 1;
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        min-height: 34px;
+        padding: 0 !important;
+        margin: 0;
+        align-self: start;
+        justify-self: end;
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,.22);
+        background: rgba(4,24,36,.30);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: transparent !important;
+        font-size: 0 !important;
+        overflow: hidden;
+      }
+
+      #favoritesTopLink::before {
+        content: "❤";
+        display: inline-block;
+        color: #ff8aa4;
+        font-size: 15px;
+        line-height: 1;
+        transform: translateY(1px);
+      }
+
+      #favoritesTopLink::after {
+        display: none !important;
+      }
+
+      .home-v5-language {
+        grid-column: 3;
+        grid-row: 1;
+        align-self: start;
+        justify-self: end;
+        margin: 0;
+        padding: 0;
+      }
+
+      .home-v5-language .language-selector,
+      .home-v5-language .language-button {
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      .home-v5-language .language-button {
+        min-width: 42px !important;
+        min-height: 34px !important;
+        padding: 0 !important;
+      }
+
+      .home-v5-language .language-button img {
+        width: 30px !important;
+        height: 21px !important;
+        object-fit: cover;
+        border-radius: 3px;
+      }
+
+      .home-v5-language .language-arrow {
+        margin-left: 3px !important;
+        font-size: 8px !important;
+      }
+
+      .home-v5-language .language-menu {
+        right: 0 !important;
+        left: auto !important;
+      }
+
+      /* Main nav becomes 3 colored buttons */
+      .home-v5-nav {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+        overflow: visible;
+        padding: 0;
+        margin: 0;
+      }
+
+      .home-v5-nav a {
+        min-width: 0;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 6px;
+        margin: 0;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,.20);
+        font-size: 10px;
+        font-weight: 900;
+        line-height: 1.13;
+        text-align: center;
+        white-space: normal;
+        color: rgba(255,255,255,.98);
+        text-shadow: 0 2px 10px rgba(0,0,0,.25);
+        box-shadow: 0 12px 26px rgba(0,0,0,.14);
+      }
+
+      .home-v5-nav a::after {
+        display: none !important;
+      }
+
+      .home-v5-nav a:nth-child(1) {
+        background: linear-gradient(180deg, rgba(4,126,146,.88), rgba(2,92,112,.84));
+      }
+
+      .home-v5-nav a:nth-child(2) {
+        background: linear-gradient(180deg, rgba(22,126,196,.88), rgba(9,95,157,.84));
+      }
+
+      .home-v5-nav a:nth-child(3) {
+        background: linear-gradient(180deg, rgba(230,166,68,.92), rgba(201,133,36,.88));
+      }
+
+      .home-v5-nav a:nth-child(4) {
+        display: none !important;
+      }
+
+      /* Copy block: only companion line remains */
+      .home-v5-copy {
+        width: 100%;
+        margin-top: 9px;
+        padding: 0 2px;
+        text-align: left;
+      }
+
+      .home-v5-kicker {
+        display: block !important;
+        max-width: 250px;
+        margin: 0;
+        color: rgba(255,255,255,.98);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 23px;
+        font-weight: 700;
+        line-height: .95;
+        letter-spacing: -.025em;
+        text-transform: none;
+        text-shadow: 0 4px 20px rgba(0,0,0,.34);
+      }
+
+      .home-v5-title,
+      .home-v5-subtitle {
+        display: none !important;
+      }
+
+      /* Main actions pulled higher and stacked */
+      .home-v5-actions {
+        width: 100%;
+        margin-top: 12px;
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .home-v5-card {
+        width: 100%;
+        min-height: 88px;
+        padding: 12px 13px 12px;
+        border-radius: 19px;
+      }
+
+      .home-v5-card--build {
+        min-height: 98px;
+        padding: 14px 15px 13px;
+        order: 1;
+      }
+
+      #findAccommodationHomeButton {
+        order: 2;
+      }
+
+      #lastMinuteHomeButton {
+        order: 3;
+      }
+
+      .home-v5-card-title {
+        margin-top: 7px;
+        font-size: 21px;
+      }
+
+      .home-v5-card--build .home-v5-card-title {
+        font-size: 26px;
+      }
+
+      .home-v5-card-meta {
+        display: none !important;
+      }
+
+      .home-v5-card-tag {
+        font-size: 7px;
+      }
+
+      .home-v5-live {
+        font-size: 6.5px;
+      }
+
+      .home-v5-card-arrow {
+        right: 12px;
+        bottom: 10px;
+        font-size: 21px;
+      }
+
+      .tmh-home-preview {
+        min-height: 46dvh;
+        margin-top: 0 !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .home-v5-logo {
+        width: 78px !important;
+      }
+
+      .home-v5-nav a {
+        min-height: 46px;
+        padding: 7px 5px;
+        font-size: 9px;
+      }
+
+      .home-v5-kicker {
+        max-width: 228px;
+        font-size: 21px;
+      }
+
+      .home-v5-card--build .home-v5-card-title {
+        font-size: 24px;
+      }
+
+      .home-v5-card-title {
+        font-size: 19px;
+      }
+    }
+
+    @media (max-height: 720px) and (max-width: 760px) {
+      .home-v5-nav a {
+        min-height: 44px;
+        font-size: 9px;
+      }
+
+      .home-v5-copy {
+        margin-top: 7px;
+      }
+
+      .home-v5-kicker {
+        font-size: 20px;
+      }
+
+      .home-v5-actions {
+        margin-top: 10px;
+        gap: 7px;
+      }
+
+      .home-v5-card {
+        min-height: 80px;
+      }
+
+      .home-v5-card--build {
+        min-height: 90px;
+      }
+
+      .home-v5-card--build .home-v5-card-title {
+        font-size: 22px;
       }
 
       .home-v5-card-title {

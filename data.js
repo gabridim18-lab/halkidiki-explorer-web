@@ -1,6 +1,48 @@
 const accommodations = [
 
         {
+            id: "sea_breeze_paradise",
+            beachSlug: "agios-nikolaos-kanistro-beach",
+            flyer: "sea-breeze-paradise.webp"
+        },
+        
+
+        {
+            id: "villa_nefeli",
+            beachSlug: "paralia-agios-nikolaos",
+            flyer: "villa-nefeli.webp"
+        },
+        
+
+        {
+            id: "sea_shore_apartment_in_perea",
+            beachSlug: "perea-beach",
+            flyer: "sea-shore-apartment-in-perea.webp"
+        },
+        
+
+        {
+            id: "sea_shore_studio_in_perea",
+            beachSlug: "perea-beach",
+            flyer: "sea-shore-studio-in-perea.webp"
+        },
+        
+
+        {
+            id: "theasis_luxury_studio_5_in_neos_marmaras",
+            beachSlug: "neos-marmaras-beach",
+            flyer: "theasis-luxury-studio-5-in-neos-marmaras.webp"
+        },
+        
+
+        {
+            id: "theasis_studio_4_in_neos_marmaras",
+            beachSlug: "neos-marmaras-beach",
+            flyer: "theasis-studio-4-in-neos-marmaras.webp"
+        },
+        
+
+        {
             id: "almira_blue",
             beachSlug: "sahara-beach",
             flyer: "almira-blue.webp"
