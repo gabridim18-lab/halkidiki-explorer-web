@@ -1,6 +1,13 @@
 const accommodations = [
 
         {
+            id: "mm_villas_vourvourou",
+            beachSlug: "karydi-beach",
+            flyer: "mm-villas-vourvourou.webp"
+        },
+        
+
+        {
             id: "sea_breeze_paradise",
             beachSlug: "agios-nikolaos-kanistro-beach",
             flyer: "sea-breeze-paradise.webp"
